@@ -8,6 +8,9 @@
     "type": "git",
     "url": "git://github.com/golden3point14/SpaceX14.git"
   },
+  "window": {
+    "toolbar": false
+  },
   "dependencies": {},
   "devDependencies": {},
   "optionalDependencies": {},
