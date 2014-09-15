@@ -1,0 +1,27 @@
+.header{
+	background-color: #0099FF;
+	color: white;
+	margin: 0;
+	height: 20px;
+}
+
+.cpu{
+	height: 60px;
+}
+
+.bar{
+	/*border: 2px solid #0099FF;*/
+	display: inline-block;
+	height: 40%;
+	width: 90%;
+}
+
+.process{
+	border: 1px solid #0099FF;
+	display: inline-block;
+	height: 100%;
+	width: 19.5%;
+	margin: 0;
+	/*background-color: blue;*/
+}
+
