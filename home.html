@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello Node Webkit</title>
+    <link href="assets/css/home.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+	    // menu logic goes here
+	    //get node webkit GUI
+	    var gui = require('nw.gui');
+	 
+	         // get the window object
+	    var win = gui.Window.get();
+	    var menubar = new gui.Menu({
+	        type: 'menubar'
+	    });
+	 
+	    var file = new gui.Menu();
+	    file.append(new gui.MenuItem({
+	        label: 'Action 1',
+	        click: function() {
+	            alert('Action 1 Clicked');
+	        }
+	    }));
+	 
+	    file.append(new gui.MenuItem({
+	        label: 'Action 2',
+	        click: function() {
+	            alert('Action 2 Clicked');
+	        }
+	    }));
+	 
+	    menubar.append(new gui.MenuItem({ label: 'File', submenu: file}));
+	 
+	    win.menu = menubar;
+    </script>
+</head>
+<body>
+    <div class="cpu"> CPU1
+    	<div class="bar">
+    		<div class="process" title="Example process
+    Start time - End time
+    Extra info">
+    		</div><div class="process">
+    		</div><div class="process">
+    		</div><div class="process">
+    		</div><div class="process">
+    		</div>
+    	</div>
+    </div>
+    <div class="cpu"> CPU2
+    	<div class="bar">
+    		<div class="process">
+    		</div><div class="process">
+    		</div><div class="process">
+    		</div><div class="process">
+    		</div><div class="process">
+    		</div>
+    	</div>
+    </div>
+</body>
+</html>
