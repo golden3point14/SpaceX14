@@ -2,11 +2,22 @@
   "author": "HMCClinic",
   "name": "myapp.SpaceX14",
   "description": "An ftrace visualization tool",
-  "main": "index.html",
+  "main": "home.html",
   "version": "0.0.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/golden3point14/SpaceX14.git"
+  },
+  "window": {
+    "toolbar": true,
+    "resizable": false,
+    "width": 1000,
+    "height": 600,
+    "min_width": 600,
+    "min_height": 400,
+    "max_width": 1000,
+    "max_height": 600,
+    "position": "center"
   },
   "dependencies": {},
   "devDependencies": {},
