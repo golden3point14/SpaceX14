@@ -9,11 +9,15 @@
 	height: 60px;
 }
 
+.time{
+	height: 30px;
+}
+
 .bar{
-	/*border: 2px solid #0099FF;*/
-	display: inline-block;
+	/*display: inline-block;*/
 	height: 40%;
 	width: 90%;
+	float: right;
 }
 
 .process{
@@ -22,6 +26,21 @@
 	height: 100%;
 	width: 19.5%;
 	margin: 0;
-	/*background-color: blue;*/
+}
+
+.fill{
+	width: 100%;
+	height: 100%;
+}
+
+.timeline{
+	width:90%;
+	border-top: 2px solid black;
+	/*display: inline-block;*/
+	margin-bottom: 5px;
+	float: right;
+	height: 10px;
+	border-left: 2px solid black;
+	border-right: 2px solid black;
 }
 
