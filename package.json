@@ -3,6 +3,13 @@
   "name": "myapp.SpaceX14",
   "description": "An ftrace visualization tool",
   "main": "index.html",
+  "window": {
+    "toolbar": false,
+    "width": 800,
+    "height": 600,
+    "min_width": 400,
+    "min_height": 300
+  },
   "version": "0.0.0",
   "repository": {
     "type": "git",
