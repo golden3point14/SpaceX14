@@ -50,12 +50,21 @@
     <div class="cpu"> CPU2
     	<div class="bar">
     		<div class="process">
+    		</div><div class="process" onclick="myClickFunction()">
     		</div><div class="process">
-    		</div><div class="process">
-    		</div><div class="process">
+    		</div><div class="process" onclick="myClickFunction()">
     		</div><div class="process">
     		</div>
     	</div>
     </div>
+
+    <script>
+    function myClickFunction() {
+    	var all = document.getElementsByClassName('process');
+    	for (var i=0; i<all.length; i++) {
+    		all[i].style.backgroundColor = 'red';
+    	}
+    }
+    </script>
 </body>
 </html>
