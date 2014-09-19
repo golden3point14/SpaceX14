@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello Node Webkit</title>
+    <link href="assets/css/home.css" rel="stylesheet" type="text/css" />
+    <script src="assets/js/menu.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+</head>
+<body>
+	<div class="time">
+		<div class="timeline"></div>
+	</div>
+    <div class="cpu"> CPU1
+    	<div class="bar">
+    		<div class="process" title="Example process
+Start time - End time
+Extra info">
+    		</div><div class="process" title="Example process
+Start time - End time
+Extra info">
+    		</div><div class="process" title="Example process
+Start time - End time
+Extra info">
+    		</div><div class="process" title="Example process
+Start time - End time
+Extra info">
+    		</div><div class="process" title="Example process
+Start time - End time
+Extra info">
+    		</div>
+    	</div>
+    </div>
+    <div class="cpu"> CPU2
+    	<div class="bar">
+    		<div class="process" title="Example process
+Start time - End time
+Extra info">
+    		</div><div class="process" title="Example process
+Start time - End time
+Extra info">
+    		</div><div class="process" title="Example process
+Start time - End time
+Extra info">
+    		</div><div class="process" title="Example process
+Start time - End time
+Extra info">
+    		</div><div class="process" title="Example process
+Start time - End time
+Extra info">
+    		</div>
+    	</div>
+    </div>
+
+    <script>
+        /*function myClickFunction(x) {
+            var element = document.getElementById(x);
+            //console.log(element.id);
+            element.style.backgroundColor="red";
+        }*/
+        $(".process").click(function(){
+            $(this).toggleClass('highlight');
+        });
+    </script>
+</body>
+</html>
