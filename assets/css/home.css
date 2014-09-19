@@ -1,39 +1,39 @@
-.header{
+.header {
 	background-color: #0099FF;
 	color: white;
 	margin: 0;
 	height: 20px;
 }
 
-.cpu{
+.cpu {
 	height: 60px;
 }
 
-.time{
+.time {
 	height: 30px;
 }
 
-.bar{
+.bar {
 	/*display: inline-block;*/
 	height: 40%;
 	width: 90%;
 	float: right;
 }
 
-.process{
-	border: 1px solid #0099FF;
+.process {
+	border: 1px solid #666666;
 	display: inline-block;
 	height: 100%;
 	width: 19.5%;
 	margin: 0;
 }
 
-.fill{
+.fill {
 	width: 100%;
 	height: 100%;
 }
 
-.timeline{
+.timeline {
 	width:90%;
 	border-top: 2px solid black;
 	/*display: inline-block;*/
@@ -44,7 +44,7 @@
 	border-right: 2px solid black;
 }
 
-.highlight{
-	background-color: red;
+.desaturated {
+	opacity: 0.4;
 }
 
