@@ -37,6 +37,14 @@ body {
   shape-rendering: crispEdges;
 }
 
+rect.hidden {
+  fill: #ccc !important;
+}
+
+text.hidden {
+  fill: #ccc !important;
+}
+
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -71,7 +79,9 @@ var xAxis = d3.svg.axis()
 
 var brush = d3.svg.brush()
     .x(x)
-    .on("brush", brushed);
+    .on("brushstart", brushstart)
+    .on("brush", brushmove)
+    .on("brushend", brushend);
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -116,8 +126,25 @@ svg.append("g")
     .attr("y", -6)
     .attr("height", height + 7);
 
-function brushed() {
-  // does nothing
+function brushstart() {
+  // do nothing
+}
+
+function brushmove() {
+  var e = brush.extent();
+  svg.selectAll("rect").classed("hidden", function(d) {
+    return e[0] > d.x || d.x > e[1];
+  });
+  svg.selectAll("text").classed("hidden", function(d) {
+    return e[0] > d.x || d.x > e[1];
+  });
+}
+
+function brushend() {
+  if (brush.empty())
+  {
+    svg.selectAll(".hidden").classed("hidden", false);
+  }
 }
 
 </script>
