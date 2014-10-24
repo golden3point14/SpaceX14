@@ -13,18 +13,36 @@ body {
   shape-rendering: crispEdges;
 }
 
-.bar:hover rect {
+/*.bar:hover rect {
   fill: black;
-}
+}*/
 
 .bar text {
-  fill: #fff;
+  fill: steelblue;
 }
+
+/*.bar:hover text {
+  fill: black;
+}*/
 
 .axis path, .axis line {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
+}
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+rect.hidden {
+  fill: #ccc !important;
+}
+
+text.hidden {
+  fill: #ccc !important;
 }
 
 </style>
@@ -38,7 +56,7 @@ var values = d3.range(1000).map(d3.random.bates(10));
 // A formatter for counts.
 var formatCount = d3.format(",.0f");
 
-var margin = {top: 10, right: 30, bottom: 30, left: 30},
+var margin = {top: 30, right: 30, bottom: 30, left: 30},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -59,6 +77,12 @@ var xAxis = d3.svg.axis()
     .scale(x)
     .orient("bottom");
 
+var brush = d3.svg.brush()
+    .x(x)
+    .on("brushstart", brushstart)
+    .on("brush", brushmove)
+    .on("brushend", brushend);
+
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -77,15 +101,50 @@ bar.append("rect")
     .attr("height", function(d) { return height - y(d.y); });
 
 bar.append("text")
-    .attr("dy", ".75em")
+    .attr("dy", "-.75em")
     .attr("y", 6)
     .attr("x", x(data[0].dx) / 2)
     .attr("text-anchor", "middle")
-    .text(function(d) { return formatCount(d.y); });
+    .text(function(d) { 
+        if (formatCount(d.y) != 0)
+        {
+          return formatCount(d.y); 
+        } else {
+          return "";
+        }
+      });
 
 svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis);
+
+svg.append("g")
+    .attr("class", "x brush")
+    .call(brush)
+  .selectAll("rect")
+    .attr("y", -6)
+    .attr("height", height + 7);
+
+function brushstart() {
+  // do nothing
+}
+
+function brushmove() {
+  var e = brush.extent();
+  svg.selectAll("rect").classed("hidden", function(d) {
+    return e[0] > d.x || d.x > e[1];
+  });
+  svg.selectAll("text").classed("hidden", function(d) {
+    return e[0] > d.x || d.x > e[1];
+  });
+}
+
+function brushend() {
+  if (brush.empty())
+  {
+    svg.selectAll(".hidden").classed("hidden", false);
+  }
+}
 
 </script>
