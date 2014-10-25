@@ -22,6 +22,9 @@ var data = d3.layout.histogram()
     .bins(x.ticks(numTicks))
     (values);
 
+var list = d3.selectAll(".list")
+    .data([processList]);
+
 var y = d3.scale.linear()
     .domain([0, d3.max(data, function(d) { return d.y; })])
     .range([height, 0]);
@@ -36,7 +39,7 @@ var brush = d3.svg.brush()
     .on("brush", brushmove)
     .on("brushend", brushend);
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#graph").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -79,6 +82,20 @@ svg.append("g")
     .attr("y", -19)
     .attr("height", height + 20);
 
+
+renderAll();
+
+// Renders the specified chart or list.
+function render(method) {
+  d3.select(this).call(method);
+}
+
+// Whenever the brush moves, re-rendering everything.
+function renderAll() {
+  list.each(render);
+  d3.select("#active").text(formatNumber(all.value()));
+}
+
 function brushstart() {
   // do nothing
 }
@@ -98,4 +115,19 @@ function brushend() {
   {
     svg.selectAll(".hidden").classed("hidden", false);
   }
+}
+
+function processList(div) {
+  div.each(function() {
+    var process = d3.select(this).selectAll(".pid")
+        .data(values);
+
+    process.enter().append("div")
+           .attr("class", "pid")
+           .text(function(d) { return d; });
+
+    process.exit().remove();
+    process.order();
+
+  });
 }
