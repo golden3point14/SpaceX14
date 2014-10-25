@@ -1,5 +1,5 @@
 body {
-  font: 11px sans-serif;
+  font: 10px sans-serif;
 }
 
 .bar rect {
@@ -24,9 +24,29 @@ body {
 }
 
 rect.hidden {
-  fill: #ccc !important;
+  fill: #ccc;
 }
 
 text.hidden {
   fill: #ccc !important;
+}
+
+#lists {
+  display: inline-block;
+}
+
+#process-list {
+  height: 500px;
+  min-width: 300px;
+  background-color: #ccc;
+  overflow-y: auto;
+}
+
+.graph {
+  display: inline-block;
+}
+
+.graphtitle {
+  font-size: 14px;
+  font-weight: bold;
 }
