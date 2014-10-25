@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<<<<<<< HEAD
     <title>Hello Node Webkit</title>
     <script type="text/javascript">
     //get node webkit GUI
@@ -31,8 +32,48 @@
  
     win.menu = menubar;
     </script>
+=======
+    <title>SharkHound</title>
+    <link href="assets/css/main.css" rel="stylesheet" type="text/css" />
+    <script src="assets/js/colorpicker.js" type="text/javascript"></script>
+>>>>>>> 2a52a17ac092daa2d8bbe7609b87d19744c1ae0b
 </head>
 <body>
-    <h1>Hello Node Webkit</h1>
+    <div class="row">
+      <div id="box1" class="box"></div>
+      <div id="box2"class="box"></div>
+      <div id="box3" class="box"></div>
+    </div>
+    <div class="row">
+      <div id="box4" class="box"></div>
+      <div id="box5" class="box"></div>
+      <div id="box6" class="box"></div>
+    </div>
+    <div class="row">
+      <div id="box7" class="box"></div>
+      <div id="box8" class="box"></div>
+      <div id="box9" class="box"></div>
+    </div>
 </body>
+<script>
+  for (var i = 1; i <= 9; ++i) {
+    var color = reallyGenerateDesaturatedColor();
+    console.log(color);
+    var name = "box" + i;
+    var box = document.getElementById(name);
+    box.style.backgroundColor = color;
+    box.style.opacity = "0.4";
+    box.addEventListener("click", function(e) {
+      var opacity = e.target.style.opacity;
+      if (opacity == "0.4") {
+        e.target.style.opacity = "1";
+      } else {
+        e.target.style.opacity = "0.4";
+      }
+    });
+  }
+  var box = document.getElementById("box5");
+  box.style.backgroundColor = "blue";
+  box.style.opacity = "1";
+</script>
 </html>

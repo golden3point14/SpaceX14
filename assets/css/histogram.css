@@ -1,0 +1,32 @@
+body {
+  font: 11px sans-serif;
+}
+
+.bar rect {
+  fill: darkcyan;
+  shape-rendering: crispEdges;
+}
+
+.bar text {
+  fill: darkcyan;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+rect.hidden {
+  fill: #ccc !important;
+}
+
+text.hidden {
+  fill: #ccc !important;
+}
