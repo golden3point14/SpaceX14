@@ -2,6 +2,7 @@
 
 // Generate a Bates distribution of 10 random variables.
 var values = d3.range(1000).map(d3.random.bates(10));
+// var values = [0.5,0.5,0.5,0.4,0.6];
 
 // A formatter for counts.
 var formatCount = d3.format(",.0f");
@@ -93,7 +94,6 @@ function render(method) {
 // Whenever the brush moves, re-rendering everything.
 function renderAll() {
   list.each(render);
-  d3.select("#active").text(formatNumber(all.value()));
 }
 
 function brushstart() {
@@ -111,21 +111,38 @@ function brushmove() {
 }
 
 function brushend() {
+
   if (brush.empty())
   {
     svg.selectAll(".hidden").classed("hidden", false);
   }
+  renderAll();
 }
 
 function processList(div) {
+  var e = brush.extent();
+
   div.each(function() {
     var process = d3.select(this).selectAll(".pid")
         .data(values);
 
+
     process.enter().append("div")
            .attr("class", "pid")
-           .text(function(d) { return d; });
+           .text(function(d) { 
 
+              if (brush.empty())
+              {
+                return d;
+              } else {
+
+                if (e[0] <= d && d <= e[1])
+                {
+                  return d;
+                }
+              }
+            });
+ 
     process.exit().remove();
     process.order();
 
