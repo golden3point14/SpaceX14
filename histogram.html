@@ -5,25 +5,17 @@
 <style>
 
 body {
-  font: 12px sans-serif;
+  font: 11px sans-serif;
 }
 
 .bar rect {
-  fill: steelblue;
+  fill: darkcyan;
   shape-rendering: crispEdges;
 }
 
-/*.bar:hover rect {
-  fill: black;
-}*/
-
 .bar text {
-  fill: steelblue;
+  fill: darkcyan;
 }
-
-/*.bar:hover text {
-  fill: black;
-}*/
 
 .axis path, .axis line {
   fill: none;
@@ -64,9 +56,12 @@ var x = d3.scale.linear()
     .domain([0, 1])
     .range([0, width]);
 
+var numTicks = 50;
+var stepSize = 1.0/numTicks;
+
 // Generate a histogram using twenty uniformly-spaced bins.
 var data = d3.layout.histogram()
-    .bins(x.ticks(20))
+    .bins(x.ticks(numTicks))
     (values);
 
 var y = d3.scale.linear()
@@ -133,10 +128,10 @@ function brushstart() {
 function brushmove() {
   var e = brush.extent();
   svg.selectAll("rect").classed("hidden", function(d) {
-    return e[0] > d.x || d.x > e[1];
+    return e[0] > d.x + stepSize || d.x > e[1];
   });
   svg.selectAll("text").classed("hidden", function(d) {
-    return e[0] > d.x || d.x > e[1];
+    return e[0] > d.x + stepSize || d.x > e[1];
   });
 }
 
