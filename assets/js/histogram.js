@@ -1,8 +1,8 @@
 // Basic histogram code from http://bl.ocks.org/mbostock/3048450
 
 // Generate a Bates distribution of 10 random variables.
-var values = d3.range(1000).map(d3.random.bates(10));
-// var values = [0.5,0.5,0.5,0.4,0.6];
+// var values = d3.range(1000).map(d3.random.bates(10));
+var values = [0.5,0.5,0.5,0.4,0.6];
 
 // A formatter for counts.
 var formatCount = d3.format(",.0f");
@@ -25,6 +25,8 @@ var data = d3.layout.histogram()
 
 var list = d3.selectAll(".list")
     .data([processList]);
+
+var dataTable = dc.dataTable("#dc-table-graph");
 
 var y = d3.scale.linear()
     .domain([0, d3.max(data, function(d) { return d.y; })])
@@ -123,14 +125,14 @@ function processList(div) {
   var e = brush.extent();
 
   div.each(function() {
-    var process = d3.select(this).selectAll(".pid")
+    var process = d3.select(this).selectAll(".processlist")
         .data(values);
 
+    var processEnter = process.enter().append("div").attr("class", "processlist");
 
-    process.enter().append("div")
+    processEnter.append("div")
            .attr("class", "pid")
            .text(function(d) { 
-
               if (brush.empty())
               {
                 return d;

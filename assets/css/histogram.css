@@ -1,5 +1,5 @@
 body {
-  font: 10px sans-serif;
+  font: sans-serif;
 }
 
 .bar rect {
@@ -33,20 +33,26 @@ text.hidden {
 
 #lists {
   display: inline-block;
+  height: 500px;
 }
 
 #process-list {
-  height: 500px;
-  min-width: 300px;
-  background-color: #ccc;
   overflow-y: auto;
 }
 
 .graph {
   display: inline-block;
+  border: none;
+  padding: 10px;
 }
 
 .graphtitle {
   font-size: 14px;
   font-weight: bold;
+}
+
+.pid:hover {
+  background-color: darkcyan;
+  color: white;
+  cursor: pointer;
 }
