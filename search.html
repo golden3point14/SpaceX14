@@ -4,13 +4,15 @@
     <title>SpaceShark</title>
     <link href="assets/css/home.css" rel="stylesheet" type="text/css" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-    <script src="https://raw.github.com/jiren/filter.js/master/filter.js" type="text/javascript"></script>
+    <script src="../filter.js/filter.js" type="text/javascript"></script>
 
 </head>
 <body>
 <input type="file" id="files" name="files[]" />
+<output id="JSON"></output>
 <output id="list"></output>
 
+<div id="bodyDiv"></div>
 
 <script>
   var files;
@@ -27,9 +29,18 @@
 
     reader.onload = function(evt) {
     var contents = evt.target.result;
-    console.log("File contents: " + contents);
+    //console.log("File contents: " + contents);
     var obj = JSON.parse(contents);
     console.log("First event is " + obj.events[0].name);
+    //obj.events.length
+    for (var i=0; i<obj.events.length; i++)
+    {
+        var iDiv = document.createElement('div');
+        iDiv.innerHTML += '<ul>' + (obj.events[i].name) + obj.events[i].startTime +
+                          obj.events[i].cpu + obj.events[i].eventType + obj.events[i].extraInfo + '</ul>';
+        document.getElementById('bodyDiv').appendChild(iDiv);
+    }
+
     };
 
     reader.onerror = function(evt) {
