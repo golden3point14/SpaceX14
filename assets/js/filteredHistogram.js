@@ -14,13 +14,13 @@ dataTable
   .height(500)
   .dimension(typeDimension)
   .group(function(d) { return "List of all selected processes"})
-  .size(10)
+  .size(10000)
     .columns([
       function(d) {return "process name"},
       function(d) {return d;}
       ])
     .sortBy(function(d) {return d;})
-    .order(d3.descending);
+    .order(d3.ascending);
 
 histogram
   .width(500)
