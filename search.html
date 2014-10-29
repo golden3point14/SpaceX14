@@ -4,65 +4,25 @@
     <title>SpaceShark</title>
     <link href="assets/css/home.css" rel="stylesheet" type="text/css" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="../jquery-2.1.1.min.js" type="text/javascript"></script>
     <script src="../filter.js/filter.js" type="text/javascript"></script>
+    <script src="assets/js/json_query.js" type="text/javascript"></script>
 
 </head>
 <body>
 <input type="file" id="files" name="files[]" />
 <output id="JSON"></output>
 <output id="list"></output>
-<script id="list_template" type="text/html">
-  <div class="event">
 
-</script>
+<template id="list_template">
+  <div id="name" class="events"></div>
+  <div id="pid" class="events"></div>
+</template>
+
 
 <div id="bodyDiv"></div>
 
-<script>
-  var files;
-  var reader = new FileReader(); 
-  function handleFileSelect(evt) {
-    files = evt.target.files; // FileList object
-    // files is a FileList of File objects. List some properties.
-    var output = [];
-    for (var i = 0, f; f = files[i]; i++) {
-      output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-                  f.size, ' bytes, last modified: ',
-                  f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-                  '</li>');
-
-    reader.onload = function(evt) {
-    var contents = evt.target.result;
-    //console.log("File contents: " + contents);
-    var obj = JSON.parse(contents);
-    console.log("First event is " + obj.events[0].name);
-
-    for (var i=0; i<obj.events.length; i++)
-    {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + (obj.events[i].name) + obj.events[i].startTime +
-                          obj.events[i].cpu + obj.events[i].eventType + obj.events[i].extraInfo + obj.events[i].pid + '</ul>';
-        document.getElementById('bodyDiv').appendChild(iDiv);
-    }
-
-    /*var FJS = FilterJS(obj, '#bodyDiv', {
-      template: '#list_template'
-});*/
-
-    };
-
-    reader.onerror = function(evt) {
-    console.error("File could not be read! Code " + evt.target.error.code);
-    };
-
-    reader.readAsText(f);
-
-    }
-    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-  }
-
-  document.getElementById('files').addEventListener('change', handleFileSelect, false);
-</script>
+<script src="assets/js/search.js" type="text/javascript"></script>
 
 </body>
 </html>
