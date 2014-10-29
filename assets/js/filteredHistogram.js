@@ -1,12 +1,16 @@
-var values = [];
-var maxPreemp = 0;
+var values = [];    // the list of tasks
+var maxPreemp = 0;  // the highest number of preemptions
 
-  d3.json("test.json", function (data) {
+  d3.json("test.json", function (data) { // getting the data from example.json
 
+    // filtering out the <idle> tasks, so that they don't show up in
+    // the histogram
     for (var i=0; i<data.tasks.length; i++)
     {
         if (data.tasks[i].name !== "<idle>") {
           values.push(data.tasks[i]);
+
+          // finding the max number of preemptions
           if (data.tasks[i].preemptionCount > maxPreemp)
           {
             maxPreemp = data.tasks[i].preemptionCount;
@@ -14,13 +18,14 @@ var maxPreemp = 0;
         }
     }
 
+    // creating a filter based on the preemption count
     var value = crossfilter(values),
-    typeDimension = value.dimension(function(d) {return d.preemptionCount;}),
-    typeGroup = typeDimension.group().reduceCount();
+      typeDimension = value.dimension(function(d) {return d.preemptionCount;}),
+      typeGroup = typeDimension.group().reduceCount();
 
 
-    var dataTable = dc.dataTable("#process-list");
-    var histogram = dc.barChart("#dc-bar-chart");
+    var dataTable = dc.dataTable("#process-list");  // the table of processes
+    var histogram = dc.barChart("#dc-bar-chart");   // the histogram
 
     dataTable
       .width(300)
@@ -43,7 +48,7 @@ var maxPreemp = 0;
       .dimension(typeDimension)
       .group(typeGroup);
 
-
+    // render the content
     dc.renderAll();
 
     });
