@@ -22,15 +22,29 @@ var files;
         // tmpl.querySelector('#name').innerText = obj.events[i].name;
         // tmpl.querySelector('#pid').innerText = obj.events[i].pid;
         // bodyDiv.appendChild(tmpl);
-        var iDiv = document.createElement('div');
+        /*var iDiv = document.createElement('div');
         iDiv.innerHTML += '<ul>' + (obj.events[i].name) + obj.events[i].startTime +
                           obj.events[i].cpu + obj.events[i].eventType + obj.events[i].extraInfo + obj.events[i].pid + '</ul>';
-        document.getElementById('bodyDiv').appendChild(iDiv);
+        document.getElementById('bodyDiv').appendChild(iDiv);*/
     }
 
     var FJS = FilterJS(obj, '#bodyDiv', {
-      template: '#list_template'
+      template: '#list_template',
+      search: {ele: '#searchBox'},
+      callbacks: {
+      afterFilter: function(result){
+        $('#total_events').text(result.length);
+      }
+    }
     });
+
+    /*FJS.setStreaming({
+    data_url: 'test.json',
+    stream_after: 1,
+    batch_size: 50
+    });*/
+
+    window.FJS = FJS;
 
     };
 
