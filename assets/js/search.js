@@ -1,4 +1,6 @@
 var files;
+var eventJSON;
+var currentResults;
   var reader = new FileReader(); 
   function handleFileSelect(evt) {
     files = evt.target.files; // FileList object
@@ -16,15 +18,15 @@ var files;
     var obj = JSON.parse(contents);
     console.log("First event is " + obj.events[0].name);
 
-    var result = _.select(obj.events, function(element){return element.name == "trace-cmd";});
+    eventJSON = obj.events;
+    currentResults = eventJSON;
 
-    for (var j = 0; j<result.length; j++)
-    {
-       var iDiv = document.createElement('div');
-       iDiv.innerHTML += '<ul>' + result[j].name;
-      document.getElementById('bodyDiv').appendChild(iDiv);
-      console.log("name: " + result[j].name);
-    }
+     for (var i = 0; i<eventJSON.length; i++)
+      {
+        var iDiv = document.createElement('div');
+        iDiv.innerHTML += '<ul>' + eventJSON[i].name;
+        document.getElementById('bodyDiv').appendChild(iDiv);
+      }
 
     };
 
@@ -38,4 +40,109 @@ var files;
     document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
   }
 
+  function handleSwitchBox(evt) {
+    if (document.getElementById('switchBox').checked)
+    {
+     
+     console.log("checked");
+      currentResults = eventJSON;
+      currentResults = refilterCheckedBoxes();
+      node = document.getElementById('bodyDiv');
+      while (node.hasChildNodes())
+      {
+        node.removeChild(node.lastChild);
+      }
+
+      for (var i = 0; i<currentResults.length; i++)
+      {
+        var iDiv = document.createElement('div');
+        iDiv.innerHTML += '<ul>' + currentResults[i].name;
+        document.getElementById('bodyDiv').appendChild(iDiv);
+      }
+
+    }
+
+    else
+    {
+       currentResults = _.select(currentResults, function(element){return element.eventType != "sched_switch";});
+      
+      console.log("unchecked");
+
+      node = document.getElementById('bodyDiv');
+      while (node.hasChildNodes())
+      {
+        node.removeChild(node.lastChild);
+      }
+
+      for (var i = 0; i<currentResults.length; i++)
+      {
+        var iDiv = document.createElement('div');
+        iDiv.innerHTML += '<ul>' + currentResults[i].name;
+        document.getElementById('bodyDiv').appendChild(iDiv);
+      }
+    }
+  }
+
+  function handleWakeupBox(evt) {
+    if (document.getElementById('wakeupBox').checked)
+    {
+     
+     console.log("checked");
+      currentResults = eventJSON;
+      currentResults = refilterCheckedBoxes();
+      node = document.getElementById('bodyDiv');
+      while (node.hasChildNodes())
+      {
+        node.removeChild(node.lastChild);
+      }
+
+      for (var i = 0; i<currentResults.length; i++)
+      {
+        var iDiv = document.createElement('div');
+        iDiv.innerHTML += '<ul>' + currentResults[i].name;
+        document.getElementById('bodyDiv').appendChild(iDiv);
+      }
+
+    }
+
+    else
+    {
+       currentResults = _.select(currentResults, function(element){return element.eventType != "sched_wakeup";});
+      
+      console.log("unchecked");
+
+      node = document.getElementById('bodyDiv');
+      while (node.hasChildNodes())
+      {
+        node.removeChild(node.lastChild);
+      }
+
+      for (var i = 0; i<currentResults.length; i++)
+      {
+        var iDiv = document.createElement('div');
+        iDiv.innerHTML += '<ul>' + currentResults[i].name;
+        document.getElementById('bodyDiv').appendChild(iDiv);
+      }
+    }
+  }
+
+
+  //called when a box is unchecked
+  //checks for checked boxes and filters when applicable
+  function refilterCheckedBoxes()
+  {
+      if (!document.getElementById('switchBox').checked)
+      {
+        currentResults = _.select(currentResults, function(element){return element.eventType != "sched_switch";});
+      }
+      if (!document.getElementById('wakeupBox').checked)
+      {
+        currentResults = _.select(currentResults, function(element){return element.eventType != "sched_wakeup";});
+      }
+
+      return currentResults;
+  }
+
   document.getElementById('files').addEventListener('change', handleFileSelect, false);
+  document.getElementById('switchBox').addEventListener('change', handleSwitchBox, false);
+  document.getElementById('wakeupBox').addEventListener('change', handleWakeupBox, false);
