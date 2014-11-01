@@ -16,21 +16,15 @@ var files;
     var obj = JSON.parse(contents);
     console.log("First event is " + obj.events[0].name);
 
-    for (var i=0; i<obj.events.length; i++)
-    {
-        // var tmpl = document.getElementById('list_template').content.cloneNode(true);
-        // tmpl.querySelector('#name').innerText = obj.events[i].name;
-        // tmpl.querySelector('#pid').innerText = obj.events[i].pid;
-        // bodyDiv.appendChild(tmpl);
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + (obj.events[i].name) + obj.events[i].startTime +
-                          obj.events[i].cpu + obj.events[i].eventType + obj.events[i].extraInfo + obj.events[i].pid + '</ul>';
-        document.getElementById('bodyDiv').appendChild(iDiv);
-    }
+    var result = _.select(obj.events, function(element){return element.name == "trace-cmd";});
 
-    var FJS = FilterJS(obj, '#bodyDiv', {
-      template: '#list_template'
-    });
+    for (var j = 0; j<result.length; j++)
+    {
+       var iDiv = document.createElement('div');
+       iDiv.innerHTML += '<ul>' + result[j].name;
+      document.getElementById('bodyDiv').appendChild(iDiv);
+      console.log("name: " + result[j].name);
+    }
 
     };
 
