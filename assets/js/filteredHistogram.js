@@ -1,7 +1,22 @@
 var values = [];    // the list of tasks
 var maxPreemp = 0;  // the highest number of preemptions
+var files;
+var reader = new FileReader(); 
 
-  d3.json("test.json", function (data) { // getting the data from example.json
+  // d3.json("test.json", function (data) { // getting the data from test.json
+  function handleFileSelect(evt) {
+    files = evt.target.files; // FileList object
+
+    var output = [];
+    for (var i = 0, f; f = files[i]; i++) {
+      output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                  f.size, ' bytes, last modified: ',
+                  f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+                  '</li>');
+
+    reader.onload = function(evt) {
+    var contents = evt.target.result;
+    var data = JSON.parse(contents);
 
     // filtering out the <idle> tasks, so that they don't show up in
     // the histogram
@@ -17,6 +32,7 @@ var maxPreemp = 0;  // the highest number of preemptions
           }
         }
     }
+
 
     // creating a filter based on the preemption count
     var value = crossfilter(values),
@@ -51,5 +67,17 @@ var maxPreemp = 0;  // the highest number of preemptions
     // render the content
     dc.renderAll();
 
-    });
+  };
+
+  reader.onerror = function(evt) {
+    console.error("File could not be read! Code " + evt.target.error.code);
+    };
+
+reader.readAsText(f);
+
+    }
+    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+  }
+
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
