@@ -52,7 +52,16 @@ var reader = new FileReader();
             function(d) {return d.preemptionCount;}
             ])
           .sortBy(function(d) {return d.preemptionCount;})
-          .order(d3.ascending);
+          .order(d3.ascending)
+          .renderlet(function(table) {
+            table.selectAll(".dc-data-table").on("click", function (d) {
+              alert("hi");
+            })
+          })
+
+        // window.function(value) {
+        //   alert("hi");
+        // }
 
         histogram
           .width(500)
