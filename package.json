@@ -2,7 +2,7 @@
   "author": "HMCClinic",
   "name": "myapp.SpaceX14",
   "description": "An ftrace visualization tool",
-  "main": "home.html",
+  "main": "histogram.html",
   "version": "0.0.0",
   "repository": {
     "type": "git",
@@ -10,13 +10,9 @@
   },
   "window": {
     "toolbar": true,
-    "resizable": false,
+    "resizable": true,
     "width": 1000,
-    "height": 600,
-    "min_width": 600,
-    "min_height": 400,
-    "max_width": 1000,
-    "max_height": 600,
+    "height": 700,
     "position": "center"
   },
   "dependencies": {},
