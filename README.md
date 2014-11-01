@@ -3,11 +3,13 @@ SpaceX14
 
 Visualizing ftrace data. Web application based, using Node.js frameworks.
 
-# Instructions
+## Instructions
 
-## Parser
+Please follow the following instructions to parse a .dat file and run our visualization.
 
-## Visualization
+### Parser
+
+### Visualization
 
 - Download Node-webkit from the appropriate link at https://github.com/rogerwang/node-webkit
 - Get the code for our project from this repository
