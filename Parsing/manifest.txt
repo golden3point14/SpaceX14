@@ -1,0 +1,2 @@
+Main-Class: parser
+Class-path: json-simple-1.1.1.jar
