@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,13 +8,25 @@ import java.util.HashMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.json.*;
 
 class parser {
 	public static void main(String [ ] args) throws IOException, InterruptedException {
 		Runtime rt = Runtime.getRuntime();
-	
-		Process proc = rt.exec("trace-cmd report");
+		
+		Process proc;
+		if (args.length > 0) {
+			String filename = args[0];
+			File f = new File(filename);
+			if (f.exists() && !f.isDirectory()) {
+				String command = "trace-cmd report " + filename;
+				proc = rt.exec(command);
+			} else {
+				System.out.println("Please provide a valid filename.");
+				return;
+			}
+		} else {	
+			proc = rt.exec("trace-cmd report");
+		}
 	
 		BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 		String s = null;
