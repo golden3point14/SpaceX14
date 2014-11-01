@@ -14,70 +14,75 @@ var reader = new FileReader();
                   f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
                   '</li>');
 
-    reader.onload = function(evt) {
-    var contents = evt.target.result;
-    var data = JSON.parse(contents);
+      reader.onload = function(evt) {
+        var contents = evt.target.result;
+        var data = JSON.parse(contents);
 
-    // filtering out the <idle> tasks, so that they don't show up in
-    // the histogram
-    for (var i=0; i<data.tasks.length; i++)
-    {
-        if (data.tasks[i].name !== "<idle>") {
-          values.push(data.tasks[i]);
+        // filtering out the <idle> tasks, so that they don't show up in
+        // the histogram
+        for (var i=0; i<data.tasks.length; i++)
+        {
+            if (data.tasks[i].name !== "<idle>") {
+              values.push(data.tasks[i]);
 
-          // finding the max number of preemptions
-          if (data.tasks[i].preemptionCount > maxPreemp)
-          {
-            maxPreemp = data.tasks[i].preemptionCount;
-          }
+              // finding the max number of preemptions
+              if (data.tasks[i].preemptionCount > maxPreemp)
+              {
+                maxPreemp = data.tasks[i].preemptionCount;
+              }
+            }
         }
-    }
+
+        // creating a filter based on the preemption count
+        var value = crossfilter(values),
+          typeDimension = value.dimension(function(d) {return d.preemptionCount;}),
+          typeGroup = typeDimension.group().reduceCount();
 
 
-    // creating a filter based on the preemption count
-    var value = crossfilter(values),
-      typeDimension = value.dimension(function(d) {return d.preemptionCount;}),
-      typeGroup = typeDimension.group().reduceCount();
+        var dataTable = dc.dataTable("#process-list");  // the table of processes
+        var histogram = dc.barChart("#dc-bar-chart");   // the histogram
 
+        dataTable
+          .width(300)
+          .height(500)
+          .dimension(typeDimension)
+          .group(function(d) { return "List of all selected processes"})
+          .columns([
+            function(d) {return d.name},
+            function(d) {return d.preemptionCount;}
+            ])
+          .sortBy(function(d) {return d.preemptionCount;})
+          .order(d3.ascending);
 
-    var dataTable = dc.dataTable("#process-list");  // the table of processes
-    var histogram = dc.barChart("#dc-bar-chart");   // the histogram
+        histogram
+          .width(500)
+          .height(400)
+          .x(d3.scale.linear().domain([0,maxPreemp + 1]))
+          .elasticY(true)
+          .elasticX(true)
+          .brushOn(true)
+          .dimension(typeDimension)
+          .group(typeGroup)
+          .renderHorizontalGridLines(true)
+          .xAxisLabel("Preemption Count")
+          .yAxisLabel("Number of Processes");
 
-    dataTable
-      .width(300)
-      .height(500)
-      .dimension(typeDimension)
-      .group(function(d) { return "List of all selected processes"})
-      .size(10000)
-        .columns([
-          function(d) {return d.name},
-          function(d) {return d.preemptionCount;}
-          ])
-        .sortBy(function(d) {return d.preemptionCount;})
-        .order(d3.ascending);
+        // render the content
+        dc.renderAll();
 
-    histogram
-      .width(500)
-      .height(400)
-      .x(d3.scale.linear().domain([0,maxPreemp + 1]))
-      .brushOn(true)
-      .dimension(typeDimension)
-      .group(typeGroup);
-
-    // render the content
-    dc.renderAll();
-
-  };
-
-  reader.onerror = function(evt) {
-    console.error("File could not be read! Code " + evt.target.error.code);
     };
 
-reader.readAsText(f);
+    reader.onerror = function(evt) {
+      console.error("File could not be read! Code " + evt.target.error.code);
+    };
 
-    }
-    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+    reader.readAsText(f);
+
   }
 
-  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+  document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+
+}
+
+document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
