@@ -8,6 +8,12 @@ Visualizing ftrace data. Web application based, using Node.js frameworks.
 Please follow the following instructions to parse a .dat file and run our visualization.
 
 ### Parser
+The code for the parser is located in parser.java. It reads in a file named 'trace.dat'
+from the current directory and creates a file called test.json. 
+
+To run:
+- `java -jar spaceshark.jar`
+
 
 ### Visualization
 
