@@ -21,3 +21,4 @@ To run:
 - Get the code for our project from this repository
 - Paste all of the Node-webkit files into the SpaceX14 directory
 - Run the `nw` executable
+- Choose the .json file that you created using our parser by clicking Browse... and opening it
