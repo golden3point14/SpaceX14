@@ -39,6 +39,7 @@ text.hidden {
 #process-list {
   overflow-y: auto;
   max-height: 500px;
+  min-width: 200px;
 }
 
 .graph {
@@ -52,13 +53,17 @@ text.hidden {
   font-weight: bold;
 }
 
-.pid:hover {
-  background-color: darkcyan;
+.dc-chart .brush rect.extent {
+    fill: steelblue;
+    fill-opacity: .2;
+}
+
+.dataTable tr:hover {
+  background-color: steelblue;
   color: white;
   cursor: pointer;
 }
 
-.dc-chart .brush rect.extent {
-    fill: steelblue;
-    fill-opacity: .2;
+.click:hover {
+  background-color: red;
 }
