@@ -39,7 +39,7 @@ text.hidden {
 #process-list {
   overflow-y: auto;
   max-height: 500px;
-  min-width: 200px;
+  min-width: 225px;
 }
 
 .graph {

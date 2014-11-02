@@ -43,6 +43,8 @@ var doc = document;
         var dataTable = dc.dataTable("#process-list");  // the table of processes
         var histogram = dc.barChart("#dc-bar-chart");   // the histogram
 
+        var checkboxes = []
+
         dataTable
           .width(300)
           .height(500)
@@ -50,8 +52,11 @@ var doc = document;
           .group(function(d) { return "List of all selected processes"})
           .columns([
             function(d) {return d.name;},
-            function(d) {return d.preemptionCount;},
-            function(d) {return '<input type=\"checkbox\" checked=\"yes\" name=\"process\" value=' + d.pid + '  />';}
+            function(d) {return d.preemptionCount;}
+            // function(d) {
+            //   var checkbox = '<input type=\"checkbox\" checked=\"yes\" name=\"process\" value=' + d.pid + '  id=' + d.pid + ' />';
+            //   return checkbox;
+            // }
             ])
           .sortBy(function(d) {return d.preemptionCount;})
           .order(d3.ascending);
@@ -59,15 +64,14 @@ var doc = document;
         histogram
           .width(700)
           .height(500)
-          .x(d3.scale.linear().domain([0,maxPreemp + 1]))
-          .elasticY(true)
-          .elasticX(true)
+          .x(d3.scale.linear().domain([0,maxPreemp + 2]))
           .brushOn(true)
           .dimension(typeDimension)
           .group(typeGroup)
           .renderHorizontalGridLines(true)
           .xAxisLabel("Preemption Count")
           .yAxisLabel("Number of Processes");
+
 
         // render the content
         dc.renderAll();
@@ -87,4 +91,3 @@ var doc = document;
 }
 
 document.getElementById('files').addEventListener('change', handleFileSelect, false);
-
