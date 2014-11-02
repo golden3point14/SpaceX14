@@ -87,7 +87,7 @@ var currentResults;
     if (document.getElementById('wakeupBox').checked)
     {
      
-     console.log("checked");
+      console.log("checked");
       currentResults = eventJSON;
       currentResults = refilterCheckedBoxes();
       node = document.getElementById('bodyDiv');
@@ -126,6 +126,53 @@ var currentResults;
     }
   }
 
+  function handleSearch(evt) {
+    console.log("handleSearch");
+    searchField = document.getElementById('searchBar').value;
+    
+    if(searchField == "") {
+      currentResults = eventJSON;
+      currentResults = refilterCheckedBoxes();
+    }
+
+    else {
+      var tempCurrentResults = new Array();
+      currentResults = eventJSON;
+      currentResults = refilterCheckedBoxes();
+      for(var i=0; i<currentResults.length; i++) {
+        console.log("name:"+currentResults[i].name);
+        console.log("length:"+currentResults.length);
+
+        if(currentResults[i].name.indexOf(searchField) != -1) {
+          tempCurrentResults.push(currentResults[i]);
+        } 
+      }
+      currentResults = tempCurrentResults;
+    }
+
+    node = document.getElementById('bodyDiv');
+      while (node.hasChildNodes())
+      {
+        node.removeChild(node.lastChild);
+      }
+
+      for (var i = 0; i<currentResults.length; i++)
+      {
+        var iDiv = document.createElement('div');
+        iDiv.innerHTML += '<ul>' + currentResults[i].name;
+        document.getElementById('bodyDiv').appendChild(iDiv);
+      }
+  }
+
+  function handleKeyPress(evt) {
+    var keycode=evt.keyCode;
+
+    if(keycode==13) {
+      handleSearch(evt);
+    }
+    return false;
+  }
+
 
   //called when a box is unchecked
   //checks for checked boxes and filters when applicable
@@ -146,3 +193,6 @@ var currentResults;
   document.getElementById('files').addEventListener('change', handleFileSelect, false);
   document.getElementById('switchBox').addEventListener('change', handleSwitchBox, false);
   document.getElementById('wakeupBox').addEventListener('change', handleWakeupBox, false);
+  document.getElementById('searchButton').addEventListener('click', handleSearch, false);
+  document.getElementById('searchBar').addEventListener('keypress', handleKeyPress, false);
+
