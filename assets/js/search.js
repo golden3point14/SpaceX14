@@ -1,6 +1,13 @@
 var files;
 var eventJSON;
 var currentResults;
+
+//angular.js things
+var resultsApp = angular.module('resultsApp', []);
+resultsApp.controller('ResultsControl', function ($scope) {
+  $scope.results = currentResults;
+});
+
   var reader = new FileReader(); 
   function handleFileSelect(evt) {
     files = evt.target.files; // FileList object
