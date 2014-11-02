@@ -10,6 +10,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 class parser {
+	public static HashMap pidToTaskIndex = new HashMap();
+	
 	public static void main(String [ ] args) throws IOException, InterruptedException {
 		Runtime rt = Runtime.getRuntime();
 		
@@ -74,6 +76,7 @@ class parser {
 			events.add(event);
 			
 			JSONObject task;
+			int numTasks = 0;
 			if (!seenTasks.containsKey(pid)) {
 				// Create new task object
 				task = new JSONObject();
@@ -83,6 +86,10 @@ class parser {
 				taskEvents.add(currentLine);
 				task.put("events", taskEvents);
 				task.put("preemptionCount", 0);
+				
+				// Associate PID of task with its index in the task array
+				pidToTaskIndex.put(pid, numTasks);
+				numTasks += 1;
 				
 				// Add task to task array
 				tasks.add(task);
@@ -118,15 +125,93 @@ class parser {
 			
 			currentLine += 1;
 		}
+		calculateTotalRunTimeOfEachTask(events, tasks);
+		calculateTotalWaitTimeOfEachTask(events, tasks);
+		calculateTotalSleepTimeOfEachTask(events, tasks);
 		
 		mainObj.put("events", events);
 		mainObj.put("tasks", tasks);
 		
+		writeJSON(mainObj);
+	}
+	
+	public static void writeJSON(JSONObject obj) throws IOException {
 		FileWriter file = new FileWriter("test.json");
-		file.write(JSONValue.toJSONString(mainObj));
+		file.write(JSONValue.toJSONString(obj));
 		file.flush();
 		file.close();
 	}
 	
+	// The runtime is in ns
+	public static void calculateTotalRunTimeOfEachTask(JSONArray events, JSONArray tasks) {
+		int numEvents = events.size();
+		for (int i = 0; i < numEvents; i++) {
+			JSONObject event = (JSONObject) events.get(i);
+			
+			// Example formatting of stat_runtime
+			// comm=trace-cmd pid=8915 runtime=241034 [ns] vruntime=56595524040767 [ns]
+			// Interested in value after runtime
+			if (event.get("eventType").equals("sched_stat_runtime")) {
+				
+				String[] runtimeInfo = ((String) event.get("extraInfo")).split("\\s");
+				Long runtime = Long.parseLong(runtimeInfo[2].substring(runtimeInfo[2].indexOf('=') + 1));
+				
+				int index = (Integer) pidToTaskIndex.get((Integer) event.get("pid"));
+				JSONObject associatedTask = (JSONObject) tasks.get(index);
+				
+				if (associatedTask.containsKey("totalRuntime")) {
+					Long total = (Long) associatedTask.get("totalRuntime");
+					runtime += total;
+				}
+				associatedTask.put("totalRuntime", runtime);
+			}
+		}
+	}
 	
+	public static void calculateTotalWaitTimeOfEachTask(JSONArray events, JSONArray tasks) {
+		int numEvents = events.size();
+		for (int i = 0; i < numEvents; i++) {
+			JSONObject event = (JSONObject) events.get(i);
+			
+			// Example of wait info formatting
+			// comm=trace-cmd pid=8905 delay=1051505 [ns]
+			if (event.get("eventType").equals("sched_stat_wait")) {
+				
+				String[] waittimeInfo = ((String) event.get("extraInfo")).split("\\s");
+				Long waittime = Long.parseLong(waittimeInfo[2].substring(waittimeInfo[2].indexOf('=') + 1));
+				
+				int index = (Integer) pidToTaskIndex.get((Integer) event.get("pid"));
+				JSONObject associatedTask = (JSONObject) tasks.get(index);
+				
+				if (associatedTask.containsKey("totalWaittime")) {
+					Long total = (Long) associatedTask.get("totalWaittime");
+					waittime += total;
+				}
+				associatedTask.put("totalWaittime", waittime);
+			}
+		}
+	}
+	
+	public static void calculateTotalSleepTimeOfEachTask(JSONArray events, JSONArray tasks) {
+		int numEvents = events.size();
+		for (int i = 0; i < numEvents; i++) {
+			JSONObject event = (JSONObject) events.get(i);
+			
+			// Same formatting as wait event
+			if (event.get("eventType").equals("sched_stat_sleep")) {
+				
+				String[] sleeptimeInfo = ((String) event.get("extraInfo")).split("\\s");
+				Long sleeptime = Long.parseLong(sleeptimeInfo[2].substring(sleeptimeInfo[2].indexOf('=') + 1));
+				
+				int index = (Integer) pidToTaskIndex.get((Integer) event.get("pid"));
+				JSONObject associatedTask = (JSONObject) tasks.get(index);
+				
+				if (associatedTask.containsKey("totalSleeptime")) {
+					Long total = (Long) associatedTask.get("totalSleeptime");
+					sleeptime += total;
+				}
+				associatedTask.put("totalSleeptime", sleeptime);
+			}
+		}
+	}
 }
