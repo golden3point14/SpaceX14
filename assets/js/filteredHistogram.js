@@ -2,6 +2,7 @@ var values = [];    // the list of tasks
 var maxPreemp = 0;  // the highest number of preemptions
 var files;
 var reader = new FileReader(); 
+var doc = document;
 
   // d3.json("test.json", function (data) { // getting the data from test.json
   function handleFileSelect(evt) {
@@ -48,24 +49,16 @@ var reader = new FileReader();
           .dimension(typeDimension)
           .group(function(d) { return "List of all selected processes"})
           .columns([
-            function(d) {return d.name},
-            function(d) {return d.preemptionCount;}
+            function(d) {return d.name;},
+            function(d) {return d.preemptionCount;},
+            function(d) {return '<input type=\"checkbox\" checked=\"yes\" name=\"process\" value=' + d.pid + '  />';}
             ])
           .sortBy(function(d) {return d.preemptionCount;})
-          .order(d3.ascending)
-          .renderlet(function(table) {
-            table.selectAll(".dc-data-table").on("click", function (d) {
-              alert("hi");
-            })
-          })
-
-        // window.function(value) {
-        //   alert("hi");
-        // }
+          .order(d3.ascending);
 
         histogram
-          .width(500)
-          .height(400)
+          .width(700)
+          .height(500)
           .x(d3.scale.linear().domain([0,maxPreemp + 1]))
           .elasticY(true)
           .elasticX(true)
