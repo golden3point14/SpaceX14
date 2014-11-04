@@ -1,6 +1,6 @@
 var values = [];    // the list of tasks
-var maxPreemp = 0;  // the highest number of preemptions
-var files;
+var maxSleeptime = 0.0;  // the longest runtime
+var minSleeptime = Infinity;  // the shortest runtime
 var reader = new FileReader(); 
 var doc = document;
 
@@ -19,6 +19,8 @@ var doc = document;
         var contents = evt.target.result;
         var data = JSON.parse(contents);
 
+        console.log(data.tasks);
+
         // filtering out the <idle> tasks, so that they don't show up in
         // the histogram
         for (var i=0; i<data.tasks.length; i++)
@@ -27,21 +29,25 @@ var doc = document;
               values.push(data.tasks[i]);
 
               // finding the max number of preemptions
-              if (data.tasks[i].preemptionCount > maxPreemp)
+              if (data.tasks[i].totalSleeptime > maxSleeptime)
               {
-                maxPreemp = data.tasks[i].preemptionCount;
+                maxSleeptime = data.tasks[i].totalSleeptime;
+              }
+
+              if (data.tasks[i].totalSleeptime < minSleeptime)
+              {
+                minSleeptime = data.tasks[i].totalSleeptime;
               }
             }
         }
 
         // creating a filter based on the preemption count
         var value = crossfilter(values),
-          typeDimension = value.dimension(function(d) {return d.preemptionCount;}),
+          typeDimension = value.dimension(function(d) {return d.totalSleeptime;}),
           typeGroup = typeDimension.group().reduceCount();
 
-
         var dataTable = dc.dataTable("#process-list");  // the table of processes
-        var histogram = dc.barChart("#dc-bar-chart");   // the histogram
+        var histogram = dc.rowChart("#dc-bar-chart");   // the histogram
 
         dataTable
           .width(300)
@@ -50,22 +56,18 @@ var doc = document;
           .group(function(d) { return "List of all selected processes"})
           .columns([
             function(d) {return d.name;},
-            function(d) {return d.preemptionCount;}
+            function(d) {return d.totalSleeptime;}
             ])
-          .sortBy(function(d) {return d.preemptionCount;})
+          .sortBy(function(d) {return d.totalSleeptime;})
           .order(d3.ascending);
 
         histogram
           .width(700)
           .height(500)
-          .x(d3.scale.linear().domain([0,maxPreemp + 2]))
-          .brushOn(true)
           .dimension(typeDimension)
           .group(typeGroup)
-          .renderHorizontalGridLines(true)
-          .xAxisLabel("Preemption Count")
-          .yAxisLabel("Number of Processes");
-
+          .label(function(d) {return d.name})
+          .renderLabel(true);
 
         // render the content
         dc.renderAll();
