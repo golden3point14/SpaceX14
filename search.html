@@ -13,7 +13,13 @@
 </head>
 <body ng-controller="ResultsControl">
 
-<ul>
+<form>
+    <input type="file" ng-file-select="onFileSelect($files)" >
+ <!--  <input type="file" ng-file-select="onFileSelect($files)" multiple> -->
+  
+</form>
+
+<ul> {{results}}
     <li ng-repeat="result in results">
       <span>{{result.name}}</span>
       <p>{{result.pid}}</p>
