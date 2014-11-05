@@ -26,28 +26,28 @@ resultsApp.controller('ResultsControl', function ($scope) {
     reader.onload = function(evt) {
       $scope.$apply(function() {
         var contents = evt.target.result;
-    //console.log("File contents: " + contents);
-    var obj = JSON.parse(contents);
-    console.log("First event is " + obj.events[0].name);
+        //console.log("File contents: " + contents);
+        var obj = JSON.parse(contents);
+        console.log("First event is " + obj.events[0].name);
 
-    eventJSON = obj.events;
-    currentResults = eventJSON;
-    $scope.results = eventJSON;
-    console.log("scope.results"+$scope.results);
+        eventJSON = obj.events;
+        currentResults = eventJSON;
+        $scope.results = eventJSON;
+        console.log("scope.results"+$scope.results);
 
 
-     /*for (var i = 0; i<eventJSON.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + eventJSON[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
-      }*/
+         /*for (var i = 0; i<eventJSON.length; i++)
+          {
+            var iDiv = document.createElement('div');
+            iDiv.innerHTML += '<ul>' + eventJSON[i].name;
+            document.getElementById('bodyDiv').appendChild(iDiv);
+          }*/
 
-    reader.onerror = function(evt) {
-    console.error("File could not be read! Code " + evt.target.error.code);
-    };
-  })
-  }
+        reader.onerror = function(evt) {
+        console.error("File could not be read! Code " + evt.target.error.code);
+        };
+      })
+    }
 
     reader.readAsText(f);
     console.log("scope.results"+$scope.results);
@@ -141,6 +141,49 @@ resultsApp.controller('ResultsControl', function ($scope) {
     }
   }
 
+  function handleRuntimeBox(evt) {
+    if (document.getElementById('runtimeBox').checked)
+    {
+     
+      console.log("checked");
+      currentResults = eventJSON;
+      currentResults = refilterCheckedBoxes();
+      node = document.getElementById('bodyDiv');
+      while (node.hasChildNodes())
+      {
+        node.removeChild(node.lastChild);
+      }
+
+      for (var i = 0; i<currentResults.length; i++)
+      {
+        var iDiv = document.createElement('div');
+        iDiv.innerHTML += '<ul>' + currentResults[i].name;
+        document.getElementById('bodyDiv').appendChild(iDiv);
+      }
+
+    }
+
+    else
+    {
+       currentResults = _.select(currentResults, function(element){return element.eventType != "sched_stat_runtime";});
+      
+      console.log("unchecked");
+
+      node = document.getElementById('bodyDiv');
+      while (node.hasChildNodes())
+      {
+        node.removeChild(node.lastChild);
+      }
+
+      for (var i = 0; i<currentResults.length; i++)
+      {
+        var iDiv = document.createElement('div');
+        iDiv.innerHTML += '<ul>' + currentResults[i].name;
+        document.getElementById('bodyDiv').appendChild(iDiv);
+      }
+    }
+  }
+
   function handleSearch(evt) {
     console.log("handleSearch");
     searchField = document.getElementById('searchBar').value;
@@ -201,7 +244,10 @@ resultsApp.controller('ResultsControl', function ($scope) {
       {
         currentResults = _.select(currentResults, function(element){return element.eventType != "sched_wakeup";});
       }
-
+      if (!document.getElementById('runtimeBox').checked)
+      {
+        currentResults = _.select(currentResults, function(element){return element.eventType != "sched_stat_runtime";});
+      }
       return currentResults;
   }
 
@@ -223,6 +269,7 @@ resultsApp.controller('ResultsControl', function ($scope) {
   //document.getElementById('files').addEventListener('change', handleFileSelect, false);
   document.getElementById('switchBox').addEventListener('change', handleSwitchBox, false);
   document.getElementById('wakeupBox').addEventListener('change', handleWakeupBox, false);
+  document.getElementById('runtimeBox').addEventListener('change', handleRuntimeBox, false);
   document.getElementById('searchButton').addEventListener('click', handleSearch, false);
   document.getElementById('searchBar').addEventListener('keypress', handleKeyPress, false);
 

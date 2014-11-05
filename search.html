@@ -19,12 +19,12 @@
   
 </form>
 
-<ul> {{results}}
-    <li ng-repeat="result in results">
-      <span>{{result.name}}</span>
-      <p>{{result.pid}}</p>
-    </li>
-  </ul>
+<ul>
+  <li ng-repeat="result in results">
+    <span>{{result.name}}</span>
+    <p>{{result.pid}}</p>
+  </li>
+</ul>
 
 
 <input type="file" id="files" name="files[]" />
@@ -40,6 +40,7 @@
 <form action="">
   <input type="checkbox" name="switch" id="switchBox" value="switch" checked> Switch Events <br>
   <input type="checkbox" name="wakeup" id="wakeupBox" value="wakeup" checked> Wakeup Events <br>
+  <input type="checkbox" name="runtime" id="runtimeBox" value="runtime" checked> Runtime Events <br>
 </form>
 
 <div id="bodyDiv"></div>
