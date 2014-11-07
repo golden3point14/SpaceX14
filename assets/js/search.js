@@ -28,12 +28,29 @@ resultsApp.controller('ResultsControl', function ($scope) {
     eventJSON = obj.events;
     currentResults = eventJSON;
 
-     for (var i = 0; i<eventJSON.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + eventJSON[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
-      }
+    var bodyDiv = document.getElementById('bodyDiv');
+
+    //var lengthEvents = eventJSON.length;
+
+    var fragment = document.createDocumentFragment();
+
+    for (var i = 0; i<eventJSON.length; i++)
+    {
+      
+      var iDiv = document.createElement('div');
+      iDiv.innerHTML = '<ul>' + eventJSON[i].name;
+      // bodyDiv.appendChild(iDiv);
+      fragment.appendChild(iDiv);
+
+      // if (i % 10000 == 0)
+      // {
+      //   bodyDiv.appendChild(fragment);
+      //   fragment = document.createDocumentFragment();
+      // }
+      
+    }
+
+    document.body.appendChild(fragment);
 
     };
 
