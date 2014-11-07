@@ -41,21 +41,23 @@ var doc = document;
           nameGroup = nameDimension.group().reduceSum(function(d) {return 5}),
           typeGroup = typeDimension.group().reduceCount();
 
-
-        var dataTable = dc.dataTable("#process-list");  // the table of processes
+        var processChart = dc.rowChart("#process-list");
         var histogram = dc.barChart("#dc-bar-chart");   // the histogram
 
-        dataTable
-          .width(300)
-          .height(500)
-          .dimension(typeDimension)
-          .group(function(d) { return "List of all selected processes"})
-          .columns([
-            function(d) {return d.name;},
-            function(d) {return d.preemptionCount;}
-            ])
-          .sortBy(function(d) {return d.preemptionCount;})
-          .order(d3.ascending);
+        processChart
+          .width(200)
+          .height(2000)
+          .dimension(nameDimension)
+          .group(nameGroup)
+          .renderLabel(true)
+          .renderTitle(false)
+          .margins({top: 0, right: 0, bottom: -1, left: 0})
+          .label(function(d) {
+            var process = processFromPid(d.key, values);
+            return "name: " + process.name + " preemptions: " + process.preemptionCount; 
+          })
+          .ordering(function(d) { return -processFromPid(d.key, values).preemptionCount; });
+          
 
         histogram
           .width(700)
@@ -87,4 +89,15 @@ var doc = document;
 }
 
 document.getElementById('files').addEventListener('change', handleFileSelect, false);
+
+function processFromPid(pid, values) {
+  for (var i = 0; i < values.length; i++) {
+    if (values[i].pid == pid) {
+
+      return values[i];
+    }
+  }
+
+  return "";
+}
 
