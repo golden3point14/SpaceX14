@@ -67,3 +67,8 @@ text.hidden {
 .click:hover {
   background-color: red;
 }
+
+.dc-row-graph .axis path, .axis line {
+stroke: none
+}
+
