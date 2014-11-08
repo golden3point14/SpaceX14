@@ -36,10 +36,16 @@ var doc = document;
 
         // creating a filter based on the preemption count
         var value = crossfilter(values),
-          typeDimension = value.dimension(function(d) {return d.preemptionCount;}),
+          typeDimensionPreemp = value.dimension(function(d) {return d.preemptionCount;}),
           nameDimension = value.dimension(function(d) {return d.pid;}),
           nameGroup = nameDimension.group().reduceSum(function(d) {return 5}),
-          typeGroup = typeDimension.group().reduceCount();
+          typeGroupPreemp = typeDimensionPreemp.group().reduceCount(),
+          typeDimensionSleep = value.dimension(function(d) {return d.totalSleeptime;}),
+          typeGroupSleep = typeDimensionSleep.group().reduceCount(),
+          typeDimensionRun = value.dimension(function(d) {return d.totalRuntime;}),
+          typeGroupRun = typeDimensionRun.group().reduceCount()
+          typeDimensionWait = value.dimension(function(d) {return d.totalWaittime;}),
+          typeGroupWait = typeDimensionWait.group().reduceCount();
 
 
         var dataTable = dc.dataTable("#process-list");  // the table of processes
@@ -48,7 +54,7 @@ var doc = document;
         dataTable
           .width(300)
           .height(400)
-          .dimension(typeDimension)
+          .dimension(typeDimensionPreemp)
           .group(function(d) { return "List of all selected processes"})
           .columns([
             function(d) {return d.name;},
@@ -62,11 +68,61 @@ var doc = document;
           .height(400)
           .x(d3.scale.linear().domain([0,maxPreemp + 2]))
           .brushOn(true)
-          .dimension(typeDimension)
-          .group(typeGroup)
+          .dimension(typeDimensionPreemp)
+          .group(typeGroupPreemp)
           .renderHorizontalGridLines(true)
           .xAxisLabel("Preemption Count")
           .yAxisLabel("Number of Processes");
+
+
+        // distribution side bar stuff
+        var histogrambutton = dc.barChart("#histogram-button");
+        var runchartbutton = dc.rowChart("#runchart-button");
+        var waitchartbutton = dc.rowChart("#waitchart-button");
+        var sleepchartbutton = dc.rowChart("#sleepchart-button");
+
+        var buttonwidth = 210;
+
+        histogrambutton
+          .width(buttonwidth)
+          .height(buttonwidth)
+          .x(d3.scale.linear().domain([0,maxPreemp]))
+          .brushOn(false)
+          .dimension(typeDimensionPreemp)
+          .group(typeGroupPreemp);
+          
+        histogrambutton.yAxis().tickFormat(function(v) { return ""; });    
+        histogrambutton.xAxis().tickFormat(function(v) { return ""; });
+
+        runchartbutton
+          .width(buttonwidth)
+          .height(buttonwidth)
+          .dimension(typeDimensionRun)
+          .group(typeGroupRun)
+          .label(function(d) {return d.name})
+          .renderLabel(false);
+
+        runchartbutton.xAxis().tickFormat(function(v) { return ""; });
+
+        waitchartbutton
+          .width(buttonwidth)
+          .height(buttonwidth)
+          .dimension(typeDimensionWait)
+          .group(typeGroupWait)
+          .label(function(d) {return d.name})
+          .renderLabel(false);
+
+        waitchartbutton.xAxis().tickFormat(function(v) { return ""; });
+
+        sleepchartbutton
+          .width(buttonwidth)
+          .height(buttonwidth)
+          .dimension(typeDimensionSleep)
+          .group(typeGroupSleep)
+          .label(function(d) {return d.name})
+          .renderLabel(false);
+
+        sleepchartbutton.xAxis().tickFormat(function(v) { return ""; });
 
 
         // render the content

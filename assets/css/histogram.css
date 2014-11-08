@@ -69,3 +69,7 @@ text.hidden {
 stroke: none
 }
 
+.content {
+  padding: 10px 10px 10px 360px;
+}
+
