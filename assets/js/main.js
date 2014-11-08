@@ -28,8 +28,8 @@ function handleFileSelect(evt) {
 			var JSONObj = obj;
 			JSONtasks = obj.tasks;
 			getTopPreemptions();
-      getTopRunTime();
-      GetTopWaitTime();
+      getTopRuntime();
+      getTopWaittime();
 
 		};
 
@@ -41,7 +41,23 @@ function handleFileSelect(evt) {
 
  	}
 
+  if (supports_html5_storage()) 
+  {
+    console.log("localstorage supported");
+  } 
+  else 
+  {
+    console.log("no");
+  }
 
+}
+
+function supports_html5_storage() {
+  try {
+    return 'localStorage' in window && window['localStorage'] !== null;
+  } catch (e) {
+    return false;
+  }
 }
 
 document.getElementById('files').addEventListener('change', handleFileSelect, false);
@@ -91,12 +107,86 @@ function getTopPreemptions()
   dc.renderAll();
 }
 
-function getTopRunTime()
+function getTopRuntime()
 {
+  //sort processes by preemptionCount
+  runTimeSorted = _.sortBy(JSONtasks, function(element){return -1*(element.totalRuntime);});
+  //remove <idle>
+  runTimeSorted = _.select(runTimeSorted, function(element){return (element.name != "<idle>") && (element.totalRuntime != 0);});
+  
+  var displayNum = 10;
+  var display = [];
+  if (runTimeSorted.length < displayNum)
+  {
+    display = runTimeSorted;
+  }
+  else
+  {
+    display = runTimeSorted.slice(0,displayNum);
+  }
 
+  var value = crossfilter(display),
+    typeDimension = value.dimension(function(d) {return d.totalRuntime;}),
+    nameDimension = value.dimension(function(d) {return d.pid;}),
+    nameGroup = nameDimension.group().reduceSum(function(d) {return 5}),
+    typeGroup = typeDimension.group().reduceCount();
+
+  var dataTable = dc.dataTable("#runtime-list");
+    
+  dataTable
+    .width(500)
+    .height(400)
+    .dimension(typeDimension)
+    .group(function(d) { return "10 longest running";})
+    .columns([
+      function(d) {return d.name;},
+      function(d) {return d.pid;},
+      function(d) {return d.totalRuntime;}
+      ])
+    .sortBy(function(d) {return -1*d.totalRuntime;})
+    .order(d3.ascending);
+
+  dc.renderAll();
 }
 
-function getTopWaitTime()
+function getTopWaittime()
 {
+  //sort processes by preemptionCount
+  waitTimeSorted = _.sortBy(JSONtasks, function(element){return -1*(element.totalWaittime);});
+  //remove <idle>
+  waitTimeSorted = _.select(waitTimeSorted, function(element){return (element.name != "<idle>") && (element.totalWaittime != 0);});
+  
+  var displayNum = 10;
+  var display = [];
+  if (waitTimeSorted.length < displayNum)
+  {
+    display = waitTimeSorted;
+  }
+  else
+  {
+    display = waitTimeSorted.slice(0,displayNum);
+  }
 
+  var value = crossfilter(display),
+    typeDimension = value.dimension(function(d) {return d.totalWaittime;}),
+    nameDimension = value.dimension(function(d) {return d.pid;}),
+    nameGroup = nameDimension.group().reduceSum(function(d) {return 5}),
+    typeGroup = typeDimension.group().reduceCount();
+
+  var dataTable = dc.dataTable("#waittime-list");
+    
+  dataTable
+    .width(500)
+    .height(400)
+    .dimension(typeDimension)
+    .group(function(d) { return "10 longest waiting";})
+    .columns([
+      function(d) {return d.name;},
+      function(d) {return d.pid;},
+      function(d) {return d.totalWaittime;}
+      ])
+    .sortBy(function(d) {return -1*d.totalWaittime;})
+    .order(d3.ascending);
+
+  dc.renderAll();
 }
