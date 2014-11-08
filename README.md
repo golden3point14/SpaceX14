@@ -13,10 +13,12 @@ passed as a command line argument, otherwise it will look for a file called `tra
 the current directory.
 
 To run:
+- `cd parsing`
 - `java -jar spaceshark.jar <filename>`
 
 To update the jar file after making changes to the .java file:
 - recompile parser.java to create a parser.class file
+- make sure the .class file is within the parsing directory
 - run `jar cfm spaceshark.jar manifest.txt *.jar *.class`
 
 If new libraries are ever added, update the Class-path in manifest.txt.
