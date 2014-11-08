@@ -47,7 +47,7 @@ var doc = document;
 
         dataTable
           .width(300)
-          .height(500)
+          .height(400)
           .dimension(typeDimension)
           .group(function(d) { return "List of all selected processes"})
           .columns([
@@ -59,7 +59,7 @@ var doc = document;
 
         histogram
           .width(700)
-          .height(500)
+          .height(400)
           .x(d3.scale.linear().domain([0,maxPreemp + 2]))
           .brushOn(true)
           .dimension(typeDimension)
