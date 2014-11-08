@@ -1,3 +1,7 @@
+body {
+  font: sans-serif;
+}
+
 .header {
 	background-color: #0099FF;
 	color: white;
@@ -50,5 +54,39 @@
 
 .events {
 	background-color: blue;
+}
+
+.sidebar {
+	width: 150px;
+	height: 100%;
+	background-color: gainsboro;
+	position:fixed;
+
+}
+
+.content {
+	padding: 10px 10px 10px 160px;
+}
+
+.sidebutton {
+	width: 140;
+	height: 50px;
+	padding: 25px 0px 0px 10px;
+	color: black;
+	font-size: 15pt;
+	border-left: 4px solid lightgray;
+	border-right: 4px solid lightgray;
+	border-top: 2px solid lightgray;
+	border-bottom: 2px solid lightgray;
+	border-collapse: collapse;
+}
+
+.sidebutton:hover {
+	background-color: white;
+	cursor: pointer;
+}
+
+.ng-scope {
+	margin: 0;
 }
 

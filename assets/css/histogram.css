@@ -1,6 +1,3 @@
-body {
-  font: sans-serif;
-}
 
 .bar rect {
   fill: darkcyan;
@@ -38,7 +35,7 @@ text.hidden {
 
 #process-list {
   overflow-y: auto;
-  max-height: 500px;
+  max-height: 400px;
   min-width: 225px;
 }
 
