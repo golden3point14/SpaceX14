@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="resultsApp">
+<html>
 <head>
     <title>SpaceShark</title>
     <link href="assets/css/dc.css" rel="stylesheet" type="text/css" />
@@ -10,29 +10,14 @@
     <script src="../filter.js/filter.js" type="text/javascript"></script>
     <script src="assets/js/json_query.js" type="text/javascript"></script>
     <script src="assets/js/underscore-min.js" type="text/javascript"></script>
-    <script src="assets/js/angular.min.js" type="text/javascript"></script>
 
 </head>
 
-<body ng-controller="ResultsControl">
+<body>
 
   <div class="sidebar" id="sidebar"></div>
 
   <div class="content">
-
-<form>
-    <input type="file" ng-file-select="onFileSelect($files)" >
- <!--  <input type="file" ng-file-select="onFileSelect($files)" multiple> -->
-  
-</form>
-
-<ul>
-  <li ng-repeat="result in results">
-    <span>{{result.name}}</span>
-    <p>{{result.pid}}</p>
-  </li>
-</ul>
-
 
 <input type="file" id="files" name="files[]" />
 <output id="JSON"></output>

@@ -14,7 +14,15 @@
 <body>
   <div class="sidebar" id="sidebar"></div>
 
+  <div class="distbar" id="distbar">
+      <div class="distbutton" id="histogram-button" onclick="window.location.href='histogram.html';">Preemption Count</div>
+      <div class="distbutton" id="runchart-button" onclick="window.location.href='runtimeChart.html';">Total Runtime</div>
+      <div class="distbutton" id="waitchart-button" onclick="window.location.href='waittimeChart.html';">Total Wait Time</div>
+      <div class="distbutton" id="sleepchart-button" onclick="window.location.href='sleeptimeChart.html';">Total Sleep Time</div>
+    </div>
+
   <div class="content">
+    
     <div>
     <input type="file" id="files" name="files[]" />
     <output id="JSON"></output>
@@ -39,6 +47,7 @@
 
 
   <script type="text/javascript" src="assets/js/sidebar.js"></script>
+
   <script type="text/javascript" src="assets/js/filteredHistogram.js"></script>
 
 </body>

@@ -18,7 +18,6 @@ body {
 }
 
 .bar {
-	/*display: inline-block;*/
 	height: 40%;
 	width: 90%;
 	float: right;
@@ -61,7 +60,7 @@ body {
 	height: 100%;
 	background-color: gainsboro;
 	position:fixed;
-
+	overflow-y: auto;
 }
 
 .content {
@@ -90,3 +89,22 @@ body {
 	margin: 0;
 }
 
+.distbar {
+  height: 100%;
+  width: 200px;
+  position: fixed;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-left: 150px;
+}
+
+.distbutton {
+  width: 100%;
+  height: 210px;
+  background-color: white;
+}
+
+.distbutton:hover {
+  background-color: gainsboro;
+  cursor: pointer;
+}

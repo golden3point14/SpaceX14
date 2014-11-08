@@ -12,26 +12,38 @@
 </head>
 
 <body>
-  <div>
-  <input type="file" id="files" name="files[]" />
-  <output id="JSON"></output>
-  <output id="list"></output>
+  <div class="sidebar" id="sidebar"></div>
+  
+  <div class="distbar" id="distbar">
+      <div class="distbutton" id="histogram-button" onclick="window.location.href='histogram.html';">Preemption Count</div>
+      <div class="distbutton" id="runchart-button" onclick="window.location.href='runtimeChart.html';">Total Runtime</div>
+      <div class="distbutton" id="waitchart-button" onclick="window.location.href='waittimeChart.html';">Total Wait Time</div>
+      <div class="distbutton" id="sleepchart-button" onclick="window.location.href='sleeptimeChart.html';">Total Sleep Time</div>
+    </div>
 
-  <script id="list_template" type="text.html">
-    <div class="name"></div>
-    <div class="pid"></div>
-  </script>
-  </div>
+  <div class="content">
+    <div>
+    <input type="file" id="files" name="files[]" />
+    <output id="JSON"></output>
+    <output id="list"></output>
 
-  <div id="graph" class="graph">
-    <div id="dc-bar-chart">
-      <h4>Total Sleep Time</h4>
+    <script id="list_template" type="text.html">
+      <div class="name"></div>
+      <div class="pid"></div>
+    </script>
+    </div>
+
+    <div id="graph" class="graph">
+      <div id="dc-bar-chart">
+        <h4>Total Sleep Time</h4>
+      </div>
+    </div>
+
+    <div id="lists">
+      <div id="process-list" class="table table-hover"></div>
     </div>
   </div>
 
-  <div id="lists">
-    <div id="process-list" class="table table-hover"></div>
-  </div>
-
+  <script type="text/javascript" src="assets/js/sidebar.js"></script>
   <script type="text/javascript" src="assets/js/sleeptimeChart.js"></script>
 </body>
