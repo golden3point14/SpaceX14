@@ -113,3 +113,8 @@ body {
   background-color: gainsboro;
   cursor: pointer;
 }
+
+.table {
+	display: inline-block;
+	max-width: 300px;
+}
