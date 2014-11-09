@@ -78,6 +78,7 @@ body {
 	border-top: 2px solid lightgray;
 	border-bottom: 2px solid lightgray;
 	border-collapse: collapse;
+	overflow: hidden;
 }
 
 .sidebutton:hover {
@@ -102,6 +103,10 @@ body {
   width: 100%;
   height: 210px;
   background-color: white;
+  overflow: hidden;
+  border-right: 4px solid lightgray;
+  border-top: 2px solid lightgray;
+  border-bottom: 2px solid lightgray;
 }
 
 .distbutton:hover {
