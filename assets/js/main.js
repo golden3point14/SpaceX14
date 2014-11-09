@@ -27,9 +27,11 @@ function handleFileSelect(evt) {
     			console.log("First event is " + obj.events[0].name);
 			var JSONObj = obj;
 			JSONtasks = obj.tasks;
+      JSONevents = obj.events;
 			getTopPreemptions();
       getTopRuntime();
       getTopWaittime();
+      attemptToFormatData();
 
 		};
 
@@ -189,4 +191,10 @@ function getTopWaittime()
     .order(d3.ascending);
 
   dc.renderAll();
+}
+
+function attemptToFormatData()
+{
+  var eventsGroupedByCPU = _.groupBy(JSONevents, function(e) { return e.cpu; });
+  console.log(eventsGroupedByCPU[0][1000]);
 }

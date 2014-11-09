@@ -28,6 +28,15 @@ text.hidden {
   fill: #ccc !important;
 }
 
+.full {
+  width: 100%;
+}
+
+.three-column {
+  display: inline-block;
+  width: 33% !important;
+}
+
 #lists {
   display: inline-block;
   height: 500px;
