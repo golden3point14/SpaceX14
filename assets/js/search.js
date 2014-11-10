@@ -6,31 +6,51 @@ function handleFileSelect(evt) {
   files = evt.target.files; // FileList object
   // files is a FileList of File objects. List some properties.
   var output = [];
+  
   for (var i = 0, f; f = files[i]; i++) {
     output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
     f.size, ' bytes, last modified: ',
     f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
     '</li>');
-    reader.onload = function(evt) {
-      var contents = evt.target.result;
-      //console.log("File contents: " + contents);
-      var obj = JSON.parse(contents);
-      console.log("First event is " + obj.events[0].name);
-      eventJSON = obj.events;
-      currentResults = eventJSON;
-      for (var i = 0; i<eventJSON.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + eventJSON[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
-      }
-    };
-    reader.onerror = function(evt) {
-    console.error("File could not be read! Code " + evt.target.error.code);
-    };
-    reader.readAsText(f);
+
+    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+
+    read_file(files[0], bodyDiv);
   }
-  document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+
+  function read_file(f, iDiv) {
+    reader.onload = function(evt) {
+    var contents = evt.target.result;
+    //console.log("File contents: " + contents);
+    var obj = JSON.parse(contents);
+    console.log("First event is " + obj.events[0].name);
+    eventJSON = obj.events;
+    currentResults = eventJSON;
+    for (var i = 0; i<50; i++) {
+      iDiv = document.createElement('div');
+      iDiv.innerHTML += '<ul>' + eventJSON[i].name;
+      document.getElementById('bodyDiv').appendChild(iDiv);
+    }
+    var d=50;
+    var j=2*d;
+    $(window).scroll(function() {
+      if($(window).scrollTop() == $(document).height() - $(window).height()) {
+        // load your content
+        for (var i = d; i<j; i++) {
+          iDiv = document.createElement('div');
+          iDiv.innerHTML += '<ul>' + eventJSON[i].name;
+          document.getElementById('bodyDiv').appendChild(iDiv);
+        }
+        d+=50;
+        j=d+50;
+      }
+    });
+  };
+  reader.onerror = function(evt) {
+  console.error("File could not be read! Code " + evt.target.error.code);
+  };
+  reader.readAsText(f);
+  }
 }
 
   function handleSwitchBox(evt) {
