@@ -4,6 +4,7 @@ var mainDiv = document.createElement('div');
 mainDiv.id = 'sidebutton';
 mainDiv.className = 'sidebutton';
 mainDiv.innerHTML = "Main";
+mainDiv.setAttribute("onclick", "window.location.href='main.html';");
 sidebar.appendChild(mainDiv);
 
 var cyclesDiv = document.createElement('div');

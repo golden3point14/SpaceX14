@@ -20,7 +20,7 @@ var doc = document;
         var contents = evt.target.result;
         var data = JSON.parse(contents);
 
-        console.log(data.tasks);
+        // console.log(data.tasks);
 
         // filtering out the <idle> tasks, so that they don't show up in
         // the histogram
@@ -54,12 +54,12 @@ var doc = document;
           nameDimension = value.dimension(function(d) {return d.pid;}),
           nameGroup = nameDimension.group().reduceSum(function(d) {return 5}),
           typeGroupPreemp = typeDimensionPreemp.group().reduceCount(),
-          typeDimensionSleep = value.dimension(function(d) {return d.totalSleeptime;}),
-          typeGroupSleep = typeDimensionSleep.group().reduceCount(),
-          typeDimensionRun = value.dimension(function(d) {return d.totalRuntime;}),
-          typeGroupRun = typeDimensionRun.group().reduceCount(),
-          typeDimensionWait = value.dimension(function(d) {return d.totalWaittime;}),
-          typeGroupWait = typeDimensionWait.group().reduceCount();
+          typeDimensionSleep = value.dimension(function(d) {return d.pid;}),
+          typeGroupSleep = typeDimensionSleep.group().reduceSum(function(d) {return d.totalSleeptime;}),
+          typeDimensionRun = value.dimension(function(d) {return d.pid;}),
+          typeGroupRun = typeDimensionRun.group().reduceSum(function(d) {return d.totalRuntime;}),
+          typeDimensionWait = value.dimension(function(d) {return d.pid;}),
+          typeGroupWait = typeDimensionWait.group().reduceSum(function(d) {return d.totalWaittime});
 
         var dataTable = dc.dataTable("#process-list");  // the table of processes
         var histogram = dc.rowChart("#dc-bar-chart");   // the histogram
@@ -73,14 +73,21 @@ var doc = document;
             function(d) {return d.name;},
             function(d) {return d.totalWaittime;}
             ])
-          .sortBy(function(d) {return d.totalWaittime;})
+          .sortBy(function(d) {return -d.totalWaittime;})
           .order(d3.ascending);
 
         histogram
           .width(700)
-          .height(500)
+          .height(values.length * 30)
           .dimension(typeDimensionWait)
-          .group(typeGroupWait);
+          .group(typeGroupWait)
+          .ordering(function(d) { return -processFromPid(d.key, values).totalWaittime; })
+          .label(function(d) {
+            var process = processFromPid(d.key, values);
+            return process.name + "    " + process.totalWaittime + " ns"; 
+          })
+          .renderLabel(true)
+          .renderTitle(false);
 
         // distribution side bar stuff
         var histogrambutton = dc.barChart("#histogram-button");
@@ -103,31 +110,31 @@ var doc = document;
 
         runchartbutton
           .width(buttonwidth)
-          .height(buttonwidth)
+          .height(values.length * 10)
           .dimension(typeDimensionRun)
           .group(typeGroupRun)
-          .label(function(d) {return d.name})
-          .renderLabel(false);
+          .renderLabel(false)
+          .ordering(function(d) { return -processFromPid(d.key, values).totalRuntime; });
 
         runchartbutton.xAxis().tickFormat(function(v) { return ""; });
 
         waitchartbutton
           .width(buttonwidth)
-          .height(buttonwidth)
+          .height(values.length * 10)
           .dimension(typeDimensionWait)
           .group(typeGroupWait)
-          .label(function(d) {return d.name})
-          .renderLabel(false);
+          .renderLabel(false)
+          .ordering(function(d) { return -processFromPid(d.key, values).totalWaittime; });
 
         waitchartbutton.xAxis().tickFormat(function(v) { return ""; });
 
         sleepchartbutton
           .width(buttonwidth)
-          .height(buttonwidth)
+          .height(values.length * 10)
           .dimension(typeDimensionSleep)
           .group(typeGroupSleep)
-          .label(function(d) {return d.name})
-          .renderLabel(false);
+          .renderLabel(false)
+          .ordering(function(d) { return -processFromPid(d.key, values).totalSleeptime; });
 
         sleepchartbutton.xAxis().tickFormat(function(v) { return ""; });
 
@@ -149,3 +156,14 @@ var doc = document;
 }
 
 document.getElementById('files').addEventListener('change', handleFileSelect, false);
+
+function processFromPid(pid, values) {
+  for (var i = 0; i < values.length; i++) {
+    if (values[i].pid == pid) {
+
+      return values[i];
+    }
+  }
+
+  return "";
+}

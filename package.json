@@ -11,8 +11,8 @@
   "window": {
     "toolbar": true,
     "resizable": true,
-    "width": 1500,
-    "height": 800,
+    "min_width": 1500,
+    "min_height": 800,
     "position": "center"
   },
   "dependencies": {},

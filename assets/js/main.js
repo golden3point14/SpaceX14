@@ -27,9 +27,11 @@ function handleFileSelect(evt) {
     			console.log("First event is " + obj.events[0].name);
 			var JSONObj = obj;
 			JSONtasks = obj.tasks;
+      JSONevents = obj.events;
 			getTopPreemptions();
       getTopRuntime();
       getTopWaittime();
+      attemptToFormatData();
 
 		};
 
@@ -134,7 +136,7 @@ function getTopRuntime()
   var dataTable = dc.dataTable("#runtime-list");
     
   dataTable
-    .width(1000)
+    .width(300)
     .height(400)
     .dimension(typeDimension)
     .group(function(d) { return "10 longest running";})
@@ -176,7 +178,7 @@ function getTopWaittime()
   var dataTable = dc.dataTable("#waittime-list");
     
   dataTable
-    .width(10000)
+    .width(300)
     .height(400)
     .dimension(typeDimension)
     .group(function(d) { return "10 longest waiting";})
@@ -189,4 +191,10 @@ function getTopWaittime()
     .order(d3.ascending);
 
   dc.renderAll();
+}
+
+function attemptToFormatData()
+{
+  var eventsGroupedByCPU = _.groupBy(JSONevents, function(e) { return e.cpu; });
+  console.log(eventsGroupedByCPU[0][1000]);
 }

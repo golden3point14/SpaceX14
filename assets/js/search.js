@@ -1,59 +1,57 @@
 var files;
 var eventJSON;
-var currentResults=[];
-
-//angular.js things
-var resultsApp = angular.module('resultsApp', []);
-resultsApp.controller('ResultsControl', function ($scope) {
-  $scope.results = currentResults;
-  console.log("scope.results"+$scope.results);
-
-
-  $scope.getFile = function () {
-    console.log("trying to get file");
-    var reader = new FileReader(); 
-
-    f = $scope.file; // FileList object
-    // files is a FileList of File objects. List some properties.
-    var output = [];
-    console.log("scope.file:"+$scope.file);
-    
+var currentResults;
+var reader = new FileReader();
+function handleFileSelect(evt) {
+  files = evt.target.files; // FileList object
+  // files is a FileList of File objects. List some properties.
+  var output = [];
+  
+  for (var i = 0, f; f = files[i]; i++) {
     output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-        f.size, ' bytes, last modified: ',
-        f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-       '</li>');
+    f.size, ' bytes, last modified: ',
+    f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+    '</li>');
 
-    reader.onload = function(evt) {
-      $scope.$apply(function() {
-        var contents = evt.target.result;
-        //console.log("File contents: " + contents);
-        var obj = JSON.parse(contents);
-        console.log("First event is " + obj.events[0].name);
-
-        eventJSON = obj.events;
-        currentResults = eventJSON;
-        $scope.results = eventJSON;
-        console.log("scope.results"+$scope.results);
-
-
-         /*for (var i = 0; i<eventJSON.length; i++)
-          {
-            var iDiv = document.createElement('div');
-            iDiv.innerHTML += '<ul>' + eventJSON[i].name;
-            document.getElementById('bodyDiv').appendChild(iDiv);
-          }*/
-
-        reader.onerror = function(evt) {
-        console.error("File could not be read! Code " + evt.target.error.code);
-        };
-      })
-    }
-
-    reader.readAsText(f);
-    console.log("scope.results"+$scope.results);
     document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+
+    read_file(files[0], bodyDiv);
+  }
+
+  function read_file(f, iDiv) {
+    reader.onload = function(evt) {
+    var contents = evt.target.result;
+    //console.log("File contents: " + contents);
+    var obj = JSON.parse(contents);
+    console.log("First event is " + obj.events[0].name);
+    eventJSON = obj.events;
+    currentResults = eventJSON;
+    for (var i = 0; i<50; i++) {
+      iDiv = document.createElement('div');
+      iDiv.innerHTML += '<ul>' + eventJSON[i].name;
+      document.getElementById('bodyDiv').appendChild(iDiv);
+    }
+    var d=50;
+    var j=2*d;
+    $(window).scroll(function() {
+      if($(window).scrollTop() == $(document).height() - $(window).height()) {
+        // load your content
+        for (var i = d; i<j; i++) {
+          iDiv = document.createElement('div');
+          iDiv.innerHTML += '<ul>' + eventJSON[i].name;
+          document.getElementById('bodyDiv').appendChild(iDiv);
+        }
+        d+=50;
+        j=d+50;
+      }
+    });
   };
-});
+  reader.onerror = function(evt) {
+  console.error("File could not be read! Code " + evt.target.error.code);
+  };
+  reader.readAsText(f);
+  }
+}
 
   function handleSwitchBox(evt) {
     if (document.getElementById('switchBox').checked)
@@ -251,22 +249,7 @@ resultsApp.controller('ResultsControl', function ($scope) {
       return currentResults;
   }
 
-  resultsApp.directive("ngFileSelect",function(){
-
-  return {
-    link: function($scope,el){
-      
-      el.bind("change", function(e){
-      
-        $scope.file = (e.srcElement || e.target).files[0];
-        $scope.getFile();
-      })
-      
-    }
-    
-  }
-})
-  //document.getElementById('files').addEventListener('change', handleFileSelect, false);
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
   document.getElementById('switchBox').addEventListener('change', handleSwitchBox, false);
   document.getElementById('wakeupBox').addEventListener('change', handleWakeupBox, false);
   document.getElementById('runtimeBox').addEventListener('change', handleRuntimeBox, false);

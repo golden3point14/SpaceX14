@@ -28,6 +28,15 @@ text.hidden {
   fill: #ccc !important;
 }
 
+.full {
+  width: 100%;
+}
+
+.three-column {
+  display: inline-block;
+  width: 33% !important;
+}
+
 #lists {
   display: inline-block;
   height: 500px;
@@ -35,14 +44,21 @@ text.hidden {
 
 #process-list {
   overflow-y: auto;
-  max-height: 400px;
+  max-height: 510px;
   min-width: 225px;
 }
 
 .graph {
-  display: inline-block;
+  /*display: inline-block;*/
   border: none;
-  padding: 10px;
+  float: left;
+}
+
+#dc-bar-chart {
+  max-height:500px;
+  overflow-y: auto;
+  overflow-x:hidden;
+  display: inline-block;
 }
 
 .graphtitle {
@@ -62,7 +78,7 @@ text.hidden {
 }
 
 .click:hover {
-  background-color: red;
+  background-c2olor: red;
 }
 
 .dc-row-graph .axis path, .axis line {
@@ -70,6 +86,6 @@ stroke: none
 }
 
 .content {
-  padding: 10px 10px 10px 360px;
+  padding: 10px 10px 10px 380px;
 }
 

@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,7 +10,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 class parser {
-	public static HashMap pidToTaskIndex = new HashMap();
+	public static HashMap<Integer,Integer> pidToTaskIndex = new HashMap<Integer, Integer>();
 	
 	public static void main(String [ ] args) throws IOException, InterruptedException {
 		Runtime rt = Runtime.getRuntime();
@@ -36,7 +35,7 @@ class parser {
 		BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 		String s = null;
 		String[] tokens;
-		HashMap seenTasks = new HashMap();
+		HashMap<Integer, JSONObject> seenTasks = new HashMap<Integer, JSONObject>();
 		
 		// First line in report is of format
 		// version = x
@@ -46,8 +45,12 @@ class parser {
 		
 		// Second line in report is of format
 		// cpus=x
+		int numCPUs = 0;
 		if ((s = stdInput.readLine()) != null) {
 			tokens = s.split("=");
+			if (tokens.length == 3) {
+				numCPUs = Integer.parseInt(tokens[2]);
+			}
 		}
 		
 		JSONObject mainObj = new JSONObject();
@@ -70,8 +73,8 @@ class parser {
 				String name = tokens[0].substring(0, splitIndex);
 				int pid = Integer.parseInt(tokens[0].substring(splitIndex+1));
 				
-				// CPU is currently left in form [000]
-				String cpu = tokens[1];
+				// Remove brackets around CPU
+				int cpu = Integer.parseInt(tokens[1].substring(1,tokens[1].length()-1));
 				
 				// Remove the colon at end of start time, then parse to a double
 				double startTime = Double.parseDouble(tokens[2].substring(0, tokens[2].length()-1));
@@ -94,7 +97,6 @@ class parser {
 				event.put("startTime", startTime);
 				event.put("eventType", eventType);
 				event.put("extraInfo", extraInfo);
-				String jsonText = JSONValue.toJSONString(event);
 				events.add(event);
 				
 				// Check to see if we have already created a task associated with this pid

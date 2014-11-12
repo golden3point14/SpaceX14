@@ -15,10 +15,30 @@
   <div class="sidebar" id="sidebar"></div>
   
   <div class="distbar" id="distbar">
-      <div class="distbutton" id="histogram-button" onclick="window.location.href='histogram.html';">Preemption Count</div>
-      <div class="distbutton" id="runchart-button" onclick="window.location.href='runtimeChart.html';">Total Runtime</div>
-      <div class="distbutton" id="waitchart-button" onclick="window.location.href='waittimeChart.html';">Total Wait Time</div>
-      <div class="distbutton" id="sleepchart-button" onclick="window.location.href='sleeptimeChart.html';">Total Sleep Time</div>
+      <div class="distbutton" onclick="window.location.href='histogram.html';">
+        <div class="distframe">
+          <div class="distgraph" id="histogram-button"></div>
+          <div class="distlabel">Preemption Count</div>
+        </div>
+      </div>
+      <div class="distbutton" onclick="window.location.href='runtimeChart.html';">
+        <div class="distframe">
+          <div class="distgraph" id="runchart-button"></div>
+          <div class="distlabel">Total Runtime</div>
+        </div>
+      </div>
+      <div class="distbutton" onclick="window.location.href='waittimeChart.html';">
+        <div class="distframe">
+          <div class="distgraph" id="waitchart-button"></div>
+          <div class="distlabel">Total Wait Time</div>
+        </div>
+      </div>
+      <div class="distbutton" onclick="window.location.href='sleeptimeChart.html';">
+        <div class="distframe">
+          <div class="distgraph" id="sleepchart-button"></div>
+          <div class="distlabel">Total Sleep Time</div>
+        </div>
+      </div>
     </div>
 
   <div class="content">
@@ -34,8 +54,8 @@
     </div>
 
     <div id="graph" class="graph">
+      <h4>Total Sleep Time</h4>
       <div id="dc-bar-chart">
-        <h4>Total Sleep Time</h4>
       </div>
     </div>
 
