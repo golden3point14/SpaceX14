@@ -134,7 +134,7 @@ function getTopRuntime()
   var dataTable = dc.dataTable("#runtime-list");
     
   dataTable
-    .width(500)
+    .width(1000)
     .height(400)
     .dimension(typeDimension)
     .group(function(d) { return "10 longest running";})
@@ -176,7 +176,7 @@ function getTopWaittime()
   var dataTable = dc.dataTable("#waittime-list");
     
   dataTable
-    .width(500)
+    .width(10000)
     .height(400)
     .dimension(typeDimension)
     .group(function(d) { return "10 longest waiting";})
