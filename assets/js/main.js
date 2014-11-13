@@ -23,17 +23,21 @@ function handleFileSelect(evt) {
 
     	reader.onload = function(evt) {
     		var contents = evt.target.result;
+        // TOO LARGE localStorage.setItem("fileContents", contents);
     		var obj = JSON.parse(contents);
-    			console.log("First event is " + obj.events[0].name);
-			var JSONObj = obj;
-			JSONtasks = obj.tasks;
-      JSONevents = obj.events;
-			getTopPreemptions();
-      getTopRuntime();
-      getTopWaittime();
-      attemptToFormatData();
+        //localStorage.setItem("events", JSON.stringify(obj.events));
+        //localStorage.setItem("tasks", JSON.stringify(obj.tasks));
+        localStorage.events = JSON.stringify(obj.events);
+  			console.log("First event is " + obj.events[0].name);
+  			var JSONObj = obj;
+  			JSONtasks = obj.tasks;
+        JSONevents = obj.events;
+  			getTopPreemptions();
+        getTopRuntime();
+        getTopWaittime();
+        attemptToFormatData();
 
-		};
+		  };
 
     	reader.onerror = function(evt) {
     		console.error("File could not be read! Code " + evt.target.error.code);
@@ -42,15 +46,6 @@ function handleFileSelect(evt) {
     reader.readAsText(f);
 
  	}
-
-  if (supports_html5_storage()) 
-  {
-    console.log("localstorage supported");
-  } 
-  else 
-  {
-    console.log("no");
-  }
 
 }
 
@@ -196,5 +191,5 @@ function getTopWaittime()
 function attemptToFormatData()
 {
   var eventsGroupedByCPU = _.groupBy(JSONevents, function(e) { return e.cpu; });
-  console.log(eventsGroupedByCPU[0][1000]);
+  //console.log(eventsGroupedByCPU[0][1000]);
 }
