@@ -24,20 +24,24 @@
 <output id="JSON"></output>
 <output id="list"></output>
 
-<form onsubmit="return false" action="">
+<form onsubmit="return false" action="" class="column">
   Search: <input type="text" id="searchBar">
+</form>
+
+<form action="" class="column">
+  <span class="filter"><input type="checkbox" name="switch" id="switchBox" value="switch" checked> Switch Events <br></span>
+  <span class="filter"><input type="checkbox" name="wakeup" id="wakeupBox" value="wakeup" checked> Wakeup Events <br></span>
+  <span class="filter"><input type="checkbox" name="runtime" id="runtimeBox" value="runtime" checked> Runtime Events <br></span>
 </form>
 
 <button id="searchButton">Go</button><br>
 
-<form action="">
-  <input type="checkbox" name="switch" id="switchBox" value="switch" checked> Switch Events <br>
-  <input type="checkbox" name="wakeup" id="wakeupBox" value="wakeup" checked> Wakeup Events <br>
-  <input type="checkbox" name="runtime" id="runtimeBox" value="runtime" checked> Runtime Events <br>
-</form>
-
-<div id="bodyDiv"></div>
-<div id="total_events"></div>
+<table id="bodyDiv" class="table">
+  <tr>
+    <td>Process Name</td>
+    <td>Event type</td>
+  </tr>
+</table>
 </div>
 
 

@@ -6,7 +6,7 @@ function handleFileSelect(evt) {
   files = evt.target.files; // FileList object
   // files is a FileList of File objects. List some properties.
   var output = [];
-  
+
   for (var i = 0, f; f = files[i]; i++) {
     output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
     f.size, ' bytes, last modified: ',
@@ -27,8 +27,8 @@ function handleFileSelect(evt) {
     eventJSON = obj.events;
     currentResults = eventJSON;
     for (var i = 0; i<50; i++) {
-      iDiv = document.createElement('div');
-      iDiv.innerHTML += '<ul>' + currentResults[i].name;
+      iDiv = document.createElement('tr');
+      iDiv.innerHTML += '<td>' + currentResults[i].name + '</td><td>' + currentResults[i].eventType + '</td>';
       document.getElementById('bodyDiv').appendChild(iDiv);
     }
     var d=50;
@@ -39,9 +39,8 @@ function handleFileSelect(evt) {
         // load your content
         for (var i = d; i<j; i++) {
           if(currentResults[i].name != "") {
-            iDiv = document.createElement('div');
-            console.log("name"+currentResults[i].name);
-            iDiv.innerHTML += '<ul>' + currentResults[i].name;
+            iDiv = document.createElement('tr');
+            iDiv.innerHTML += '<td>' + currentResults[i].name + '</td><td>' + currentResults[i].eventType + '</td>';
             document.getElementById('bodyDiv').appendChild(iDiv);
             d+=50;
             j=d+50;
@@ -60,71 +59,55 @@ function handleFileSelect(evt) {
   }
 }
 
+function updateDisplay() {
+  node = document.getElementById('bodyDiv');
+  while (node.hasChildNodes())
+  {
+    node.removeChild(node.lastChild);
+  }
+
+  for (var i = 0; i<50; i++) {
+    iDiv = document.createElement('tr');
+    iDiv.innerHTML += '<td>' + currentResults[i].name + '</td><td>' + currentResults[i].eventType + '</td>';
+    document.getElementById('bodyDiv').appendChild(iDiv);
+  }
+
+  var d = 50;
+  var j = 2 * d;
+
+  $(window).scroll(function() {
+    if($(window).scrollTop() == $(document).height() - $(window).height()) {
+      // load your content
+      for (var i = d; i < j; i++) {
+        iDiv = document.createElement('tr');
+        iDiv.innerHTML += '<td>' + currentResults[i].name + '</td><td>' + currentResults[i].eventType + '</td>';
+        document.getElementById('bodyDiv').appendChild(iDiv);
+      }
+      d += 50;
+      j = d + 50;
+    }
+  });
+}
+
   function handleSwitchBox(evt) {
     if (document.getElementById('switchBox').checked)
     {
      
-     console.log("checked");
+      console.log("checked");
       currentResults = eventJSON;
       currentResults = refilterCheckedBoxes();
-      node = document.getElementById('bodyDiv');
-      while (node.hasChildNodes())
-      {
-        node.removeChild(node.lastChild);
-      }
-      for (var i = 0; i<50; i++) {
-      iDiv = document.createElement('div');
-      iDiv.innerHTML += '<ul>' + currentResults[i].name;
-      document.getElementById('bodyDiv').appendChild(iDiv);
-      }
-      var d=50;
-      var j=2*d;
-      $(window).scroll(function() {
-        if($(window).scrollTop() == $(document).height() - $(window).height()) {
-          // load your content
-          for (var i = d; i<j; i++) {
-            iDiv = document.createElement('div');
-            iDiv.innerHTML += '<ul>' + currentResults[i].name;
-            document.getElementById('bodyDiv').appendChild(iDiv);
-          }
-          d+=50;
-          j=d+50;
-        }
-      });
+
+      updateDisplay();
 
     }
 
     else
-    {
-       currentResults = _.select(currentResults, function(element){return element.eventType != "sched_switch";});
+    { 
+      currentResults = _.select(currentResults, function(element){return element.eventType != "sched_switch";});
       
       console.log("unchecked");
 
-      node = document.getElementById('bodyDiv');
-      while (node.hasChildNodes())
-      {
-        node.removeChild(node.lastChild);
-      }
-
-      for (var i = 0; i<50; i++) {
-      iDiv = document.createElement('div');
-      iDiv.innerHTML += '<ul>' + currentResults[i].name;
-      document.getElementById('bodyDiv').appendChild(iDiv);
-      }
-      var d=50;
-      var j=2*d;
-      $(window).scroll(function() {
-        if($(window).scrollTop() == $(document).height() - $(window).height()) {
-          // load your content
-          for (var i = d; i<j; i++) {
-            iDiv = document.createElement('div');
-            iDiv.innerHTML += '<ul>' + currentResults[i].name;
-            document.getElementById('bodyDiv').appendChild(iDiv);
-          }
-          d+=50;
-          j=d+50;
-        }
-      });
+      updateDisplay();
     }
   }
 
@@ -135,31 +118,8 @@ function handleFileSelect(evt) {
       console.log("checked");
       currentResults = eventJSON;
       currentResults = refilterCheckedBoxes();
-      node = document.getElementById('bodyDiv');
-      while (node.hasChildNodes())
-      {
-        node.removeChild(node.lastChild);
-      }
 
-      for (var i = 0; i<50; i++) {
-      iDiv = document.createElement('div');
-      iDiv.innerHTML += '<ul>' + currentResults[i].name;
-      document.getElementById('bodyDiv').appendChild(iDiv);
-      }
-      var d=50;
-      var j=2*d;
-      $(window).scroll(function() {
-        if($(window).scrollTop() == $(document).height() - $(window).height()) {
-          // load your content
-          for (var i = d; i<j; i++) {
-            iDiv = document.createElement('div');
-            iDiv.innerHTML += '<ul>' + currentResults[i].name;
-            document.getElementById('bodyDiv').appendChild(iDiv);
-          }
-          d+=50;
-          j=d+50;
-        }
-      });
+      updateDisplay();
 
     }
 
@@ -169,31 +129,7 @@ function handleFileSelect(evt) {
       
       console.log("unchecked");
 
-      node = document.getElementById('bodyDiv');
-      while (node.hasChildNodes())
-      {
-        node.removeChild(node.lastChild);
-      }
-
-      for (var i = 0; i<50; i++) {
-      iDiv = document.createElement('div');
-      iDiv.innerHTML += '<ul>' + currentResults[i].name;
-      document.getElementById('bodyDiv').appendChild(iDiv);
-      }
-      var d=50;
-      var j=2*d;
-      $(window).scroll(function() {
-        if($(window).scrollTop() == $(document).height() - $(window).height()) {
-          // load your content
-          for (var i = d; i<j; i++) {
-            iDiv = document.createElement('div');
-            iDiv.innerHTML += '<ul>' + currentResults[i].name;
-            document.getElementById('bodyDiv').appendChild(iDiv);
-          }
-          d+=50;
-          j=d+50;
-        }
-      });
+      updateDisplay();
     }
   }
 
@@ -204,33 +140,8 @@ function handleFileSelect(evt) {
       console.log("checked");
       currentResults = eventJSON;
       currentResults = refilterCheckedBoxes();
-      node = document.getElementById('bodyDiv');
-      while (node.hasChildNodes())
-      {
-        node.removeChild(node.lastChild);
-      }
 
-      for (var i = 0; i<50; i++) {
-      iDiv = document.createElement('div');
-      iDiv.innerHTML += '<ul>' + currentResults[i].name;
-      document.getElementById('bodyDiv').appendChild(iDiv);
-      }
-      var d=50;
-      var j=2*d;
-      $(window).scroll(function() {
-        if($(window).scrollTop() == $(document).height() - $(window).height()) {
-          console.log("scrolling in runtime");
-          // load your content
-          for (var i = d; i<j; i++) {
-            iDiv = document.createElement('div');
-            iDiv.innerHTML += '<ul>' + currentResults[i].name;
-            document.getElementById('bodyDiv').appendChild(iDiv);
-          }
-          d+=50;
-          j=d+50;
-        }
-      });
-
+      updateDisplay();
     }
 
     else
@@ -239,31 +150,7 @@ function handleFileSelect(evt) {
       
       console.log("unchecked");
 
-      node = document.getElementById('bodyDiv');
-      while (node.hasChildNodes())
-      {
-        node.removeChild(node.lastChild);
-      }
-
-      for (var i = 0; i<50; i++) {
-      iDiv = document.createElement('div');
-      iDiv.innerHTML += '<ul>' + currentResults[i].name;
-      document.getElementById('bodyDiv').appendChild(iDiv);
-      }
-      var d=50;
-      var j=2*d;
-      $(window).scroll(function() {
-        if($(window).scrollTop() == $(document).height() - $(window).height()) {
-          // load your content
-          for (var i = d; i<j; i++) {
-            iDiv = document.createElement('div');
-            iDiv.innerHTML += '<ul>' + currentResults[i].name;
-            document.getElementById('bodyDiv').appendChild(iDiv);
-          }
-          d+=50;
-          j=d+50;
-        }
-      });
+      updateDisplay();
     }
   }
 
@@ -288,33 +175,7 @@ function handleFileSelect(evt) {
       currentResults = tempCurrentResults;
     }
 
-    node = document.getElementById('bodyDiv');
-    while (node.hasChildNodes())
-    {
-      node.removeChild(node.lastChild);
-    }
-    for (var i = 0; i<50; i++) {
-      iDiv = document.createElement('div');
-      iDiv.innerHTML += '<ul>' + currentResults[i].name;
-      document.getElementById('bodyDiv').appendChild(iDiv);
-      lastScrollElement=i;
-    }
-    var d=50;
-    var j=2*d;
-    $(window).scroll(function() {
-      if($(window).scrollTop() == $(document).height() - $(window).height()) {
-        console.log("scrolling in search");
-        // load your content
-        for (var i = d; i<j; i++) {
-          iDiv = document.createElement('div');
-          iDiv.innerHTML += '<ul>' + currentResults[i].name;
-          document.getElementById('bodyDiv').appendChild(iDiv);
-          console.log("currentResults"+currentResults[i]);
-        }
-        d+=50;
-        j=d+50;
-      }
-    });
+    updateDisplay();
   }
 
   function handleKeyPress(evt) {
