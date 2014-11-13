@@ -28,21 +28,28 @@ function handleFileSelect(evt) {
     currentResults = eventJSON;
     for (var i = 0; i<50; i++) {
       iDiv = document.createElement('div');
-      iDiv.innerHTML += '<ul>' + eventJSON[i].name;
+      iDiv.innerHTML += '<ul>' + currentResults[i].name;
       document.getElementById('bodyDiv').appendChild(iDiv);
     }
     var d=50;
     var j=2*d;
     $(window).scroll(function() {
       if($(window).scrollTop() == $(document).height() - $(window).height()) {
+        console.log("scrolling in read_file");
         // load your content
         for (var i = d; i<j; i++) {
-          iDiv = document.createElement('div');
-          iDiv.innerHTML += '<ul>' + eventJSON[i].name;
-          document.getElementById('bodyDiv').appendChild(iDiv);
+          if(currentResults[i].name != "") {
+            iDiv = document.createElement('div');
+            console.log("name"+currentResults[i].name);
+            iDiv.innerHTML += '<ul>' + currentResults[i].name;
+            document.getElementById('bodyDiv').appendChild(iDiv);
+            d+=50;
+            j=d+50;
+          } else {
+            console.log("about to break")
+            break;
+          }
         }
-        d+=50;
-        j=d+50;
       }
     });
   };
@@ -65,13 +72,25 @@ function handleFileSelect(evt) {
       {
         node.removeChild(node.lastChild);
       }
-
-      for (var i = 0; i<currentResults.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + currentResults[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
+      for (var i = 0; i<50; i++) {
+      iDiv = document.createElement('div');
+      iDiv.innerHTML += '<ul>' + currentResults[i].name;
+      document.getElementById('bodyDiv').appendChild(iDiv);
       }
+      var d=50;
+      var j=2*d;
+      $(window).scroll(function() {
+        if($(window).scrollTop() == $(document).height() - $(window).height()) {
+          // load your content
+          for (var i = d; i<j; i++) {
+            iDiv = document.createElement('div');
+            iDiv.innerHTML += '<ul>' + currentResults[i].name;
+            document.getElementById('bodyDiv').appendChild(iDiv);
+          }
+          d+=50;
+          j=d+50;
+        }
+      });
 
     }
 
@@ -87,12 +106,25 @@ function handleFileSelect(evt) {
         node.removeChild(node.lastChild);
       }
 
-      for (var i = 0; i<currentResults.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + currentResults[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
+      for (var i = 0; i<50; i++) {
+      iDiv = document.createElement('div');
+      iDiv.innerHTML += '<ul>' + currentResults[i].name;
+      document.getElementById('bodyDiv').appendChild(iDiv);
       }
+      var d=50;
+      var j=2*d;
+      $(window).scroll(function() {
+        if($(window).scrollTop() == $(document).height() - $(window).height()) {
+          // load your content
+          for (var i = d; i<j; i++) {
+            iDiv = document.createElement('div');
+            iDiv.innerHTML += '<ul>' + currentResults[i].name;
+            document.getElementById('bodyDiv').appendChild(iDiv);
+          }
+          d+=50;
+          j=d+50;
+        }
+      });
     }
   }
 
@@ -109,12 +141,25 @@ function handleFileSelect(evt) {
         node.removeChild(node.lastChild);
       }
 
-      for (var i = 0; i<currentResults.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + currentResults[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
+      for (var i = 0; i<50; i++) {
+      iDiv = document.createElement('div');
+      iDiv.innerHTML += '<ul>' + currentResults[i].name;
+      document.getElementById('bodyDiv').appendChild(iDiv);
       }
+      var d=50;
+      var j=2*d;
+      $(window).scroll(function() {
+        if($(window).scrollTop() == $(document).height() - $(window).height()) {
+          // load your content
+          for (var i = d; i<j; i++) {
+            iDiv = document.createElement('div');
+            iDiv.innerHTML += '<ul>' + currentResults[i].name;
+            document.getElementById('bodyDiv').appendChild(iDiv);
+          }
+          d+=50;
+          j=d+50;
+        }
+      });
 
     }
 
@@ -130,12 +175,25 @@ function handleFileSelect(evt) {
         node.removeChild(node.lastChild);
       }
 
-      for (var i = 0; i<currentResults.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + currentResults[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
+      for (var i = 0; i<50; i++) {
+      iDiv = document.createElement('div');
+      iDiv.innerHTML += '<ul>' + currentResults[i].name;
+      document.getElementById('bodyDiv').appendChild(iDiv);
       }
+      var d=50;
+      var j=2*d;
+      $(window).scroll(function() {
+        if($(window).scrollTop() == $(document).height() - $(window).height()) {
+          // load your content
+          for (var i = d; i<j; i++) {
+            iDiv = document.createElement('div');
+            iDiv.innerHTML += '<ul>' + currentResults[i].name;
+            document.getElementById('bodyDiv').appendChild(iDiv);
+          }
+          d+=50;
+          j=d+50;
+        }
+      });
     }
   }
 
@@ -152,12 +210,26 @@ function handleFileSelect(evt) {
         node.removeChild(node.lastChild);
       }
 
-      for (var i = 0; i<currentResults.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + currentResults[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
+      for (var i = 0; i<50; i++) {
+      iDiv = document.createElement('div');
+      iDiv.innerHTML += '<ul>' + currentResults[i].name;
+      document.getElementById('bodyDiv').appendChild(iDiv);
       }
+      var d=50;
+      var j=2*d;
+      $(window).scroll(function() {
+        if($(window).scrollTop() == $(document).height() - $(window).height()) {
+          console.log("scrolling in runtime");
+          // load your content
+          for (var i = d; i<j; i++) {
+            iDiv = document.createElement('div');
+            iDiv.innerHTML += '<ul>' + currentResults[i].name;
+            document.getElementById('bodyDiv').appendChild(iDiv);
+          }
+          d+=50;
+          j=d+50;
+        }
+      });
 
     }
 
@@ -173,12 +245,25 @@ function handleFileSelect(evt) {
         node.removeChild(node.lastChild);
       }
 
-      for (var i = 0; i<currentResults.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + currentResults[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
+      for (var i = 0; i<50; i++) {
+      iDiv = document.createElement('div');
+      iDiv.innerHTML += '<ul>' + currentResults[i].name;
+      document.getElementById('bodyDiv').appendChild(iDiv);
       }
+      var d=50;
+      var j=2*d;
+      $(window).scroll(function() {
+        if($(window).scrollTop() == $(document).height() - $(window).height()) {
+          // load your content
+          for (var i = d; i<j; i++) {
+            iDiv = document.createElement('div');
+            iDiv.innerHTML += '<ul>' + currentResults[i].name;
+            document.getElementById('bodyDiv').appendChild(iDiv);
+          }
+          d+=50;
+          j=d+50;
+        }
+      });
     }
   }
 
@@ -196,9 +281,6 @@ function handleFileSelect(evt) {
       currentResults = eventJSON;
       currentResults = refilterCheckedBoxes();
       for(var i=0; i<currentResults.length; i++) {
-        console.log("name:"+currentResults[i].name);
-        console.log("length:"+currentResults.length);
-
         if(currentResults[i].name.indexOf(searchField) != -1) {
           tempCurrentResults.push(currentResults[i]);
         } 
@@ -207,17 +289,32 @@ function handleFileSelect(evt) {
     }
 
     node = document.getElementById('bodyDiv');
-      while (node.hasChildNodes())
-      {
-        node.removeChild(node.lastChild);
+    while (node.hasChildNodes())
+    {
+      node.removeChild(node.lastChild);
+    }
+    for (var i = 0; i<50; i++) {
+      iDiv = document.createElement('div');
+      iDiv.innerHTML += '<ul>' + currentResults[i].name;
+      document.getElementById('bodyDiv').appendChild(iDiv);
+      lastScrollElement=i;
+    }
+    var d=50;
+    var j=2*d;
+    $(window).scroll(function() {
+      if($(window).scrollTop() == $(document).height() - $(window).height()) {
+        console.log("scrolling in search");
+        // load your content
+        for (var i = d; i<j; i++) {
+          iDiv = document.createElement('div');
+          iDiv.innerHTML += '<ul>' + currentResults[i].name;
+          document.getElementById('bodyDiv').appendChild(iDiv);
+          console.log("currentResults"+currentResults[i]);
+        }
+        d+=50;
+        j=d+50;
       }
-
-      for (var i = 0; i<currentResults.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + currentResults[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
-      }
+    });
   }
 
   function handleKeyPress(evt) {
