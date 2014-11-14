@@ -23,11 +23,7 @@ function handleFileSelect(evt) {
 
     	reader.onload = function(evt) {
     		var contents = evt.target.result;
-        // TOO LARGE localStorage.setItem("fileContents", contents);
     		var obj = JSON.parse(contents);
-        //localStorage.setItem("events", JSON.stringify(obj.events));
-        //localStorage.setItem("tasks", JSON.stringify(obj.tasks));
-        localStorage.events = JSON.stringify(obj.events);
   			console.log("First event is " + obj.events[0].name);
   			var JSONObj = obj;
   			JSONtasks = obj.tasks;
@@ -47,14 +43,6 @@ function handleFileSelect(evt) {
 
  	}
 
-}
-
-function supports_html5_storage() {
-  try {
-    return 'localStorage' in window && window['localStorage'] !== null;
-  } catch (e) {
-    return false;
-  }
 }
 
 document.getElementById('files').addEventListener('change', handleFileSelect, false);
