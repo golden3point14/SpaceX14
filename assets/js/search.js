@@ -6,7 +6,7 @@ function handleFileSelect(evt) {
   files = evt.target.files; // FileList object
   // files is a FileList of File objects. List some properties.
   var output = [];
-  
+
   for (var i = 0, f; f = files[i]; i++) {
     output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
     f.size, ' bytes, last modified: ',
@@ -16,9 +16,11 @@ function handleFileSelect(evt) {
     document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
 
     read_file(files[0], bodyDiv);
+    console.log("handFileSelect");
   }
 
   function read_file(f, iDiv) {
+    console.log("read_file");
     reader.onload = function(evt) {
     var contents = evt.target.result;
     //console.log("File contents: " + contents);
@@ -26,25 +28,8 @@ function handleFileSelect(evt) {
     console.log("First event is " + obj.events[0].name);
     eventJSON = obj.events;
     currentResults = eventJSON;
-    for (var i = 0; i<50; i++) {
-      iDiv = document.createElement('div');
-      iDiv.innerHTML += '<ul>' + eventJSON[i].name;
-      document.getElementById('bodyDiv').appendChild(iDiv);
-    }
-    var d=50;
-    var j=2*d;
-    $(window).scroll(function() {
-      if($(window).scrollTop() == $(document).height() - $(window).height()) {
-        // load your content
-        for (var i = d; i<j; i++) {
-          iDiv = document.createElement('div');
-          iDiv.innerHTML += '<ul>' + eventJSON[i].name;
-          document.getElementById('bodyDiv').appendChild(iDiv);
-        }
-        d+=50;
-        j=d+50;
-      }
-    });
+
+    updateDisplay();
   };
   reader.onerror = function(evt) {
   console.error("File could not be read! Code " + evt.target.error.code);
@@ -53,46 +38,59 @@ function handleFileSelect(evt) {
   }
 }
 
+function updateDisplay() {
+  node = document.getElementById('bodyDiv');
+  while (node.hasChildNodes())
+  {
+    node.removeChild(node.lastChild);
+  }
+
+  for (var i = 0; i<50; i++) {
+    iDiv = document.createElement('tr');
+    iDiv.innerHTML += '<td>' + currentResults[i].name + '</td><td>' + currentResults[i].eventType + '</td>';
+    document.getElementById('bodyDiv').appendChild(iDiv);
+    console.log("before scrolling in some filtering function1");
+  }
+
+  var d = 50;
+  var j = 2 * d;
+  
+  console.log("before scrolling in some filtering function2");
+
+  $(window).scroll(function() {
+    if($(window).scrollTop() == $(document).height() - $(window).height()) {
+      console.log("scrolling");
+      // load your content
+      for (var i = d; i < j; i++) {
+        iDiv = document.createElement('tr');
+        iDiv.innerHTML += '<td>' + currentResults[i].name + '</td><td>' + currentResults[i].eventType + '</td>';
+        document.getElementById('bodyDiv').appendChild(iDiv);
+      }
+      d += 50;
+      j = d + 50;
+    }
+  });
+}
+
   function handleSwitchBox(evt) {
     if (document.getElementById('switchBox').checked)
     {
      
-     console.log("checked");
+      console.log("checked");
       currentResults = eventJSON;
       currentResults = refilterCheckedBoxes();
-      node = document.getElementById('bodyDiv');
-      while (node.hasChildNodes())
-      {
-        node.removeChild(node.lastChild);
-      }
 
-      for (var i = 0; i<currentResults.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + currentResults[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
-      }
+      updateDisplay();
 
     }
 
     else
-    {
-       currentResults = _.select(currentResults, function(element){return element.eventType != "sched_switch";});
+    { 
+      currentResults = _.select(currentResults, function(element){return element.eventType != "sched_switch";});
       
       console.log("unchecked");
 
-      node = document.getElementById('bodyDiv');
-      while (node.hasChildNodes())
-      {
-        node.removeChild(node.lastChild);
-      }
-
-      for (var i = 0; i<currentResults.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + currentResults[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
-      }
+      updateDisplay();
     }
   }
 
@@ -103,18 +101,8 @@ function handleFileSelect(evt) {
       console.log("checked");
       currentResults = eventJSON;
       currentResults = refilterCheckedBoxes();
-      node = document.getElementById('bodyDiv');
-      while (node.hasChildNodes())
-      {
-        node.removeChild(node.lastChild);
-      }
 
-      for (var i = 0; i<currentResults.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + currentResults[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
-      }
+      updateDisplay();
 
     }
 
@@ -124,18 +112,7 @@ function handleFileSelect(evt) {
       
       console.log("unchecked");
 
-      node = document.getElementById('bodyDiv');
-      while (node.hasChildNodes())
-      {
-        node.removeChild(node.lastChild);
-      }
-
-      for (var i = 0; i<currentResults.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + currentResults[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
-      }
+      updateDisplay();
     }
   }
 
@@ -146,19 +123,8 @@ function handleFileSelect(evt) {
       console.log("checked");
       currentResults = eventJSON;
       currentResults = refilterCheckedBoxes();
-      node = document.getElementById('bodyDiv');
-      while (node.hasChildNodes())
-      {
-        node.removeChild(node.lastChild);
-      }
 
-      for (var i = 0; i<currentResults.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + currentResults[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
-      }
-
+      updateDisplay();
     }
 
     else
@@ -167,18 +133,112 @@ function handleFileSelect(evt) {
       
       console.log("unchecked");
 
-      node = document.getElementById('bodyDiv');
-      while (node.hasChildNodes())
-      {
-        node.removeChild(node.lastChild);
-      }
+      updateDisplay();
+    }
+  }
 
-      for (var i = 0; i<currentResults.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + currentResults[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
-      }
+  function handleMigrateBox(evt) {
+    if (document.getElementById('migrateBox').checked)
+    {
+     
+      console.log("checked");
+      currentResults = eventJSON;
+      currentResults = refilterCheckedBoxes();
+
+      updateDisplay();
+    }
+
+    else
+    {
+       currentResults = _.select(currentResults, function(element){return element.eventType != "sched_migrate_task";});
+      
+      console.log("unchecked");
+
+      updateDisplay();
+    }
+  }
+
+  function handleSleepBox(evt) {
+    if (document.getElementById('sleepBox').checked)
+    {
+     
+      console.log("checked");
+      currentResults = eventJSON;
+      currentResults = refilterCheckedBoxes();
+
+      updateDisplay();
+    }
+
+    else
+    {
+       currentResults = _.select(currentResults, function(element){return element.eventType != "sched_stat_sleep";});
+      
+      console.log("unchecked");
+
+      updateDisplay();
+    }
+  }
+
+  function handleEntryBox(evt) {
+    if (document.getElementById('entryBox').checked)
+    {
+     
+      console.log("checked");
+      currentResults = eventJSON;
+      currentResults = refilterCheckedBoxes();
+
+      updateDisplay();
+    }
+
+    else
+    {
+       currentResults = _.select(currentResults, function(element){return element.eventType != "softirq_entry";});
+      
+      console.log("unchecked");
+
+      updateDisplay();
+    }
+  }
+
+  function handleRaiseBox(evt) {
+    if (document.getElementById('raiseBox').checked)
+    {
+     
+      console.log("checked");
+      currentResults = eventJSON;
+      currentResults = refilterCheckedBoxes();
+
+      updateDisplay();
+    }
+
+    else
+    {
+       currentResults = _.select(currentResults, function(element){return element.eventType != "softirq_raise";});
+      
+      console.log("unchecked");
+
+      updateDisplay();
+    }
+  }
+
+  function handleExitBox(evt) {
+    if (document.getElementById('exitBox').checked)
+    {
+     
+      console.log("checked");
+      currentResults = eventJSON;
+      currentResults = refilterCheckedBoxes();
+
+      updateDisplay();
+    }
+
+    else
+    {
+       currentResults = _.select(currentResults, function(element){return element.eventType != "softirq_exit";});
+      
+      console.log("unchecked");
+
+      updateDisplay();
     }
   }
 
@@ -196,28 +256,18 @@ function handleFileSelect(evt) {
       currentResults = eventJSON;
       currentResults = refilterCheckedBoxes();
       for(var i=0; i<currentResults.length; i++) {
-        console.log("name:"+currentResults[i].name);
-        console.log("length:"+currentResults.length);
-
         if(currentResults[i].name.indexOf(searchField) != -1) {
           tempCurrentResults.push(currentResults[i]);
         } 
       }
       currentResults = tempCurrentResults;
+
+      for(var i=0; i<currentResults.length; i++) {
+        console.log("search name:"+i+currentResults[i].name);
+      }
     }
 
-    node = document.getElementById('bodyDiv');
-      while (node.hasChildNodes())
-      {
-        node.removeChild(node.lastChild);
-      }
-
-      for (var i = 0; i<currentResults.length; i++)
-      {
-        var iDiv = document.createElement('div');
-        iDiv.innerHTML += '<ul>' + currentResults[i].name;
-        document.getElementById('bodyDiv').appendChild(iDiv);
-      }
+    updateDisplay();
   }
 
   function handleKeyPress(evt) {
@@ -253,5 +303,10 @@ function handleFileSelect(evt) {
   document.getElementById('switchBox').addEventListener('change', handleSwitchBox, false);
   document.getElementById('wakeupBox').addEventListener('change', handleWakeupBox, false);
   document.getElementById('runtimeBox').addEventListener('change', handleRuntimeBox, false);
+  document.getElementById('migrateBox').addEventListener('change', handleMigrateBox, false);
+  document.getElementById('sleepBox').addEventListener('change', handleSleepBox, false);
+  document.getElementById('entryBox').addEventListener('change', handleEntryBox, false);
+  document.getElementById('raiseBox').addEventListener('change', handleRaiseBox, false);
+  document.getElementById('exitBox').addEventListener('change', handleExitBox, false);
   document.getElementById('searchButton').addEventListener('click', handleSearch, false);
   document.getElementById('searchBar').addEventListener('keypress', handleKeyPress, false);
