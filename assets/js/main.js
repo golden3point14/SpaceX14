@@ -11,6 +11,8 @@ var files;
 
 var reader = new FileReader(); 
 
+var db;
+
 function handleFileSelect(evt) {
 	files = evt.target.files; // FileList object
     // files is a FileList of File objects. List some properties.
@@ -22,12 +24,17 @@ function handleFileSelect(evt) {
                   '</li>');
 
     	reader.onload = function(evt) {
+
+        
+
     		var contents = evt.target.result;
     		var obj = JSON.parse(contents);
-  			console.log("First event is " + obj.events[0].name);
   			var JSONObj = obj;
   			JSONtasks = obj.tasks;
         JSONevents = obj.events;
+
+        openDB();
+
   			getTopPreemptions();
         getTopRuntime();
         getTopWaittime();
@@ -46,6 +53,62 @@ function handleFileSelect(evt) {
 }
 
 document.getElementById('files').addEventListener('change', handleFileSelect, false);
+
+function openDB()
+{
+  var openRequest = indexedDB.open("events", 2);
+
+  openRequest.onupgradeneeded =  function(e)
+  {
+    console.log("upgrading...");
+
+    var thisDB = e.target.result;
+
+    if (!thisDB.objectStoreNames.contains("Events"))
+      {
+        thisDB.createObjectStore("Events");
+        console.log("created events");
+      }
+
+    if (!thisDB.objectStoreNames.contains("Tasks"))
+    {
+      thisDB.createObjectStore("Tasks");
+      console.log("created tasks");
+    }
+    
+
+  }
+
+  openRequest.onsuccess = function(e)
+  {
+    console.log("openRequest success!");
+    db = e.target.result;
+
+    var xact = db.transaction(["Events"],"readwrite");
+    var xact2 = db.transaction(["Tasks"], "readwrite");
+    var store = xact.objectStore("Events");
+    var store2 = xact2.objectStore("Tasks");
+    var request = store.add(JSONevents, 1);
+    var request2 = store2.add(JSONtasks, 1);
+
+    // some kind of error handling
+    request.onerror = function(e) {console.log("Error", e.target.error.name);}
+
+    request.onsuccess = function(e) {console.log("added events");}
+
+     // some kind of error handling
+    request2.onerror = function(e) {console.log("Error", e.target.error.name);}
+
+    request2.onsuccess = function(e) {console.log("added tasks");}
+
+  }
+
+  openRequest.onerror = function(e)
+  {
+    console.log("Error in OpenRequest");
+    console.dir(e);
+  }
+}
 
 function getTopPreemptions()
 {
