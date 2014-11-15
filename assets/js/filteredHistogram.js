@@ -218,109 +218,108 @@ function useDatabaseData()
 {
 
   for (var i=0; i<JSONtasks.length; i++)
-        {
-            if (JSONtasks[i].name !== "<idle>") {
-              values.push(JSONtasks[i]);
+  {
+    if (JSONtasks[i].name !== "<idle>") {
+      values.push(JSONtasks[i]);
 
-              // finding the max number of preemptions
-              if (JSONtasks[i].preemptionCount > maxPreemp)
-              {
-                maxPreemp = JSONtasks[i].preemptionCount;
-              }
-            }
-        }
+      // finding the max number of preemptions
+      if (JSONtasks[i].preemptionCount > maxPreemp)
+      {
+        maxPreemp = JSONtasks[i].preemptionCount;
+      }
+    }
+  }
 
-        // creating a filter based on the preemption count
-        var value = crossfilter(values),
-          typeDimensionPreemp = value.dimension(function(d) {return d.preemptionCount;}),
-          nameDimension = value.dimension(function(d) {return d.pid;}),
-          nameGroup = nameDimension.group().reduceSum(function(d) {return 5}),
-          typeGroupPreemp = typeDimensionPreemp.group().reduceCount(),
-          typeDimensionSleep = value.dimension(function(d) {return d.pid;}),
-          typeGroupSleep = typeDimensionSleep.group().reduceSum(function(d) {return d.totalSleeptime;}),
-          typeDimensionRun = value.dimension(function(d) {return d.pid;}),
-          typeGroupRun = typeDimensionRun.group().reduceSum(function(d) {return d.totalRuntime;}),
-          typeDimensionWait = value.dimension(function(d) {return d.pid;}),
-          typeGroupWait = typeDimensionWait.group().reduceSum(function(d) {return d.totalWaittime});
-
-
-        var dataTable = dc.dataTable("#process-list");  // the table of processes
-        var histogram = dc.barChart("#dc-bar-chart");   // the histogram
-
-        dataTable
-          .width(300)
-          .height(500)
-          .dimension(typeDimensionPreemp)
-          .group(function(d) { return "List of all selected processes"})
-          .columns([
-            function(d) {return d.name;},
-            function(d) {return d.preemptionCount;}
-            ])
-          .sortBy(function(d) {return -d.preemptionCount;})
-          .order(d3.ascending);
-
-        histogram
-          .width(700)
-          .height(400)
-          .x(d3.scale.linear().domain([0,maxPreemp + 2]))
-          .brushOn(true)
-          .dimension(typeDimensionPreemp)
-          .group(typeGroupPreemp)
-          .renderHorizontalGridLines(true)
-          .xAxisLabel("Preemption Count")
-          .yAxisLabel("Number of Processes");
+  // creating a filter based on the preemption count
+  var value = crossfilter(values),
+    typeDimensionPreemp = value.dimension(function(d) {return d.preemptionCount;}),
+    pidDimension = value.dimension(function(d) {return d.pid;}),
+    typeGroupPreemp = typeDimensionPreemp.group().reduceCount(),
+    typeDimensionSleep = value.dimension(function(d) {return d.pid;}),
+    typeGroupSleep = typeDimensionSleep.group().reduceSum(function(d) {return d.totalSleeptime;}),
+    typeDimensionRun = value.dimension(function(d) {return d.pid;}),
+    typeGroupRun = typeDimensionRun.group().reduceSum(function(d) {return d.totalRuntime;}),
+    typeDimensionWait = value.dimension(function(d) {return d.pid;}),
+    typeGroupWait = typeDimensionWait.group().reduceSum(function(d) {return d.totalWaittime});
 
 
-        // distribution side bar stuff
-        var histogrambutton = dc.barChart("#histogram-button");
-        var runchartbutton = dc.rowChart("#runchart-button");
-        var waitchartbutton = dc.rowChart("#waitchart-button");
-        var sleepchartbutton = dc.rowChart("#sleepchart-button");
+  var dataTable = dc.dataTable("#process-list");  // the table of processes
+  var histogram = dc.barChart("#dc-bar-chart");   // the histogram
 
-        var buttonwidth = 210;
+  dataTable
+    .width(300)
+    .height(500)
+    .dimension(typeDimensionPreemp)
+    .group(function(d) { return "List of all selected processes"})
+    .columns([
+      function(d) {return d.name;},
+      function(d) {return d.preemptionCount;}
+      ])
+    .sortBy(function(d) {return -d.preemptionCount;})
+    .order(d3.ascending);
 
-        histogrambutton
-          .width(buttonwidth)
-          .height(buttonwidth)
-          .x(d3.scale.linear().domain([0,maxPreemp]))
-          .brushOn(false)
-          .dimension(typeDimensionPreemp)
-          .group(typeGroupPreemp);
-          
-        histogrambutton.yAxis().tickFormat(function(v) { return ""; });    
-        histogrambutton.xAxis().tickFormat(function(v) { return ""; });
-
-        runchartbutton
-          .width(buttonwidth)
-          .height(values.length * 10)
-          .dimension(typeDimensionRun)
-          .group(typeGroupRun)
-          .renderLabel(false)
-          .ordering(function(d) { return -processFromPid(d.key, values).totalRuntime; });
-
-        runchartbutton.xAxis().tickFormat(function(v) { return ""; });
-
-        waitchartbutton
-          .width(buttonwidth)
-          .height(values.length * 10)
-          .dimension(typeDimensionWait)
-          .group(typeGroupWait)
-          .renderLabel(false)
-          .ordering(function(d) { return -processFromPid(d.key, values).totalWaittime; });
-
-        waitchartbutton.xAxis().tickFormat(function(v) { return ""; });
-
-        sleepchartbutton
-          .width(buttonwidth)
-          .height(values.length * 10)
-          .dimension(typeDimensionSleep)
-          .group(typeGroupSleep)
-          .renderLabel(false)
-          .ordering(function(d) { return -processFromPid(d.key, values).totalSleeptime; });
-
-        sleepchartbutton.xAxis().tickFormat(function(v) { return ""; });
+  histogram
+    .width(700)
+    .height(400)
+    .x(d3.scale.linear().domain([0,maxPreemp + 2]))
+    .brushOn(true)
+    .dimension(typeDimensionPreemp)
+    .group(typeGroupPreemp)
+    .renderHorizontalGridLines(true)
+    .xAxisLabel("Preemption Count")
+    .yAxisLabel("Number of Processes");
 
 
-        // render the content
-        dc.renderAll();
+  // distribution side bar stuff
+  var histogrambutton = dc.barChart("#histogram-button");
+  var runchartbutton = dc.rowChart("#runchart-button");
+  var waitchartbutton = dc.rowChart("#waitchart-button");
+  var sleepchartbutton = dc.rowChart("#sleepchart-button");
+
+  var buttonwidth = 210;
+
+  histogrambutton
+    .width(buttonwidth)
+    .height(buttonwidth)
+    .x(d3.scale.linear().domain([0,maxPreemp]))
+    .brushOn(false)
+    .dimension(pidDimension)
+    .group(typeGroupPreemp);
+    
+  histogrambutton.yAxis().tickFormat(function(v) { return ""; });    
+  histogrambutton.xAxis().tickFormat(function(v) { return ""; });
+
+  runchartbutton
+    .width(buttonwidth)
+    .height(values.length * 10)
+    .dimension(pidDimension)
+    .group(typeGroupRun)
+    .renderLabel(false)
+    .ordering(function(d) { return -processFromPid(d.key, values).totalRuntime; });
+
+  runchartbutton.xAxis().tickFormat(function(v) { return ""; });
+
+  waitchartbutton
+    .width(buttonwidth)
+    .height(values.length * 10)
+    .dimension(pidDimension)
+    .group(typeGroupWait)
+    .renderLabel(false)
+    .ordering(function(d) { return -processFromPid(d.key, values).totalWaittime; });
+
+  waitchartbutton.xAxis().tickFormat(function(v) { return ""; });
+
+  sleepchartbutton
+    .width(buttonwidth)
+    .height(values.length * 10)
+    .dimension(pidDimension)
+    .group(typeGroupSleep)
+    .renderLabel(false)
+    .ordering(function(d) { return -processFromPid(d.key, values).totalSleeptime; });
+
+  sleepchartbutton.xAxis().tickFormat(function(v) { return ""; });
+
+
+  // render the content
+  dc.renderAll();
 }
