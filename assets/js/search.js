@@ -337,6 +337,57 @@ function updateDisplay() {
       return currentResults;
   }
 
+  //pulls the data from the IndexedDB and displays it
+  function openDB()
+  {
+    var openRequest = indexedDB.open("events", 2);
+
+  openRequest.onupgradeneeded =  function(e)
+  {
+    console.log("upgrading...");
+
+    var thisDB = e.target.result;
+
+    if (!thisDB.objectStoreNames.contains("Events"))
+      {
+        thisDB.createObjectStore("Events");
+        console.log("created events");
+      }
+
+    if (!thisDB.objectStoreNames.contains("Tasks"))
+    {
+      thisDB.createObjectStore("Tasks");
+      console.log("created tasks");
+    }
+    
+
+  }
+
+  openRequest.onsuccess = function(e)
+  {
+    console.log("openRequest success!");
+    db = e.target.result;
+
+    //get data
+    var xact = db.transaction(["Events"], "readonly");
+    var objectStore = xact.objectStore("Events");
+    var ob = objectStore.get(1); //temporary hard-coded
+    ob.onsuccess = function(e) { console.log("e is the JSONevents");
+                                 console.log(e.target.result);
+                                 eventJSON = e.target.result;
+                                 currentResults = eventJSON;
+                                 updateDisplay();
+                               }
+    
+  }
+
+  openRequest.onerror = function(e)
+  {
+    console.log("Error in OpenRequest");
+    console.dir(e);
+  }
+}
+
   document.getElementById('files').addEventListener('change', handleFileSelect, false);
   document.getElementById('switchBox').addEventListener('change', handleSwitchBox, false);
   document.getElementById('wakeupBox').addEventListener('change', handleWakeupBox, false);
@@ -349,3 +400,4 @@ function updateDisplay() {
   document.getElementById('exitBox').addEventListener('change', handleExitBox, false);
   document.getElementById('searchButton').addEventListener('click', handleSearch, false);
   document.getElementById('searchBar').addEventListener('keypress', handleKeyPress, false);
+  document.addEventListener("load", openDB());
