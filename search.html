@@ -28,23 +28,30 @@
   Search: <input type="text" id="searchBar">
 </form>
 
-<form action="" class="column">
-  <span class="filter"><input type="checkbox" name="switch" id="switchBox" value="switch" checked> Switch Events <br></span>
-  <span class="filter"><input type="checkbox" name="wakeup" id="wakeupBox" value="wakeup" checked> Wakeup Events <br></span>
-  <span class="filter"><input type="checkbox" name="runtime" id="runtimeBox" value="runtime" checked> Runtime Events <br></span>
-  <span class="filter"><input type="checkbox" name="migrate" id="migrateBox" value="migrate" checked> Migrate Events <br></span>
-  <span class="filter"><input type="checkbox" name="sleep" id="sleepBox" value="sleep" checked> Sleep Events <br></span>
-  <span class="filter"><input type="checkbox" name="entry" id="entryBox" value="entry" checked> Entry Events <br></span>
-  <span class="filter"><input type="checkbox" name="raise" id="raiseBox" value="raise" checked> Raise Events <br></span>
-  <span class="filter"><input type="checkbox" name="exit" id="exitBox" value="exit" checked> Exit Events <br></span>
+<form action="" class="column" name="eventFilters">
+  <span class="filter"><input type="checkbox" name="eventFilter" id="switchBox" value="switch" checked> Switch Events <br></span>
+  <span class="filter"><input type="checkbox" name="eventFilter" id="wakeupBox" value="wakeup" checked> Wakeup Events <br></span>
+  <span class="filter"><input type="checkbox" name="eventFilter" id="runtimeBox" value="runtime" checked> Runtime Events <br></span>
+  <span class="filter"><input type="checkbox" name="eventFilter" id="migrateBox" value="migrate" checked> Migrate Events <br></span>
+  <span class="filter"><input type="checkbox" name="eventFilter" id="sleepBox" value="sleep" checked> Sleep Events <br></span>
+  <span class="filter"><input type="checkbox" name="eventFilter" id="waitBox" value="wait" checked> Wait Events <br></span>
+  <span class="filter"><input type="checkbox" name="eventFilter" id="entryBox" value="entry" checked> Entry Events <br></span>
+  <span class="filter"><input type="checkbox" name="eventFilter" id="raiseBox" value="raise" checked> Raise Events <br></span>
+  <span class="filter"><input type="checkbox" name="eventFilter" id="exitBox" value="exit" checked> Exit Events <br></span>
 </form>
+
+<a href="javascript:checkall('eventFilters','eventFilter',true)">Check All</a>
 
 <button id="searchButton">Go</button><br>
 
 <table id="bodyDiv" class="table">
   <tr>
+    <td>CPU</td>
+    <td>Start Time</td>
     <td>Process Name</td>
-    <td>Event type</td>
+    <td>PID</td>
+    <td>Event Type</td>
+    <td>Extra Info</td>
   </tr>
 </table>
 </div>
