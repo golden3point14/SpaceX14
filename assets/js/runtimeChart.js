@@ -51,24 +51,27 @@ var doc = document;
         // creating a filter based on the preemption count
         var value = crossfilter(values),
           typeDimensionPreemp = value.dimension(function(d) {return d.preemptionCount;}),
-          nameDimension = value.dimension(function(d) {return d.pid;}),
-          nameGroup = nameDimension.group().reduceSum(function(d) {return 5}),
+          pidDimension = value.dimension(function(d) {return d.pid;}),
           typeGroupPreemp = typeDimensionPreemp.group().reduceCount(),
-          typeDimensionSleep = value.dimension(function(d) {return d.pid;}),
-          typeGroupSleep = typeDimensionSleep.group().reduceSum(function(d) {return d.totalSleeptime;}),
+          typeDimensionSleep = value.dimension(function(d) {return d.totalSleeptime;}),
+          typeGroupSleep = pidDimension.group().reduceCount(),
           typeDimensionRun = value.dimension(function(d) {return d.pid;}),
-          typeGroupRun = typeDimensionRun.group().reduceSum(function(d) {return d.totalRuntime;}),
+          typeGroupRun = pidDimension.group().reduceSum(function(d) {return d.totalRuntime;}),
           typeDimensionWait = value.dimension(function(d) {return d.pid;}),
-          typeGroupWait = typeDimensionWait.group().reduceSum(function(d) {return d.totalWaittime});
+          typeGroupWait = pidDimension.group().reduceSum(function(d) {return d.totalWaittime});
 
         var dataTable = dc.dataTable("#process-list");  // the table of processes
         var histogram = dc.rowChart("#dc-bar-chart");   // the histogram
 
+
         dataTable
           .width(300)
           .height(500)
-          .dimension(typeDimensionRun)
-          .group(function(d) { return "List of all selected processes"})
+          .dimension(typeDimensionSleep)
+          .group(
+            function(d) { 
+            console.log(d);
+            return "List of all selected processes";})
           .columns([
             function(d) {return d.name;},
             function(d) {return d.totalRuntime;}
@@ -79,15 +82,18 @@ var doc = document;
         histogram
           .width(700)
           .height(values.length * 30)
-          .dimension(typeDimensionRun)
+          .dimension(pidDimension)
           .group(typeGroupRun)
-          .ordering(function(d) { return -processFromPid(d.key, values).totalRuntime; })
+          .ordering(function(d) { 
+            console.log(d);
+            return -processFromPid(d.key, values).totalRuntime; })
           .label(function(d) {
             var process = processFromPid(d.key, values);
             return process.name + "    " + process.totalRuntime + " ns"; 
           })
           .renderLabel(true)
           .renderTitle(false);
+
 
         // distribution side bar stuff
         var histogrambutton = dc.barChart("#histogram-button");
@@ -111,7 +117,7 @@ var doc = document;
         runchartbutton
           .width(buttonwidth)
           .height(values.length * 10)
-          .dimension(typeDimensionRun)
+          .dimension(pidDimension)
           .group(typeGroupRun)
           .renderLabel(false)
           .ordering(function(d) { return -processFromPid(d.key, values).totalRuntime; });
@@ -121,7 +127,7 @@ var doc = document;
         waitchartbutton
           .width(buttonwidth)
           .height(values.length * 10)
-          .dimension(typeDimensionWait)
+          .dimension(pidDimension)
           .group(typeGroupWait)
           .renderLabel(false)
           .ordering(function(d) { return -processFromPid(d.key, values).totalWaittime; });
@@ -131,7 +137,7 @@ var doc = document;
         sleepchartbutton
           .width(buttonwidth)
           .height(values.length * 10)
-          .dimension(typeDimensionSleep)
+          .dimension(pidDimension)
           .group(typeGroupSleep)
           .renderLabel(false)
           .ordering(function(d) { return -processFromPid(d.key, values).totalSleeptime; });
@@ -167,3 +173,4 @@ function processFromPid(pid, values) {
 
   return "";
 }
+
