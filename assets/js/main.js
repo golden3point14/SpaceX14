@@ -88,8 +88,8 @@ function openDB()
     var xact2 = db.transaction(["Tasks"], "readwrite");
     var store = xact.objectStore("Events");
     var store2 = xact2.objectStore("Tasks");
-    var request = store.add(JSONevents, 1);
-    var request2 = store2.add(JSONtasks, 1);
+    var request = store.put(JSONevents, 1);
+    var request2 = store2.put(JSONtasks, 1);
 
     // some kind of error handling
     request.onerror = function(e) {console.log("Error", e.target.error.name);}
