@@ -8,10 +8,6 @@ var doc = document;
 var db; //for indexedDB
 var JSONtasks;
 
-function handleFileSelect(evt) {}
-
-document.getElementById('files').addEventListener('change', handleFileSelect, false);
-
 function processFromPid(pid, values) {
   for (var i = 0; i < values.length; i++) {
     if (values[i].pid == pid) {
@@ -99,6 +95,11 @@ function useDatabaseData() {
         }
       }
   }
+
+  var avg = calculateAverage(JSONtasks, "totalWaittime");
+  var stdDev = calculateStdDev(JSONtasks, "totalWaittime", avg);
+  document.getElementById("mean").innerHTML = Math.round(avg);
+  document.getElementById("stddev").innerHTML = Math.round(stdDev);
 
   // creating a filter based on the preemption count
   var value = crossfilter(values),

@@ -1,9 +1,12 @@
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -22,14 +25,14 @@ class parser {
 			String filename = args[0];
 			File f = new File(filename);
 			if (f.exists() && !f.isDirectory()) {
-				String command = "trace-cmd report " + filename;
+				String command = "trace-cmd report -r" + filename;
 				proc = rt.exec(command);
 			} else {
 				System.out.println("Please provide a valid filename.");
 				return;
 			}
 		} else {	
-			proc = rt.exec("trace-cmd report");
+			proc = rt.exec("trace-cmd report -r");
 		}
 	
 		BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -137,8 +140,8 @@ class parser {
 				if (eventType.equals("sched_switch")) {
 					String[] switchInfo = extraInfo.split("\\s==>\\s");
 					
-					String[] previousTaskInfo = switchInfo[0].split(":");
-					if (previousTaskInfo[2].equals("R")) {
+					String[] previousTaskInfo = switchInfo[0].split(" ");
+					if (previousTaskInfo[3].charAt(previousTaskInfo[3].length() - 1) == 'R') {
 						event.put("preempted", true);
 						int i = switchInfo[1].indexOf(':');
 						int preemptingTaskId = Integer.parseInt(switchInfo[1].substring(0,i));
@@ -160,6 +163,7 @@ class parser {
 		calculateTotalRunTimeOfEachTask(events, tasks);
 		calculateTotalWaitTimeOfEachTask(events, tasks);
 		calculateTotalSleepTimeOfEachTask(events, tasks);
+		calculateDurationOfEvent(events);
 		
 		mainObj.put("events", events);
 		mainObj.put("tasks", tasks);
@@ -255,4 +259,32 @@ class parser {
 			
 		}
 	}
+	
+	public static void calculateDurationOfEvent(JSONArray events) {
+		HashMap<Integer, List<JSONObject>> cpuGrouped = new HashMap<Integer, List<JSONObject>>();
+		int len = events.size();
+		for (int i = 0; i < len; i++) {
+			JSONObject event = (JSONObject) events.get(i);
+			int cpu = (Integer)event.get("cpu");
+			if (!cpuGrouped.containsKey(cpu)) {
+				List<JSONObject> eventsForCPU = new ArrayList<JSONObject>();
+				eventsForCPU.add(event);
+				cpuGrouped.put(cpu, eventsForCPU);
+			} else {
+				cpuGrouped.get(cpu).add(event);
+			}
+		}
+		int numCPUs = cpuGrouped.size();
+		for (int cpu = 0; cpu < numCPUs; cpu++) {
+			List<JSONObject> eventsForCPU = cpuGrouped.get(cpu);
+			int numEventsForCPU = eventsForCPU.size() - 1;
+			for (int i = 0; i < numEventsForCPU; i++) {
+				JSONObject event1 = eventsForCPU.get(i);
+				JSONObject event2 = eventsForCPU.get(i + 1);
+				double duration = (Double)event2.get("startTime") - (Double)event1.get("startTime");
+				event1.put("duration", duration);
+			}
+		}
+	}
+	
 }
