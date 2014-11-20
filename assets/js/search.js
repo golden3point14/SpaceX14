@@ -46,33 +46,42 @@ function updateDisplay() {
   }
 
   bodyDiv.innerHTML += '<td>CPU</td>'+'<td>Start Time</td>'+'<td>Name</td>'+'<td>PID</td>'+'<td>Event Type</td>'+'<td>Extra Info</td>';
-  for (var i = 0; i<50; i++) {
-    iDiv = document.createElement('tr');
-    iDiv.innerHTML += '<td>' + currentResults[i].cpu + '</td><td>' + currentResults[i].startTime + '</td><td>' + currentResults[i].name + 
-                        '</td><td>' + currentResults[i].pid + '</td><td>' + currentResults[i].eventType + '</td><td>' + currentResults[i].extraInfo + '</td>';
-    document.getElementById('bodyDiv').appendChild(iDiv);
-    console.log("before scrolling in some filtering function1");
+  console.log("currenResultsLength:"+currentResults.length);
+  if(currentResults.length >= 50) {
+    for (var i = 0; i<50; i++) {
+      iDiv = document.createElement('tr');
+      iDiv.innerHTML += '<td>' + currentResults[i].cpu + '</td><td>' + currentResults[i].startTime + '</td><td>' + currentResults[i].name + 
+                          '</td><td>' + currentResults[i].pid + '</td><td>' + currentResults[i].eventType + '</td><td>' + currentResults[i].extraInfo + '</td><td>' + i + '</td>';
+      document.getElementById('bodyDiv').appendChild(iDiv);
+    }
   }
 
   var d = 50;
   var j = 2 * d;
 
-  console.log("resutlsLength:"+currentResults.length);
-  
-  console.log("before scrolling in some filtering function2");
-
   $(window).scroll(function() {
     if($(window).scrollTop() == $(document).height() - $(window).height()) {
-      console.log("scrolling");
-      // load your content
-      for (var i = d; i < j; i++) {
-        iDiv = document.createElement('tr');
-        iDiv.innerHTML += '<td>' + currentResults[i].cpu + '</td><td>' + currentResults[i].startTime + '</td><td>' + currentResults[i].name + 
-                            '</td><td>' + currentResults[i].pid + '</td><td>' + currentResults[i].eventType + '</td><td>' + currentResults[i].extraInfo + '</td>';
-        document.getElementById('bodyDiv').appendChild(iDiv);
+      if(j < currentResults.length) {
+        // load your content
+        for (var i = d; i < j; i++) {
+          iDiv = document.createElement('tr');
+          iDiv.innerHTML += '<td>' + currentResults[i].cpu + '</td><td>' + currentResults[i].startTime + '</td><td>' + currentResults[i].name + 
+                              '</td><td>' + currentResults[i].pid + '</td><td>' + currentResults[i].eventType + '</td><td>' + currentResults[i].extraInfo + '</td><td>' + i + '</td>';
+          document.getElementById('bodyDiv').appendChild(iDiv);
+        }
+        d += 50;
+        j = d + 50;
+      } else {
+        //calculate difference somehow?
+        var lengthLeft = currentResults.length%50
+        for (var i = d; i < d+lengthLeft; i++) {
+          iDiv = document.createElement('tr');
+          iDiv.innerHTML += '<td>' + currentResults[i].cpu + '</td><td>' + currentResults[i].startTime + '</td><td>' + currentResults[i].name + 
+                              '</td><td>' + currentResults[i].pid + '</td><td>' + currentResults[i].eventType + '</td><td>' + currentResults[i].extraInfo + '</td><td>' + i + '</td>';
+          document.getElementById('bodyDiv').appendChild(iDiv);
+        }
+        $(window).unbind('scroll');
       }
-      d += 50;
-      j = d + 50;
     }
   });
 }
@@ -333,6 +342,18 @@ function updateDisplay() {
       if (!document.getElementById('runtimeBox').checked)
       {
         currentResults = _.select(currentResults, function(element){return element.eventType != "sched_stat_runtime";});
+      }
+      if (!document.getElementById('migrateBox').checked)
+      {
+        currentResults = _.select(currentResults, function(element){return element.eventType != "sched_migrate_task";});
+      }
+      if (!document.getElementById('sleepBox').checked)
+      {
+        currentResults = _.select(currentResults, function(element){return element.eventType != "sched_stat_sleep";});
+      }
+      if (!document.getElementById('waitBox').checked)
+      {
+        currentResults = _.select(currentResults, function(element){return element.eventType != "sched_switch";});
       }
       return currentResults;
   }
