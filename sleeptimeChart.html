@@ -43,18 +43,16 @@
 
   <div class="content">
     <div>
-    <input type="file" id="files" name="files[]" />
-    <output id="JSON"></output>
-    <output id="list"></output>
-
-    <script id="list_template" type="text.html">
-      <div class="name"></div>
-      <div class="pid"></div>
-    </script>
+      <script id="list_template" type="text.html">
+        <div class="name"></div>
+        <div class="pid"></div>
+      </script>
     </div>
 
     <div id="graph" class="graph">
       <h4>Total Sleep Time</h4>
+      <div class="stats">Mean sleeptime: <span id="mean"></span> ns</div>
+      <div class="stats">Standard deviation: <span id="stddev"></span> ns</div>
       <div id="dc-bar-chart">
       </div>
     </div>
@@ -64,6 +62,7 @@
     </div>
   </div>
 
+  <script type="text/javascript" src="assets/js/calculations.js"></script>
   <script type="text/javascript" src="assets/js/sidebar.js"></script>
   <script type="text/javascript" src="assets/js/sleeptimeChart.js"></script>
 </body>
