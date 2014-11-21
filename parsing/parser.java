@@ -25,17 +25,18 @@ class parser {
 			String filename = args[0];
 			File f = new File(filename);
 			if (f.exists() && !f.isDirectory()) {
-				String command = "trace-cmd report -r" + filename;
+				String command = "trace-cmd report -R" + filename;
 				proc = rt.exec(command);
 			} else {
 				System.out.println("Please provide a valid filename.");
 				return;
 			}
 		} else {	
-			proc = rt.exec("trace-cmd report -r");
+			proc = rt.exec("trace-cmd report -R");
 		}
 	
 		BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+		//BufferedReader stdInput = new BufferedReader(new FileReader("trace_output.txt"));
 		String s = null;
 		String[] tokens;
 		HashMap<Integer, JSONObject> seenTasks = new HashMap<Integer, JSONObject>();
