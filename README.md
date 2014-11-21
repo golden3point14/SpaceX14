@@ -17,9 +17,7 @@ To run:
 - `java -jar spaceshark.jar <filename>`
 
 To update the jar file after making changes to the .java file:
-- recompile parser.java to create a parser.class file
-- make sure the .class file is within the parsing directory
-- run `jar cfm spaceshark.jar manifest.txt *.jar *.class`
+- run the makeParser script in the main directory
 
 If new libraries are ever added, update the Class-path in manifest.txt.
 

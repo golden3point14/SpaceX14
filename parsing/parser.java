@@ -1,3 +1,5 @@
+package parsing;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -25,7 +27,7 @@ class parser {
 			String filename = args[0];
 			File f = new File(filename);
 			if (f.exists() && !f.isDirectory()) {
-				String command = "trace-cmd report -R" + filename;
+				String command = "trace-cmd report -R " + filename;
 				proc = rt.exec(command);
 			} else {
 				System.out.println("Please provide a valid filename.");
