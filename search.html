@@ -11,49 +11,49 @@
     <script src="assets/js/json_query.js" type="text/javascript"></script>
     <script src="assets/js/underscore-min.js" type="text/javascript"></script>
     <script src="assets/js/waypoints.min.js" type="text/javascript"></script>
-
 </head>
 
 <body>
 
-  <div class="sidebar" id="sidebar"></div>
+<div class="sidebar" id="sidebar"></div>
 
-  <div class="content">
+<div class="content">
+  <div id="searchToolbar">
+    <input type="file" id="files" name="files[]" />
+    <output id="JSON"></output>
+    <output id="list"></output>
 
-<input type="file" id="files" name="files[]" />
-<output id="JSON"></output>
-<output id="list"></output>
+    <form onsubmit="return false" action="" class="column">
+      Search: <input type="text" id="searchBar">
+    </form>
 
-<form onsubmit="return false" action="" class="column">
-  Search: <input type="text" id="searchBar">
-</form>
+    <form action="" class="column" name="eventFilters">
+      <span class="filter"><input type="checkbox" name="eventFilter" id="switchBox" value="switch" checked> Switch Events <br></span>
+      <span class="filter"><input type="checkbox" name="eventFilter" id="wakeupBox" value="wakeup" checked> Wakeup Events <br></span>
+      <span class="filter"><input type="checkbox" name="eventFilter" id="runtimeBox" value="runtime" checked> Runtime Events <br></span>
+      <span class="filter"><input type="checkbox" name="eventFilter" id="migrateBox" value="migrate" checked> Migrate Events <br></span>
+      <span class="filter"><input type="checkbox" name="eventFilter" id="sleepBox" value="sleep" checked> Sleep Events <br></span>
+      <span class="filter"><input type="checkbox" name="eventFilter" id="waitBox" value="wait" checked> Wait Events <br></span>
+      <span class="filter"><input type="checkbox" name="eventFilter" id="entryBox" value="entry" checked> Entry Events <br></span>
+      <span class="filter"><input type="checkbox" name="eventFilter" id="raiseBox" value="raise" checked> Raise Events <br></span>
+      <span class="filter"><input type="checkbox" name="eventFilter" id="exitBox" value="exit" checked> Exit Events <br></span>
+    </form>
 
-<form action="" class="column" name="eventFilters">
-  <span class="filter"><input type="checkbox" name="eventFilter" id="switchBox" value="switch" checked> Switch Events <br></span>
-  <span class="filter"><input type="checkbox" name="eventFilter" id="wakeupBox" value="wakeup" checked> Wakeup Events <br></span>
-  <span class="filter"><input type="checkbox" name="eventFilter" id="runtimeBox" value="runtime" checked> Runtime Events <br></span>
-  <span class="filter"><input type="checkbox" name="eventFilter" id="migrateBox" value="migrate" checked> Migrate Events <br></span>
-  <span class="filter"><input type="checkbox" name="eventFilter" id="sleepBox" value="sleep" checked> Sleep Events <br></span>
-  <span class="filter"><input type="checkbox" name="eventFilter" id="waitBox" value="wait" checked> Wait Events <br></span>
-  <span class="filter"><input type="checkbox" name="eventFilter" id="entryBox" value="entry" checked> Entry Events <br></span>
-  <span class="filter"><input type="checkbox" name="eventFilter" id="raiseBox" value="raise" checked> Raise Events <br></span>
-  <span class="filter"><input type="checkbox" name="eventFilter" id="exitBox" value="exit" checked> Exit Events <br></span>
-</form>
+    <a href="javascript:checkall('eventFilters','eventFilter',true)">Check All</a>
 
-<a href="javascript:checkall('eventFilters','eventFilter',true)">Check All</a>
+    <button id="searchButton">Go</button><br>
+  </div>
 
-<button id="searchButton">Go</button><br>
-
-<table id="bodyDiv" class="table">
-  <tr>
-    <td>CPU</td>
-    <td>Start Time</td>
-    <td>Process Name</td>
-    <td>PID</td>
-    <td>Event Type</td>
-    <td>Extra Info</td>
-  </tr>
-</table>
+  <table id="bodyDiv" class="table">
+    <tr>
+      <td>CPU</td>
+      <td>Start Time</td>
+      <td>Process Name</td>
+      <td>PID</td>
+      <td>Event Type</td>
+      <td>Extra Info</td>
+    </tr>
+  </table>
 </div>
 
 
