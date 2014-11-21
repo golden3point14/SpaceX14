@@ -46,33 +46,64 @@ function updateDisplay() {
   }
 
   bodyDiv.innerHTML += '<td>CPU</td>'+'<td>Start Time</td>'+'<td>Name</td>'+'<td>PID</td>'+'<td>Event Type</td>'+'<td>Extra Info</td>';
-  for (var i = 0; i<50; i++) {
-    iDiv = document.createElement('tr');
-    iDiv.innerHTML += '<td>' + currentResults[i].cpu + '</td><td>' + currentResults[i].startTime + '</td><td>' + currentResults[i].name + 
-                        '</td><td>' + currentResults[i].pid + '</td><td>' + currentResults[i].eventType + '</td><td>' + currentResults[i].extraInfo + '</td>';
-    document.getElementById('bodyDiv').appendChild(iDiv);
-    console.log("before scrolling in some filtering function1");
+  console.log("currenResultsLength:"+currentResults.length);
+  if(currentResults.length < 50) {
+    for (var i = 0; i<currentResults.length; i++) {
+      iDiv = document.createElement('tr');
+      iDiv.innerHTML += '<td>' + currentResults[i].cpu + '</td><td>' + currentResults[i].startTime + '</td><td>' + currentResults[i].name + 
+                          '</td><td>' + currentResults[i].pid + '</td><td>' + currentResults[i].eventType + '</td><td>' + currentResults[i].extraInfo + '</td><td>' + i + '</td>';
+      document.getElementById('bodyDiv').appendChild(iDiv);
+    }
+    console.log("currentResults.length < 50 loop:"+currentResults.length);
+  } else {
+    for (var i = 0; i<50; i++) {
+      iDiv = document.createElement('tr');
+      iDiv.innerHTML += '<td>' + currentResults[i].cpu + '</td><td>' + currentResults[i].startTime + '</td><td>' + currentResults[i].name + 
+                          '</td><td>' + currentResults[i].pid + '</td><td>' + currentResults[i].eventType + '</td><td>' + currentResults[i].extraInfo + '</td><td>' + i + '</td>';
+      document.getElementById('bodyDiv').appendChild(iDiv);
+    }
+    console.log("currentResults.length else case loop:"+currentResults.length);
   }
 
   var d = 50;
   var j = 2 * d;
 
-  console.log("resutlsLength:"+currentResults.length);
-  
-  console.log("before scrolling in some filtering function2");
+  console.log("d:"+d);
+  console.log("j:"+d)
 
   $(window).scroll(function() {
     if($(window).scrollTop() == $(document).height() - $(window).height()) {
-      console.log("scrolling");
-      // load your content
-      for (var i = d; i < j; i++) {
-        iDiv = document.createElement('tr');
-        iDiv.innerHTML += '<td>' + currentResults[i].cpu + '</td><td>' + currentResults[i].startTime + '</td><td>' + currentResults[i].name + 
-                            '</td><td>' + currentResults[i].pid + '</td><td>' + currentResults[i].eventType + '</td><td>' + currentResults[i].extraInfo + '</td>';
-        document.getElementById('bodyDiv').appendChild(iDiv);
+      if(currentResults.length < 50) {
+        console.log('currentResults less than 50:'+currentResults.length);
+        $(window).unbind('scroll');
       }
-      d += 50;
-      j = d + 50;
+      //continue loading in blocks of 50
+      else if(j < currentResults.length) {
+        console.log('currentResults loading in blocks of 50:'+currentResults.length);
+        // load your content
+        for (var i = d; i < j; i++) {
+          iDiv = document.createElement('tr');
+          iDiv.innerHTML += '<td>' + currentResults[i].cpu + '</td><td>' + currentResults[i].startTime + '</td><td>' + currentResults[i].name + 
+                              '</td><td>' + currentResults[i].pid + '</td><td>' + currentResults[i].eventType + '</td><td>' + currentResults[i].extraInfo + '</td><td>' + i + '</td>';
+          document.getElementById('bodyDiv').appendChild(iDiv);
+        }
+        d += 50;
+        j = d + 50;
+      }
+      //last batch has less than 50
+      else {
+        //calculate difference somehow?
+        var lengthLeft = currentResults.length%50;
+        console.log('currentResults in last batch less than 50:'+currentResults.length);
+        console.log("d inside last batch less than 50:"+d);
+        for (var i = d; i < d+lengthLeft; i++) {
+          iDiv = document.createElement('tr');
+          iDiv.innerHTML += '<td>' + currentResults[i].cpu + '</td><td>' + currentResults[i].startTime + '</td><td>' + currentResults[i].name + 
+                              '</td><td>' + currentResults[i].pid + '</td><td>' + currentResults[i].eventType + '</td><td>' + currentResults[i].extraInfo + '</td><td>' + i + '</td>';
+          document.getElementById('bodyDiv').appendChild(iDiv);
+        }
+        $(window).unbind('scroll');
+      }
     }
   });
 }
@@ -83,7 +114,7 @@ function updateDisplay() {
      
       console.log("checked");
       currentResults = eventJSON;
-      currentResults = refilterCheckedBoxes();
+      currentResults = refilterSearchBarAndCheckedBoxes();
 
       updateDisplay();
 
@@ -105,7 +136,7 @@ function updateDisplay() {
      
       console.log("checked");
       currentResults = eventJSON;
-      currentResults = refilterCheckedBoxes();
+      currentResults = refilterSearchBarAndCheckedBoxes();
 
       updateDisplay();
 
@@ -127,7 +158,7 @@ function updateDisplay() {
      
       console.log("checked");
       currentResults = eventJSON;
-      currentResults = refilterCheckedBoxes();
+      currentResults = refilterSearchBarAndCheckedBoxes();
 
       updateDisplay();
     }
@@ -148,7 +179,7 @@ function updateDisplay() {
      
       console.log("checked");
       currentResults = eventJSON;
-      currentResults = refilterCheckedBoxes();
+      currentResults = refilterSearchBarAndCheckedBoxes();
 
       updateDisplay();
     }
@@ -169,7 +200,7 @@ function updateDisplay() {
      
       console.log("checked");
       currentResults = eventJSON;
-      currentResults = refilterCheckedBoxes();
+      currentResults = refilterSearchBarAndCheckedBoxes();
 
       updateDisplay();
     }
@@ -190,7 +221,7 @@ function updateDisplay() {
      
       console.log("checked");
       currentResults = eventJSON;
-      currentResults = refilterCheckedBoxes();
+      currentResults = refilterSearchBarAndCheckedBoxes();
 
       updateDisplay();
     }
@@ -211,7 +242,7 @@ function updateDisplay() {
      
       console.log("checked");
       currentResults = eventJSON;
-      currentResults = refilterCheckedBoxes();
+      currentResults = refilterSearchBarAndCheckedBoxes();
 
       updateDisplay();
     }
@@ -232,7 +263,7 @@ function updateDisplay() {
      
       console.log("checked");
       currentResults = eventJSON;
-      currentResults = refilterCheckedBoxes();
+      currentResults = refilterSearchBarAndCheckedBoxes();
 
       updateDisplay();
     }
@@ -253,7 +284,7 @@ function updateDisplay() {
      
       console.log("checked");
       currentResults = eventJSON;
-      currentResults = refilterCheckedBoxes();
+      currentResults = refilterSearchBarAndCheckedBoxes();
 
       updateDisplay();
     }
@@ -275,7 +306,7 @@ function updateDisplay() {
     }
     console.log("checked");
     currentResults = eventJSON;
-    currentResults = refilterCheckedBoxes();
+    currentResults = refilterSearchBarAndCheckedBoxes();
 
     updateDisplay();
   }
@@ -286,13 +317,13 @@ function updateDisplay() {
     
     if(searchField == "") {
       currentResults = eventJSON;
-      currentResults = refilterCheckedBoxes();
+      currentResults = refilterSearchBarAndCheckedBoxes();
     }
 
     else {
       var tempCurrentResults = new Array();
       currentResults = eventJSON;
-      currentResults = refilterCheckedBoxes();
+      currentResults = refilterSearchBarAndCheckedBoxes();
       for(var i=0; i<currentResults.length; i++) {
         if(currentResults[i].name.indexOf(searchField) != -1) {
           tempCurrentResults.push(currentResults[i]);
@@ -320,22 +351,51 @@ function updateDisplay() {
 
   //called when a box is unchecked
   //checks for checked boxes and filters when applicable
-  function refilterCheckedBoxes()
+  function refilterSearchBarAndCheckedBoxes()
   {
-      if (!document.getElementById('switchBox').checked)
-      {
-        currentResults = _.select(currentResults, function(element){return element.eventType != "sched_switch";});
-      }
-      if (!document.getElementById('wakeupBox').checked)
-      {
-        currentResults = _.select(currentResults, function(element){return element.eventType != "sched_wakeup";});
-      }
-      if (!document.getElementById('runtimeBox').checked)
-      {
-        currentResults = _.select(currentResults, function(element){return element.eventType != "sched_stat_runtime";});
-      }
-      return currentResults;
+    if (searchField != "")
+    {
+      currentResults = _.select(currentResults, function(element){return element.name == searchField;});
+    }
+    if (!document.getElementById('switchBox').checked)
+    {
+      currentResults = _.select(currentResults, function(element){return element.eventType != "sched_switch";});
+    }
+    if (!document.getElementById('wakeupBox').checked)
+    {
+      currentResults = _.select(currentResults, function(element){return element.eventType != "sched_wakeup";});
+    }
+    if (!document.getElementById('runtimeBox').checked)
+    {
+      currentResults = _.select(currentResults, function(element){return element.eventType != "sched_stat_runtime";});
+    }
+    if (!document.getElementById('migrateBox').checked)
+    {
+      currentResults = _.select(currentResults, function(element){return element.eventType != "sched_migrate_task";});
+    }
+    if (!document.getElementById('sleepBox').checked)
+    {
+      currentResults = _.select(currentResults, function(element){return element.eventType != "sched_stat_sleep";});
+    }
+    if (!document.getElementById('waitBox').checked)
+    {
+      currentResults = _.select(currentResults, function(element){return element.eventType != "sched_stat_wait";});
+    }
+
+    return currentResults;
   }
+
+  /*function refilterSearchBar()
+  {
+    console.log('start refilterSearchBar');
+    if (document.getElementById('searchBar').value != "")
+    {
+      currentResults = _.select(currentResults, function(element){return element.name == searchField;});
+      console.log("in refilterSearchBar:");
+    }
+    console.log("refilterSearchBar:"+currentResults.length);
+    return currentResults;
+  }*/
 
   //pulls the data from the IndexedDB and displays it
   function openDB()

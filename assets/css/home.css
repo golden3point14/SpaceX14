@@ -159,6 +159,17 @@ body {
   width: 30%
 }
 
+#searchToolbar {
+	position:fixed;
+	background-color: white;
+}
+
+#bodyDiv {
+	position:relative;
+	top:100px;
+	z-index: -1; 
+}
+
 #lists {
   width: 100%
 }
