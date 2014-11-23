@@ -101,11 +101,11 @@ function useDatabaseData() {
   document.getElementById("mean").innerHTML = Math.round(avg);
   document.getElementById("stddev").innerHTML = Math.round(stdDev);
 
-  // creating a filter based on the preemption count
+  // creating a the filters and groups from the data
   var value = crossfilter(values),
-    typeDimensionPreemp = value.dimension(function(d) {return d.preemptionCount;}),
     pidDimension = value.dimension(function(d) {return d.pid;}),
-    typeGroupPreemp = typeDimensionPreemp.group().reduceCount(),
+    typeDimensionPreemp = value.dimension(function(d) {return d.preemptionCount;}),
+    typeGroupPreemp = pidDimension.group().reduceSum(function(d) {return d.preemptionCount;}),
     typeDimensionSleep = value.dimension(function(d) {return d.totalSleeptime;}),
     typeGroupSleep = pidDimension.group().reduceSum(function(d) {return d.totalSleeptime;}),
     typeDimensionRun = value.dimension(function(d) {return d.totalRuntime;}),
@@ -142,7 +142,7 @@ function useDatabaseData() {
     .renderTitle(false);
 
   // distribution side bar stuff
-  var histogrambutton = dc.barChart("#histogram-button");
+  var histogrambutton = dc.rowChart("#histogram-button");
   var runchartbutton = dc.rowChart("#runchart-button");
   var waitchartbutton = dc.rowChart("#waitchart-button");
   var sleepchartbutton = dc.rowChart("#sleepchart-button");
@@ -151,13 +151,12 @@ function useDatabaseData() {
 
   histogrambutton
     .width(buttonwidth)
-    .height(buttonwidth)
-    .x(d3.scale.linear().domain([0,maxPreemp]))
-    .brushOn(false)
+    .height(values.length * 10)
     .dimension(pidDimension)
-    .group(typeGroupPreemp);
-    
-  histogrambutton.yAxis().tickFormat(function(v) { return ""; });    
+    .group(typeGroupPreemp)
+    .renderLabel(false)
+    .ordering(function(d) { return -processFromPid(d.key, values).preemptionCount; });
+      
   histogrambutton.xAxis().tickFormat(function(v) { return ""; });
 
   runchartbutton

@@ -1,12 +1,15 @@
 var values = [];    // the list of tasks
-var maxRuntime = 0.0;  // the longest runtime
-var minRuntime = Infinity;  // the shortest runtime
 var maxPreemp = 0;  // the highest number of preemptions
+var files;
 var reader = new FileReader(); 
 var doc = document;
 
 var db; //for indexedDB
 var JSONtasks;
+
+  function handleFileSelect(evt) {}
+
+document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
 function processFromPid(pid, values) {
   for (var i = 0; i < values.length; i++) {
@@ -72,35 +75,19 @@ function openDB()
 
 function useDatabaseData()
 {
-  console.log("using the runtime data");
+
   for (var i=0; i<JSONtasks.length; i++)
   {
-      if (JSONtasks[i].name !== "<idle>") {
-        values.push(JSONtasks[i]);
+    if (JSONtasks[i].name !== "<idle>") {
+      values.push(JSONtasks[i]);
 
-        // finding the max number of preemptions
-        if (JSONtasks[i].totalRuntime > maxRuntime)
-        {
-          maxRuntime = JSONtasks[i].totalRuntime;
-        }
-
-        if (JSONtasks[i].totalRuntime < minRuntime)
-        {
-          minRuntime = JSONtasks[i].totalRuntime;
-        }
-
-        // finding the max number of preemptions
-        if (JSONtasks[i].preemptionCount > maxPreemp)
-        {
-          maxPreemp = JSONtasks[i].preemptionCount;
-        }
+      // finding the max number of preemptions
+      if (JSONtasks[i].preemptionCount > maxPreemp)
+      {
+        maxPreemp = JSONtasks[i].preemptionCount;
       }
+    }
   }
-
-  var avg = calculateAverage(JSONtasks, "totalRuntime");
-  var stdDev = calculateStdDev(JSONtasks, "totalRuntime", avg);
-  document.getElementById("mean").innerHTML = Math.round(avg);
-  document.getElementById("stddev").innerHTML = Math.round(stdDev);
 
   // creating a the filters and groups from the data
   var value = crossfilter(values),
@@ -114,36 +101,31 @@ function useDatabaseData()
     typeDimensionWait = value.dimension(function(d) {return d.totalWaittime;}),
     typeGroupWait = pidDimension.group().reduceSum(function(d) {return d.totalWaittime});
 
+
   var dataTable = dc.dataTable("#process-list");  // the table of processes
   var histogram = dc.rowChart("#dc-bar-chart");   // the histogram
-
 
   dataTable
     .width(300)
     .height(500)
-    .dimension(typeDimensionRun)
-    .group(
-      function(d) { 
-      console.log(d);
-      return "List of all selected processes";})
+    .dimension(typeDimensionPreemp)
+    .group(function(d) { return "List of all selected processes"})
     .columns([
       function(d) {return d.name;},
-      function(d) {return d.totalRuntime;}
+      function(d) {return d.preemptionCount;}
       ])
-    .sortBy(function(d) {return -d.totalRuntime;})
+    .sortBy(function(d) {return -d.preemptionCount;})
     .order(d3.ascending);
 
   histogram
     .width(700)
     .height(values.length * 30)
     .dimension(pidDimension)
-    .group(typeGroupRun)
-    .ordering(function(d) { 
-      console.log(d);
-      return -processFromPid(d.key, values).totalRuntime; })
+    .group(typeGroupPreemp)
+    .ordering(function(d) { return -processFromPid(d.key, values).preemptionCount; })
     .label(function(d) {
       var process = processFromPid(d.key, values);
-      return process.name + "    " + process.totalRuntime + " ns"; 
+      return process.name + "    " + process.preemptionCount + " preemptions"; 
     })
     .renderLabel(true)
     .renderTitle(false);
@@ -197,7 +179,7 @@ function useDatabaseData()
 
   sleepchartbutton.xAxis().tickFormat(function(v) { return ""; });
 
+
   // render the content
   dc.renderAll();
 }
-
