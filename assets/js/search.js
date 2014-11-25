@@ -73,8 +73,7 @@ function updateDisplay() {
   console.log("j:"+j);
 
   $(window).scroll(function() {
-    // var dprime = d;
-    // var jprime = j;
+
     if($(window).scrollTop() == $(document).height() - $(window).height()) {
       console.log("d in start of scroll:"+d);
       console.log("j in start of scroll:"+j);
