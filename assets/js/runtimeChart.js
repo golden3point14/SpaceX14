@@ -133,13 +133,13 @@ function useDatabaseData()
     .sortBy(function(d) {return -d.totalRuntime;})
     .order(d3.ascending);
 
+
   histogram
     .width(700)
     .height(values.length * 30)
     .dimension(pidDimension)
     .group(typeGroupRun)
     .ordering(function(d) { 
-      console.log(d);
       return -processFromPid(d.key, values).totalRuntime; })
     .label(function(d) {
       var process = processFromPid(d.key, values);

@@ -1,8 +1,5 @@
-package parsing;
-
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -38,7 +35,6 @@ class parser {
 		}
 	
 		BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-		//BufferedReader stdInput = new BufferedReader(new FileReader("trace_output.txt"));
 		String s = null;
 		String[] tokens;
 		HashMap<Integer, JSONObject> seenTasks = new HashMap<Integer, JSONObject>();
@@ -144,10 +140,9 @@ class parser {
 					String[] switchInfo = extraInfo.split("\\s==>\\s");
 					
 					String[] previousTaskInfo = switchInfo[0].split(" ");
-					if (previousTaskInfo[3].charAt(previousTaskInfo[3].length() - 1) == 'R') {
+          // If the previous state was 0, then the switch is a preemption
+					if (previousTaskInfo[3].charAt(previousTaskInfo[3].length() - 1) == '0') {
 						event.put("preempted", true);
-						int i = switchInfo[1].indexOf(':');
-						int preemptingTaskId = Integer.parseInt(switchInfo[1].substring(0,i));
 						int preemptCount = (Integer)(task.get("preemptionCount"));
 						preemptCount++;
 						task.put("preemptionCount", preemptCount);
