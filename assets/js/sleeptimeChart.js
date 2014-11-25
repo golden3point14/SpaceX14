@@ -137,7 +137,7 @@ function useDatabaseData() {
     .ordering(function(d) { return -processFromPid(d.key, values).totalSleeptime; })
     .label(function(d) {
       var process = processFromPid(d.key, values);
-      return process.name + "    " + process.totalSleeptime + " ns"; 
+      return process.name + "    " + process.totalSleeptime / 1000000 + " ms"; 
     })
     .renderLabel(true)
     .renderTitle(false);
