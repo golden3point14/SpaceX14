@@ -38,6 +38,10 @@ function handleFileSelect(evt) {
   			getTopPreemptions();
         getTopRuntime();
         getTopWaittime();
+
+        var cpus = [0, 1, 2, 3]
+        var gantt = d3.gantt().taskTypes(cpus);
+        gantt(JSONevents);
         attemptToFormatData();
 
 		  };

@@ -124,7 +124,6 @@ function useDatabaseData()
     .dimension(typeDimensionRun)
     .group(
       function(d) { 
-      console.log(d);
       return "List of all selected processes";})
     .columns([
       function(d) {return d.name;},
