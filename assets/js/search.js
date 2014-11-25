@@ -1,4 +1,5 @@
 var files;
+var d,j;
 var eventJSON;
 var currentResults;
 var reader = new FileReader();
@@ -65,13 +66,15 @@ function updateDisplay() {
     console.log("currentResults.length else case loop:"+currentResults.length);
   }
 
-  var d = 50;
-  var j = 2 * d;
+  d = 50;
+  j = 2 * d;
 
   console.log("d:"+d);
   console.log("j:"+j);
 
   $(window).scroll(function() {
+    // var dprime = d;
+    // var jprime = j;
     if($(window).scrollTop() == $(document).height() - $(window).height()) {
       console.log("d in start of scroll:"+d);
       console.log("j in start of scroll:"+j);
