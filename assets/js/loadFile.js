@@ -110,26 +110,37 @@ function handleUseOld(evt)
 		var thisDB = e.target.result;
 
 		if (!thisDB.objectStoreNames.contains("Events"))
-		{
-			console.log("you need to choose one!");
-		}
+	    {
+		   thisDB.createObjectStore("Events");
+		   console.log("created events");
+	    }
 
-		else if (!thisDB.objectStoreNames.contains("Tasks"))
-		{
-			console.log("you need to choose one!");
-		}
-
-		else
-		{
-			console.log("go to main page");
-			//document.location.href='main.html';
-		}
+	    if (!thisDB.objectStoreNames.contains("Tasks"))
+	    {
+	      thisDB.createObjectStore("Tasks");
+	      console.log("created tasks");
+	    }
 
 		
 	}
 
 	openRequest.onsuccess = function(e)
 	{
+
+		var thisDB = e.target.result;
+
+		if (!thisDB.objectStoreNames.contains("Events"))
+	    {
+		   thisDB.createObjectStore("Events");
+		   console.log("created events");
+	    }
+
+	    if (!thisDB.objectStoreNames.contains("Tasks"))
+	    {
+	      thisDB.createObjectStore("Tasks");
+	      console.log("created tasks");
+	    }
+
 		var db = e.target.result;
 		var xact = db.transaction(["Events"],"readwrite");
 	    var xact2 = db.transaction(["Tasks"], "readwrite");
