@@ -2,7 +2,7 @@
   "author": "HMCClinic",
   "name": "myapp.SpaceX14",
   "description": "An ftrace visualization tool",
-  "main": "main.html",
+  "main": "loadFile.html",
   "version": "0.0.0",
   "repository": {
     "type": "git",
