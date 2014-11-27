@@ -56,7 +56,7 @@ function handleFileSelect(evt) {
 
 }
 
-document.getElementById('files').addEventListener('change', handleFileSelect, false);
+
 
 function openDB()
 {
@@ -92,18 +92,22 @@ function openDB()
     var xact2 = db.transaction(["Tasks"], "readwrite");
     var store = xact.objectStore("Events");
     var store2 = xact2.objectStore("Tasks");
-    var request = store.put(JSONevents, 1);
-    var request2 = store2.put(JSONtasks, 1);
+    var result = store.get(1);
+    var result2 = store2.get(1);
 
     // some kind of error handling
-    request.onerror = function(e) {console.log("Error", e.target.error.name);}
+    result.onerror = function(e) {console.log("Error", e.target.error.name);}
 
-    request.onsuccess = function(e) {console.log("added events");}
+    result.onsuccess = function(e) {JSONevents = e.target.result;}
 
      // some kind of error handling
-    request2.onerror = function(e) {console.log("Error", e.target.error.name);}
+    result2.onerror = function(e) {console.log("Error", e.target.error.name);}
 
-    request2.onsuccess = function(e) {console.log("added tasks");}
+    result2.onsuccess = function(e) {JSONtasks = e.target.result;
+                                    getTopPreemptions();
+                                    getTopRuntime();
+                                    getTopWaittime();
+                                    attemptToFormatData();}
 
   }
 
@@ -248,3 +252,6 @@ function attemptToFormatData()
   var eventsGroupedByCPU = _.groupBy(JSONevents, function(e) { return e.cpu; });
   //console.log(eventsGroupedByCPU[0][1000]);
 }
+
+document.getElementById('files').addEventListener('change', handleFileSelect, false);
+document.addEventListener("load", openDB());

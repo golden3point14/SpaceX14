@@ -1,4 +1,5 @@
 var files;
+var d,j;
 var eventJSON;
 var currentResults;
 var reader = new FileReader();
@@ -65,14 +66,17 @@ function updateDisplay() {
     console.log("currentResults.length else case loop:"+currentResults.length);
   }
 
-  var d = 50;
-  var j = 2 * d;
+  d = 50;
+  j = 2 * d;
 
   console.log("d:"+d);
-  console.log("j:"+d)
+  console.log("j:"+j);
 
   $(window).scroll(function() {
+
     if($(window).scrollTop() == $(document).height() - $(window).height()) {
+      console.log("d in start of scroll:"+d);
+      console.log("j in start of scroll:"+j);
       if(currentResults.length < 50) {
         console.log('currentResults less than 50:'+currentResults.length);
         $(window).unbind('scroll');
@@ -89,6 +93,9 @@ function updateDisplay() {
         }
         d += 50;
         j = d + 50;
+
+        console.log("d inside scroll:" + d);
+        console.log("j inside scroll:" + j);
       }
       //last batch has less than 50
       else {
@@ -96,7 +103,7 @@ function updateDisplay() {
         var lengthLeft = currentResults.length%50;
         console.log('currentResults in last batch less than 50:'+currentResults.length);
         console.log("d inside last batch less than 50:"+d);
-        for (var i = d; i < d+lengthLeft; i++) {
+        for (var i = currentResults.length-lengthLeft; i < currentResults.length; i++) {
           iDiv = document.createElement('tr');
           iDiv.innerHTML += '<td>' + currentResults[i].cpu + '</td><td>' + currentResults[i].startTime + '</td><td>' + currentResults[i].name + 
                               '</td><td>' + currentResults[i].pid + '</td><td>' + currentResults[i].eventType + '</td><td>' + currentResults[i].extraInfo + '</td><td>' + i + '</td>';
@@ -330,10 +337,6 @@ function updateDisplay() {
         } 
       }
       currentResults = tempCurrentResults;
-
-      for(var i=0; i<currentResults.length; i++) {
-        console.log("search name:"+i+currentResults[i].name);
-      }
     }
 
     updateDisplay();
@@ -353,9 +356,11 @@ function updateDisplay() {
   //checks for checked boxes and filters when applicable
   function refilterSearchBarAndCheckedBoxes()
   {
+    searchField = document.getElementById('searchBar').value;
+
     if (searchField != "")
     {
-      currentResults = _.select(currentResults, function(element){return element.name == searchField;});
+      currentResults = _.select(currentResults, function(element){return element.name.indexOf(searchField) != -1;});
     }
     if (!document.getElementById('switchBox').checked)
     {
@@ -381,7 +386,6 @@ function updateDisplay() {
     {
       currentResults = _.select(currentResults, function(element){return element.eventType != "sched_stat_wait";});
     }
-
     return currentResults;
   }
 
