@@ -3,7 +3,7 @@ var sidebar = document.getElementById('sidebar');
 var mainDiv = document.createElement('div');
 mainDiv.id = 'sidebutton';
 mainDiv.className = 'sidebutton';
-mainDiv.innerHTML = "Main";
+mainDiv.innerHTML = "Visualization";
 mainDiv.setAttribute("onclick", "window.location.href='main.html';");
 sidebar.appendChild(mainDiv);
 
@@ -16,14 +16,14 @@ sidebar.appendChild(cyclesDiv);
 var distributionsDiv = document.createElement('div');
 distributionsDiv.id = 'sidebutton';
 distributionsDiv.className = 'sidebutton';
-distributionsDiv.innerHTML = "Distributions";
+distributionsDiv.innerHTML = "Statistics";
 distributionsDiv.setAttribute("onclick", "window.location.href='histogram.html';");
 sidebar.appendChild(distributionsDiv);
 
 var statsDiv = document.createElement('div');
 statsDiv.id = 'sidebutton';
 statsDiv.className = 'sidebutton';
-statsDiv.innerHTML = "Statistics";
+statsDiv.innerHTML = "Distributions";
 sidebar.appendChild(statsDiv);
 
 var searchDiv = document.createElement('div');

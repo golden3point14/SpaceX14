@@ -3,41 +3,6 @@ var d,j;
 var eventJSON;
 var currentResults;
 var reader = new FileReader();
-function handleFileSelect(evt) {
-  files = evt.target.files; // FileList object
-  // files is a FileList of File objects. List some properties.
-  var output = [];
-
-  for (var i = 0, f; f = files[i]; i++) {
-    output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-    f.size, ' bytes, last modified: ',
-    f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-    '</li>');
-
-    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-
-    read_file(files[0], bodyDiv);
-    console.log("handFileSelect");
-  }
-
-  function read_file(f, iDiv) {
-    console.log("read_file");
-    reader.onload = function(evt) {
-    var contents = evt.target.result;
-    //console.log("File contents: " + contents);
-    var obj = JSON.parse(contents);
-    console.log("First event is " + obj.events[0].name);
-    eventJSON = obj.events;
-    currentResults = eventJSON;
-
-    updateDisplay();
-  };
-  reader.onerror = function(evt) {
-  console.error("File could not be read! Code " + evt.target.error.code);
-  };
-  reader.readAsText(f);
-  }
-}
 
 function updateDisplay() {
   node = document.getElementById('bodyDiv');
@@ -452,7 +417,6 @@ function updateDisplay() {
   }
 }
 
-  document.getElementById('files').addEventListener('change', handleFileSelect, false);
   document.getElementById('switchBox').addEventListener('change', handleSwitchBox, false);
   document.getElementById('wakeupBox').addEventListener('change', handleWakeupBox, false);
   document.getElementById('runtimeBox').addEventListener('change', handleRuntimeBox, false);
