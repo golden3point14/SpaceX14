@@ -7,10 +7,6 @@ var doc = document;
 var db; //for indexedDB
 var JSONtasks;
 
-  function handleFileSelect(evt) {}
-
-document.getElementById('files').addEventListener('change', handleFileSelect, false);
-
 function processFromPid(pid, values) {
   for (var i = 0; i < values.length; i++) {
     if (values[i].pid == pid) {
