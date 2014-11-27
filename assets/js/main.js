@@ -13,47 +13,6 @@ var reader = new FileReader();
 
 var db;
 
-function handleFileSelect(evt) {
-	files = evt.target.files; // FileList object
-    // files is a FileList of File objects. List some properties.
-    var output = [];
-    for (var i = 0, f; f = files[i]; i++) {
-      output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-                  f.size, ' bytes, last modified: ',
-                  f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-                  '</li>');
-
-    	reader.onload = function(evt) {
-
-        
-
-    		var contents = evt.target.result;
-    		var obj = JSON.parse(contents);
-  			var JSONObj = obj;
-  			JSONtasks = obj.tasks;
-        JSONevents = obj.events;
-
-        openDB();
-
-  			getTopPreemptions();
-        getTopRuntime();
-        getTopWaittime();
-        attemptToFormatData();
-
-		  };
-
-    	reader.onerror = function(evt) {
-    		console.error("File could not be read! Code " + evt.target.error.code);
-		};
-
-    reader.readAsText(f);
-
- 	}
-
-}
-
-
-
 function openDB()
 {
   var openRequest = indexedDB.open("events", 2);
@@ -249,5 +208,4 @@ function attemptToFormatData()
   //console.log(eventsGroupedByCPU[0][1000]);
 }
 
-document.getElementById('files').addEventListener('change', handleFileSelect, false);
 document.addEventListener("load", openDB());
