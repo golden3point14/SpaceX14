@@ -281,14 +281,14 @@ class parser {
 		int numCPUs = cpuGrouped.size();
 		for (int cpu = 0; cpu < numCPUs; cpu++) {
 			List<JSONObject> eventsForCPU = cpuGrouped.get(cpu);
-			int numEventsForCPU = eventsForCPU.size() - 2;
+			int numEventsForCPU = eventsForCPU.size() - 1;
 			for (int i = 0; i < numEventsForCPU; i++) {
 				JSONObject event1 = eventsForCPU.get(i);
 				JSONObject event2 = eventsForCPU.get(i + 1);
 				double duration = (Double)event2.get("startTime") - (Double)event1.get("startTime");
 				event1.put("duration", duration);
 			}
-			eventsForCPU.get(eventsForCPU.size()-1).put("duration", 0);
+			eventsForCPU.get(numEventsForCPU).put("duration", 0);
 		}
 	}
 	
