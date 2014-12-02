@@ -17,7 +17,7 @@ To run:
 - `java -jar spaceshark.jar <filename>`
 
 To update the jar file after making changes to the .java file:
-- run the makeParser script in the main directory
+- run the makeParser script in the parsing directory
 
 If new libraries are ever added, update the Class-path in manifest.txt.
 
