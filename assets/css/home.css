@@ -156,7 +156,7 @@ body {
 
 .mainlist {
   display: inline-block;
-  width: 30%
+  width: 30%;
 }
 
 #searchToolbar {
@@ -171,7 +171,7 @@ body {
 }
 
 #lists {
-  width: 100%
+  width: 100%;
 }
 
 /* Sortable tables */
@@ -180,6 +180,12 @@ table.sortable thead {
     color:#666666;
     font-weight: bold;
     cursor: default;
+    position:fixed;
+}
+
+table.sortable {
+	position:absolute;
+	top:95px;
 }
 
 /*::-webkit-scrollbar {
