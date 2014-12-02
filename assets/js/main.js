@@ -14,6 +14,7 @@ var reader = new FileReader();
 var db;
 
 var switchEvents;
+var maxDuration;
 
 function openDB()
 {
@@ -64,15 +65,21 @@ function openDB()
                                     getTopPreemptions();
                                     getTopRuntime();
                                     getTopWaittime();
-                                    attemptToFormatData();}
+                                    //attemptToFormatData();
+
+                                    var cpus = [0, 1, 2, 3];
+                                    var gantt = d3.gantt().taskTypes(cpus);
+                                    switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
+                                    getLongestCPUDuration();
+                                    gantt(switchEvents);
+    }
 
   }
 
   openRequest.onerror = function(e)
   {
     console.log("Error in OpenRequest");
-    console.dir(e);
-  }
+    console.dir(e); }
 }
 
 function getTopPreemptions()
@@ -204,6 +211,22 @@ function getTopWaittime()
   dc.renderAll();
 }
 
+function getLongestCPUDuration()
+{
+
+  numCPU = 4;
+  switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
+  switchEvents = _.groupBy(switchEvents, function(e){return e.cpu;});
+  maxDuration = 0;
+  for (var j = 0; j < numCPU; j++)
+  {
+    var sum = _.reduce(switchEvents[j], function(first, second) { return first.duration + second.duration }, 0);
+    if (sum > maxDuration) {
+      maxDuration = sum
+    }
+  }
+}
+
 // filters on switch events and calculates their durations
 function attemptToFormatData()
 {
@@ -218,7 +241,7 @@ function attemptToFormatData()
 
   console.log(switchEvents);
 
-  for (var j=0; j < numCPU; j++)
+  for (var j = 0; j < numCPU; j++)
   {
     var lastIndex = switchEvents[j].length-1;
     

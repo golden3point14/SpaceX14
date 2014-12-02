@@ -77,8 +77,7 @@ d3.gantt = function() {
 	 .attr("rx", 5)
          .attr("ry", 5)
 	 .attr("class", function(d){ 
-	     if(taskStatus[d.status] == null){ return "bar";}
-	     return taskStatus[d.status];
+	     return d.name;
 	     }) 
 	 .attr("y", 0)
 	 .attr("transform", rectTransform)
@@ -201,6 +200,13 @@ d3.gantt = function() {
 	    return tickFormat;
 	tickFormat = value;
 	return gantt;
+    };
+
+    gantt.timeDomain = function(value) {
+      if (!arguments.length)
+          return timeDomainEnd;
+      timeDomainEnd = value;
+      return gantt;
     };
 
 
