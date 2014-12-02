@@ -13,6 +13,8 @@ var reader = new FileReader();
 
 var db;
 
+var switchEvents;
+
 function openDB()
 {
   var openRequest = indexedDB.open("events", 2);
@@ -202,10 +204,35 @@ function getTopWaittime()
   dc.renderAll();
 }
 
+// filters on switch events and calculates their durations
 function attemptToFormatData()
 {
-  var eventsGroupedByCPU = _.groupBy(JSONevents, function(e) { return e.cpu; });
-  //console.log(eventsGroupedByCPU[0][1000]);
+  //FIXME we need to care about which CPU a thing is on
+
+  //HARDCODED FOR NOW FIXME
+  var numCPU = 4;
+
+  //switch these and find last event per cpu FIXME
+  switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
+  switchEvents = _.groupBy(switchEvents, function(e){return e.cpu;});
+
+  console.log(switchEvents);
+
+  for (var j=0; j < numCPU; j++)
+  {
+    var lastIndex = switchEvents[j].length-1;
+    
+    for (var i = 0; i < lastIndex; i++)
+    {
+      switchEvents[j][i].duration = switchEvents[j][i+1].startTime - switchEvents[j][i].startTime;
+    }
+
+      //LAST ONE GETS SPECIAL TREATMENT
+      //PROBLEM: uses last one not of last CPU
+      switchEvents[j][lastIndex].duration = JSONevents[JSONevents.length-1].startTime -
+                                                      switchEvents[j][lastIndex].startTime;
+  }
+  console.log(switchEvents);
 }
 
 document.addEventListener("load", openDB());
