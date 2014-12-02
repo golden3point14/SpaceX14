@@ -55,6 +55,10 @@ class parser {
 			}
 		}
 		
+		//wbrooks	
+		JSONObject numCPU = new JSONObject();
+		numCPU.put("value", numCPUs);
+		
 		JSONObject mainObj = new JSONObject();
 		JSONArray events = new JSONArray();
 		JSONArray tasks = new JSONArray();
@@ -165,6 +169,8 @@ class parser {
 		
 		mainObj.put("events", events);
 		mainObj.put("tasks", tasks);
+		mainObj.put("numCPU", numCPU); //wbrooks
+		
 		
 		writeJSON(mainObj);
 	}
@@ -282,6 +288,7 @@ class parser {
 				double duration = (Double)event2.get("startTime") - (Double)event1.get("startTime");
 				event1.put("duration", duration);
 			}
+			eventsForCPU.get(eventsForCPU.size()).put("duration", 0);
 		}
 	}
 	
