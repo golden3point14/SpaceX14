@@ -13,8 +13,8 @@ d3.gantt = function() {
 	bottom : 20,
 	left : 150
     };
-    var timeDomainStart = 0
-    var timeDomainEnd = 10000000;
+    var timeDomainStart = 0;
+    var timeDomainEnd = 0;
     var timeDomainMode = FIT_TIME_DOMAIN_MODE;// fixed or fit
     var taskTypes = [];
     var taskStatus = [];
@@ -42,7 +42,6 @@ d3.gantt = function() {
 
     var initTimeDomain = function(tasks) {
       timeDomainStart = 0;
-      timeDomainEnd = 1000000;
     };
 
     var initAxis = function() {
@@ -208,8 +207,6 @@ d3.gantt = function() {
       timeDomainEnd = value;
       return gantt;
     };
-
-
     
     return gantt;
 };

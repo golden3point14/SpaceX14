@@ -22,9 +22,15 @@ body {
 }
 
 .bar {
-	height: 40%;
-	width: 90%;
-	float: right;
+  fill: #33b5e5;
+}
+
+.trace-cmd {
+  fill: yellow;
+}
+
+.Xorg {
+  fill: blue;
 }
 
 .process {

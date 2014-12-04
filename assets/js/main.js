@@ -6,6 +6,7 @@ var JSONobj;
 
 var JSONevents;
 var JSONtasks;
+var numCPU;
 
 var files;
 
@@ -13,8 +14,7 @@ var reader = new FileReader();
 
 var db;
 
-var switchEvents;
-var maxDuration;
+var SCALE_FACTOR = 100000; // Scales the duration so things are actually visible
 
 function openDB()
 {
@@ -67,10 +67,15 @@ function openDB()
                                     getTopWaittime();
                                     //attemptToFormatData();
 
+                                    // TODO Fix so that numCPU read from JSON, generate cpus array
                                     var cpus = [0, 1, 2, 3];
-                                    var gantt = d3.gantt().taskTypes(cpus);
-                                    switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
-                                    getLongestCPUDuration();
+                                    maxDuration = getLongestCPUDuration(4); //should be numCPU as argument
+
+                                    var gantt = d3.gantt().taskTypes(cpus).timeDomain(maxDuration);
+                                    switchEvents = normalizeStartTime(4);
+                                    
+                                    // Scale all durations up
+                                    //switchEvents = _.map(switchEvents, function(e){e.duration *= SCALE_FACTOR; return e;})
                                     gantt(switchEvents);
     }
 
@@ -211,51 +216,42 @@ function getTopWaittime()
   dc.renderAll();
 }
 
-function getLongestCPUDuration()
+function normalizeStartTime(numCPU)
 {
+  switchEvents = [];
+  tempSwitchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
+  tempSwitchEvents = _.groupBy(tempSwitchEvents, function(e){return e.cpu;});
+  for (var cpu = 0; cpu < numCPU; cpu++)
+  {
+    var firstStartTime = tempSwitchEvents[cpu][0].startTime;
+    tempSwitchEvents[cpu] = _.map(tempSwitchEvents[cpu], function(e) {e.startTime -= firstStartTime; return e});
+    switchEvents = switchEvents.concat(tempSwitchEvents[cpu]);
+  }
 
-  numCPU = 4;
+  return switchEvents;
+}
+
+function getLongestCPUDuration(numCPU)
+{
   switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
   switchEvents = _.groupBy(switchEvents, function(e){return e.cpu;});
+
   maxDuration = 0;
   for (var j = 0; j < numCPU; j++)
   {
-    var sum = _.reduce(switchEvents[j], function(first, second) { return first.duration + second.duration }, 0);
+    var lastIndex = switchEvents[j].length-1;
+    //var sum = _.reduce(switchEvents[j], function(first, second) { return first.duration + second.duration }, 0);
+    var sum = 0;
+    for (var i = 0; i < lastIndex; i++) {
+      sum  += switchEvents[j][i].duration;
+    }
+    console.log(sum);
     if (sum > maxDuration) {
       maxDuration = sum
     }
   }
-}
 
-// filters on switch events and calculates their durations
-function attemptToFormatData()
-{
-  //FIXME we need to care about which CPU a thing is on
-
-  //HARDCODED FOR NOW FIXME
-  var numCPU = 4;
-
-  //switch these and find last event per cpu FIXME
-  switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
-  switchEvents = _.groupBy(switchEvents, function(e){return e.cpu;});
-
-  console.log(switchEvents);
-
-  for (var j = 0; j < numCPU; j++)
-  {
-    var lastIndex = switchEvents[j].length-1;
-    
-    for (var i = 0; i < lastIndex; i++)
-    {
-      switchEvents[j][i].duration = switchEvents[j][i+1].startTime - switchEvents[j][i].startTime;
-    }
-
-      //LAST ONE GETS SPECIAL TREATMENT
-      //PROBLEM: uses last one not of last CPU
-      switchEvents[j][lastIndex].duration = JSONevents[JSONevents.length-1].startTime -
-                                                      switchEvents[j][lastIndex].startTime;
-  }
-  console.log(switchEvents);
+  return maxDuration;
 }
 
 document.addEventListener("load", openDB());
