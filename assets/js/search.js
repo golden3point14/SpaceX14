@@ -11,7 +11,6 @@ function updateDisplay() {
     node.removeChild(node.lastChild);
   }
 
-  bodyDiv.innerHTML += '<td>CPU</td>'+'<td>Start Time</td>'+'<td>Name</td>'+'<td>PID</td>'+'<td>Event Type</td>'+'<td>Extra Info</td>';
   console.log("currenResultsLength:"+currentResults.length);
   if(currentResults.length < 50) {
     for (var i = 0; i<currentResults.length; i++) {
@@ -38,7 +37,6 @@ function updateDisplay() {
   console.log("j:"+j);
 
   $(window).scroll(function() {
-
     if($(window).scrollTop() == $(document).height() - $(window).height()) {
       console.log("d in start of scroll:"+d);
       console.log("j in start of scroll:"+j);
