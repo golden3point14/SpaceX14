@@ -67,16 +67,17 @@ function openDB()
                                     getTopWaittime();
                                     //attemptToFormatData();
 
-                                    // TODO Fix so that numCPU read from JSON, generate cpus array
-                                    var cpus = [0, 1, 2, 3];
-                                    maxDuration = getLongestCPUDuration(4); //should be numCPU as argument
+                                    // TODO Fix so that numCPU read from JSON
+                                    var numCPU = 4;
+                                    maxDuration = getLongestCPUDuration(numCPU); //should be numCPU as argument
 
-                                    var gantt = d3.gantt().taskTypes(cpus).timeDomain(maxDuration);
-                                    switchEvents = normalizeStartTime(4);
+                                    var gantt = d3.gantt().taskTypes(_.range(numCPU)).timeDomain(maxDuration);
+                                    switchEvents = normalizeStartTime(numCPU);
                                     
                                     // Scale all durations up
                                     //switchEvents = _.map(switchEvents, function(e){e.duration *= SCALE_FACTOR; return e;})
                                     gantt(switchEvents);
+                                    setColoringOfTasks();
     }
 
   }
@@ -87,49 +88,46 @@ function openDB()
     console.dir(e); }
 }
 
+function setColoringOfTasks() {
+  // For each task, create a CSS class with a random color
+  for (var i = 0; i < JSONtasks.length; i++) {
+    var style = document.createElement('style');
+    style.type = 'text/css';
+    var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
+    style.innerHTML = '.' + JSONtasks[i].pid + ' { color: #' + color + '; }';
+    document.getElementsByTagName('head')[0].appendChild(style);
+  }
+}
+
+function makeRow(task, table, attribute) {
+    var row = table.insertRow(2);
+
+    var nameCell = row.insertCell(0);
+    nameCell.innerHTML = task.name;
+
+    var pidCell = row.insertCell(1);
+    pidCell.innerHTML = task.pid;
+
+    var countCell = row.insertCell(2);
+    countCell.innerHTML = task[attribute];
+}
+
 function getTopPreemptions()
 {
 
-  //JSONtasks = _.select(JSONtasks, function(element){return element.name != "<idle>";});
+  var displayNum = 10;
 
 	//sort processes by preemptionCount
  	preemptionSorted = _.sortBy(JSONtasks, function(element){return -1*(element.preemptionCount);});
  	//remove <idle>
  	preemptionSorted = _.select(preemptionSorted, function(element){return (element.name != "<idle>") && (element.preemptionCount != 0);});
- 	
-  var displayNum = 10;
-  var display = [];
-  if (preemptionSorted.length < displayNum)
-  {
-    display = preemptionSorted;
+
+  var preemptionList = document.getElementById("preemption-list");
+
+  for (var r = displayNum - 1; r >= 0; r--) {
+    var task = preemptionSorted[r];
+    makeRow(task, preemptionList, "preemptionCount");
   }
-  else
-  {
-    display = preemptionSorted.slice(0,displayNum);
-  }
-
-  var value = crossfilter(display),
-    typeDimension = value.dimension(function(d) {return d.preemptionCount;}),
-    nameDimension = value.dimension(function(d) {return d.pid;}),
-    nameGroup = nameDimension.group().reduceSum(function(d) {return 5}),
-    typeGroup = typeDimension.group().reduceCount();
-
-  var dataTable = dc.dataTable("#preemption-list");
-    
-  dataTable
-    .width(300)
-    .height(400)
-    .dimension(typeDimension)
-    .group(function(d) { return "top 10 most preempted"})
-    .columns([
-      function(d) {return d.name;},
-      function(d) {return d.pid;},
-      function(d) {return d.preemptionCount;}
-      ])
-    .sortBy(function(d) {return -1*d.preemptionCount;})
-    .order(d3.ascending);
-
-  dc.renderAll();
 }
 
 function getTopRuntime()
@@ -140,38 +138,12 @@ function getTopRuntime()
   runTimeSorted = _.select(runTimeSorted, function(element){return (element.name != "<idle>") && (element.totalRuntime != 0);});
   
   var displayNum = 10;
-  var display = [];
-  if (runTimeSorted.length < displayNum)
-  {
-    display = runTimeSorted;
+  var runtimeList = document.getElementById("runtime-list");
+
+  for (var r = displayNum - 1; r >= 0; r--) {
+    var task = runTimeSorted[r];
+    makeRow(task, runtimeList, "totalRuntime");
   }
-  else
-  {
-    display = runTimeSorted.slice(0,displayNum);
-  }
-
-  var value = crossfilter(display),
-    typeDimension = value.dimension(function(d) {return d.totalRuntime;}),
-    nameDimension = value.dimension(function(d) {return d.pid;}),
-    nameGroup = nameDimension.group().reduceSum(function(d) {return 5}),
-    typeGroup = typeDimension.group().reduceCount();
-
-  var dataTable = dc.dataTable("#runtime-list");
-    
-  dataTable
-    .width(300)
-    .height(400)
-    .dimension(typeDimension)
-    .group(function(d) { return "10 longest running";})
-    .columns([
-      function(d) {return d.name;},
-      function(d) {return d.pid;},
-      function(d) {return d.totalRuntime;}
-      ])
-    .sortBy(function(d) {return -1*d.totalRuntime;})
-    .order(d3.ascending);
-
-  dc.renderAll();
 }
 
 function getTopWaittime()
@@ -182,38 +154,12 @@ function getTopWaittime()
   waitTimeSorted = _.select(waitTimeSorted, function(element){return (element.name != "<idle>") && (element.totalWaittime != 0);});
   
   var displayNum = 10;
-  var display = [];
-  if (waitTimeSorted.length < displayNum)
-  {
-    display = waitTimeSorted;
+  var waittimeList = document.getElementById("waittime-list");
+
+  for (var r = displayNum - 1; r >= 0; r--) {
+    var task = waitTimeSorted[r];
+    makeRow(task, waittimeList, "totalWaittime");
   }
-  else
-  {
-    display = waitTimeSorted.slice(0,displayNum);
-  }
-
-  var value = crossfilter(display),
-    typeDimension = value.dimension(function(d) {return d.totalWaittime;}),
-    nameDimension = value.dimension(function(d) {return d.pid;}),
-    nameGroup = nameDimension.group().reduceSum(function(d) {return 5}),
-    typeGroup = typeDimension.group().reduceCount();
-
-  var dataTable = dc.dataTable("#waittime-list");
-    
-  dataTable
-    .width(300)
-    .height(400)
-    .dimension(typeDimension)
-    .group(function(d) { return "10 longest waiting";})
-    .columns([
-      function(d) {return d.name;},
-      function(d) {return d.pid;},
-      function(d) {return d.totalWaittime;}
-      ])
-    .sortBy(function(d) {return -1*d.totalWaittime;})
-    .order(d3.ascending);
-
-  dc.renderAll();
 }
 
 function normalizeStartTime(numCPU)

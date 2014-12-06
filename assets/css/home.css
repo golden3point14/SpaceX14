@@ -25,14 +25,6 @@ body {
   fill: #33b5e5;
 }
 
-.trace-cmd {
-  fill: yellow;
-}
-
-.Xorg {
-  fill: blue;
-}
-
 .process {
 	border: 1px solid #666666;
 	display: inline-block;

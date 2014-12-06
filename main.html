@@ -25,9 +25,44 @@
         <div id="bodyDiv"></div>
 
         <div id="lists">
-        	<div id="preemption-list" class="mainlist table table-hover"></div>
-        	<div id="runtime-list" class="mainlist table table-hover"></div>
-        	<div id="waittime-list" class="mainlist table table-hover"></div>
+          <table id="preemption-list" class="mainlist table table-hover">
+            <thead>
+              <tr>
+                <th class="colspan-3">Most Preempted Tasks</th>
+              </tr>
+              <tr>
+                <th>Task name</th>
+                <th>PID</th>
+                <th>Preemption Count</th>
+              </tr>
+            </thead>
+          </table>
+
+        	<table id="runtime-list" class="mainlist table table-hover">
+            <thead>
+              <tr>
+                <th class="colspan-3">Longest Running Tasks</th>
+              </tr>
+              <tr>
+                <th>Task name</th>
+                <th>PID</th>
+                <th>Total Runtime (ns)</th>
+              </tr>
+            </thead>
+          </table>
+
+        	<table id="waittime-list" class="mainlist table table-hover">
+            <thead>
+              <tr>
+                <th class="colspan-3">Longest Waiting Tasks</th>
+              </tr>
+              <tr>
+                <th>Task name</th>
+                <th>PID</th>
+                <th>Total Waittime (ns)</th>
+              </tr>
+            </thead>
+          </table>
         </div>
 
 <script type="text/javascript" src="assets/js/sidebar.js"></script>
