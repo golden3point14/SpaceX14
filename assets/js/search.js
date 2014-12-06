@@ -3,6 +3,9 @@ var d,j;
 var eventJSON;
 var currentResults;
 var reader = new FileReader();
+var tableOffset = $("#table").offset().top;
+var $header = $("#table > thead").clone();
+var $fixedHeader = $("#header-fixed").append($header);
 
 function updateDisplay() {
   node = document.getElementById('bodyDiv');
@@ -35,6 +38,17 @@ function updateDisplay() {
 
   console.log("d:"+d);
   console.log("j:"+j);
+
+  $(window).bind("scroll", function() {
+      var offset = $(this).scrollTop();
+      
+      if (offset >= tableOffset && $fixedHeader.is(":hidden")) {
+          $fixedHeader.show();
+      }
+      else if (offset < tableOffset) {
+          $fixedHeader.hide();
+      }
+  });
 
   $(window).scroll(function() {
     if($(window).scrollTop() == $(document).height() - $(window).height()) {
@@ -314,6 +328,21 @@ function updateDisplay() {
     return false;
   }
 
+  function predicatBy(prop){
+    return function(a,b){
+      if( a[prop] > b[prop]){
+        return 1;
+      } else if( a[prop] < b[prop] ){
+          return -1;
+      } 
+      return -1
+    }
+  }
+
+  function sortEvents(json) {
+    json.sort(predicatBy("cpu"));
+    updateDisplay();
+  }
 
   //called when a box is unchecked
   //checks for checked boxes and filters when applicable
