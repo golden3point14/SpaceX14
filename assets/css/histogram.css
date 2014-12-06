@@ -49,7 +49,8 @@ text.hidden {
 #process-list {
   overflow-y: auto;
   max-height: 510px;
-  min-width: 225px;
+  min-width: 30%;
+  display: none;
 }
 
 .graph {
@@ -63,7 +64,10 @@ text.hidden {
   overflow-y: auto;
   overflow-x:hidden;
   display: inline-block;
+  /*max-width: 90%;*/
 }
+
+
 
 .graphtitle {
   font-size: 14px;
@@ -71,8 +75,8 @@ text.hidden {
 }
 
 .dc-chart .brush rect.extent {
-    fill: steelblue;
-    fill-opacity: .2;
+  fill: steelblue;
+  fill-opacity: .2;
 }
 
 .dataTable tr:hover {
