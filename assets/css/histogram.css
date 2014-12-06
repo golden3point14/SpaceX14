@@ -50,6 +50,7 @@ text.hidden {
   overflow-y: auto;
   max-height: 510px;
   min-width: 225px;
+  display: none;
 }
 
 .graph {
