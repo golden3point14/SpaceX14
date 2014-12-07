@@ -3,6 +3,8 @@ SpaceX14
 
 Visualizing ftrace data. Web application based, using Node.js frameworks.
 
+IMPORTANT NOTE: After pulling for the first time, ALWAYS CHOOSE A NEW FILE FIRST!
+
 ## Instructions
 
 Please follow the following instructions to parse a .dat file and run our visualization.
