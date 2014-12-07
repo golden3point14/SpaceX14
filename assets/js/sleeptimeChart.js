@@ -97,10 +97,10 @@ function useDatabaseData() {
       }
   }
 
-  var avg = calculateAverage(JSONtasks, "totalSleeptime");
-  var stdDev = calculateStdDev(JSONtasks, "totalSleeptime", avg);
-  document.getElementById("mean").innerHTML = Math.round(avg);
-  document.getElementById("stddev").innerHTML = Math.round(stdDev);
+  var avg = calculateAverage(values, "totalSleeptime");
+  var stdDev = calculateStdDev(values, "totalSleeptime", avg);
+  document.getElementById("mean").innerHTML = (avg / 1000000).toFixed(5);
+  document.getElementById("stddev").innerHTML = (stdDev / 1000000).toFixed(5);
 
   // creating a the filters and groups from the data
   var value = crossfilter(values),
@@ -137,10 +137,13 @@ function useDatabaseData() {
     .ordering(function(d) { return -processFromPid(d.key, values).totalSleeptime; })
     .label(function(d) {
       var process = processFromPid(d.key, values);
-      return process.name + "    " + process.totalSleeptime / 1000000 + " ms"; 
+      return process.name + "    (" + process.totalSleeptime / 1000000 + " ms)"; 
     })
     .renderLabel(true)
-    .renderTitle(false);
+    .renderTitle(false)
+    .margins({top: 0, right: 0, bottom: -1, left: 10});
+
+  histogram.filter = function() {};
 
 
   // distribution side bar stuff
