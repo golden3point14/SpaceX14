@@ -50,14 +50,10 @@ class parser {
 		int numCPUs = 0;
 		if ((s = stdInput.readLine()) != null) {
 			tokens = s.split("=");
-			if (tokens.length == 3) {
-				numCPUs = Integer.parseInt(tokens[2]);
+			if (tokens.length == 2) {
+				numCPUs = Integer.parseInt(tokens[1]);
 			}
 		}
-		
-		//wbrooks	
-		JSONObject numCPU = new JSONObject();
-		numCPU.put("value", numCPUs);
 		
 		JSONObject mainObj = new JSONObject();
 		JSONArray events = new JSONArray();
@@ -169,7 +165,7 @@ class parser {
 		
 		mainObj.put("events", events);
 		mainObj.put("tasks", tasks);
-		mainObj.put("numCPU", numCPU); //wbrooks
+		mainObj.put("numCPU", numCPUs); //wbrooks
 		
 		
 		writeJSON(mainObj);
