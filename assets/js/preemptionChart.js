@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", openDB());
 
 function openDB()
 {
-  var openRequest = indexedDB.open("events", 2);
+  var openRequest = indexedDB.open("events", 3);
 
   openRequest.onupgradeneeded =  function(e)
   {
