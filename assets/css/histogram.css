@@ -66,6 +66,7 @@ text.hidden {
   overflow-x:hidden;
   display: inline-block;
   /*max-width: 90%;*/
+  padding-top: 90px;
 }
 
 
