@@ -57,6 +57,7 @@ text.hidden {
   display: inline-block;
   border: none;
   float: left;
+  padding-left: 10px;
 }
 
 #dc-bar-chart {
@@ -92,7 +93,7 @@ stroke: none
 }
 
 .content {
-  padding: 10px 10px 10px 380px;
+  padding: 0px 0px 0px 380px;
 }
 
 .graphheader {
