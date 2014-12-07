@@ -3,7 +3,7 @@ SpaceX14
 
 Visualizing ftrace data. Web application based, using Node.js frameworks.
 
-IMPORTANT NOTE: After pulling for the first time, ALWAYS CHOOSE A NEW FILE FIRST!
+IMPORTANT NOTE: After pulling a new update, ALWAYS CHOOSE A NEW FILE the first time you run it!
 
 ## Instructions
 
