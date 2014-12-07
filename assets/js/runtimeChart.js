@@ -143,10 +143,12 @@ function useDatabaseData()
       return -processFromPid(d.key, values).totalRuntime; })
     .label(function(d) {
       var process = processFromPid(d.key, values);
-      return process.name + "    " + process.totalRuntime / 1000000 + " ms"; 
+      return process.name + "    (" + process.totalRuntime / 1000000 + " ms)"; 
     })
     .renderLabel(true)
     .renderTitle(false);
+
+  histogram.filter = function() {};
 
 
   // distribution side bar stuff

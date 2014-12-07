@@ -136,10 +136,12 @@ function useDatabaseData() {
     .ordering(function(d) { return -processFromPid(d.key, values).totalWaittime; })
     .label(function(d) {
       var process = processFromPid(d.key, values);
-      return process.name + "    " + process.totalWaittime / 1000000 + " ms"; 
+      return process.name + "    (" + process.totalWaittime / 1000000 + " ms)"; 
     })
     .renderLabel(true)
     .renderTitle(false);
+
+  histogram.filter = function() {};
 
   // distribution side bar stuff
   var histogrambutton = dc.rowChart("#histogram-button");

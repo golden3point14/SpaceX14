@@ -121,11 +121,16 @@ function useDatabaseData()
     .ordering(function(d) { return -processFromPid(d.key, values).preemptionCount; })
     .label(function(d) {
       var process = processFromPid(d.key, values);
-      return process.name + "    " + process.preemptionCount + " preemptions"; 
+      return process.name + "    (" + process.preemptionCount + " preemptions)"; 
     })
     .renderLabel(true)
+    .title(function(d) {
+      var process = processFromPid(d.key, values);
+      return process.name + "\n" + process.preemptionCount + " preemptions";
+    })
     .renderTitle(false);
 
+  histogram.filter = function() {};
 
   // distribution side bar stuff
   var histogrambutton = dc.rowChart("#histogram-button");
