@@ -14,8 +14,7 @@ var reader = new FileReader();
 
 var db;
 
-var switchEvents;
-
+var SCALE_FACTOR = 100000; // Scales the duration so things are actually visible
 
 function openDB()
 {
@@ -87,61 +86,68 @@ function openDB()
     result3.onsuccess = function(e) {
                                       numCPUs = e.target.result;
                                       console.log("numCPUs is " + numCPUs);
-                                      attemptToFormatData();
-                                      }
+                                    //attemptToFormatData();
+
+                                    // TODO Fix so that numCPU read from JSON
+                                    maxDuration = getLongestCPUDuration(numCPUs); //should be numCPU as argument
+
+                                    var gantt = d3.gantt().taskTypes(_.range(numCPUs)).timeDomain(maxDuration);
+                                    switchEvents = normalizeStartTime(numCPUs);
+                                    
+                                    // Scale all durations up
+                                    //switchEvents = _.map(switchEvents, function(e){e.duration *= SCALE_FACTOR; return e;})
+                                    gantt(switchEvents);
+                                    setColoringOfTasks();
+    }
 
   }
 
   openRequest.onerror = function(e)
   {
     console.log("Error in OpenRequest");
-    console.dir(e);
+    console.dir(e); }
+}
+
+function setColoringOfTasks() {
+  // For each task, create a CSS class with a random color
+  for (var i = 0; i < JSONtasks.length; i++) {
+    var style = document.createElement('style');
+    style.type = 'text/css';
+    var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
+    style.innerHTML = '.' + JSONtasks[i].pid + ' { color: #' + color + '; }';
+    document.getElementsByTagName('head')[0].appendChild(style);
   }
+}
+
+function makeRow(task, table, attribute) {
+    var row = table.insertRow(2);
+
+    var nameCell = row.insertCell(0);
+    nameCell.innerHTML = task.name;
+
+    var pidCell = row.insertCell(1);
+    pidCell.innerHTML = task.pid;
+
+    var countCell = row.insertCell(2);
+    countCell.innerHTML = task[attribute];
 }
 
 function getTopPreemptions()
 {
 
-  //JSONtasks = _.select(JSONtasks, function(element){return element.name != "<idle>";});
+  var displayNum = 10;
 
 	//sort processes by preemptionCount
  	preemptionSorted = _.sortBy(JSONtasks, function(element){return -1*(element.preemptionCount);});
  	//remove <idle>
  	preemptionSorted = _.select(preemptionSorted, function(element){return (element.name != "<idle>") && (element.preemptionCount != 0);});
- 	
-  var displayNum = 10;
-  var display = [];
-  if (preemptionSorted.length < displayNum)
-  {
-    display = preemptionSorted;
+
+  var preemptionList = document.getElementById("preemption-list");
+
+  for (var r = displayNum - 1; r >= 0; r--) {
+    var task = preemptionSorted[r];
+    makeRow(task, preemptionList, "preemptionCount");
   }
-  else
-  {
-    display = preemptionSorted.slice(0,displayNum);
-  }
-
-  var value = crossfilter(display),
-    typeDimension = value.dimension(function(d) {return d.preemptionCount;}),
-    nameDimension = value.dimension(function(d) {return d.pid;}),
-    nameGroup = nameDimension.group().reduceSum(function(d) {return 5}),
-    typeGroup = typeDimension.group().reduceCount();
-
-  var dataTable = dc.dataTable("#preemption-list");
-    
-  dataTable
-    .width(300)
-    .height(400)
-    .dimension(typeDimension)
-    .group(function(d) { return "top 10 most preempted"})
-    .columns([
-      function(d) {return d.name;},
-      function(d) {return d.pid;},
-      function(d) {return d.preemptionCount;}
-      ])
-    .sortBy(function(d) {return -1*d.preemptionCount;})
-    .order(d3.ascending);
-
-  dc.renderAll();
 }
 
 function getTopRuntime()
@@ -152,38 +158,12 @@ function getTopRuntime()
   runTimeSorted = _.select(runTimeSorted, function(element){return (element.name != "<idle>") && (element.totalRuntime != 0);});
   
   var displayNum = 10;
-  var display = [];
-  if (runTimeSorted.length < displayNum)
-  {
-    display = runTimeSorted;
+  var runtimeList = document.getElementById("runtime-list");
+
+  for (var r = displayNum - 1; r >= 0; r--) {
+    var task = runTimeSorted[r];
+    makeRow(task, runtimeList, "totalRuntime");
   }
-  else
-  {
-    display = runTimeSorted.slice(0,displayNum);
-  }
-
-  var value = crossfilter(display),
-    typeDimension = value.dimension(function(d) {return d.totalRuntime;}),
-    nameDimension = value.dimension(function(d) {return d.pid;}),
-    nameGroup = nameDimension.group().reduceSum(function(d) {return 5}),
-    typeGroup = typeDimension.group().reduceCount();
-
-  var dataTable = dc.dataTable("#runtime-list");
-    
-  dataTable
-    .width(300)
-    .height(400)
-    .dimension(typeDimension)
-    .group(function(d) { return "10 longest running";})
-    .columns([
-      function(d) {return d.name;},
-      function(d) {return d.pid;},
-      function(d) {return d.totalRuntime;}
-      ])
-    .sortBy(function(d) {return -1*d.totalRuntime;})
-    .order(d3.ascending);
-
-  dc.renderAll();
 }
 
 function getTopWaittime()
@@ -194,52 +174,31 @@ function getTopWaittime()
   waitTimeSorted = _.select(waitTimeSorted, function(element){return (element.name != "<idle>") && (element.totalWaittime != 0);});
   
   var displayNum = 10;
-  var display = [];
-  if (waitTimeSorted.length < displayNum)
-  {
-    display = waitTimeSorted;
+  var waittimeList = document.getElementById("waittime-list");
+
+  for (var r = displayNum - 1; r >= 0; r--) {
+    var task = waitTimeSorted[r];
+    makeRow(task, waittimeList, "totalWaittime");
   }
-  else
-  {
-    display = waitTimeSorted.slice(0,displayNum);
-  }
-
-  var value = crossfilter(display),
-    typeDimension = value.dimension(function(d) {return d.totalWaittime;}),
-    nameDimension = value.dimension(function(d) {return d.pid;}),
-    nameGroup = nameDimension.group().reduceSum(function(d) {return 5}),
-    typeGroup = typeDimension.group().reduceCount();
-
-  var dataTable = dc.dataTable("#waittime-list");
-    
-  dataTable
-    .width(300)
-    .height(400)
-    .dimension(typeDimension)
-    .group(function(d) { return "10 longest waiting";})
-    .columns([
-      function(d) {return d.name;},
-      function(d) {return d.pid;},
-      function(d) {return d.totalWaittime;}
-      ])
-    .sortBy(function(d) {return -1*d.totalWaittime;})
-    .order(d3.ascending);
-
-  dc.renderAll();
 }
 
-// filters on switch events and calculates their durations
-function attemptToFormatData()
+function normalizeStartTime(numCPU)
 {
-  //FIXME we need to care about which CPU a thing is on
+  switchEvents = [];
+  tempSwitchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
+  tempSwitchEvents = _.groupBy(tempSwitchEvents, function(e){return e.cpu;});
+  for (var cpu = 0; cpu < numCPU; cpu++)
+  {
+    var firstStartTime = tempSwitchEvents[cpu][0].startTime;
+    tempSwitchEvents[cpu] = _.map(tempSwitchEvents[cpu], function(e) {e.startTime -= firstStartTime; return e});
+    switchEvents = switchEvents.concat(tempSwitchEvents[cpu]);
+  }
 
-  //HARDCODED FOR NOW FIXME
-  var numCPU = numCPUs;
+  return switchEvents;
+}
 
-  console.log("size of JSONevents is " + JSONevents.length);
-
-
-
+function getLongestCPUDuration(numCPU)
+{
   //switch these and find last event per cpu FIXME
   switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
   switchEvents = _.groupBy(switchEvents, function(e){return e.cpu;});
@@ -248,21 +207,18 @@ function attemptToFormatData()
 
   setTimeout(function(e){return true}, 10000);
 
-  for (var j=0; j < numCPU; j++)
+  maxDuration = 0;
+  for (var j = 0; j < numCPUs; j++)
   {
     var lastIndex = switchEvents[j].length-1;
-    
-    for (var i = 0; i < lastIndex; i++)
-    {
-      switchEvents[j][i].duration = switchEvents[j][i+1].startTime - switchEvents[j][i].startTime;
+    var sum = _.reduce(switchEvents[j], function(sum, next) { return sum += next.duration }, 0);
+    console.log(sum);
+    if (sum > maxDuration) {
+      maxDuration = sum
     }
-
-      //LAST ONE GETS SPECIAL TREATMENT
-      //PROBLEM: uses last one not of last CPU
-      switchEvents[j][lastIndex].duration = JSONevents[JSONevents.length-1].startTime -
-                                                      switchEvents[j][lastIndex].startTime;
   }
-  //console.log(switchEvents);
+
+  return maxDuration;
 }
 
 document.addEventListener("load", openDB());

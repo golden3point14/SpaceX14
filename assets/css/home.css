@@ -22,9 +22,7 @@ body {
 }
 
 .bar {
-	height: 40%;
-	width: 90%;
-	float: right;
+  fill: #33b5e5;
 }
 
 .process {
