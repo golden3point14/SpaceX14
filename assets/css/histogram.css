@@ -60,10 +60,11 @@ text.hidden {
 }
 
 #dc-bar-chart {
-  max-height:500px;
+  /*max-height:500px;*/
   overflow-y: auto;
   overflow-x:hidden;
   display: inline-block;
+  margin-top: 80px;
 }
 
 .graphtitle {
@@ -94,3 +95,8 @@ stroke: none
   padding: 10px 10px 10px 380px;
 }
 
+.graphheader {
+  position: fixed;
+  background-color: white;
+  width: 100%;
+}

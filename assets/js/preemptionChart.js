@@ -85,6 +85,11 @@ function useDatabaseData()
     }
   }
 
+  var avg = calculateAverage(values, "preemptionCount");
+  var stdDev = calculateStdDev(values, "preemptionCount", avg);
+  document.getElementById("mean").innerHTML = (avg).toFixed(5);
+  document.getElementById("stddev").innerHTML = (stdDev).toFixed(5);
+
   // creating a the filters and groups from the data
   var value = crossfilter(values),
     pidDimension = value.dimension(function(d) {return d.pid;}),
@@ -128,7 +133,8 @@ function useDatabaseData()
       var process = processFromPid(d.key, values);
       return process.name + "\n" + process.preemptionCount + " preemptions";
     })
-    .renderTitle(false);
+    .renderTitle(false)
+    .margins({top: 0, right: 0, bottom: -1, left: 10});
 
   histogram.filter = function() {};
 
