@@ -49,7 +49,7 @@ function handleFileSelect(evt) {
 // sets up the database
 function openDB()
 {
-  var openRequest = indexedDB.open("events", 3);
+  var openRequest = indexedDB.open("events", 4);
 
   openRequest.onupgradeneeded =  function(e)
   {
@@ -120,7 +120,7 @@ function openDB()
 function handleUseOld(evt)
 {
 	console.log("yo");
-	var openRequest = indexedDB.open("events", 2);
+	var openRequest = indexedDB.open("events", 4);
 
 	openRequest.onupgradeneeded = function(e)
 	{
@@ -136,6 +136,12 @@ function handleUseOld(evt)
 	    {
 	      thisDB.createObjectStore("Tasks");
 	      console.log("created tasks");
+	    }
+
+	      if (!thisDB.objectStoreNames.contains("numCPUs"))
+	    {
+	      thisDB.createObjectStore("numCPUs");
+	      console.log("created numCPUs");
 	    }
 
 		

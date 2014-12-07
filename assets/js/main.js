@@ -19,7 +19,7 @@ var switchEvents;
 
 function openDB()
 {
-  var openRequest = indexedDB.open("events", 3);
+  var openRequest = indexedDB.open("events", 4);
 
   openRequest.onupgradeneeded =  function(e)
   {
