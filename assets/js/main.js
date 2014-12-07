@@ -6,6 +6,7 @@ var JSONobj;
 
 var JSONevents;
 var JSONtasks;
+var numCPUs;
 
 var files;
 
@@ -18,7 +19,7 @@ var switchEvents;
 
 function openDB()
 {
-  var openRequest = indexedDB.open("events", 2);
+  var openRequest = indexedDB.open("events", 3);
 
   openRequest.onupgradeneeded =  function(e)
   {
@@ -37,6 +38,12 @@ function openDB()
       thisDB.createObjectStore("Tasks");
       console.log("created tasks");
     }
+
+    if (!thisDB.objectStoreNames.contains("numCPUs"))
+    {
+      thisDB.createObjectStore("numCPUs");
+      console.log("created CPUs");
+    }
     
 
   }
@@ -48,24 +55,40 @@ function openDB()
 
     var xact = db.transaction(["Events"],"readwrite");
     var xact2 = db.transaction(["Tasks"], "readwrite");
+    var xact3 = db.transaction(["numCPUs"], "readwrite");
     var store = xact.objectStore("Events");
     var store2 = xact2.objectStore("Tasks");
+    var store3 = xact3.objectStore("numCPUs");
     var result = store.get(1);
     var result2 = store2.get(1);
+    var result3 = store3.get(1);
 
     // some kind of error handling
     result.onerror = function(e) {console.log("Error", e.target.error.name);}
 
-    result.onsuccess = function(e) {JSONevents = e.target.result;}
+    result.onsuccess = function(e) {
+                                      JSONevents = e.target.result;
+                                      console.log("SIZE OF THING IS " + JSONevents.length);
+                                      
+                                    //attemptToFormatData();
+                                  }
 
      // some kind of error handling
     result2.onerror = function(e) {console.log("Error", e.target.error.name);}
 
     result2.onsuccess = function(e) {JSONtasks = e.target.result;
-                                    getTopPreemptions();
+                                      getTopPreemptions();
                                     getTopRuntime();
                                     getTopWaittime();
-                                    attemptToFormatData();}
+                                    }
+
+    result3.onerror = function(e) {console.log("Error", e.target.error.name);}
+
+    result3.onsuccess = function(e) {
+                                      numCPUs = e.target.result;
+                                      console.log("numCPUs is " + numCPUs);
+                                      attemptToFormatData();
+                                      }
 
   }
 
@@ -211,13 +234,19 @@ function attemptToFormatData()
   //FIXME we need to care about which CPU a thing is on
 
   //HARDCODED FOR NOW FIXME
-  var numCPU = 4;
+  var numCPU = numCPUs;
+
+  console.log("size of JSONevents is " + JSONevents.length);
+
+
 
   //switch these and find last event per cpu FIXME
   switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
   switchEvents = _.groupBy(switchEvents, function(e){return e.cpu;});
 
-  console.log(switchEvents);
+  //console.log(switchEvents);
+
+  setTimeout(function(e){return true}, 10000);
 
   for (var j=0; j < numCPU; j++)
   {
@@ -233,7 +262,7 @@ function attemptToFormatData()
       switchEvents[j][lastIndex].duration = JSONevents[JSONevents.length-1].startTime -
                                                       switchEvents[j][lastIndex].startTime;
   }
-  console.log(switchEvents);
+  //console.log(switchEvents);
 }
 
 document.addEventListener("load", openDB());
