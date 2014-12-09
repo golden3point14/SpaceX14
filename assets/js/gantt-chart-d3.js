@@ -48,6 +48,7 @@ d3.gantt = function() {
     var initAxis = function() {
   x = d3.time.scale().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]).clamp(true);
   y = d3.scale.ordinal().domain(taskTypes).rangeRoundBands([ 0, height - margin.top - margin.bottom ], .1);
+
   xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.time.format(tickFormat)).tickSubdivide(true)
   .tickSize(8).tickPadding(8);
 
@@ -56,26 +57,20 @@ d3.gantt = function() {
 
     var zoom = d3.behavior.zoom()
       .x(x)
-      .y(y)
+  //    .y(y)
       .on("zoom", zoomed);
 
-//http://stackoverflow.com/questions/15705527/chart-zooming-in-d3
+    var make_x_axis = function () {
+      return xAxis;
+    };
+    
+    var zoomRectTransform = function(d) {
+      var newX = x(d.startTime) + d3.event.translate[0];
+      return "translate(" + newX + "," + y(d.cpu) + ")scale(" + d3.event.scale + ",1)";
+    };
+
     function zoomed() {
-        console.log(d3.event.translate);
-          console.log(d3.event.scale);
-              svg.select(".x.axis").call(xAxis);
-                  svg.select(".y.axis").call(yAxis);
-                      svg.select(".x.grid")
-                                .call(make_x_axis()
-                                            .tickSize(-height, 0, 0)
-                                                    .tickFormat(""));
-                          svg.select(".y.grid")
-                                    .call(make_y_axis()
-                                                .tickSize(-width, 0, 0)
-                                                        .tickFormat(""));
-                              svg.select(".line")
-                                          .attr("class", "line")
-                                                  .attr("d", line);
+      d3.selectAll("rect").attr("transform", zoomRectTransform);
     }
     
   function gantt(tasks) {
@@ -107,7 +102,8 @@ d3.gantt = function() {
      .attr("height", function(d) { return y.rangeBand(); })
      .attr("width", function(d) { 
          return (x(d.duration)); 
-         });
+         })
+     .call(zoom);
     svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0, " + (height - margin.top - margin.bottom) + ")")
