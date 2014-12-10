@@ -10,7 +10,6 @@
     <script src="../filter.js/filter.js" type="text/javascript"></script>
     <script src="assets/js/json_query.js" type="text/javascript"></script>
     <script src="assets/js/underscore-min.js" type="text/javascript"></script>
-    <script src="assets/js/waypoints.min.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -18,25 +17,22 @@
 <div class="sidebar" id="sidebar"></div>
 
 <div class="content">
-  <div id="columnHeaders">
-    <table id="table" class="table table-striped">
-      <thead>
-        <tr>
-          <th onclick="sortEvents(currentResults)">CPU</th>
-          <th>Start Time</th>
-          <th>Process Name</th>
-          <th>PID</th>
-          <th>Event Type</th>
-          <th>Extra Info</th>
-        </tr>
-      </tead>
-      <tbody id="bodyDiv">
-      </tbody>
-      <tfoot>
-      </tfoot>
-    </table>
-    <table id="header-fixed"></table>
-  </div>
+  <table id="table" class="table table-striped" cellspacing="0" width="100%">
+    <thead id="headings">
+      <tr>
+        <th class="cpu" onclick="sortEvents(currentResults,'cpu')">CPU</th>
+        <th class="startTime" onclick="sortEvents(currentResults,'startTime')">Start Time</th>
+        <th id="processName">Process Name</th>
+        <th class="pid" onclick="sortEvents(currentResults, 'pid')">PID</th>
+        <th>Event Type</th>
+        <th>Extra Info</th>
+      </tr>
+    </tead>
+    <tbody id="bodyDiv">
+    </tbody>
+    <tfoot>
+    </tfoot>
+  </table>
 
   <div id="searchToolbar" class="toolbar">
     <form onsubmit="return false" action="" class="column">

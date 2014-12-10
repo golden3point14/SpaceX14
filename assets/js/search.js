@@ -3,9 +3,6 @@ var d,j;
 var eventJSON;
 var currentResults;
 var reader = new FileReader();
-var tableOffset = $("#table").offset().top;
-var $header = $("#table > thead").clone();
-var $fixedHeader = $("#header-fixed").append($header);
 
 function updateDisplay() {
   node = document.getElementById('bodyDiv');
@@ -25,6 +22,7 @@ function updateDisplay() {
     console.log("currentResults.length < 50 loop:"+currentResults.length);
   } else {
     for (var i = 0; i<50; i++) {
+      console.log("currentResults[0]"+currentResults[0].startTime);
       iDiv = document.createElement('tr');
       iDiv.innerHTML += '<td>' + currentResults[i].cpu + '</td><td>' + currentResults[i].startTime + '</td><td>' + currentResults[i].name + 
                           '</td><td>' + currentResults[i].pid + '</td><td>' + currentResults[i].eventType + '</td><td>' + currentResults[i].extraInfo + '</td><td>' + i + '</td>';
@@ -38,17 +36,6 @@ function updateDisplay() {
 
   console.log("d:"+d);
   console.log("j:"+j);
-
-  $(window).bind("scroll", function() {
-      var offset = $(this).scrollTop();
-      
-      if (offset >= tableOffset && $fixedHeader.is(":hidden")) {
-          $fixedHeader.show();
-      }
-      else if (offset < tableOffset) {
-          $fixedHeader.hide();
-      }
-  });
 
   $(window).scroll(function() {
     if($(window).scrollTop() == $(document).height() - $(window).height()) {
@@ -339,8 +326,10 @@ function updateDisplay() {
     }
   }
 
-  function sortEvents(json) {
-    json.sort(predicatBy("cpu"));
+  function sortEvents(json, prop) {
+    var sorted = json.sort(predicatBy(prop));
+    json = sorted;
+    console.log("json1:"+json[0].startTime);
     updateDisplay();
   }
 
@@ -380,18 +369,6 @@ function updateDisplay() {
     }
     return currentResults;
   }
-
-  /*function refilterSearchBar()
-  {
-    console.log('start refilterSearchBar');
-    if (document.getElementById('searchBar').value != "")
-    {
-      currentResults = _.select(currentResults, function(element){return element.name == searchField;});
-      console.log("in refilterSearchBar:");
-    }
-    console.log("refilterSearchBar:"+currentResults.length);
-    return currentResults;
-  }*/
 
   //pulls the data from the IndexedDB and displays it
   function openDB()
