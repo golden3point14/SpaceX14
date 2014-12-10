@@ -373,7 +373,7 @@ function updateDisplay() {
   //pulls the data from the IndexedDB and displays it
   function openDB()
   {
-    var openRequest = indexedDB.open("events", 2);
+    var openRequest = indexedDB.open("events", 4);
 
   openRequest.onupgradeneeded =  function(e)
   {

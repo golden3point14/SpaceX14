@@ -22,9 +22,7 @@ body {
 }
 
 .bar {
-	height: 40%;
-	width: 90%;
-	float: right;
+  fill: #33b5e5;
 }
 
 .process {
@@ -74,7 +72,7 @@ body {
 
 .sidebutton {
 	width: 140;
-	height: 5%;
+	height: 50px;
 	padding: 25px 0px 0px 10px;
 	font-size: 15pt;
 	background-color: steelblue;
@@ -105,10 +103,11 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   margin-left: 150px;
+  padding-right:10px;
 }
 
 .distbutton {
-  width: 100%;
+  width: 220px;
   height: 230px;
   background-color: white;
   overflow: hidden;
@@ -119,7 +118,7 @@ body {
 }
 
 .distgraph {
-	width: 190px;
+	width: 100%;
 	height: 190px;
 	overflow: hidden;
 	background-color: white; 

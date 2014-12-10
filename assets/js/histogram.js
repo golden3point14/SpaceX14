@@ -1,5 +1,7 @@
 // Basic histogram code from http://bl.ocks.org/mbostock/3048450
 
+var db; //indexedDB stuff
+
 // Generate a Bates distribution of 10 random variables.
 // var values = d3.range(1000).map(d3.random.bates(10));
 var values = [0.5,0.5,0.5,0.4,0.6];
@@ -150,3 +152,5 @@ function processList(div) {
 
   });
 }
+
+document.addEventListener("DOMContentLoaded", openDB());

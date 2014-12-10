@@ -49,7 +49,7 @@ text.hidden {
 #process-list {
   overflow-y: auto;
   max-height: 510px;
-  min-width: 225px;
+  min-width: 30%;
   display: none;
 }
 
@@ -57,14 +57,19 @@ text.hidden {
   display: inline-block;
   border: none;
   float: left;
+  padding-left: 10px;
 }
 
 #dc-bar-chart {
-  max-height:500px;
+  /*max-height:500px;*/
   overflow-y: auto;
   overflow-x:hidden;
   display: inline-block;
+  /*max-width: 90%;*/
+  padding-top: 90px;
 }
+
+
 
 .graphtitle {
   font-size: 14px;
@@ -72,8 +77,8 @@ text.hidden {
 }
 
 .dc-chart .brush rect.extent {
-    fill: steelblue;
-    fill-opacity: .2;
+  fill: steelblue;
+  fill-opacity: .2;
 }
 
 .dataTable tr:hover {
@@ -91,6 +96,11 @@ stroke: none
 }
 
 .content {
-  padding: 10px 10px 10px 380px;
+  padding: 0px 0px 0px 380px;
 }
 
+.graphheader {
+  position: fixed;
+  background-color: white;
+  width: 100%;
+}

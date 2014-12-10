@@ -9,6 +9,8 @@ var reader = new FileReader();
 
 var db;
 
+var JSONnumCPUs;
+
 function handleFileSelect(evt) {
 	files = evt.target.files; // FileList object
     // files is a FileList of File objects. List some properties.
@@ -28,6 +30,7 @@ function handleFileSelect(evt) {
   			var JSONObj = obj;
   			JSONtasks = obj.tasks;
         	JSONevents = obj.events;
+        	JSONnumCPUs = obj.numCPU;
 
         	openDB();
 
@@ -46,7 +49,7 @@ function handleFileSelect(evt) {
 // sets up the database
 function openDB()
 {
-  var openRequest = indexedDB.open("events", 2);
+  var openRequest = indexedDB.open("events", 4);
 
   openRequest.onupgradeneeded =  function(e)
   {
@@ -65,6 +68,12 @@ function openDB()
       thisDB.createObjectStore("Tasks");
       console.log("created tasks");
     }
+
+    if (!thisDB.objectStoreNames.contains("numCPUs"))
+    {
+    	thisDB.createObjectStore("numCPUs");
+    	console.log("numCPUs created");
+    }
     
 
   }
@@ -76,10 +85,14 @@ function openDB()
 
     var xact = db.transaction(["Events"],"readwrite");
     var xact2 = db.transaction(["Tasks"], "readwrite");
+    var xact3 = db.transaction(["numCPUs"], "readwrite");
     var store = xact.objectStore("Events");
     var store2 = xact2.objectStore("Tasks");
+    var store3 = xact3.objectStore("numCPUs");
+    var request3 = store3.put(JSONnumCPUs, 1);
     var request = store.put(JSONevents, 1);
     var request2 = store2.put(JSONtasks, 1);
+    
 
     // some kind of error handling
     request.onerror = function(e) {console.log("Error", e.target.error.name);}
@@ -90,6 +103,10 @@ function openDB()
     request2.onerror = function(e) {console.log("Error", e.target.error.name);}
 
     request2.onsuccess = function(e) {console.log("added tasks"); document.location.href='main.html';}
+
+    request3.onerror = function(e) {console.log("Error", e.target.error.name);}
+
+    request3.onsuccess = function(e) {console.log("added numCPUs");}
 
   }
 
@@ -103,7 +120,7 @@ function openDB()
 function handleUseOld(evt)
 {
 	console.log("yo");
-	var openRequest = indexedDB.open("events", 2);
+	var openRequest = indexedDB.open("events", 4);
 
 	openRequest.onupgradeneeded = function(e)
 	{
@@ -119,6 +136,12 @@ function handleUseOld(evt)
 	    {
 	      thisDB.createObjectStore("Tasks");
 	      console.log("created tasks");
+	    }
+
+	      if (!thisDB.objectStoreNames.contains("numCPUs"))
+	    {
+	      thisDB.createObjectStore("numCPUs");
+	      console.log("created numCPUs");
 	    }
 
 		
@@ -141,13 +164,22 @@ function handleUseOld(evt)
 	      console.log("created tasks");
 	    }
 
+	    if (!thisDB.objectStoreNames.contains("numCPUs"))
+	    {
+	    	thisDB.createObjectStore("numCPUs");
+	    	console.log("created numCPUs");
+	    }
+
 		var db = e.target.result;
 		var xact = db.transaction(["Events"],"readwrite");
 	    var xact2 = db.transaction(["Tasks"], "readwrite");
+	    var xact3 = db.transaction(["numCPUs"], "readwrite");
 	    var store = xact.objectStore("Events");
 	    var store2 = xact2.objectStore("Tasks");
+	    var store3 = xact3.objectStore("numCPUs");
 	    var result = store.get(1);
 	    var result2 = store2.get(1);
+	    var result3 = store3.get(1);
 
 	    // // some kind of error handling
 	    result.onerror = function(e) {console.log("Error", e.target.error.name);}
@@ -163,6 +195,22 @@ function handleUseOld(evt)
 	    result2.onerror = function(e) {console.log("Error", e.target.error.name);}
 
 	    result2.onsuccess = function(e) {
+	    									if (e.target.result == null)
+	    									{
+	    										console.log("tasks are null");
+	    										window.alert(
+	    											"There is no old data. Please select a file."
+	    											);
+	    									}
+	    									else
+	    									{
+	    										document.location.href='main.html';
+	    									}
+	    								}
+
+	    result3.onerror = function(e) {console.log("error", e.target.error.name);}
+
+	    result3.onsuccess = function(e) {
 	    									if (e.target.result == null)
 	    									{
 	    										console.log("tasks are null");

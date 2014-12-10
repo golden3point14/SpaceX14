@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", openDB());
 
 function openDB()
 {
-  var openRequest = indexedDB.open("events", 2);
+  var openRequest = indexedDB.open("events", 4);
 
   openRequest.onupgradeneeded =  function(e)
   {
@@ -96,10 +96,10 @@ function useDatabaseData() {
       }
   }
 
-  var avg = calculateAverage(JSONtasks, "totalWaittime");
-  var stdDev = calculateStdDev(JSONtasks, "totalWaittime", avg);
-  document.getElementById("mean").innerHTML = Math.round(avg);
-  document.getElementById("stddev").innerHTML = Math.round(stdDev);
+  var avg = calculateAverage(values, "totalWaittime");
+  var stdDev = calculateStdDev(values, "totalWaittime", avg);
+  document.getElementById("mean").innerHTML = (avg / 1000000).toFixed(5);
+  document.getElementById("stddev").innerHTML = (stdDev / 1000000).toFixed(5);
 
   // creating a the filters and groups from the data
   var value = crossfilter(values),
@@ -136,10 +136,13 @@ function useDatabaseData() {
     .ordering(function(d) { return -processFromPid(d.key, values).totalWaittime; })
     .label(function(d) {
       var process = processFromPid(d.key, values);
-      return process.name + "    " + process.totalWaittime / 1000000 + " ms"; 
+      return process.name + "    (" + process.totalWaittime / 1000000 + " ms)"; 
     })
     .renderLabel(true)
-    .renderTitle(false);
+    .renderTitle(false)
+    .margins({top: 0, right: 0, bottom: -1, left: 10});
+
+  histogram.filter = function() {};
 
   // distribution side bar stuff
   var histogrambutton = dc.rowChart("#histogram-button");
