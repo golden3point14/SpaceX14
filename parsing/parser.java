@@ -152,6 +152,47 @@ class parser {
 						event.put("preempted", false);
 					}
 				}
+				//EXAMPLE ffffffff810f3fec START: Cycle 24 1413589739.264370 (0.067290)
+				//EXAMPLE ffffffff810f3fec STOP: Cycle 24.
+				if  (eventType.equals("print"))
+				{
+					String[] printInfo = extraInfo.split(" ");
+					
+					if (printInfo[1].equals("START:") && printInfo.length < 5)
+					{
+						//do nothing, first line is useless
+					}
+					
+					//if START
+					else if (printInfo[1].equals("START:"))
+					{
+						//store it as a start
+						//get time from parenthesis
+						
+						Float duration = Float.valueOf(printInfo[5].substring(1, printInfo[5].length()-2));
+						
+						
+						event.put("userMark", "START");
+						event.put("userLength", duration);
+						
+						System.out.println(extraInfo);
+						System.out.println("duration " + duration);
+						
+					}
+					//else if STOP
+					else if (printInfo[1].equals("STOP:"))
+					{
+						//store it as a stop
+						event.put("userMark", "STOP");
+						
+					}
+					//else
+					else
+					{
+						//do nothing we messed up
+						System.out.printf("Unable to parse extra info for: %s\n", s);
+					}
+				}
 				
 				currentLine += 1;
 			
