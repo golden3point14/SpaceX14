@@ -24,14 +24,14 @@ class parser {
 			String filename = args[0];
 			File f = new File(filename);
 			if (f.exists() && !f.isDirectory()) {
-				String command = "trace-cmd report -R " + filename;
+				String command = "trace-cmd report " + filename;
 				proc = rt.exec(command);
 			} else {
 				System.out.println("Please provide a valid filename.");
 				return;
 			}
 		} else {	
-			proc = rt.exec("trace-cmd report -R");
+			proc = rt.exec("trace-cmd report ");
 		}
 	
 		BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -136,12 +136,13 @@ class parser {
 					((JSONArray)task.get("events")).add(currentLine);
 				}
 				
+				//EXAMPLE trace-cmd:31185 [120] S ==> swapper/1:0 [120]
 				if (eventType.equals("sched_switch")) {
 					String[] switchInfo = extraInfo.split("\\s==>\\s");
 					
 					String[] previousTaskInfo = switchInfo[0].split(" ");
           // If the previous state was 0, then the switch is a preemption
-					if (previousTaskInfo[3].charAt(previousTaskInfo[3].length() - 1) == '0') {
+					if (previousTaskInfo[2].charAt(0) == 'R') {
 						event.put("preempted", true);
 						int preemptCount = (Integer)(task.get("preemptionCount"));
 						preemptCount++;
