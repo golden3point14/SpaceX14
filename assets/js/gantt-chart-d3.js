@@ -89,14 +89,18 @@ d3.gantt = function() {
                   .attr("height", height + margin.top + margin.bottom)
                   .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
+
     svg.selectAll(".chart")
      .data(tasks, keyFunction).enter()
      .append("rect")
      .attr("rx", 5)
            .attr("ry", 5)
      .attr("class", function(d){ 
-         return d.name;
-         }) 
+         if (d.name === '<idle>') {
+           return 'idle';
+         }
+         return d.name + d.pid;
+       }) 
      .attr("y", 0)
      .attr("transform", rectTransform)
      .attr("height", function(d) { return y.rangeBand(); })

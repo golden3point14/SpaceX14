@@ -69,7 +69,6 @@ function openDB()
                                       JSONevents = e.target.result;
                                       console.log("SIZE OF THING IS " + JSONevents.length);
                                       
-                                    //attemptToFormatData();
                                   }
 
      // some kind of error handling
@@ -85,10 +84,7 @@ function openDB()
 
     result3.onsuccess = function(e) {
                                       numCPUs = e.target.result;
-                                      console.log("numCPUs is " + numCPUs);
-                                    //attemptToFormatData();
 
-                                    // TODO Fix so that numCPU read from JSON
                                     maxDuration = getLongestCPUDuration(numCPUs); //should be numCPU as argument
 
                                     var gantt = d3.gantt().taskTypes(_.range(numCPUs)).timeDomain(maxDuration);
@@ -111,13 +107,20 @@ function openDB()
 function setColoringOfTasks() {
   // For each task, create a CSS class with a random color
   for (var i = 0; i < JSONtasks.length; i++) {
-    var style = document.createElement('style');
-    style.type = 'text/css';
-    var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
-    style.innerHTML = '.' + JSONtasks[i].pid + ' { color: #' + color + '; }';
-    document.getElementsByTagName('head')[0].appendChild(style);
+    if (JSONtasks[i].name !== '<idle>') {
+      var style = document.createElement('style');
+      style.type = 'text/css';
+      var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
+      style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: #' + color + '; }';
+      document.getElementsByTagName('head')[0].appendChild(style);
+      } else {
+        var style = document.createElement('style');
+        style.type = 'text/css';
+        style.innerHTML = '.idle { fill: white; }';
+        document.getElementsByTagName('head')[0].appendChild(style);
+      }
+    }
   }
-}
 
 function makeRow(task, table, attribute) {
     var row = table.insertRow(2);
@@ -146,7 +149,10 @@ function getTopPreemptions()
 
   for (var r = displayNum - 1; r >= 0; r--) {
     var task = preemptionSorted[r];
-    makeRow(task, preemptionList, "preemptionCount");
+    if (task) {
+      console.log(task);
+      makeRow(task, preemptionList, "preemptionCount");
+    }
   }
 }
 
@@ -161,8 +167,10 @@ function getTopRuntime()
   var runtimeList = document.getElementById("runtime-list");
 
   for (var r = displayNum - 1; r >= 0; r--) {
-    var task = runTimeSorted[r];
-    makeRow(task, runtimeList, "totalRuntime");
+      var task = runTimeSorted[r];
+    if (task) {
+      makeRow(task, runtimeList, "totalRuntime");
+    }
   }
 }
 
@@ -178,7 +186,9 @@ function getTopWaittime()
 
   for (var r = displayNum - 1; r >= 0; r--) {
     var task = waitTimeSorted[r];
-    makeRow(task, waittimeList, "totalWaittime");
+    if (task) {
+      makeRow(task, waittimeList, "totalWaittime");
+    }
   }
 }
 
