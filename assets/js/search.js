@@ -4,6 +4,11 @@ var eventJSON;
 var currentResults;
 var reader = new FileReader();
 
+
+$(document).ready(function() {
+    $('#example').DataTable();
+} );
+
 function updateDisplay() {
   node = document.getElementById('bodyDiv');
   while (node.hasChildNodes())
@@ -329,7 +334,7 @@ function updateDisplay() {
   function sortEvents(json, prop) {
     var sorted = json.sort(predicatBy(prop));
     json = sorted;
-    console.log("json1:"+json[0].startTime);
+    //console.log("json1:"+json[0].startTime);
     updateDisplay();
   }
 
@@ -406,7 +411,7 @@ function updateDisplay() {
     var objectStore = xact.objectStore("Events");
     var ob = objectStore.get(1); //temporary hard-coded
     ob.onsuccess = function(e) { console.log("e is the JSONevents");
-                                 console.log(e.target.result);
+                                 //console.log(e.target.result);
                                  eventJSON = e.target.result;
                                  currentResults = eventJSON;
                                  updateDisplay();
