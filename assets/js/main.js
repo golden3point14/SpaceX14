@@ -150,7 +150,7 @@ function getTopPreemptions()
   for (var r = displayNum - 1; r >= 0; r--) {
     var task = preemptionSorted[r];
     if (task) {
-      console.log(task);
+      //console.log(task);
       makeRow(task, preemptionList, "preemptionCount");
     }
   }
