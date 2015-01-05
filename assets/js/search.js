@@ -58,8 +58,9 @@ var reader = new FileReader();
             deferRender:    true,
             dom:            "frtiS",
             scrollY:        450,
-            scrollCollapse: true
-        } );
+            scrollCollapse: true,
+            order: [[1, 'asc']]
+       } );
     } );
                                }
     
