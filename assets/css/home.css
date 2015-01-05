@@ -155,7 +155,9 @@ body {
 
 .mainlist {
   display: inline-block;
-  width: 30%;
+  width: 250px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 #searchToolbar {
