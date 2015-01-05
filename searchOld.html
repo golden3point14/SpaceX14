@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SpaceShark</title>
+    <link href="assets/css/dc.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/home.css" rel="stylesheet" type="text/css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="../jquery-2.1.1.min.js" type="text/javascript"></script>
+    <script src="../filter.js/filter.js" type="text/javascript"></script>
+    <script src="assets/js/json_query.js" type="text/javascript"></script>
+    <script src="assets/js/underscore-min.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+<div class="sidebar" id="sidebar"></div>
+
+<div class="content">
+  <table id="table" class="table table-striped" cellspacing="0" width="100%">
+    <thead id="headings">
+      <tr>
+        <th class="cpu" onclick="sortEvents(currentResults,'cpu')">CPU</th>
+        <th class="startTime" onclick="sortEvents(currentResults,'startTime')">Start Time</th>
+        <th id="processName">Process Name</th>
+        <th class="pid" onclick="sortEvents(currentResults, 'pid')">PID</th>
+        <th>Event Type</th>
+        <th>Extra Info</th>
+      </tr>
+    </tead>
+    <tbody id="bodyDiv">
+    </tbody>
+    <tfoot>
+    </tfoot>
+  </table>
+
+  <div id="searchToolbar" class="toolbar">
+    <form onsubmit="return false" action="" class="column">
+      Search: <input type="text" id="searchBar">
+    </form>
+
+    <form action="" class="column" name="eventFilters">
+      <span class="filter"><input type="checkbox" name="eventFilter" id="switchBox" value="switch" checked> Switch Events <br></span>
+      <span class="filter"><input type="checkbox" name="eventFilter" id="wakeupBox" value="wakeup" checked> Wakeup Events <br></span>
+      <span class="filter"><input type="checkbox" name="eventFilter" id="runtimeBox" value="runtime" checked> Runtime Events <br></span>
+      <span class="filter"><input type="checkbox" name="eventFilter" id="migrateBox" value="migrate" checked> Migrate Events <br></span>
+      <span class="filter"><input type="checkbox" name="eventFilter" id="sleepBox" value="sleep" checked> Sleep Events <br></span>
+      <span class="filter"><input type="checkbox" name="eventFilter" id="waitBox" value="wait" checked> Wait Events <br></span>
+      <span class="filter"><input type="checkbox" name="eventFilter" id="entryBox" value="entry" checked> Entry Events <br></span>
+      <span class="filter"><input type="checkbox" name="eventFilter" id="raiseBox" value="raise" checked> Raise Events <br></span>
+      <span class="filter"><input type="checkbox" name="eventFilter" id="exitBox" value="exit" checked> Exit Events <br></span>
+    </form>
+
+    <a href="javascript:checkall('eventFilters','eventFilter',true)">Check All</a>
+
+    <button id="searchButton">Go</button><br>
+  </div>
+</div>
+
+<script src="assets/js/search.js" type="text/javascript"></script>
+<script type="text/javascript" src="assets/js/sidebar.js"></script>
+
+
+</body>
+</html>
