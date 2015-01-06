@@ -60,6 +60,7 @@ class parser {
 		JSONArray tasks = new JSONArray();
 		int currentLine = 0;
 		int numTasks = 0;
+		JSONArray autocompleteNames = new JSONArray();
 		
 		// Within the rest of the file, lines will roughly be of the format
 		// trace-cmd-28911 [001]  6340.460348: sched_wakeup:         28911:?:? +   28911:120:? trace-cmd [001] Success
@@ -134,6 +135,14 @@ class parser {
 				{
 					task = (JSONObject)seenTasks.get(pid);
 					((JSONArray)task.get("events")).add(currentLine);
+				}
+
+				if (!autocompleteNames.containsKey(name)) {
+					autocompleteNames.add(name);
+				}
+
+				if (!autocompleteNames.containsKey(eventType)) {
+					autocompleteNames.add(eventType);
 				}
 				
 				//EXAMPLE trace-cmd:31185 [120] S ==> swapper/1:0 [120]
