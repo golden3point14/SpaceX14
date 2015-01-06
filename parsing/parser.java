@@ -38,6 +38,7 @@ class parser {
 		String s = null;
 		String[] tokens;
 		HashMap<Integer, JSONObject> seenTasks = new HashMap<Integer, JSONObject>();
+		HashMap<Integer, JSONObject> seenEventTypes = new HashMap<Integer, JSONObject>();
 		
 		// First line in report is of format
 		// version = x
@@ -137,12 +138,14 @@ class parser {
 					((JSONArray)task.get("events")).add(currentLine);
 				}
 
-				if (!autocompleteNames.containsKey(name)) {
+				if (!seenEventTypes.containsKey(name)) {
 					autocompleteNames.add(name);
+					seenEventTypes.put(name);
 				}
 
-				if (!autocompleteNames.containsKey(eventType)) {
+				if (!seenEventTypes.containsKey(eventType)) {
 					autocompleteNames.add(eventType);
+					seenEventTypes.put(eventType);
 				}
 				
 				//EXAMPLE trace-cmd:31185 [120] S ==> swapper/1:0 [120]
