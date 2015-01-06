@@ -4,7 +4,7 @@
   "description": "An ftrace visualization tool",
   "main": "loadFile.html",
   "version": "0.0.0",
-  "single-instance": false,
+  "single-instance": true,
   "repository": {
     "type": "git",
     "url": "git://github.com/golden3point14/SpaceX14.git"

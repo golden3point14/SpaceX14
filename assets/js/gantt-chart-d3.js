@@ -11,7 +11,7 @@ d3.gantt = function() {
       top : 20,
       right : 40,
       bottom : 20,
-      left : 160
+      left : 20
     };
 
     var timeDomainStart = 0;
@@ -79,7 +79,7 @@ d3.gantt = function() {
     initTimeDomain(tasks);
     initAxis();
 
-    var svg = d3.select("body")
+    var svg = d3.select(".content")
                 .append("svg")
                   .attr("class", "chart")
                   .attr("width", width + margin.left + margin.right)

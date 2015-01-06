@@ -217,6 +217,8 @@ class parser {
 		mainObj.put("events", events);
 		mainObj.put("tasks", tasks);
 		mainObj.put("numCPU", numCPUs); //wbrooks
+		mainObj.put("autocompleteNames", autocompleteNames);
+		System.out.print.ln(autocompleteNames);
 		
 		
 		writeJSON(mainObj);

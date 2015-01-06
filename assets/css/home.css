@@ -155,9 +155,11 @@ body {
 
 .mainlist {
   display: inline-block;
-  width: 250px;
+  width: 300px;
   margin-left: 5px;
   margin-right: 5px;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 #searchToolbar {
