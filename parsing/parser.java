@@ -141,7 +141,7 @@ class parser {
 				JSONObject autocompleteEventType;
 				if (!seenEventTypes.containsKey(eventType)) {
 					autocompleteEventType = new JSONObject();
-					autocompleteNames.add(eventType);
+					autocompleteEventTypes.add(eventType);
 					seenEventTypes.put(eventType, autocompleteEventType);
 				}
 				
@@ -217,8 +217,8 @@ class parser {
 		mainObj.put("events", events);
 		mainObj.put("tasks", tasks);
 		mainObj.put("numCPU", numCPUs); //wbrooks
-		mainObj.put("autocompleteNames", autocompleteNames);
-		System.out.print.ln(autocompleteNames);
+		mainObj.put("autocompleteEventTypes", autocompleteEventTypes);
+		System.out.print.ln(autocompleteEventTypes);
 		
 		
 		writeJSON(mainObj);
