@@ -12,9 +12,10 @@
   "window": {
     "toolbar": true,
     "resizable": true,
-    "min_width": 1500,
-    "min_height": 800,
-    "position": "center"
+    "width": 1500,
+    "height": 800,
+    "position": "center",
+    "title": "SpaceShark"
   },
   "dependencies": {},
   "devDependencies": {},
