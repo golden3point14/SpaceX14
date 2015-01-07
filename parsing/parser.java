@@ -145,17 +145,15 @@ class parser {
 					seenEventTypes.put(eventType, autocompleteEventType);
 				}
 				
-				//EXAMPLE trace-cmd:31185 [120] S ==> swapper/1:0 [120]
+				//EXAMPLE prev_comm=swapper/1 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=irq/53-msg_tx next_pid=375 next_prio=39
 				if (eventType.equals("sched_switch")) {
 					String[] switchInfo = extraInfo.split("\\s==>\\s");
 					
 					String[] previousTaskInfo = switchInfo[0].split(" ");
-					System.out.println(switchInfo[0]);
-					System.out.println(previousTaskInfo[2]);
-					System.out.println(previousTaskInfo[3].charAt(previousTaskInfo[3].length() - 1));
-          // If the previous state was 0, then the switch is a preemption
+
+          			// If the previous state was runnable, then the switch is a preemption
 					if (previousTaskInfo[3].charAt(previousTaskInfo[3].length() - 1) == 'R') {
-						System.out.println("preemption");
+						// System.out.println("preemption");
 						event.put("preempted", true);
 						int preemptCount = (Integer)(task.get("preemptionCount"));
 						preemptCount++;
@@ -165,6 +163,7 @@ class parser {
 						event.put("preempted", false);
 					}
 				}
+				
 				//EXAMPLE ffffffff810f3fec START: Cycle 24 1413589739.264370 (0.067290)
 				//EXAMPLE ffffffff810f3fec STOP: Cycle 24.
 				if  (eventType.equals("print"))
