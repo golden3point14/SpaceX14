@@ -147,6 +147,10 @@ function getTopPreemptions()
 
   var preemptionList = document.getElementById("preemption-list");
 
+  if (!preemptionSorted) {
+    preemptionList.style.display = "none";
+  }
+
   for (var r = displayNum - 1; r >= 0; r--) {
     var task = preemptionSorted[r];
     if (task) {
@@ -166,6 +170,10 @@ function getTopRuntime()
   var displayNum = 10;
   var runtimeList = document.getElementById("runtime-list");
 
+  if (!runTimeSorted) {
+    runtimeList.style.display = "none";
+  }
+
   for (var r = displayNum - 1; r >= 0; r--) {
       var task = runTimeSorted[r];
     if (task) {
@@ -183,6 +191,10 @@ function getTopWaittime()
   
   var displayNum = 10;
   var waittimeList = document.getElementById("waittime-list");
+
+  if (!waitTimesorted) {
+    waittimeList.style.display = "none";
+  }
 
   for (var r = displayNum - 1; r >= 0; r--) {
     var task = waitTimeSorted[r];
@@ -213,13 +225,15 @@ function getLongestCPUDuration(numCPU)
   switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
   switchEvents = _.groupBy(switchEvents, function(e){return e.cpu;});
 
-  //console.log(switchEvents);
+  // console.log(switchEvents);
+  // console.log("numCPUs: " + numCPUs);
 
   setTimeout(function(e){return true}, 10000);
 
   maxDuration = 0;
   for (var j = 0; j < numCPUs; j++)
   {
+    console.log("j = " + j);
     var lastIndex = switchEvents[j].length-1;
     var sum = _.reduce(switchEvents[j], function(sum, next) { return sum += next.duration }, 0);
     console.log(sum);
