@@ -8,6 +8,9 @@ var reader = new FileReader();
 	$(document).ready(function() {
 	var data = [];
 	for ( var i=0 ; i<currentResults.length ; i++ ) {
+    if(currentResults[i].name=="<idle>") {
+      currentResults[i].name='idle';
+    } 
 	data.push( [ currentResults[i].cpu, currentResults[i].startTime, currentResults[i].name, currentResults[i].pid, currentResults[i].eventType, currentResults[i].extraInfo ] );
 	}
 
@@ -101,15 +104,8 @@ var substringMatcher = function(strs) {
   };
 };
  
-var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
-  'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
-  'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-  'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-  'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-  'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-  'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
-  'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-  'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+var states = ['sched_wakeup', 'sched_switch', 'sched_migrate_task', 'sched_stat_runtime',
+              'sched_stat_sleep', 'softirq_entry', 'softirq_raise', 'softirq_exit'
 ];
  
 function autoComplete() {

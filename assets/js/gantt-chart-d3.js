@@ -21,7 +21,7 @@ d3.gantt = function() {
     var taskStatus = [];
     // var height = document.body.clientHeight - margin.top - margin.bottom-5;
     var height = 300;
-    var width = document.body.clientWidth - margin.right - margin.left-5;
+    var width = document.body.clientWidth - margin.right - margin.left-145;
 
     var tickFormat = "%H:%M";
 

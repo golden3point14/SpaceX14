@@ -1,5 +1,6 @@
 body {
   font: sans-serif;
+  overflow-x:hidden;
 }
 
 .header {
@@ -155,10 +156,10 @@ body {
 
 .mainlist {
   display: inline-block;
-  width: 300px;
+  width: 350px;
   margin-left: 5px;
   margin-right: 5px;
-  max-height: 200px;
+  max-height: 250px;
   overflow-y: auto;
 }
 
@@ -179,6 +180,7 @@ body {
 
 #lists {
   width: 100%;
+  height: 250px;
 }
 
 /* Sortable tables */

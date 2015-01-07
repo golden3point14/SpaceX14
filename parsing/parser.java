@@ -152,6 +152,7 @@ class parser {
 					String[] previousTaskInfo = switchInfo[0].split(" ");
           // If the previous state was 0, then the switch is a preemption
 					if (previousTaskInfo[2].charAt(0) == 'R') {
+						System.out.println("preemption");
 						event.put("preempted", true);
 						int preemptCount = (Integer)(task.get("preemptionCount"));
 						preemptCount++;
@@ -217,9 +218,7 @@ class parser {
 		mainObj.put("events", events);
 		mainObj.put("tasks", tasks);
 		mainObj.put("numCPU", numCPUs); //wbrooks
-		mainObj.put("autocompleteEventTypes", autocompleteEventTypes);
-		System.out.println(autocompleteEventTypes);
-		
+		mainObj.put("autocompleteEventTypes", autocompleteEventTypes);		
 		
 		writeJSON(mainObj);
 	}
