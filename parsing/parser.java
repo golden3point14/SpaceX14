@@ -150,10 +150,11 @@ class parser {
 					String[] switchInfo = extraInfo.split("\\s==>\\s");
 					
 					String[] previousTaskInfo = switchInfo[0].split(" ");
-					System.out.println(previousTaskInfo);
+					System.out.println(switchInfo[0]);
 					System.out.println(previousTaskInfo[2]);
+					System.out.println(previousTaskInfo[3].charAt(previousTaskInfo[3].length() - 1));
           // If the previous state was 0, then the switch is a preemption
-					if (previousTaskInfo[2].charAt(0) == 'R') {
+					if (previousTaskInfo[3].charAt(previousTaskInfo[3].length() - 1)) == 'R') {
 						System.out.println("preemption");
 						event.put("preempted", true);
 						int preemptCount = (Integer)(task.get("preemptionCount"));
