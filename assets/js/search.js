@@ -21,8 +21,9 @@ var autocompleteEventTypes;
 		dom:            "frtiS",
 		scrollY:        450,
 		scrollCollapse: true,
-		order:          [[1, 'asc']]
-		} );
+		order:          [[1, 'asc']],
+    aoColumns: [{"sWidth": "40px"}, null, {"sWidth": "120px"}, {"sWidth": "40px"}, {"sWidth": "140px"}, null]
+    } );
 	} );
   }
 
