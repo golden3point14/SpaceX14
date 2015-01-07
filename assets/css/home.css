@@ -1,6 +1,7 @@
 body {
   font: sans-serif;
-  overflow-x:hidden;
+  /*overflow-x:hidden;
+  overflow-y:visible;*/
 }
 
 .header {
@@ -65,10 +66,12 @@ body {
 	color: #B1DCFE;
 	position:fixed;
 	overflow-y: auto;
+	z-index: 2;
 }
 
 .content {
 	padding: 10px 10px 10px 160px;
+	/*overflow-y:visible;*/
 }
 
 .sidebutton {

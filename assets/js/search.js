@@ -6,25 +6,34 @@ var reader = new FileReader();
 var autocompleteEventTypes;
 
   function displayTable() {
-	$(document).ready(function() {
-	var data = [];
-	for ( var i=0 ; i<currentResults.length ; i++ ) {
-    if(currentResults[i].name=="<idle>") {
-      currentResults[i].name='idle';
-    } 
-	data.push( [ currentResults[i].cpu, currentResults[i].startTime, currentResults[i].name, currentResults[i].pid, currentResults[i].eventType, currentResults[i].extraInfo ] );
-	}
+  	$(document).ready(function() {
+    	var data = [];
+    	for ( var i=0 ; i<currentResults.length ; i++ ) {
+        if(currentResults[i].name=="<idle>") {
+          currentResults[i].name='idle';
+        } 
+    	data.push( [ currentResults[i].cpu, currentResults[i].startTime, currentResults[i].name, currentResults[i].pid, currentResults[i].eventType, currentResults[i].extraInfo ] );
+    	}
 
-	var oTable = $('#table_id').dataTable( {
-		data:           data,
-		deferRender:    true,
-		dom:            "frtiS",
-		scrollY:        450,
-		scrollCollapse: true,
-		order:          [[1, 'asc']],
-    aoColumns: [{"sWidth": "40px"}, null, {"sWidth": "120px"}, {"sWidth": "40px"}, {"sWidth": "140px"}, null]
-    } );
-	} );
+
+
+    	var oTable = $('#table_id').dataTable( {
+    		data:           data,
+    		deferRender:    true,
+    		dom:            "frtiS",
+    		scrollY:        450,
+    		scrollCollapse: true,
+    		order:          [[1, 'asc']],
+        aoColumns: [{"sWidth": "40px"}, null, {"sWidth": "120px"}, {"sWidth": "40px"}, {"sWidth": "140px"}, null]
+        } );
+
+
+
+      // $('.tt-suggestion').click(function() {
+      //        var filterString = $('.dataTables_filter :input').val();
+      //        oTable.fnFilter(filterString);
+      // });
+  	} );
   }
 
   //pulls the data from the IndexedDB and displays it
@@ -84,6 +93,7 @@ var autocompleteEventTypes;
                                 autocompleteEventTypes = e.target.result;
                                 console.log("autocompleteEventTypes"+autocompleteEventTypes);
                                 autoComplete();
+                                clickSearch();
                               }
   }
 
@@ -129,6 +139,13 @@ $('input').typeahead({
   displayKey: 'value',
   source: substringMatcher(autocompleteEventTypes)
 });
+}
+
+function clickSearch() {
+  $('.tt-dropdown-menu').click(function() {
+             var filterString = $('.tt-input').val();
+             $('#table_id').dataTable().fnFilter(filterString);
+      });
 }
 
 document.addEventListener("load", openDB());
