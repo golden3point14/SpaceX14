@@ -3,6 +3,7 @@ var d,j;
 var eventJSON;
 var currentResults;
 var reader = new FileReader();
+var autocompleteEventTypes;
 
   function displayTable() {
 	$(document).ready(function() {
@@ -28,7 +29,7 @@ var reader = new FileReader();
   //pulls the data from the IndexedDB and displays it
   function openDB()
   {
-    var openRequest = indexedDB.open("events", 4);
+    var openRequest = indexedDB.open("events", 5);
     console.log("in search.js");
 
 
@@ -50,7 +51,11 @@ var reader = new FileReader();
       console.log("created tasks");
     }
     
-
+    if (!thisDB.objectStoreNames.contains("AutocompleteEventTypes"))
+    {
+      thisDB.createObjectStore("AutocompleteEventTypes");
+      console.log("created autocompleteEventTypes");
+    }
   }
 
   openRequest.onsuccess = function(e)
@@ -60,17 +65,25 @@ var reader = new FileReader();
 
     //get data
     var xact = db.transaction(["Events"], "readonly");
+    var xact2 = db.transaction(["AutocompleteEventTypes"], "readonly");
     var objectStore = xact.objectStore("Events");
+    var objectStore2 = xact2.objectStore("AutocompleteEventTypes");
     var ob = objectStore.get(1); //temporary hard-coded
+    var ob2 = objectStore2.get(1);
     ob.onsuccess = function(e) {console.log("e is the JSONevents");
                                 //console.log(e.target.result);
                                 eventJSON = e.target.result;
                                 currentResults = eventJSON;
                                 console.log("currentResults.length:"+currentResults.length);
                                 displayTable();
-                                autoComplete();
 						                  }
-    
+
+    ob2.onsuccess = function(e) {console.log("e is the JSONevents");
+                                //console.log(e.target.result);
+                                autocompleteEventTypes = e.target.result;
+                                console.log("autocompleteEventTypes"+autocompleteEventTypes);
+                                autoComplete();
+                              }
   }
 
   openRequest.onerror = function(e)
@@ -104,10 +117,6 @@ var substringMatcher = function(strs) {
   };
 };
  
-var states = ['sched_wakeup', 'sched_switch', 'sched_migrate_task', 'sched_stat_runtime',
-              'sched_stat_sleep', 'softirq_entry', 'softirq_raise', 'softirq_exit'
-];
- 
 function autoComplete() {
 $('input').typeahead({
   hint: true,
@@ -115,9 +124,9 @@ $('input').typeahead({
   minLength: 1
 },
 {
-  name: 'states',
+  name: 'autocompleteEventTypes',
   displayKey: 'value',
-  source: substringMatcher(states)
+  source: substringMatcher(autocompleteEventTypes)
 });
 }
 

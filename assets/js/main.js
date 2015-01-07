@@ -18,7 +18,7 @@ var SCALE_FACTOR = 100000; // Scales the duration so things are actually visible
 
 function openDB()
 {
-  var openRequest = indexedDB.open("events", 4);
+  var openRequest = indexedDB.open("events", 5);
 
   openRequest.onupgradeneeded =  function(e)
   {
