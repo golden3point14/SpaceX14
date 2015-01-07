@@ -21,7 +21,7 @@ var autocompleteEventTypes;
 		dom:            "frtiS",
 		scrollY:        450,
 		scrollCollapse: true,
-		order: [[1, 'asc']]
+		order:          [[1, 'asc']]
 		} );
 	} );
   }
