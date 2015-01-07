@@ -148,7 +148,7 @@ class parser {
 				//EXAMPLE trace-cmd:31185 [120] S ==> swapper/1:0 [120]
 				if (eventType.equals("sched_switch")) {
 					String[] switchInfo = extraInfo.split("\\s==>\\s");
-					System.out.println(switchInfo);
+					System.out.println(switchInfo[0]);
 					
 					String[] previousTaskInfo = switchInfo[0].split(" ");
           // If the previous state was 0, then the switch is a preemption
