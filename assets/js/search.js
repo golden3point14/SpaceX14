@@ -4,6 +4,7 @@ var eventJSON;
 var currentResults;
 var reader = new FileReader();
 var autocompleteEventTypes;
+var autocompleteNames;
 
   function displayTable() {
   	$(document).ready(function() {
@@ -15,8 +16,6 @@ var autocompleteEventTypes;
     	data.push( [ currentResults[i].cpu, currentResults[i].startTime, currentResults[i].duration, currentResults[i].name, currentResults[i].pid, currentResults[i].eventType, currentResults[i].extraInfo ] );
     	}
 
-
-
     	var oTable = $('#table_id').dataTable( {
     		data:           data,
     		deferRender:    true,
@@ -27,19 +26,16 @@ var autocompleteEventTypes;
         aoColumns: [{"sWidth": "40px"}, null, null, {"sWidth": "120px"}, {"sWidth": "40px"}, {"sWidth": "140px"}, null]
         } );
 
-
-
-      // $('.tt-suggestion').click(function() {
-      //        var filterString = $('.dataTables_filter :input').val();
-      //        oTable.fnFilter(filterString);
-      // });
+        $('input.column_filter').on( 'keyup click', function () {
+        filterColumn( $(this).parents('tr').attr('data-column') );
+    } );
   	} );
   }
 
   //pulls the data from the IndexedDB and displays it
   function openDB()
   {
-    var openRequest = indexedDB.open("events", 5);
+    var openRequest = indexedDB.open("events", 7);
     console.log("in search.js");
 
 
@@ -66,6 +62,12 @@ var autocompleteEventTypes;
       thisDB.createObjectStore("AutocompleteEventTypes");
       console.log("created autocompleteEventTypes");
     }
+
+    if (!thisDB.objectStoreNames.contains("AutocompleteNames"))
+    {
+      thisDB.createObjectStore("AutocompleteNames");
+      console.log("created autocompleteNames");
+    }
   }
 
   openRequest.onsuccess = function(e)
@@ -76,10 +78,14 @@ var autocompleteEventTypes;
     //get data
     var xact = db.transaction(["Events"], "readonly");
     var xact2 = db.transaction(["AutocompleteEventTypes"], "readonly");
+    var xact3 = db.transaction(["AutocompleteNames"], "readonly");
     var objectStore = xact.objectStore("Events");
     var objectStore2 = xact2.objectStore("AutocompleteEventTypes");
+    var objectStore3 = xact3.objectStore("AutocompleteNames");
     var ob = objectStore.get(1); //temporary hard-coded
     var ob2 = objectStore2.get(1);
+    var ob3 = objectStore3.get(1);
+
     ob.onsuccess = function(e) {console.log("e is the JSONevents");
                                 //console.log(e.target.result);
                                 eventJSON = e.target.result;
@@ -94,7 +100,19 @@ var autocompleteEventTypes;
                                 console.log("autocompleteEventTypes"+autocompleteEventTypes);
                                 autoComplete();
                                 clickSearch();
+                                // var columnFilters = document.getElementById("columnFilters");
+                                // var table_id_wrapper = document.getElementById("table_id_wrapper");
+                                //document.getElementById("table_id_wrapper").appendChild(columnFilters);
+                                // table_id_wrapper.insertBefore(columnFilters, table_id_wrapper.firstChild);
                               }
+
+    // ob3.onsuccess = function(e) {console.log("e is the JSONevents");
+    //                             //console.log(e.target.result);
+    //                             autocompleteNames = e.target.result;
+    //                             console.log("autocompleteNames"+autocompleteNames);
+    //                             autoComplete();
+    //                             clickSearch();
+    //                           }
   }
 
   openRequest.onerror = function(e)
@@ -138,6 +156,11 @@ $('input').typeahead({
   name: 'autocompleteEventTypes',
   displayKey: 'value',
   source: substringMatcher(autocompleteEventTypes)
+},
+{
+  name: 'autocompleteNames',
+  displayKey: 'value',
+  source: substringMatcher(autocompleteNames)
 });
 }
 
@@ -146,6 +169,12 @@ function clickSearch() {
              var filterString = $('.tt-input').val();
              $('#table_id').dataTable().fnFilter(filterString);
       });
+}
+
+function filterColumn ( i ) {
+    $('#example').DataTable().column( i ).search(
+        $('#col'+i+'_filter').val()
+    ).draw();
 }
 
 document.addEventListener("load", openDB());

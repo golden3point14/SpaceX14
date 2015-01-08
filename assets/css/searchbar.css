@@ -176,3 +176,7 @@ p + p {
 #rtl-support .tt-dropdown-menu {
   text-align: right;
 }
+
+#columnFilters {
+  display: inline-block;
+}

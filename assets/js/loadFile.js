@@ -12,6 +12,7 @@ var db;
 var JSONnumCPUs;
 
 var JSONautocompleteEventTypes;
+var JSONautocompleteNames;
 
 function handleFileSelect(evt) {
 	files = evt.target.files; // FileList object
@@ -34,6 +35,7 @@ function handleFileSelect(evt) {
         	JSONevents = obj.events;
         	JSONnumCPUs = obj.numCPU;
         	JSONautocompleteEventTypes = obj.autocompleteEventTypes;
+        	JSONautocompleteNames = obj.autocompleteNames;
 
         	openDB();
 
@@ -52,7 +54,7 @@ function handleFileSelect(evt) {
 // sets up the database
 function openDB()
 {
-  var openRequest = indexedDB.open("events", 5);
+  var openRequest = indexedDB.open("events", 7);
 
   openRequest.onupgradeneeded =  function(e)
   {
@@ -83,6 +85,12 @@ function openDB()
     	thisDB.createObjectStore("AutocompleteEventTypes");
     	console.log("autocompleteEventTypes created");
     }
+
+    if (!thisDB.objectStoreNames.contains("AutocompleteNames"))
+    {
+    	thisDB.createObjectStore("AutocompleteNames");
+    	console.log("autocompleteNames created");
+    }
     
 
   }
@@ -96,15 +104,17 @@ function openDB()
     var xact2 = db.transaction(["Tasks"], "readwrite");
     var xact3 = db.transaction(["numCPUs"], "readwrite");
     var xact4 = db.transaction(["AutocompleteEventTypes"], "readwrite");
+    var xact5 = db.transaction(["AutocompleteNames"], "readwrite");
     var store = xact.objectStore("Events");
     var store2 = xact2.objectStore("Tasks");
     var store3 = xact3.objectStore("numCPUs");
     var store4 = xact4.objectStore("AutocompleteEventTypes");
+    var store5 = xact5.objectStore("AutocompleteNames");
     var request3 = store3.put(JSONnumCPUs, 1);
     var request = store.put(JSONevents, 1);
     var request2 = store2.put(JSONtasks, 1);
     var request4 = store4.put(JSONautocompleteEventTypes, 1);
-    
+    var request5 = store5.put(JSONautocompleteNames, 1);
 
     // some kind of error handling
     request.onerror = function(e) {console.log("Error", e.target.error.name);}
@@ -124,6 +134,10 @@ function openDB()
 
     request4.onsuccess = function(e) {console.log("added autocompleteEventTypes");}
 
+    request5.onerror = function(e) {console.log("Error", e.target.error.name);}
+
+    request5.onsuccess = function(e) {console.log("added autocompleteNames");}
+
   }
 
   openRequest.onerror = function(e)
@@ -136,7 +150,7 @@ function openDB()
 function handleUseOld(evt)
 {
 	console.log("yo");
-	var openRequest = indexedDB.open("events", 5);
+	var openRequest = indexedDB.open("events", 7);
 
 	openRequest.onupgradeneeded = function(e)
 	{
@@ -164,6 +178,12 @@ function handleUseOld(evt)
 	    {
 	      thisDB.createObjectStore("AutocompleteEventTypes");
 	      console.log("created autocompleteEventTypes");
+	    }
+
+	    if (!thisDB.objectStoreNames.contains("AutocompleteNames"))
+	    {
+	      thisDB.createObjectStore("AutocompleteNames");
+	      console.log("created autocompleteNames");
 	    }
 	}
 
@@ -196,19 +216,28 @@ function handleUseOld(evt)
 	    	console.log("created autocompleteEventTypes");
 	    }
 
+	    if (!thisDB.objectStoreNames.contains("AutocompleteNames"))
+	    {
+	    	thisDB.createObjectStore("AutocompleteNames");
+	    	console.log("created autocompleteNames");
+	    }
+
 		var db = e.target.result;
 		var xact = db.transaction(["Events"],"readwrite");
 	    var xact2 = db.transaction(["Tasks"], "readwrite");
 	    var xact3 = db.transaction(["numCPUs"], "readwrite");
 	    var xact4 = db.transaction(["AutocompleteEventTypes"], "readwrite");
+	    var xact5 = db.transaction(["AutocompleteNames"], "readwrite");
 	    var store = xact.objectStore("Events");
 	    var store2 = xact2.objectStore("Tasks");
 	    var store3 = xact3.objectStore("numCPUs");
 	    var store4 = xact4.objectStore("AutocompleteEventTypes");
+	    var store5 = xact5.objectStore("AutocompleteNames");
 	    var result = store.get(1);
 	    var result2 = store2.get(1);
 	    var result3 = store3.get(1);
 	    var result4 = store4.get(1);
+	    var result5 = store5.get(1);
 
 	    // // some kind of error handling
 	    result.onerror = function(e) {console.log("Error", e.target.error.name);}
@@ -256,6 +285,22 @@ function handleUseOld(evt)
 	    result4.onerror = function(e) {console.log("error", e.target.error.name);}
 
 	    result4.onsuccess = function(e) {
+	    									if (e.target.result == null)
+	    									{
+	    										console.log("tasks are null");
+	    										window.alert(
+	    											"There is no old data. Please select a file."
+	    											);
+	    									}
+	    									else
+	    									{
+	    										document.location.href='main.html';
+	    									}
+	    								}
+
+	    result5.onerror = function(e) {console.log("error", e.target.error.name);}
+
+	    result5.onsuccess = function(e) {
 	    									if (e.target.result == null)
 	    									{
 	    										console.log("tasks are null");
