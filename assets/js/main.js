@@ -111,8 +111,19 @@ function setColoringOfTasks() {
       var style = document.createElement('style');
       style.type = 'text/css';
       var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
+      // console.log(JSONtasks[i].name + " color: " + color);
       style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: #' + color + '; }';
       
+      var div = document.createElement("div");
+      div.style.width = "1000px";
+      // div.style.height = "100px";
+      div.style.background = "#" + color;
+      div.style.color = "white";
+      div.style.textAlign = "right";
+      div.innerHTML = JSONtasks[i].name;
+
+      document.body.appendChild(div);
+
       document.getElementsByTagName('head')[0].appendChild(style);
       } else {
         var style = document.createElement('style');
@@ -211,13 +222,37 @@ function normalizeStartTime(numCPU)
   switchEvents = [];
   tempSwitchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
   tempSwitchEvents = _.groupBy(tempSwitchEvents, function(e){return e.cpu;});
+
   for (var cpu = 0; cpu < numCPU; cpu++)
   {
+    tempSwitchEvents[cpu].sort(function(a,b) {return a.startTime - b.startTime;});
+
     var firstStartTime = tempSwitchEvents[cpu][0].startTime;
-    tempSwitchEvents[cpu] = _.map(tempSwitchEvents[cpu], function(e) {
-      e.normalStartTime = e.startTime - firstStartTime;
-      return e;
-     });
+    for (var i = 0; i < tempSwitchEvents[cpu].length; i++) {
+      var switchEvent = tempSwitchEvents[cpu][i];
+      switchEvent.normalStartTime = switchEvent.startTime - firstStartTime;
+      
+      if (i != tempSwitchEvents[cpu].length - 1) {
+        var nextEvent = tempSwitchEvents[cpu][i+1];
+        switchEvent.processLength = nextEvent.startTime - switchEvent.startTime;
+      } else {
+        switchEvent.processLength = 0;
+      }
+
+      // if (switchEvent.processLength > 0.5) {
+      //   console.log(switchEvent.processLength);
+      //   console.log(switchEvent);
+      //   console.log(nextEvent);
+      // }
+
+      // console.log("duration: " + switchEvent.duration + ", processLength: " + switchEvent.processLength);
+    }
+    console.log(tempSwitchEvents[cpu]);
+    // tempSwitchEvents[cpu] = _.map(tempSwitchEvents[cpu], function(e) {
+    //   e.normalStartTime = e.startTime - firstStartTime;
+
+    //   return e;
+    //  });
     switchEvents = switchEvents.concat(tempSwitchEvents[cpu]);
   }
 
@@ -238,10 +273,10 @@ function getLongestCPUDuration(numCPU)
   maxDuration = 0;
   for (var j = 0; j < numCPUs; j++)
   {
-    console.log("j = " + j);
+    // console.log("j = " + j);
     var lastIndex = switchEvents[j].length-1;
     var sum = _.reduce(switchEvents[j], function(sum, next) { return sum += next.duration }, 0);
-    console.log(sum);
+    // console.log(sum);
     if (sum > maxDuration) {
       maxDuration = sum
     }

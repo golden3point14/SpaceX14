@@ -219,28 +219,13 @@ tr:after {
     margin: auto;
 }
 
-#button {
-	border-top:		2px solid #a3ceda;
-	border-left:		2px solid #a3ceda;
-	border-right:		2px solid #4f6267;
-	border-bottom:		2px solid #4f6267;
-	padding:		10px 20px !important;
-	font-size:		14px !important;
-	background-color:	#c4f1fe;
-	font-weight:		bold;
-	color:			#2d525d;
-}
-
-
 div.tooltip {   
   position: absolute;           
-  /*text-align: center;           */
   max-width: 400px;                  
-  /*height: 28px;                 */
-  padding: 2px;             
+  padding: 5px;             
   font: 12px sans-serif;        
   background: lightsteelblue;   
   border: 0px;      
-  border-radius: 8px;           
+  border-radius: 5px;           
   pointer-events: none;         
 }

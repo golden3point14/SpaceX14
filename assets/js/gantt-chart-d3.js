@@ -35,7 +35,7 @@ d3.gantt = function() {
 
     var x = d3.time.scale().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]).clamp(true);
 
-    var y = d3.scale.ordinal().domain(taskTypes).rangeRoundBands([ 0, height - margin.top - margin.bottom ], .1);
+    var y = d3.scale.ordinal().domain(taskTypes).rangeBands([ 0, height - margin.top - margin.bottom ], .1);
     
     var xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.time.format(tickFormat)).tickSubdivide(true)
     .tickSize(8).tickPadding(8);
@@ -48,7 +48,7 @@ d3.gantt = function() {
 
     var initAxis = function() {
   x = d3.time.scale().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]).clamp(true);
-  y = d3.scale.ordinal().domain(taskTypes).rangeRoundBands([ 0, height - margin.top - margin.bottom ], .1);
+  y = d3.scale.ordinal().domain(taskTypes).rangeBands([ 0, height - margin.top - margin.bottom ], .1);
 
   xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.time.format(tickFormat)).tickSubdivide(true)
   .tickSize(8).tickPadding(8);
@@ -117,7 +117,7 @@ d3.gantt = function() {
                 .style("opacity", .9);      
             div .html("Process name: " + d.name + "<br/> PID: " + d.pid + 
               "<br/> Start time: " + d.startTime + "<br/> Duration: " + 
-              d.duration + "<br/> Extra Info: " + d.extraInfo)
+              d.processLength + "<br/> Extra Info: " + d.extraInfo)
                 .style("left", (d3.event.pageX) + "px")     
                 .style("top", (d3.event.pageY - 28) + "px");    
             })                  
