@@ -108,6 +108,12 @@ function setColoringOfTasks() {
   // For each task, create a CSS class with a random color
   for (var i = 0; i < JSONtasks.length; i++) {
     if (JSONtasks[i].name !== '<idle>') {
+      if (JSONevents[JSONtasks[i].events[0]].eventType == "print") {
+        var style = document.createElement('style');
+      style.type = 'text/css';
+      style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: red; }';
+      document.getElementsByTagName('head')[0].appendChild(style);
+      } else {
       var style = document.createElement('style');
       style.type = 'text/css';
       var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
@@ -123,12 +129,15 @@ function setColoringOfTasks() {
       // div.innerHTML = JSONtasks[i].name;
 
       // document.body.appendChild(div);
+      // style.innerHTML += '.' + JSONtasks[i].name + JSONtasks[i].pid + ':hover { fill: red; }';
 
       document.getElementsByTagName('head')[0].appendChild(style);
+    }
       } else {
         var style = document.createElement('style');
         style.type = 'text/css';
         style.innerHTML = '.idle { fill: white; }';
+        // style.innerHTML += '.idle:hover { fill: red; }';
 
         document.getElementsByTagName('head')[0].appendChild(style);
       }
@@ -221,6 +230,7 @@ function normalizeStartTime(numCPU)
 {
   switchEvents = [];
   tempSwitchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
+  cycleMarkers = _.filter(JSONevents, function(e){return e.eventType === "print";});
   tempSwitchEvents = _.groupBy(tempSwitchEvents, function(e){return e.cpu;});
 
   for (var cpu = 0; cpu < numCPU; cpu++)
@@ -239,13 +249,6 @@ function normalizeStartTime(numCPU)
         switchEvent.processLength = 0;
       }
 
-      // if (switchEvent.processLength > 0.5) {
-      //   console.log(switchEvent.processLength);
-      //   console.log(switchEvent);
-      //   console.log(nextEvent);
-      // }
-
-      // console.log("duration: " + switchEvent.duration + ", processLength: " + switchEvent.processLength);
     }
     // console.log(tempSwitchEvents[cpu]);
     // tempSwitchEvents[cpu] = _.map(tempSwitchEvents[cpu], function(e) {
@@ -256,6 +259,7 @@ function normalizeStartTime(numCPU)
     switchEvents = switchEvents.concat(tempSwitchEvents[cpu]);
   }
 
+  switchEvents = switchEvents.concat(cycleMarkers);
   return switchEvents;
 }
 
