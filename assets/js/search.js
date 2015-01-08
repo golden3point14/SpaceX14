@@ -12,7 +12,7 @@ var autocompleteEventTypes;
         if(currentResults[i].name=="<idle>") {
           currentResults[i].name='idle';
         } 
-    	data.push( [ currentResults[i].cpu, currentResults[i].startTime, currentResults[i].name, currentResults[i].pid, currentResults[i].eventType, currentResults[i].extraInfo ] );
+    	data.push( [ currentResults[i].cpu, currentResults[i].startTime, currentResults[i].duration, currentResults[i].name, currentResults[i].pid, currentResults[i].eventType, currentResults[i].extraInfo ] );
     	}
 
 
@@ -24,7 +24,7 @@ var autocompleteEventTypes;
     		scrollY:        450,
     		scrollCollapse: true,
     		order:          [[1, 'asc']],
-        aoColumns: [{"sWidth": "40px"}, null, {"sWidth": "120px"}, {"sWidth": "40px"}, {"sWidth": "140px"}, null]
+        aoColumns: [{"sWidth": "40px"}, null, null, {"sWidth": "120px"}, {"sWidth": "40px"}, {"sWidth": "140px"}, null]
         } );
 
 

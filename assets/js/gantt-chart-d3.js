@@ -91,6 +91,10 @@ d3.gantt = function() {
                   .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
 
+    var div = d3.select("body").append("div")   
+    .attr("class", "tooltip")               
+    .style("opacity", 0);
+
     svg.selectAll(".chart")
      .data(tasks, keyFunction).enter()
      .append("rect")
@@ -108,7 +112,21 @@ d3.gantt = function() {
      .attr("width", function(d) { 
          return (x(d.duration)); 
          })
-     .call(zoom);
+     .call(zoom)
+     .on("mouseover", function(d) {      
+            div.transition()        
+                .duration(200)      
+                .style("opacity", .9);      
+            div .html("Process name: " + d.name + "<br/> PID: " + d.pid + 
+              "<br/> Start time: " + d.startTime + "<br/> Duration: " + d.duration + "<br/> Extra Info: " + d.extraInfo)
+                .style("left", (d3.event.pageX) + "px")     
+                .style("top", (d3.event.pageY - 28) + "px");    
+            })                  
+        .on("mouseout", function(d) {       
+            div.transition()        
+                .duration(200)      
+                .style("opacity", 0);   
+        });
     svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0, " + (height - margin.top - margin.bottom) + ")")
