@@ -26,7 +26,7 @@ d3.gantt = function() {
     var tickFormat = "%H:%M";
 
     var keyFunction = function(d) {
-      return d.normalStartTime + d.cpu + (d.normalStartTime + d.duration);
+      return d.normalStartTime + d.cpu + (d.normalStartTime + d.processLength);
     };
 
     var rectTransform = function(d) {
@@ -108,7 +108,7 @@ d3.gantt = function() {
      .attr("transform", rectTransform)
      .attr("height", function(d) { return y.rangeBand(); })
      .attr("width", function(d) { 
-         return (x(d.duration)); 
+         return (x(d.processLength)); 
          })
      .call(zoom)
      .on("mouseover", function(d) {      
@@ -159,14 +159,14 @@ d3.gantt = function() {
    .attr("transform", rectTransform)
    .attr("height", function(d) { return y.rangeBand(); })
    .attr("width", function(d) { 
-       return (x(d.duration)); 
+       return (x(d.processLength)); 
        });
 
         rect.transition()
           .attr("transform", rectTransform)
 	 .attr("height", function(d) { return y.rangeBand(); })
 	 .attr("width", function(d) { 
-	     return (x(d.duration)); 
+	     return (x(d.processLength)); 
 	     });
         
 	rect.exit().remove();
