@@ -39,6 +39,7 @@ class parser {
 		String[] tokens;
 		HashMap<Integer, JSONObject> seenTasks = new HashMap<Integer, JSONObject>();
 		HashMap<String, JSONObject> seenEventTypes = new HashMap<String, JSONObject>();
+		HashMap<String, JSONObject> seenNames = new HashMap<String, JSONObject>();
 		
 		// First line in report is of format
 		// version = x
@@ -62,6 +63,7 @@ class parser {
 		int currentLine = 0;
 		int numTasks = 0;
 		JSONArray autocompleteEventTypes = new JSONArray();
+		JSONArray autocompleteNames = new JSONArray();
 		
 		// Within the rest of the file, lines will roughly be of the format
 		// trace-cmd-28911 [001]  6340.460348: sched_wakeup:         28911:?:? +   28911:120:? trace-cmd [001] Success
@@ -144,6 +146,13 @@ class parser {
 					autocompleteEventTypes.add(eventType);
 					seenEventTypes.put(eventType, autocompleteEventType);
 				}
+
+				JSONObject autocompleteName;
+				if (!seenNames.containsKey(name)) {
+					autocompleteName = new JSONObject();
+					autocompleteNames.add(name);
+					seenNames.put(name, autocompleteName);
+				}
 				
 				//EXAMPLE prev_comm=swapper/1 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=irq/53-msg_tx next_pid=375 next_prio=39
 				if (eventType.equals("sched_switch")) {
@@ -221,7 +230,10 @@ class parser {
 		mainObj.put("tasks", tasks);
 		mainObj.put("numCPU", numCPUs); //wbrooks
 		mainObj.put("autocompleteEventTypes", autocompleteEventTypes);		
+		mainObj.put("autocompleteNames", autocompleteNames);
 		
+		System.out.println("autocompleteNames", autocompleteNames);
+
 		writeJSON(mainObj);
 	}
 	
