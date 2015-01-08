@@ -232,7 +232,7 @@ class parser {
 		mainObj.put("autocompleteEventTypes", autocompleteEventTypes);		
 		mainObj.put("autocompleteNames", autocompleteNames);
 		
-		System.out.println("autocompleteNames", autocompleteNames);
+		System.out.println(autocompleteNames);
 
 		writeJSON(mainObj);
 	}
