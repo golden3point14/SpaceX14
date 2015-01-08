@@ -26,11 +26,11 @@ d3.gantt = function() {
     var tickFormat = "%H:%M";
 
     var keyFunction = function(d) {
-      return d.startTime + d.cpu + (d.startTime + d.duration);
+      return d.normalStartTime + d.cpu + (d.normalStartTime + d.duration);
     };
 
     var rectTransform = function(d) {
-      return "translate(" + x(d.startTime) + "," + y(d.cpu) + ")";
+      return "translate(" + x(d.normalStartTime) + "," + y(d.cpu) + ")";
     };
 
     var x = d3.time.scale().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]).clamp(true);
@@ -66,7 +66,7 @@ d3.gantt = function() {
     };
     
     var zoomRectTransform = function(d) {
-      var newX = x(d.startTime) + d3.event.translate[0];
+      var newX = x(d.normalStartTime) + d3.event.translate[0];
       return "translate(" + newX + "," + y(d.cpu) + ")scale(" + d3.event.scale + ",1)";
     };
 
@@ -116,7 +116,8 @@ d3.gantt = function() {
                 .duration(200)      
                 .style("opacity", .9);      
             div .html("Process name: " + d.name + "<br/> PID: " + d.pid + 
-              "<br/> Start time: " + d.startTime + "<br/> Duration: " + d.duration + "<br/> Extra Info: " + d.extraInfo)
+              "<br/> Start time: " + d.startTime + "<br/> Duration: " + 
+              d.duration + "<br/> Extra Info: " + d.extraInfo)
                 .style("left", (d3.event.pageX) + "px")     
                 .style("top", (d3.event.pageY - 28) + "px");    
             })                  

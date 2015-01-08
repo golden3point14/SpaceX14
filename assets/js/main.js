@@ -215,7 +215,7 @@ function normalizeStartTime(numCPU)
   {
     var firstStartTime = tempSwitchEvents[cpu][0].startTime;
     tempSwitchEvents[cpu] = _.map(tempSwitchEvents[cpu], function(e) {
-      e.startTime -= firstStartTime;
+      e.normalStartTime = e.startTime - firstStartTime;
       return e;
      });
     switchEvents = switchEvents.concat(tempSwitchEvents[cpu]);
