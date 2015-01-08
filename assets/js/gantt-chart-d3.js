@@ -23,7 +23,7 @@ d3.gantt = function() {
     var height = 300;
     var width = document.body.clientWidth - margin.right - margin.left-145;
 
-    var tickFormat = "%H:%M";
+    var tickFormat = "";
 
     var keyFunction = function(d) {
       return d.normalStartTime + d.cpu + (d.normalStartTime + d.processLength);
@@ -34,9 +34,8 @@ d3.gantt = function() {
     };
 
     var x = d3.time.scale().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]).clamp(true);
-
     var y = d3.scale.ordinal().domain(taskTypes).rangeBands([ 0, height - margin.top - margin.bottom ], .1);
-    
+
     var xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.time.format(tickFormat)).tickSubdivide(true)
     .tickSize(8).tickPadding(8);
 
@@ -106,9 +105,13 @@ d3.gantt = function() {
        }) 
      .attr("y", 0)
      .attr("transform", rectTransform)
-     .attr("height", function(d) { return y.rangeBand(); })
+     .attr("height", function(d) { 
+          if (d.eventType == "print") {return y.rangeBand(); }
+          else {return y.rangeBand();}
+        })
      .attr("width", function(d) { 
-         return (x(d.processLength)); 
+         if (d.eventType == "print") {return (x(d.duration));}
+         else {return (x(d.processLength));}
          })
      .call(zoom)
      .on("mouseover", function(d) {      
