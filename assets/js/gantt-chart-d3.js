@@ -98,8 +98,6 @@ d3.gantt = function() {
     svg.selectAll(".chart")
      .data(tasks, keyFunction).enter()
      .append("rect")
-     .attr("rx", 5)
-           .attr("ry", 5)
      .attr("class", function(d){ 
          if (d.name === '<idle>') {
            return 'idle';
@@ -151,8 +149,6 @@ d3.gantt = function() {
         
         rect.enter()
          .insert("rect",":first-child")
-         .attr("rx", 5)
-         .attr("ry", 5)
    .attr("class", function(d){ 
        if(taskStatus[d.status] == null){ return "bar";}
        return taskStatus[d.status];
