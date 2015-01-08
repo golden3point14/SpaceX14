@@ -114,15 +114,15 @@ function setColoringOfTasks() {
       // console.log(JSONtasks[i].name + " color: " + color);
       style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: #' + color + '; }';
       
-      var div = document.createElement("div");
-      div.style.width = "1000px";
-      // div.style.height = "100px";
-      div.style.background = "#" + color;
-      div.style.color = "white";
-      div.style.textAlign = "right";
-      div.innerHTML = JSONtasks[i].name;
+      // var div = document.createElement("div");
+      // div.style.width = "1000px";
+      // // div.style.height = "100px";
+      // div.style.background = "#" + color;
+      // div.style.color = "white";
+      // div.style.textAlign = "right";
+      // div.innerHTML = JSONtasks[i].name;
 
-      document.body.appendChild(div);
+      // document.body.appendChild(div);
 
       document.getElementsByTagName('head')[0].appendChild(style);
       } else {
@@ -247,7 +247,7 @@ function normalizeStartTime(numCPU)
 
       // console.log("duration: " + switchEvent.duration + ", processLength: " + switchEvent.processLength);
     }
-    console.log(tempSwitchEvents[cpu]);
+    // console.log(tempSwitchEvents[cpu]);
     // tempSwitchEvents[cpu] = _.map(tempSwitchEvents[cpu], function(e) {
     //   e.normalStartTime = e.startTime - firstStartTime;
 
