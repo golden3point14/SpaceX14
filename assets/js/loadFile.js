@@ -112,10 +112,11 @@ function openDB()
     var store5 = xact5.objectStore("AutocompleteNames");
     var request3 = store3.put(JSONnumCPUs, 1);
     var request = store.put(JSONevents, 1);
-    var request2 = store2.put(JSONtasks, 1);
     var request4 = store4.put(JSONautocompleteEventTypes, 1);
     var request5 = store5.put(JSONautocompleteNames, 1);
+    var request2 = store2.put(JSONtasks, 1);
 
+    console.log("JSONautocompleteNames", JSONautocompleteNames);
     // some kind of error handling
     request.onerror = function(e) {console.log("Error", e.target.error.name);}
 

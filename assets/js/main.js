@@ -214,7 +214,7 @@ function getTopWaittime()
   var displayNum = 10;
   var waittimeList = document.getElementById("waittime-list");
 
-  if (!waitTimesorted) {
+  if (!waitTimeSorted) {
     waittimeList.style.display = "none";
   }
 

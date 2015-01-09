@@ -33,11 +33,12 @@ searchDiv.innerHTML = "Search";
 searchDiv.setAttribute("onclick", "window.location.href='search.html';");
 sidebar.appendChild(searchDiv);
 
-// var processDiv = document.createElement('div');
-// processDiv.id = 'sidebutton';
-// processDiv.className = 'sidebutton';
-// processDiv.innerHTML = "Process";
-// sidebar.appendChild(processDiv);
+var processDiv = document.createElement('div');
+processDiv.id = 'sidebutton';
+processDiv.className = 'sidebutton';
+processDiv.innerHTML = "Process";
+processDiv.setAttribute("onclick", "window.location.href='process.html';");
+sidebar.appendChild(processDiv);
 
 // var compareDiv = document.createElement('div');
 // compareDiv.id = 'sidebutton';
