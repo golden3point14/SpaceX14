@@ -14,6 +14,8 @@ var JSONnumCPUs;
 var JSONautocompleteEventTypes;
 var JSONautocompleteNames;
 
+window.localStorage.setItem("cellData", "");
+
 function handleFileSelect(evt) {
 	files = evt.target.files; // FileList object
     // files is a FileList of File objects. List some properties.
@@ -25,8 +27,6 @@ function handleFileSelect(evt) {
                   '</li>');
 
     	reader.onload = function(evt) {
-
-        
 
     		var contents = evt.target.result;
     		var obj = JSON.parse(contents);
@@ -91,8 +91,6 @@ function openDB()
     	thisDB.createObjectStore("AutocompleteNames");
     	console.log("autocompleteNames created");
     }
-    
-
   }
 
   openRequest.onsuccess = function(e)

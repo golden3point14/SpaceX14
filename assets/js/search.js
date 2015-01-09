@@ -25,6 +25,12 @@ var autocompleteNames;
     		order:          [[1, 'asc']],
         aoColumns: [{"sWidth": "40px"}, null, {"sWidth": "120px"}, {"sWidth": "40px"}, {"sWidth": "140px"}, null]
         } );
+
+      $('#table_id tbody').on( 'click', 'tr', function () {
+        var cellData = oTable.fnGetData(this);
+        // console.log( 'Clicked on: '+ cellData[2]);
+        clickCell(cellData[2]);
+      } );
       
   //     $('input.column_filter').on( 'keyup click', function () {
   //     filterColumn( $(this).parents('tr').attr('data-column') );
@@ -97,7 +103,7 @@ var autocompleteNames;
     ob2.onsuccess = function(e) {console.log("e is the JSONevents");
                                 //console.log(e.target.result);
                                 autocompleteEventTypes = e.target.result;
-                                console.log("autocompleteEventTypes"+autocompleteEventTypes);
+                                // console.log("autocompleteEventTypes"+autocompleteEventTypes);
                                 autoCompleteEventTypes();
                                 clickSearch();
                                 // var columnFilters = document.getElementById("columnFilters");
@@ -109,7 +115,7 @@ var autocompleteNames;
     ob3.onsuccess = function(e) {console.log("e is the JSONevents");
                                 //console.log(e.target.result);
                                 autocompleteNames = e.target.result;
-                                console.log("autocompleteNames"+autocompleteNames);
+                                // console.log("autocompleteNames"+autocompleteNames);
                                 autoCompleteNames();
                                 clickSearch();
                               }
@@ -184,5 +190,11 @@ function clickSearch() {
 //         $('#col'+i+'_filter').val()
 //     ).draw();
 // }
+
+function clickCell(cellData)
+{
+  window.localStorage.setItem("cellData", cellData);
+  window.location.href = "process.html";
+}
 
 document.addEventListener("load", openDB());
