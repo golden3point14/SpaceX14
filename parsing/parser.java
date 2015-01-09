@@ -164,7 +164,7 @@ class parser {
 					String[] nextTaskInfo = switchInfo[1].split(" ");
 
           			// If the previous state was runnable, then the switch is a preemption
-          			String lastChar = previousTaskInfo[3].charAt(previousTaskInfo[3].length() - 1);
+          			Char lastChar = previousTaskInfo[3].charAt(previousTaskInfo[3].length() - 1);
 					if ((lastChar == 'R') || (lastChar == '+')) {
 						String preemptedBy = nextTaskInfo[0].split("=")[1];
 						JSONArray preemptedByTasks = (JSONArray)(task.get("preemptedBy"));
