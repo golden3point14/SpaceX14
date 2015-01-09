@@ -142,7 +142,13 @@ function useDatabaseData() {
     .renderTitle(false)
     .margins({top: 0, right: 0, bottom: -1, left: 10});
 
-  histogram.filter = function() {};
+  // histogram.filter = function() {};
+  histogram.onClick = function(d) {
+    // console.log("clicked on the chart");
+    // console.log(processFromPid(d.key, values).name);
+    window.localStorage.setItem("cellData", processFromPid(d.key, values).name);
+    window.location.href = "process.html";
+  };
 
   // distribution side bar stuff
   var histogrambutton = dc.rowChart("#histogram-button");
