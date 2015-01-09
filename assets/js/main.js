@@ -169,7 +169,7 @@ function getTopPreemptions()
 
   var preemptionList = document.getElementById("preemption-list");
 
-  if (!preemptionSorted) {
+  if (preemptionSorted.length == 0) {
     preemptionList.style.display = "none";
   }
 
@@ -192,7 +192,7 @@ function getTopRuntime()
   var displayNum = 10;
   var runtimeList = document.getElementById("runtime-list");
 
-  if (!runTimeSorted) {
+  if (runTimeSorted.length == 0) {
     runtimeList.style.display = "none";
   }
 
@@ -213,8 +213,8 @@ function getTopWaittime()
   
   var displayNum = 10;
   var waittimeList = document.getElementById("waittime-list");
-
-  if (!waitTimeSorted) {
+ 
+  if (waitTimeSorted.length == 0) {
     waittimeList.style.display = "none";
   }
 

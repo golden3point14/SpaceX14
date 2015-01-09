@@ -128,12 +128,62 @@ $('#search-process').typeahead({
 function clickSearch() {
   $('.tt-dropdown-menu').click(function() {
              var filterString = $('.tt-input').val();
-             // $('#table_id').dataTable().fnFilter(filterString);
+
              console.log(filterString);
              var tasks = _.filter(taskJSON, function(e){return e.name === filterString;});
              console.log(tasks);
              currentTasks = tasks;
+
+            var data = [];
+            var newData = [];
+            for (var i = 0; i < currentTasks.length; i++) {
+              for (var j = 0; j < currentTasks[i].preemptedBy.length; j++){
+                // data.push([currentTasks[i].preemptedBy[j]]);
+                if (!_.contains(data, currentTasks[i].preemptedBy[j])) {
+                  newData.push([currentTasks[i].preemptedBy[j], 1]);
+                  data.push(currentTasks[i].preemptedBy[j]);
+                } else {
+                  var process = _.find(newData, function(a) {return a[0] == currentTasks[i].preemptedBy[j];});
+                  process[1]++;
+                }
+              }
+            }
+
+            document.getElementById('table_title').innerHTML = filterString + 
+              " was preempted " + data.length + " times by:";
+
+
+            if ( $.fn.dataTable.isDataTable( '#example' ) ) {
+                // table = $('#example').DataTable();
+                var table = $('#example').DataTable();
+                table.destroy();
+                table = $('#example').dataTable( {
+                data: newData,
+                columns: [
+                    { "title": "Process Name" },
+                    { "title": "Number of Preemptions" }
+                ],
+                deferRender:    true,
+                dom:            "frtiS",
+                scrollY:        450,
+                scrollCollapse: true
+              } ); 
+            }
+            else {
+                var table = $('#example').dataTable( {
+                data: newData,
+                columns: [
+                    { "title": "Process Name" },
+                    { "title": "Number of Preemptions" }
+                ],
+                deferRender:    true,
+                dom:            "frtiS",
+                scrollY:        450,
+                scrollCollapse: true
+              } ); 
+            }                
       });
 }
+
 
 document.addEventListener("load", openDB());
