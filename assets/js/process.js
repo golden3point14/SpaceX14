@@ -142,6 +142,7 @@ function searchTasks(filterString)
         data.push(currentTasks[i].preemptedBy[j]);
       } else {
         var process = _.find(newData, function(a) {return a[0] == currentTasks[i].preemptedBy[j];});
+        data.push(currentTasks[i].preemptedBy[j]);
         process[1]++;
       }
     }

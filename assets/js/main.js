@@ -78,6 +78,7 @@ function openDB()
                                       getTopPreemptions();
                                     getTopRuntime();
                                     getTopWaittime();
+
                                     }
 
     result3.onerror = function(e) {console.log("Error", e.target.error.name);}
@@ -155,6 +156,15 @@ function makeRow(task, table, attribute) {
 
     var countCell = row.insertCell(2);
     countCell.innerHTML = task[attribute];
+
+    row.onclick = function(myrow){
+                      return function() { 
+                         var cell = myrow.getElementsByTagName("td")[0];
+                         var id = cell.innerHTML;
+                         // console.log("id:" + id);
+                         clickCell(id);
+                      };
+                  }(row);
 }
 
 function getTopPreemptions()
@@ -180,6 +190,9 @@ function getTopPreemptions()
       makeRow(task, preemptionList, "preemptionCount");
     }
   }
+
+  // addRowHandlers();
+
 }
 
 function getTopRuntime()
@@ -290,3 +303,14 @@ function getLongestCPUDuration(numCPU)
 }
 
 document.addEventListener("load", openDB());
+
+// $('#preemption-list tr').click(function(e){
+//     console.log($(e.target).text());
+//     clickCell($(e.target).text()); // using jQuery
+// })
+
+function clickCell(cellData)
+{
+  window.localStorage.setItem("cellData", cellData);
+  window.location.href = "process.html";
+}
