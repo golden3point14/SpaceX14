@@ -13,7 +13,7 @@ var autocompleteNames;
         if(currentResults[i].name=="<idle>") {
           currentResults[i].name='idle';
         } 
-    	data.push( [ currentResults[i].cpu, currentResults[i].startTime, currentResults[i].duration, currentResults[i].name, currentResults[i].pid, currentResults[i].eventType, currentResults[i].extraInfo ] );
+    	data.push( [ currentResults[i].cpu, currentResults[i].startTime, currentResults[i].name, currentResults[i].pid, currentResults[i].eventType, currentResults[i].extraInfo ] );
     	}
 
     	var oTable = $('#table_id').dataTable( {
@@ -23,12 +23,12 @@ var autocompleteNames;
     		scrollY:        450,
     		scrollCollapse: true,
     		order:          [[1, 'asc']],
-        aoColumns: [{"sWidth": "40px"}, null, null, {"sWidth": "120px"}, {"sWidth": "40px"}, {"sWidth": "140px"}, null]
+        aoColumns: [{"sWidth": "40px"}, null, {"sWidth": "120px"}, {"sWidth": "40px"}, {"sWidth": "140px"}, null]
         } );
-
-        $('input.column_filter').on( 'keyup click', function () {
-        filterColumn( $(this).parents('tr').attr('data-column') );
-    } );
+      
+  //     $('input.column_filter').on( 'keyup click', function () {
+  //     filterColumn( $(this).parents('tr').attr('data-column') );
+  // });
   	} );
   }
 
@@ -98,7 +98,7 @@ var autocompleteNames;
                                 //console.log(e.target.result);
                                 autocompleteEventTypes = e.target.result;
                                 console.log("autocompleteEventTypes"+autocompleteEventTypes);
-                                autoComplete();
+                                autoCompleteEventTypes();
                                 clickSearch();
                                 // var columnFilters = document.getElementById("columnFilters");
                                 // var table_id_wrapper = document.getElementById("table_id_wrapper");
@@ -106,13 +106,13 @@ var autocompleteNames;
                                 // table_id_wrapper.insertBefore(columnFilters, table_id_wrapper.firstChild);
                               }
 
-    // ob3.onsuccess = function(e) {console.log("e is the JSONevents");
-    //                             //console.log(e.target.result);
-    //                             autocompleteNames = e.target.result;
-    //                             console.log("autocompleteNames"+autocompleteNames);
-    //                             autoComplete();
-    //                             clickSearch();
-    //                           }
+    ob3.onsuccess = function(e) {console.log("e is the JSONevents");
+                                //console.log(e.target.result);
+                                autocompleteNames = e.target.result;
+                                console.log("autocompleteNames"+autocompleteNames);
+                                autoCompleteNames();
+                                clickSearch();
+                              }
   }
 
   openRequest.onerror = function(e)
@@ -146,7 +146,7 @@ var substringMatcher = function(strs) {
   };
 };
  
-function autoComplete() {
+function autoCompleteEventTypes() {
 $('input').typeahead({
   hint: true,
   highlight: true,
@@ -156,6 +156,14 @@ $('input').typeahead({
   name: 'autocompleteEventTypes',
   displayKey: 'value',
   source: substringMatcher(autocompleteEventTypes)
+});
+}
+
+function autoCompleteNames() {
+$('#process_filter').typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 1
 },
 {
   name: 'autocompleteNames',
@@ -171,10 +179,10 @@ function clickSearch() {
       });
 }
 
-function filterColumn ( i ) {
-    $('#example').DataTable().column( i ).search(
-        $('#col'+i+'_filter').val()
-    ).draw();
-}
+// function filterColumn ( i ) {
+//     $('#table_id').dataTable().column( i ).search(
+//         $('#col'+i+'_filter').val()
+//     ).draw();
+// }
 
 document.addEventListener("load", openDB());
