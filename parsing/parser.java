@@ -115,8 +115,10 @@ class parser {
 					task.put("name", name);
 					task.put("pid", pid);
 					JSONArray taskEvents = new JSONArray();
+					JSONArray preemptedByTasks = new JSONArray();
 					taskEvents.add(currentLine);
 					task.put("events", taskEvents);
+					task.put("preemptedBy", preemptedByTasks);
 					task.put("preemptionCount", 0);
 					task.put("totalRuntime", 0l);
 					task.put("totalWaittime", 0l);
@@ -159,10 +161,16 @@ class parser {
 					String[] switchInfo = extraInfo.split("\\s==>\\s");
 					
 					String[] previousTaskInfo = switchInfo[0].split(" ");
+					String[] nextTaskInfo = switchInfo[1].split(" ");
 
           			// If the previous state was runnable, then the switch is a preemption
-					if (previousTaskInfo[3].charAt(previousTaskInfo[3].length() - 1) == 'R') {
-						// System.out.println("preemption");
+          			String lastChar = previousTaskInfo[3].charAt(previousTaskInfo[3].length() - 1);
+					if ((lastChar == 'R') || (lastChar == '+')) {
+						String preemptedBy = nextTaskInfo[0].split("=")[1];
+						JSONArray preemptedByTasks = (JSONArray)(task.get("preemptedBy"));
+						preemptedByTasks.add(preemptedBy);
+						task.put("preemptedBy", preemptedByTasks);
+
 						event.put("preempted", true);
 						int preemptCount = (Integer)(task.get("preemptionCount"));
 						preemptCount++;
@@ -196,8 +204,8 @@ class parser {
 						event.put("userMark", "START");
 						event.put("userLength", duration);
 						
-						System.out.println(extraInfo);
-						System.out.println("duration " + duration);
+						// System.out.println(extraInfo);
+						// System.out.println("duration " + duration);
 						
 					}
 					//else if STOP
