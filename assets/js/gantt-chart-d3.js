@@ -11,7 +11,7 @@ d3.gantt = function() {
       top : 20,
       right : 40,
       bottom : 20,
-      left : 20
+      left : 50
     };
 
     var timeDomainStart = 0;
@@ -21,7 +21,7 @@ d3.gantt = function() {
     var taskStatus = [];
     // var height = document.body.clientHeight - margin.top - margin.bottom-5;
     var height = 300;
-    var width = document.body.clientWidth - margin.right - margin.left-145;
+    var width = document.body.clientWidth - margin.right - margin.left-150;
 
     var tickFormat = "";
 
@@ -39,7 +39,7 @@ d3.gantt = function() {
     var xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.time.format(tickFormat)).tickSubdivide(true)
     .tickSize(8).tickPadding(8);
 
-    var yAxis = d3.svg.axis().scale(y).orient("left").tickSize(0);
+    var yAxis = d3.svg.axis().scale(y).orient("left").tickFormat(function(d) {return "CPU " + d;}).tickSize(0);
 
     var initTimeDomain = function(tasks) {
       timeDomainStart = 0;
@@ -52,7 +52,7 @@ d3.gantt = function() {
   xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.time.format(tickFormat)).tickSubdivide(true)
   .tickSize(8).tickPadding(8);
 
-  yAxis = d3.svg.axis().scale(y).orient("left").tickSize(0);
+  yAxis = d3.svg.axis().scale(y).orient("left").tickFormat(function(d) {return "CPU " + d;}).tickSize(0);
     };
 
     var zoom = d3.behavior.zoom()

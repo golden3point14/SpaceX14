@@ -134,7 +134,10 @@ function searchTasks(filterString)
  currentTasks = tasks;
   var data = [];
   var newData = [];
+
   for (var i = 0; i < currentTasks.length; i++) {
+    console.log(currentTasks[i]);
+    if (currentTasks[i].preemptedBy) {
     for (var j = 0; j < currentTasks[i].preemptedBy.length; j++){
       // data.push([currentTasks[i].preemptedBy[j]]);
       if (!_.contains(data, currentTasks[i].preemptedBy[j])) {
@@ -145,6 +148,7 @@ function searchTasks(filterString)
         data.push(currentTasks[i].preemptedBy[j]);
         process[1]++;
       }
+    }
     }
   }
 
