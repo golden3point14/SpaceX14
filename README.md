@@ -5,6 +5,8 @@ Visualizing ftrace data. Web application based, using Node.js frameworks.
 
 IMPORTANT NOTE: After pulling a new update, ALWAYS CHOOSE A NEW FILE the first time you run it!
 
+The parser relies on trace-cmd version 2.2.1.2.1
+
 ## Instructions
 
 Please follow the following instructions to parse a .dat file and run our visualization.
