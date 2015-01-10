@@ -157,7 +157,7 @@ function makeRow(task, table, attribute) {
     var countCell = row.insertCell(2);
     countCell.innerHTML = task[attribute];
 
-    row.onclick = function(myrow){
+    row.ondblclick = function(myrow){
                       return function() { 
                          var cell = myrow.getElementsByTagName("td")[0];
                          var id = cell.innerHTML;

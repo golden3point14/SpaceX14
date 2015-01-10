@@ -26,7 +26,7 @@ var autocompleteNames;
         aoColumns: [{"sWidth": "40px"}, null, {"sWidth": "120px"}, {"sWidth": "40px"}, {"sWidth": "140px"}, null]
         } );
 
-      $('#table_id tbody').on( 'click', 'tr', function () {
+      $('#table_id tbody').on( 'dblclick', 'tr', function () {
         var cellData = oTable.fnGetData(this);
         // console.log( 'Clicked on: '+ cellData[2]);
         clickCell(cellData[2]);

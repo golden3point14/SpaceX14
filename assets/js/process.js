@@ -173,9 +173,9 @@ function searchTasks(filterString)
       order:          [[1, 'desc']]
     } ); 
 
-      table.on( 'click', 'td', function () {
-          alert( 'Clicked on cell in visible column: '+table.cell( this ).index().columnVisible );
-      } );
+      // table.on( 'click', 'td', function () {
+      //     alert( 'Clicked on cell in visible column: '+table.cell( this ).index().columnVisible );
+      // } );
   }
   else {
       var table = $('#example').dataTable( {
@@ -191,9 +191,9 @@ function searchTasks(filterString)
       order:          [[1, 'desc']]
     } ); 
 
-      table.on( 'click', 'td', function () {
-          alert( 'Clicked on cell in visible column: '+table.cell( this ).index().columnVisible );
-      } );
+      // table.on( 'click', 'td', function () {
+      //     alert( 'Clicked on cell in visible column: '+table.cell( this ).index().columnVisible );
+      // } );
   } 
   }               
 }
