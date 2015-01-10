@@ -16,6 +16,8 @@ var db;
 
 var SCALE_FACTOR = 100000; // Scales the duration so things are actually visible
 
+$('#mainButton').css('background-color', '#315B7E');
+
 function openDB()
 {
   var openRequest = indexedDB.open("events", 7);

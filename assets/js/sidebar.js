@@ -1,7 +1,7 @@
 var sidebar = document.getElementById('sidebar');
 
 var mainDiv = document.createElement('div');
-mainDiv.id = 'sidebutton';
+mainDiv.id = 'mainButton';
 mainDiv.className = 'sidebutton';
 mainDiv.innerHTML = "Main";
 mainDiv.setAttribute("onclick", "window.location.href='main.html';");
@@ -13,12 +13,12 @@ sidebar.appendChild(mainDiv);
 // cyclesDiv.innerHTML = "Cycles";
 // sidebar.appendChild(cyclesDiv);
 
-var distributionsDiv = document.createElement('div');
-distributionsDiv.id = 'sidebutton';
-distributionsDiv.className = 'sidebutton';
-distributionsDiv.innerHTML = "Statistics";
-distributionsDiv.setAttribute("onclick", "window.location.href='histogram.html';");
-sidebar.appendChild(distributionsDiv);
+var statisticsDiv = document.createElement('div');
+statisticsDiv.id = 'statisticsButton';
+statisticsDiv.className = 'sidebutton';
+statisticsDiv.innerHTML = "Statistics";
+statisticsDiv.setAttribute("onclick", "window.location.href='histogram.html';");
+sidebar.appendChild(statisticsDiv);
 
 // var statsDiv = document.createElement('div');
 // statsDiv.id = 'sidebutton';
@@ -27,14 +27,14 @@ sidebar.appendChild(distributionsDiv);
 // sidebar.appendChild(statsDiv);
 
 var searchDiv = document.createElement('div');
-searchDiv.id = 'sidebutton';
+searchDiv.id = 'searchButton';
 searchDiv.className = 'sidebutton';
 searchDiv.innerHTML = "Search";
 searchDiv.setAttribute("onclick", "window.location.href='search.html';");
 sidebar.appendChild(searchDiv);
 
 var processDiv = document.createElement('div');
-processDiv.id = 'sidebutton';
+processDiv.id = 'processButton';
 processDiv.className = 'sidebutton';
 processDiv.innerHTML = "Process";
 processDiv.setAttribute("onclick", "window.location.href='process.html';");

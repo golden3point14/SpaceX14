@@ -6,6 +6,8 @@ var reader = new FileReader();
 var autocompleteNames;
 var currentTasks;
 
+$('#processButton').css('background-color', '#315B7E');
+
 //pulls the data from the IndexedDB and displays it
   function openDB()
   {

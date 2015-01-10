@@ -6,6 +6,8 @@ var reader = new FileReader();
 var autocompleteEventTypes;
 var autocompleteNames;
 
+$('#searchButton').css('background-color', '#315B7E');
+
   function displayTable() {
   	$(document).ready(function() {
     	var data = [];
