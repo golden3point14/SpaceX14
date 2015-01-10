@@ -8,6 +8,7 @@ var db; //for indexedDB
 var JSONtasks;
 
 $('#statisticsButton').css('background-color', '#315B7E');
+$('#histogram-button').css('background-color', '#315B7E');
 
 function processFromPid(pid, values) {
   for (var i = 0; i < values.length; i++) {

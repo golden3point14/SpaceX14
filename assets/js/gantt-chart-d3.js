@@ -11,7 +11,7 @@ d3.gantt = function() {
       top : 20,
       right : 40,
       bottom : 20,
-      left : 50
+      left : 55
     };
 
     var timeDomainStart = 0;

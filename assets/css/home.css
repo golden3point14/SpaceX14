@@ -66,8 +66,8 @@ body {
   position: fixed;
   overflow-y: auto;
   overflow-x: hidden;
-  margin-left: 150px;
-  padding-right:10px;
+  margin-left: 145px;
+  padding-right:20px;
 }
 
 .distbutton {
