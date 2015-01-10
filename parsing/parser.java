@@ -169,7 +169,7 @@ class parser {
 						String preemptedBy = nextTaskInfo[0].split("=")[1];
 						JSONArray preemptedByTasks = (JSONArray)(task.get("preemptedBy"));
 						preemptedByTasks.add(preemptedBy);
-						System.out.println(preemptedBy);
+						// System.out.println(preemptedBy);
 						task.put("preemptedBy", preemptedByTasks);
 
 						event.put("preempted", true);
@@ -241,7 +241,7 @@ class parser {
 		mainObj.put("autocompleteEventTypes", autocompleteEventTypes);		
 		mainObj.put("autocompleteNames", autocompleteNames);
 
-		System.out.println(autocompleteNames);
+		// System.out.println(autocompleteNames);
 		
 		writeJSON(mainObj);
 	}

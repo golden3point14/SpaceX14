@@ -128,15 +128,15 @@ $('#search-process').typeahead({
 function searchTasks(filterString)
 {
   if (filterString != "") {
-  console.log(taskJSON);
+  // console.log(taskJSON);
   var tasks = _.filter(taskJSON, function(e){return e.name === filterString;});
- console.log(tasks);
+ // console.log(tasks);
  currentTasks = tasks;
   var data = [];
   var newData = [];
 
   for (var i = 0; i < currentTasks.length; i++) {
-    console.log(currentTasks[i]);
+    // console.log(currentTasks[i]);
     if (currentTasks[i].preemptedBy) {
     for (var j = 0; j < currentTasks[i].preemptedBy.length; j++){
       // data.push([currentTasks[i].preemptedBy[j]]);
@@ -168,8 +168,9 @@ function searchTasks(filterString)
       ],
       deferRender:    true,
       dom:            "frtiS",
-      scrollY:        450,
-      scrollCollapse: true
+      scrollY:        400,
+      scrollCollapse: true,
+      order:          [[1, 'desc']]
     } ); 
 
       table.on( 'click', 'td', function () {
@@ -185,8 +186,9 @@ function searchTasks(filterString)
       ],
       deferRender:    true,
       dom:            "frtiS",
-      scrollY:        450,
-      scrollCollapse: true
+      scrollY:        400,
+      scrollCollapse: true,
+      order:          [[1, 'desc']]
     } ); 
 
       table.on( 'click', 'td', function () {
@@ -199,13 +201,13 @@ function searchTasks(filterString)
 function clickSearch() {
   $('.tt-dropdown-menu').click(function() {
              var filterString = $('.tt-input').val();
-
+             window.localStorage.setItem("cellData", filterString);
              searchTasks(filterString);
       });
 }
 
 function autoSearch() {
-  console.log(window.localStorage.getItem("cellData"));
+  // console.log(window.localStorage.getItem("cellData"));
   searchTasks(window.localStorage.getItem("cellData"));
 }
 
