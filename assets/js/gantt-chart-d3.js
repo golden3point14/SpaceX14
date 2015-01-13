@@ -3,7 +3,10 @@
  * @version 2.1
  */
 
-d3.gantt = function() {
+var mainType = "MAIN";
+var cyclesType = "CYCLES";
+
+d3.gantt = function(type) {
     var FIT_TIME_DOMAIN_MODE = "fit";
     var FIXED_TIME_DOMAIN_MODE = "fixed";
     
@@ -17,47 +20,45 @@ d3.gantt = function() {
     var timeDomainStart = 0;
     var timeDomainEnd = 0;
     var timeDomainMode = FIT_TIME_DOMAIN_MODE;// fixed or fit
+    var yAttribute = "cpu"; // By default, use cpu to group tasks on y axis
+
     var taskTypes = [];
     var taskStatus = [];
+
     // var height = document.body.clientHeight - margin.top - margin.bottom-5;
     var height = 300;
-    var width = document.body.clientWidth - margin.right - margin.left-150;
-
-    var tickFormat = "";
+    var width = document.body.clientWidth - margin.right - margin.left - 150;
 
     var keyFunction = function(d) {
-      return d.normalStartTime + d.cpu + (d.normalStartTime + d.processLength);
+      return d.normalStartTime + d[yAttribute] + (d.normalStartTime + d.processLength);
     };
 
     var rectTransform = function(d) {
-      return "translate(" + x(d.normalStartTime) + "," + y(d.cpu) + ")";
+      return "translate(" + x(d.normalStartTime) + "," + y(d[yAttribute]) + ")";
     };
 
-    var x = d3.time.scale().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]).clamp(true);
-    var y = d3.scale.ordinal().domain(taskTypes).rangeBands([ 0, height - margin.top - margin.bottom ], .1);
-
-    var xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.time.format(tickFormat)).tickSubdivide(true)
-    .tickSize(8).tickPadding(8);
-
-    var yAxis = d3.svg.axis().scale(y).orient("left").tickFormat(function(d) {return "CPU " + d;}).tickSize(0);
+    var x;
+    var y;
+    var xAxis;
+    var yAxis;
 
     var initTimeDomain = function(tasks) {
       timeDomainStart = 0;
     };
 
     var initAxis = function() {
-  x = d3.time.scale().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]).clamp(true);
-  y = d3.scale.ordinal().domain(taskTypes).rangeBands([ 0, height - margin.top - margin.bottom ], .1);
 
-  xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.time.format(tickFormat)).tickSubdivide(true)
-  .tickSize(8).tickPadding(8);
+    // Set the pixel width of the scale based on the width of the window, and
+    // the domain based on the time domain
+    x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]);
+    // Y scale is ordinal and lists CPUs
+    y = d3.scale.ordinal().domain(taskTypes).rangeBands([ 0, height - margin.top - margin.bottom ], .1);
+    xAxis = d3.svg.axis().scale(x).orient("bottom");
 
-  yAxis = d3.svg.axis().scale(y).orient("left").tickFormat(function(d) {return "CPU " + d;}).tickSize(0);
+    yAxis = d3.svg.axis().scale(y).orient("left").tickFormat(function(d) {return "CPU " + d;}).tickSize(0);
     };
 
     var zoom = d3.behavior.zoom()
-      .x(x)
-  //    .y(y)
       .on("zoom", zoomed);
 
     var make_x_axis = function () {
@@ -66,7 +67,7 @@ d3.gantt = function() {
     
     var zoomRectTransform = function(d) {
       var newX = x(d.normalStartTime) + d3.event.translate[0];
-      return "translate(" + newX + "," + y(d.cpu) + ")scale(" + d3.event.scale + ",1)";
+      return "translate(" + newX + "," + y(d[yAttribute]) + ")scale(" + d3.event.scale + ",1)";
     };
 
     function zoomed() {
@@ -246,6 +247,13 @@ d3.gantt = function() {
       if (!arguments.length)
           return timeDomainEnd;
       timeDomainEnd = value;
+      return gantt;
+    };
+
+    gantt.yAttribute = function(value) {
+      if (!arguments.length)
+          return yAttribute;
+      yAttribute = value;
       return gantt;
     };
     
