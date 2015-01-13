@@ -3,7 +3,10 @@
  * @version 2.1
  */
 
-d3.gantt = function() {
+var mainType = "MAIN";
+var cyclesType = "CYCLES";
+
+d3.gantt = function(type) {
     var FIT_TIME_DOMAIN_MODE = "fit";
     var FIXED_TIME_DOMAIN_MODE = "fixed";
     

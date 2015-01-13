@@ -16,6 +16,8 @@ var db;
 
 var SCALE_FACTOR = 100000; // Scales the duration so things are actually visible
 
+var chartType = "MAIN";
+
 $('#mainButton').css('background-color', '#315B7E');
 
 function openDB()
@@ -90,7 +92,7 @@ function openDB()
 
                                     maxDuration = getLongestCPUDuration(numCPUs); //should be numCPU as argument
 
-                                    var gantt = d3.gantt().taskTypes(_.range(numCPUs)).timeDomain(maxDuration);
+                                    var gantt = d3.gantt(chartType).taskTypes(_.range(numCPUs)).timeDomain(maxDuration);
                                     switchEvents = normalizeStartTime(numCPUs);
                                     
                                     // Scale all durations up
