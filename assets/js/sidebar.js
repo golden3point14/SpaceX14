@@ -7,11 +7,12 @@ mainDiv.innerHTML = "Main";
 mainDiv.setAttribute("onclick", "window.location.href='main.html';");
 sidebar.appendChild(mainDiv);
 
-// var cyclesDiv = document.createElement('div');
-// cyclesDiv.id = 'sidebutton';
-// cyclesDiv.className = 'sidebutton';
-// cyclesDiv.innerHTML = "Cycles";
-// sidebar.appendChild(cyclesDiv);
+var cyclesDiv = document.createElement('div');
+cyclesDiv.id = 'sidebutton';
+cyclesDiv.className = 'sidebutton';
+cyclesDiv.innerHTML = "Cycles";
+cyclesDiv.setAttribute("onclick", "window.location.href='cycles.html';");
+sidebar.appendChild(cyclesDiv);
 
 var statisticsDiv = document.createElement('div');
 statisticsDiv.id = 'statisticsButton';
