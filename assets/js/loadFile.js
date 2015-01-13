@@ -118,23 +118,25 @@ function openDB()
     var store4 = xact4.objectStore("AutocompleteEventTypes");
     var store5 = xact5.objectStore("AutocompleteNames");
     var storeCycles = xactCycles.objectStore("cycleEvents");
+    var requestCycles = storeCycles.put(JSONcycleEvents, 1);
     var request3 = store3.put(JSONnumCPUs, 1);
     var request = store.put(JSONevents, 1);
     var request4 = store4.put(JSONautocompleteEventTypes, 1);
     var request5 = store5.put(JSONautocompleteNames, 1);
     var request2 = store2.put(JSONtasks, 1);
-    var requestCycles = storeCycles.put(JSONcycleEvents,1);
+    
 
-    console.log("JSONautocompleteNames", JSONautocompleteNames);
     // some kind of error handling
+    requestCycles.onerror = function(e) {console.log("error", e.target.error.name);}
+
+    requestCycles.onsuccess = function(e) {console.log("cycleEvents added");}
+
     request.onerror = function(e) {console.log("Error", e.target.error.name);}
 
     request.onsuccess = function(e) {console.log("added events");}
 
      // some kind of error handling
-    request2.onerror = function(e) {console.log("Error", e.target.error.name);}
-
-    request2.onsuccess = function(e) {console.log("added tasks"); document.location.href='main.html';}
+   
 
     request3.onerror = function(e) {console.log("Error", e.target.error.name);}
 
@@ -147,6 +149,10 @@ function openDB()
     request5.onerror = function(e) {console.log("Error", e.target.error.name);}
 
     request5.onsuccess = function(e) {console.log("added autocompleteNames");}
+
+     request2.onerror = function(e) {console.log("Error", e.target.error.name);}
+
+    request2.onsuccess = function(e) {console.log("added tasks"); document.location.href='main.html';}
 
   }
 
