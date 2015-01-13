@@ -20,6 +20,7 @@ d3.gantt = function(type) {
     var timeDomainStart = 0;
     var timeDomainEnd = 0;
     var timeDomainMode = FIT_TIME_DOMAIN_MODE;// fixed or fit
+
     var yAttribute = "cpu"; // By default, use cpu to group tasks on y axis
 
     var taskTypes = [];
@@ -50,7 +51,7 @@ d3.gantt = function(type) {
 
     // Set the pixel width of the scale based on the width of the window, and
     // the domain based on the time domain
-    x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]);
+    x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd]).range([ 0, width ]);
     // Y scale is ordinal and lists CPUs
     y = d3.scale.ordinal().domain(taskTypes).rangeBands([ 0, height - margin.top - margin.bottom ], .1);
     xAxis = d3.svg.axis().scale(x).orient("bottom");
@@ -72,6 +73,8 @@ d3.gantt = function(type) {
 
     function zoomed() {
       d3.selectAll("rect").attr("transform", zoomRectTransform);
+      timeDomainStart 
+      console.log(d3.event.translate);
     }
     
   function gantt(tasks) {

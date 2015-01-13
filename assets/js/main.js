@@ -16,13 +16,13 @@ var db;
 
 var SCALE_FACTOR = 100000; // Scales the duration so things are actually visible
 
-var chartType = "MAIN";
+var chartType = "MAIN"; //for gantt
 
 $('#mainButton').css('background-color', '#315B7E');
 
 function openDB()
 {
-  var openRequest = indexedDB.open("events", 7);
+  var openRequest = indexedDB.open("events", 8);
 
   openRequest.onupgradeneeded =  function(e)
   {
@@ -90,14 +90,15 @@ function openDB()
     result3.onsuccess = function(e) {
                                       numCPUs = e.target.result;
 
-                                    maxDuration = getLongestCPUDuration(numCPUs); //should be numCPU as argument
+                                    // this is the time of the last event for the end of the chart
+                                    maxDuration = getLongestCPUDuration(numCPUs);
 
                                     var gantt = d3.gantt(chartType).taskTypes(_.range(numCPUs)).timeDomain(maxDuration);
                                     switchEvents = normalizeStartTime(numCPUs);
                                     
                                     // Scale all durations up
                                     //switchEvents = _.map(switchEvents, function(e){e.duration *= SCALE_FACTOR; return e;})
-                                    gantt(switchEvents);
+                                    gantt(switchEvents); //feeding it the relevant events
                                     setColoringOfTasks();
     }
 
@@ -277,6 +278,7 @@ function normalizeStartTime(numCPU)
   }
 
   switchEvents = switchEvents.concat(cycleMarkers);
+
   return switchEvents;
 }
 

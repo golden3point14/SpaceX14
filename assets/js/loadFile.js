@@ -13,6 +13,7 @@ var JSONnumCPUs;
 
 var JSONautocompleteEventTypes;
 var JSONautocompleteNames;
+var JSONcycleEvents;
 
 window.localStorage.setItem("cellData", "");
 
@@ -36,6 +37,7 @@ function handleFileSelect(evt) {
         	JSONnumCPUs = obj.numCPU;
         	JSONautocompleteEventTypes = obj.autocompleteEventTypes;
         	JSONautocompleteNames = obj.autocompleteNames;
+        	JSONcycleEvents = obj.cycleEvents;
 
         	openDB();
 
@@ -54,7 +56,7 @@ function handleFileSelect(evt) {
 // sets up the database
 function openDB()
 {
-  var openRequest = indexedDB.open("events", 7);
+  var openRequest = indexedDB.open("events", 8);
 
   openRequest.onupgradeneeded =  function(e)
   {
@@ -91,6 +93,12 @@ function openDB()
     	thisDB.createObjectStore("AutocompleteNames");
     	console.log("autocompleteNames created");
     }
+
+    if (!thisDB.objectStoreNames.contains("cycleEvents"))
+    {
+    	thisDB.createObjectStore("cycleEvents");
+    	console.log("cycleEvents created");
+    }
   }
 
   openRequest.onsuccess = function(e)
@@ -103,16 +111,19 @@ function openDB()
     var xact3 = db.transaction(["numCPUs"], "readwrite");
     var xact4 = db.transaction(["AutocompleteEventTypes"], "readwrite");
     var xact5 = db.transaction(["AutocompleteNames"], "readwrite");
+    var xactCycles = db.transaction(["cycleEvents"], "readwrite");
     var store = xact.objectStore("Events");
     var store2 = xact2.objectStore("Tasks");
     var store3 = xact3.objectStore("numCPUs");
     var store4 = xact4.objectStore("AutocompleteEventTypes");
     var store5 = xact5.objectStore("AutocompleteNames");
+    var storeCycles = xactCycles.objectStore("cycleEvents");
     var request3 = store3.put(JSONnumCPUs, 1);
     var request = store.put(JSONevents, 1);
     var request4 = store4.put(JSONautocompleteEventTypes, 1);
     var request5 = store5.put(JSONautocompleteNames, 1);
     var request2 = store2.put(JSONtasks, 1);
+    var requestCycles = storeCycles.put(JSONcycleEvents,1);
 
     console.log("JSONautocompleteNames", JSONautocompleteNames);
     // some kind of error handling
@@ -184,6 +195,12 @@ function handleUseOld(evt)
 	      thisDB.createObjectStore("AutocompleteNames");
 	      console.log("created autocompleteNames");
 	    }
+
+	     if (!thisDB.objectStoreNames.contains("cycleEvents"))
+    	{
+    	thisDB.createObjectStore("cycleEvents");
+    	console.log("cycleEvents created");
+    	}
 	}
 
 	openRequest.onsuccess = function(e)
@@ -221,6 +238,12 @@ function handleUseOld(evt)
 	    	console.log("created autocompleteNames");
 	    }
 
+	    if (!thisDB.objectStoreNames.contains("cycleEvents"))
+	    {
+	    	thisDB.createObjectStore("cycleEvents");
+	    	console.log("created cycleEvents");
+	    }
+
 		var db = e.target.result;
 		var xact = db.transaction(["Events"],"readwrite");
 	    var xact2 = db.transaction(["Tasks"], "readwrite");
@@ -237,6 +260,9 @@ function handleUseOld(evt)
 	    var result3 = store3.get(1);
 	    var result4 = store4.get(1);
 	    var result5 = store5.get(1);
+	    var xactCycles = db.transaction(["cycleEvents"]);
+		var storeCycles = xactCycles.objectStore("cycleEvents");
+		var resultCycles = storeCycles.get(1);
 
 	    // // some kind of error handling
 	    result.onerror = function(e) {console.log("Error", e.target.error.name);}

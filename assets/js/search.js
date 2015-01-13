@@ -43,7 +43,7 @@ $('#searchButton').css('background-color', '#315B7E');
   //pulls the data from the IndexedDB and displays it
   function openDB()
   {
-    var openRequest = indexedDB.open("events", 7);
+    var openRequest = indexedDB.open("events", 8);
     console.log("in search.js");
 
 
