@@ -40,11 +40,13 @@ d3.gantt = function(type) {
 
     var x;
     var y;
+    var originalTimeDomainEnd;
     var xAxis;
     var yAxis;
 
     var initTimeDomain = function(tasks) {
       timeDomainStart = 0;
+      originalTimeDomainEnd = timeDomainEnd;
     };
 
     var initAxis = function() {
@@ -68,17 +70,20 @@ d3.gantt = function(type) {
     
     var zoomRectTransform = function(d) {
       var newX = x(d.normalStartTime) + d3.event.translate[0];
-      return "translate(" + newX + "," + y(d[yAttribute]) + ")scale(" + d3.event.scale + ",1)";
+      return "translate(" + newX + "," + y(d[yAttribute]) + ")scale(" + d3.event.scale + ", 1)";
     };
 
     function zoomed() {
+      timeDomainEnd = originalTimeDomainEnd / d3.event.scale;
+      x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]);
+      xAxis = d3.svg.axis().scale(x).orient("bottom");
+      d3.select(".x.axis").call(xAxis);
       d3.selectAll("rect").attr("transform", zoomRectTransform);
       timeDomainStart 
       console.log(d3.event.translate);
     }
     
   function gantt(tasks) {
-
     initTimeDomain(tasks);
     initAxis();
 
@@ -140,8 +145,6 @@ d3.gantt = function(type) {
     .call(xAxis);
     
     svg.append("g").attr("class", "y axis").transition().call(yAxis);
-
-   svg.append("svg:g").attr("transform", "translate(" + margin.left + "," + margin.top + ")").call(zoom); 
 
    return gantt;
 
