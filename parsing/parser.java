@@ -64,6 +64,7 @@ class parser {
 		int numTasks = 0;
 		JSONArray autocompleteEventTypes = new JSONArray();
 		JSONArray autocompleteNames = new JSONArray();
+		JSONArray cycleEvents = new JSONArray();
 		
 		// Within the rest of the file, lines will roughly be of the format
 		// trace-cmd-28911 [001]  6340.460348: sched_wakeup:         28911:?:? +   28911:120:? trace-cmd [001] Success
@@ -186,6 +187,7 @@ class parser {
 				//EXAMPLE ffffffff810f3fec STOP: Cycle 24.
 				if  (eventType.equals("print"))
 				{
+					System.out.println("CYCLE MARKER OF SOME KIND WOOT");
 					String[] printInfo = extraInfo.split(" ");
 					
 					if (printInfo[1].equals("START:") && printInfo.length < 5)
@@ -208,13 +210,20 @@ class parser {
 						// System.out.println(extraInfo);
 						// System.out.println("duration " + duration);
 						
+						JSONObject startCycles = new JSONObject();
+						//startCycles.put("status", "START");
+						startCycles.put("startTime", startTime);
+						startCycles.put("length", duration);
+						cycleEvents.add(startCycles);
+
 					}
 					//else if STOP
 					else if (printInfo[1].equals("STOP:"))
 					{
 						//store it as a stop
 						event.put("userMark", "STOP");
-						
+
+
 					}
 					//else
 					else
@@ -240,6 +249,9 @@ class parser {
 		mainObj.put("numCPU", numCPUs); //wbrooks
 		mainObj.put("autocompleteEventTypes", autocompleteEventTypes);		
 		mainObj.put("autocompleteNames", autocompleteNames);
+		mainObj.put("cycleEvents", cycleEvents);
+
+		System.out.println(cycleEvents);		
 
 		// System.out.println(autocompleteNames);
 		
