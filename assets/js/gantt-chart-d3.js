@@ -22,6 +22,8 @@ d3.gantt = function(type) {
     var timeDomainMode = FIT_TIME_DOMAIN_MODE;// fixed or fit
 
     var yAttribute = "cpu"; // By default, use cpu to group tasks on y axis
+    var xStartAttribute = "normalStartTime";
+    var xDuration = "processLength";
 
     var taskTypes = [];
     var taskStatus = [];
@@ -31,11 +33,11 @@ d3.gantt = function(type) {
     var width = document.body.clientWidth - margin.right - margin.left - 150;
 
     var keyFunction = function(d) {
-      return d.normalStartTime + d[yAttribute] + (d.normalStartTime + d.processLength);
+      return d[xStartAttribute] + d[yAttribute] + (d[xStartAttribute] + d[xDuration]);
     };
 
     var rectTransform = function(d) {
-      return "translate(" + x(d.normalStartTime) + "," + y(d[yAttribute]) + ")";
+      return "translate(" + x(d[xStartAttribute]) + "," + y(d[yAttribute]) + ")";
     };
 
     var x;
@@ -69,7 +71,7 @@ d3.gantt = function(type) {
     };
     
     var zoomRectTransform = function(d) {
-      var newX = x(d.normalStartTime) + d3.event.translate[0];
+      var newX = x(d[xStartAttribute]) + d3.event.translate[0];
       return "translate(" + newX + "," + y(d[yAttribute]) + ")scale(" + d3.event.scale + ", 1)";
     };
 
@@ -119,7 +121,7 @@ d3.gantt = function(type) {
         })
      .attr("width", function(d) { 
          if (d.eventType == "print") {return (x(d.duration));}
-         else {return (x(d.processLength));}
+         else {return (x(d[xDuration]));}
          })
      .call(zoom)
      .on("mouseover", function(d) {      
@@ -128,7 +130,7 @@ d3.gantt = function(type) {
                 .style("opacity", .9);      
             div .html("Process name: " + d.name + "<br/> PID: " + d.pid + 
               "<br/> Start time: " + d.startTime + "<br/> Duration: " + 
-              d.processLength + "<br/> Extra Info: " + d.extraInfo)
+              d[xDuration] + "<br/> Extra Info: " + d.extraInfo)
                 .style("left", (d3.event.pageX) + "px")     
                 .style("top", (d3.event.pageY - 28) + "px");    
             })                  
@@ -261,6 +263,21 @@ d3.gantt = function(type) {
       yAttribute = value;
       return gantt;
     };
+
+    gantt.xStartAttribute = function(value) {
+      if (!arguments.length)
+          return xStartAttribute;
+      xStartAttribute = value;
+      return gantt;
+    };
+
+    gantt.xDuration = function(value) {
+      if (!arguments.length)
+          return xDuration;
+      xDuration = value;
+      return gantt;
+    };
+
     
     return gantt;
 };

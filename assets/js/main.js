@@ -91,13 +91,11 @@ function openDB()
                                       numCPUs = e.target.result;
 
                                     // this is the time of the last event for the end of the chart
-                                    maxDuration = getLongestCPUDuration(numCPUs);
+                                    maxDuration = getLongestCPUDuration();
 
                                     var gantt = d3.gantt(chartType).taskTypes(_.range(numCPUs)).timeDomain(maxDuration);
                                     switchEvents = normalizeStartTime(numCPUs);
                                     
-                                    // Scale all durations up
-                                    //switchEvents = _.map(switchEvents, function(e){e.duration *= SCALE_FACTOR; return e;})
                                     gantt(switchEvents); //feeding it the relevant events
                                     setColoringOfTasks();
     }
@@ -282,30 +280,16 @@ function normalizeStartTime(numCPU)
   return switchEvents;
 }
 
-function getLongestCPUDuration(numCPU)
+function calculateDuration(eventList) {
+  return _.reduce(eventList, function(sum, next) { return sum += next.duration }, 0)
+};
+
+function getLongestCPUDuration()
 {
-  //switch these and find last event per cpu FIXME
   switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
-  switchEvents = _.groupBy(switchEvents, function(e){return e.cpu;});
+  switchEventsByCPU = _.groupBy(switchEvents, function(e){return e.cpu;});
 
-  // console.log(switchEvents);
-  // console.log("numCPUs: " + numCPUs);
-
-  setTimeout(function(e){return true}, 10000);
-
-  maxDuration = 0;
-  for (var j = 0; j < numCPUs; j++)
-  {
-    // console.log("j = " + j);
-    var lastIndex = switchEvents[j].length-1;
-    var sum = _.reduce(switchEvents[j], function(sum, next) { return sum += next.duration }, 0);
-    // console.log(sum);
-    if (sum > maxDuration) {
-      maxDuration = sum
-    }
-  }
-
-  return maxDuration;
+  return _.max(_.map(switchEventsByCPU, calculateDuration));
 }
 
 document.addEventListener("load", openDB());
