@@ -160,7 +160,7 @@ function openDB()
 function handleUseOld(evt)
 {
 	console.log("yo");
-	var openRequest = indexedDB.open("events", 7);
+	var openRequest = indexedDB.open("events", 8);
 
 	openRequest.onupgradeneeded = function(e)
 	{
