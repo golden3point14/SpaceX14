@@ -151,7 +151,7 @@ function setColoringOfTasks() {
   }
 
 function makeRow(task, table, attribute) {
-    var row = table.insertRow(2);
+    var row = table.insertRow(0);
 
     var nameCell = row.insertCell(0);
     nameCell.innerHTML = task.name;
@@ -162,7 +162,7 @@ function makeRow(task, table, attribute) {
     var countCell = row.insertCell(2);
     countCell.innerHTML = task[attribute];
 
-    row.ondblclick = function(myrow){
+    row.onclick = function(myrow){
                       return function() { 
                          var cell = myrow.getElementsByTagName("td")[0];
                          var id = cell.innerHTML;
@@ -182,7 +182,7 @@ function getTopPreemptions()
  	//remove <idle>
  	preemptionSorted = _.select(preemptionSorted, function(element){return (element.name != "<idle>") && (element.preemptionCount != 0);});
 
-  var preemptionList = document.getElementById("preemption-list");
+  var preemptionList = document.getElementById("preemption-list").tBodies[0];
 
   if (preemptionSorted.length == 0) {
     preemptionList.style.display = "none";
@@ -208,7 +208,7 @@ function getTopRuntime()
   runTimeSorted = _.select(runTimeSorted, function(element){return (element.name != "<idle>") && (element.totalRuntime != 0);});
   
   var displayNum = 10;
-  var runtimeList = document.getElementById("runtime-list");
+  var runtimeList = document.getElementById("runtime-list").tBodies[0];
 
   if (runTimeSorted.length == 0) {
     runtimeList.style.display = "none";
@@ -230,7 +230,7 @@ function getTopWaittime()
   waitTimeSorted = _.select(waitTimeSorted, function(element){return (element.name != "<idle>") && (element.totalWaittime != 0);});
   
   var displayNum = 10;
-  var waittimeList = document.getElementById("waittime-list");
+  var waittimeList = document.getElementById("waittime-list").tBodies[0];
  
   if (waitTimeSorted.length == 0) {
     waittimeList.style.display = "none";

@@ -80,7 +80,6 @@ d3.gantt = function(type) {
       d3.select(".x.axis").call(xAxis);
       d3.selectAll("rect").attr("transform", zoomRectTransform);
       timeDomainStart 
-      console.log(d3.event.translate);
     }
     
   function gantt(tasks) {

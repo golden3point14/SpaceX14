@@ -14,6 +14,10 @@ body {
   src: url(../fonts/Roboto-Bold.ttf);
 }
 
+.table-hover tbody tr:hover td {
+  background-color: #B1DCFE !important;
+}
+
 .sidebar {
 	width: 140px;
 	height: 100%;
@@ -48,12 +52,8 @@ body {
 }
 
 .sidebutton:hover {
-	background-color: #315B7E;
+	background-color: #182E3F !important;
 	cursor: pointer;
-}
-
-.sidebutton:active {
-	background-color: #315B7E;
 }
 
 .ng-scope {
@@ -119,6 +119,7 @@ body {
 
 .mainlist {
   display: inline-block;
+  vertical-align: top;
   width: 350px;
   margin-left: 5px;
   margin-right: 5px;
