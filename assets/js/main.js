@@ -71,7 +71,6 @@ function openDB()
 
     result.onsuccess = function(e) {
                                       JSONevents = e.target.result;
-                                      console.log("SIZE OF THING IS " + JSONevents.length);
                                       
                                   }
 
@@ -88,13 +87,19 @@ function openDB()
     result3.onerror = function(e) {console.log("Error", e.target.error.name);}
 
     result3.onsuccess = function(e) {
-                                      numCPUs = e.target.result;
+                                    numCPUs = e.target.result;
 
+                                    switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
                                     // this is the time of the last event for the end of the chart
-                                    maxDuration = getLongestCPUDuration();
+                                    
+                                    maxDuration = getLongestCPUDuration(switchEvents);
+                                    
 
                                     var gantt = d3.gantt(chartType).taskTypes(_.range(numCPUs)).timeDomain(maxDuration);
-                                    switchEvents = normalizeStartTime(numCPUs);
+                                    switchEvents = normalizeStartTime(switchEvents);
+                                    
+                                    switchEvents = calculateDurationBetweenSwitches(switchEvents, numCPUs);
+
                                     
                                     gantt(switchEvents); //feeding it the relevant events
                                     setColoringOfTasks();
@@ -242,51 +247,42 @@ function getTopWaittime()
   }
 }
 
-function normalizeStartTime(numCPU)
+function normalizeStartTime(switchEvents)
 {
-  switchEvents = [];
-  tempSwitchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
-  cycleMarkers = _.filter(JSONevents, function(e){return e.eventType === "print";});
-  tempSwitchEvents = _.groupBy(tempSwitchEvents, function(e){return e.cpu;});
-
-  for (var cpu = 0; cpu < numCPU; cpu++)
-  {
-    tempSwitchEvents[cpu].sort(function(a,b) {return a.startTime - b.startTime;});
-
-    var firstStartTime = tempSwitchEvents[cpu][0].startTime;
-    for (var i = 0; i < tempSwitchEvents[cpu].length; i++) {
-      var switchEvent = tempSwitchEvents[cpu][i];
-      switchEvent.normalStartTime = switchEvent.startTime - firstStartTime;
-      
-      if (i != tempSwitchEvents[cpu].length - 1) {
-        var nextEvent = tempSwitchEvents[cpu][i+1];
-        switchEvent.processLength = nextEvent.startTime - switchEvent.startTime;
-      } else {
-        switchEvent.processLength = 0;
-      }
-
-    }
-    // console.log(tempSwitchEvents[cpu]);
-    // tempSwitchEvents[cpu] = _.map(tempSwitchEvents[cpu], function(e) {
-    //   e.normalStartTime = e.startTime - firstStartTime;
-
-    //   return e;
-    //  });
-    switchEvents = switchEvents.concat(tempSwitchEvents[cpu]);
-  }
-
-  switchEvents = switchEvents.concat(cycleMarkers);
-
+  var earliestTime = switchEvents[0].startTime;
+  switchEvents = _.map(switchEvents, function(e) {e.normalStartTime = e.startTime - earliestTime; return e;});
   return switchEvents;
+}
+
+function calculateDurationBetweenSwitches(switchEvents, numCPUs) {
+  var groupedByCPU = _.groupBy(switchEvents, function(e){return e.cpu;});
+
+  var newSwitchEvents = [];
+
+  for (var cpu = 0; cpu < numCPUs; cpu++) {
+    var tempEvents = groupedByCPU[cpu];
+
+    for (var i = 0; i < tempEvents.length - 1; i++) {
+      var currEvent = tempEvents[i];
+      currEvent.processTime = tempEvents[i + 1].startTime - currEvent.startTime;
+    }
+
+    // Set the duration of the last event to be 0, as we don't know the start time
+    // of what happened after it
+    tempEvents[tempEvents.length - 1].processTime = 0;
+
+    newSwitchEvents = newSwitchEvents.concat(groupedByCPU[cpu]);
+  }
+  
+  return newSwitchEvents;
 }
 
 function calculateDuration(eventList) {
   return _.reduce(eventList, function(sum, next) { return sum += next.duration }, 0)
 };
 
-function getLongestCPUDuration()
+function getLongestCPUDuration(switchEvents)
 {
-  switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
   switchEventsByCPU = _.groupBy(switchEvents, function(e){return e.cpu;});
 
   return _.max(_.map(switchEventsByCPU, calculateDuration));

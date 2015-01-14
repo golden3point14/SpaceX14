@@ -6,7 +6,7 @@
 var mainType = "MAIN";
 var cyclesType = "CYCLES";
 
-d3.gantt = function(type) {
+d3.gantt = function(chartType) {
     var FIT_TIME_DOMAIN_MODE = "fit";
     var FIXED_TIME_DOMAIN_MODE = "fixed";
     
@@ -23,13 +23,21 @@ d3.gantt = function(type) {
 
     var yAttribute = "cpu"; // By default, use cpu to group tasks on y axis
     var xStartAttribute = "normalStartTime";
-    var xDuration = "processLength";
+    var xDuration = "processTime";
 
     var taskTypes = [];
     var taskStatus = [];
 
+    var height;
     // var height = document.body.clientHeight - margin.top - margin.bottom-5;
-    var height = 300;
+    switch(chartType) {
+      case "MAIN":
+        height = 300;
+        break;
+      case "CYCLES":
+        height = 4000;
+        break;
+    }
     var width = document.body.clientWidth - margin.right - margin.left - 150;
 
     var keyFunction = function(d) {
