@@ -4,6 +4,8 @@ var events;
 var currentCPU = 0;
 var chartType = "CYCLES"
 var taskNames;
+var numCycles;
+var gantt;
 
 $('#cyclesButton').css('background-color', '#315B7E');
 
@@ -49,20 +51,19 @@ function openDB()
 			{
 				events = f.target.result;
 
-				var numCycles = cycleEvents.length;
+				numCycles = cycleEvents.length;
 
-				var switchCycleEvents = _.filter(events, function(e){ return e.cpu === currentCPU && e.eventType === "sched_switch"; });
-
+				// Categorize all events into cycles
 				addCycleAttribute();
+				console.log(events);
+
+				var switchCycleEvents = getCycleEventsForCPU();
+				console.log(switchCycleEvents);
 
 				timeDomainEnd = getLongestCycleDuration(switchCycleEvents);
 
-				var gantt = d3.gantt(chartType).taskTypes(_.range(numCycles))
-					.timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ");
-
-				switchCycleEvents = normalizeStartTime(switchCycleEvents, numCycles);
-
-				switchCycleEvents = calculateDurationBetweenSwitches(switchCycleEvents);
+				gantt = d3.gantt(chartType).taskTypes(_.range(numCycles + 1))
+								.timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ");
 
 				gantt(switchCycleEvents);
 
@@ -83,6 +84,19 @@ function openDB()
 
 		}
 	}
+}
+
+function getCycleEventsForCPU() {
+	var switchCycleEvents = _.filter(events, function(e){ return e.cpu == currentCPU && e.eventType === "sched_switch"; });
+	
+	switchCycleEvents = normalizeStartTime(switchCycleEvents, numCycles);
+
+	switchCycleEvents = calculateDurationBetweenSwitches(switchCycleEvents);
+
+	//switchCycleEvents = _.filter(switchCycleEvents, function(e) { return e.cycle != 0 && 
+	//	e.cycle != numCycles - 1});
+
+	return switchCycleEvents;
 }
 
 function setColoringOfTasks() {
@@ -126,33 +140,34 @@ function calculateDurationBetweenSwitches(switchEvents)
 // for each event, normalizes it relative to the cycle it is in.
 function normalizeStartTime(switchCycleEvents, numCycles)
 {
-	//first group is unique
-	var earliestTime = switchCycleEvents[0].startTime;
 	var grouped = _.groupBy(switchCycleEvents, function(e){return e.cycle;});
-
 	var newSwitchEvents = [];
 
-	var eventsInFirstCycle = grouped[0];
-	for (var i=0; i<eventsInFirstCycle.length; i++)
-	{
-		eventsInFirstCycle[i].normalStartTime = 
-			eventsInFirstCycle[i].startTime - earliestTime;
-	}
-
-	newSwitchEvents = newSwitchEvents.concat(eventsInFirstCycle);
-
 	//remaining groups
-	for (var g=1; g<numCycles; g++)
+	for (var cycleNum in grouped)
 	{
-		var currEvents = grouped[g];
-		earliestTime = cycleEvents[g-1].startTime;
-		for (var i=0; i<currEvents.length; i++)
-		{
-			currEvents[i].normalStartTime = 
-				currEvents[i].startTime - earliestTime;
-		}
 
-		newSwitchEvents = newSwitchEvents.concat(currEvents);
+		if (grouped.hasOwnProperty(cycleNum)) {
+			var currEvents = grouped[cycleNum];
+
+			// For first cycle, shift everything by the start time so that
+			// we begin at 0. Later cycles shifted by the end time of previous
+			// cycle.
+			if (cycleNum === "0") {
+				earliestTime = switchCycleEvents[0].startTime;
+			} else {
+				earliestTime = cycleEvents[cycleNum - 1].startTime;
+			}
+		
+			for (var i=0; i<currEvents.length; i++)
+			{
+				currEvents[i].normalStartTime = 
+				currEvents[i].startTime - earliestTime;
+			}
+
+			newSwitchEvents = newSwitchEvents.concat(currEvents);
+		}
+		
 	}
 
 	return newSwitchEvents;
@@ -184,6 +199,8 @@ function addCycleAttribute()
 
 		var currCycle = 0;
 
+		// Loop through all cycles, comparing the start time of the cycle
+		// to the start time of events to cateogorize events
 		for (currCycle; currCycle<cycleEvents.length;currCycle++)
 		{
 			var currEvent = events[currEventIndex];
@@ -194,8 +211,8 @@ function addCycleAttribute()
 				currEvent = events[currEventIndex];
 			}
 		}
-		//last thing special fun times
-		for (currEventIndex; currEventIndex<event.length;currEventIndex++)
+		// All remaining events go into the last cycle
+		for (currEventIndex; currEventIndex<events.length;currEventIndex++)
 		{
 			currEvent = events[currEventIndex];
 			currEvent.cycle = currCycle;
@@ -221,4 +238,8 @@ function addOptions()
 // Handles user selection of new CPU from dropdown
  document.getElementById("cpu").onchange = function (e) {
  	currentCPU = e.target.value;
+ 	var switchCycleEvents = getCycleEventsForCPU();
+ 	d3.selectAll("svg").remove();
+ 	gantt(switchCycleEvents);
+
  }
