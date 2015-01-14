@@ -116,42 +116,38 @@ function openDB()
 function setColoringOfTasks() {
   // For each task, create a CSS class with a random color
   for (var i = 0; i < JSONtasks.length; i++) {
+    
     if (JSONtasks[i].name !== '<idle>') {
+
+      // trying to mark cycles
       if (JSONevents[JSONtasks[i].events[0]].eventType == "print") {
-        var style = document.createElement('style');
-      style.type = 'text/css';
-      style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: red; }';
-      document.getElementsByTagName('head')[0].appendChild(style);
-      } else {
-      var style = document.createElement('style');
-      style.type = 'text/css';
-      var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
-      // console.log(JSONtasks[i].name + " color: " + color);
-      style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: #' + color + '; }';
-      
-      // var div = document.createElement("div");
-      // div.style.width = "1000px";
-      // // div.style.height = "100px";
-      // div.style.background = "#" + color;
-      // div.style.color = "white";
-      // div.style.textAlign = "right";
-      // div.innerHTML = JSONtasks[i].name;
 
-      // document.body.appendChild(div);
-      // style.innerHTML += '.' + JSONtasks[i].name + JSONtasks[i].pid + ':hover { fill: red; }';
-
-      document.getElementsByTagName('head')[0].appendChild(style);
-    }
-      } else {
         var style = document.createElement('style');
         style.type = 'text/css';
-        style.innerHTML = '.idle { fill: white; }';
-        // style.innerHTML += '.idle:hover { fill: red; }';
+        style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: red; }';
+        document.getElementsByTagName('head')[0].appendChild(style);
+      } 
 
+      // generating colors for non-cycle, non idle events
+      else {
+        var style = document.createElement('style');
+        style.type = 'text/css';
+        var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
+        style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: #' + color + '; }';
+      
         document.getElementsByTagName('head')[0].appendChild(style);
       }
+    } 
+    
+    // make <idle> white
+    else {
+      var style = document.createElement('style');
+      style.type = 'text/css';
+      style.innerHTML = '.idle { fill: white; }';
+      document.getElementsByTagName('head')[0].appendChild(style);
     }
   }
+}
 
 function makeRow(task, table, attribute) {
     var row = table.insertRow(0);

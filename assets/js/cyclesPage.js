@@ -3,6 +3,7 @@ var cycleEvents;
 var events;
 var currentCPU = 0;
 var chartType = "CYCLES"
+var taskNames;
 
 $('#cyclesButton').css('background-color', '#315B7E');
 
@@ -43,7 +44,7 @@ function openDB()
 
 			cycleEvents = e.target.result;
 
-			resultEvents.onerror = function(f){console.log("error", e.target.error.name);}
+			resultEvents.onerror = function(f){console.log("error", f.target.error.name);}
 			resultEvents.onsuccess = function(f)
 			{
 				events = f.target.result;
@@ -65,10 +66,47 @@ function openDB()
 
 				gantt(switchCycleEvents);
 
+				var xactTaskNames = db.transaction(["AutocompleteNames"], "readonly");
+				var storeTaskNames = xactTaskNames.objectStore("AutocompleteNames");
+				var resultTaskNames = storeTaskNames.get(1);
+
+				resultTaskNames.onerror = function(h) {console.log("error", h.target.error.name);}
+
+				resultTaskNames.onsuccess = function(h)
+				{
+					taskNames = h.target.result;
+
+					setColoringOfTasks();
+				}
+
 			}
 
 		}
 	}
+}
+
+function setColoringOfTasks() {
+	// For each task, create a CSS class with a random color
+  for (var i = 0; i < taskNames.length; i++) {
+    
+    if (taskNames[i] !== '<idle>') {
+
+     	// generating colors for non-cycle, non idle events
+	    var style = document.createElement('style');
+	    style.type = 'text/css';
+	    var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
+	    style.innerHTML = '.' + taskNames[i] + ' { fill: #' + color + '; }';
+	    document.getElementsByTagName('head')[0].appendChild(style);
+    } 
+    
+    // make <idle> white
+    else {
+      var style = document.createElement('style');
+      style.type = 'text/css';
+      style.innerHTML = '.idle { fill: white; }';
+      document.getElementsByTagName('head')[0].appendChild(style);
+    }
+  }
 }
 
 function calculateDurationBetweenSwitches(switchEvents)

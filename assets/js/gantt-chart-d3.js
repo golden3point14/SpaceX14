@@ -119,7 +119,16 @@ d3.gantt = function(chartType) {
          if (d.name === '<idle>') {
            return 'idle';
          }
-         return d.name + d.pid;
+         var className;
+         switch(chartType){
+            case "MAIN":
+              className = d.name+d.pid;
+              break;
+            case "CYCLES":
+              className = d.name;
+              break;
+         }
+         return className;
        }) 
      .attr("y", 0)
      .attr("transform", rectTransform)
