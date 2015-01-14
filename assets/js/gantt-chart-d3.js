@@ -84,8 +84,7 @@ d3.gantt = function(chartType) {
     };
     
     var zoomRectTransform = function(d) {
-      var newX = x(d[xStartAttribute]) + d3.event.translate[0];
-      return "translate(" + newX + "," + y(d[yAttribute]) + ")scale(" + d3.event.scale + ", 1)";
+      return "translate(" + x(d[xStartAttribute]) + "," + y(d[yAttribute]) + ")scale(" + d3.event.scale + ", 1)";
     };
 
     function zoomed() {
