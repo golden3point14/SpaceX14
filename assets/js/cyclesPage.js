@@ -55,10 +55,8 @@ function openDB()
 
 				// Categorize all events into cycles
 				addCycleAttribute();
-				console.log(events);
 
 				var switchCycleEvents = getCycleEventsForCPU();
-				console.log(switchCycleEvents);
 
 				timeDomainEnd = getLongestCycleDuration(switchCycleEvents);
 
@@ -92,9 +90,6 @@ function getCycleEventsForCPU() {
 	switchCycleEvents = normalizeStartTime(switchCycleEvents, numCycles);
 
 	switchCycleEvents = calculateDurationBetweenSwitches(switchCycleEvents);
-
-	//switchCycleEvents = _.filter(switchCycleEvents, function(e) { return e.cycle != 0 && 
-	//	e.cycle != numCycles - 1});
 
 	return switchCycleEvents;
 }
