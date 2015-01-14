@@ -166,10 +166,10 @@ class parser {
 
           			// If the previous state was runnable, then the switch is a preemption
           			char lastChar = previousTaskInfo[3].charAt(previousTaskInfo[3].length() - 1);
+					String next = nextTaskInfo[0].split("=")[1];
 					if ((lastChar == 'R') || (lastChar == '+')) {
-						String preemptedBy = nextTaskInfo[0].split("=")[1];
 						JSONArray preemptedByTasks = (JSONArray)(task.get("preemptedBy"));
-						preemptedByTasks.add(preemptedBy);
+						preemptedByTasks.add(next);
 						// System.out.println(preemptedBy);
 						task.put("preemptedBy", preemptedByTasks);
 
@@ -181,6 +181,8 @@ class parser {
 					} else {
 						event.put("preempted", false);
 					}
+					event.put("active", next);
+					
 				}
 				
 				//EXAMPLE ffffffff810f3fec START: Cycle 24 1413589739.264370 (0.067290)
