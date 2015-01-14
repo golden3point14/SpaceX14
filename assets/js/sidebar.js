@@ -8,7 +8,7 @@ mainDiv.setAttribute("onclick", "window.location.href='main.html';");
 sidebar.appendChild(mainDiv);
 
 var cyclesDiv = document.createElement('div');
-cyclesDiv.id = 'sidebutton';
+cyclesDiv.id = 'cyclesButton';
 cyclesDiv.className = 'sidebutton';
 cyclesDiv.innerHTML = "Cycles";
 cyclesDiv.setAttribute("onclick", "window.location.href='cycles.html';");
