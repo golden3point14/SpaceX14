@@ -58,7 +58,7 @@ function openDB()
 				timeDomainEnd = getLongestCycleDuration(switchCycleEvents);
 
 				var gantt = d3.gantt(chartType).taskTypes(_.range(numCycles))
-					.timeDomain(timeDomainEnd).yAttribute("cycle");
+					.timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ");
 
 				switchCycleEvents = normalizeStartTime(switchCycleEvents, numCycles);
 

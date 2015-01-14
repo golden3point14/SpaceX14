@@ -53,6 +53,7 @@ d3.gantt = function(chartType) {
     var originalTimeDomainEnd;
     var xAxis;
     var yAxis;
+    var yLabel = "CPU ";
 
     var initTimeDomain = function(tasks) {
       timeDomainStart = 0;
@@ -68,7 +69,11 @@ d3.gantt = function(chartType) {
     y = d3.scale.ordinal().domain(taskTypes).rangeBands([ 0, height - margin.top - margin.bottom ], .1);
     xAxis = d3.svg.axis().scale(x).orient("bottom");
 
-    yAxis = d3.svg.axis().scale(y).orient("left").tickFormat(function(d) {return "CPU " + d;}).tickSize(0);
+    yAxis = d3.svg.axis().scale(y).orient("left").tickFormat(
+      function(d) {
+        return yLabel + d;
+      }
+      ).tickSize(0);
     };
 
     var zoom = d3.behavior.zoom()
@@ -294,6 +299,13 @@ d3.gantt = function(chartType) {
       xDuration = value;
       return gantt;
     };
+
+    gantt.yLabel = function(value) {
+      if (!arguments.length)
+        return yLabel;
+      yLabel = value;
+      return gantt;
+    }
 
     
     return gantt;
