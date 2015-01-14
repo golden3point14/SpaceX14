@@ -166,10 +166,13 @@ class parser {
 
           			// If the previous state was runnable, then the switch is a preemption
           			char lastChar = previousTaskInfo[3].charAt(previousTaskInfo[3].length() - 1);
-					String next = nextTaskInfo[0].split("=")[1];
+				
+					String nextName = nextTaskInfo[0].split("=")[1];
+					String nextPID = nextTaskInfo[1].split("=")[1];
+				
 					if ((lastChar == 'R') || (lastChar == '+')) {
 						JSONArray preemptedByTasks = (JSONArray)(task.get("preemptedBy"));
-						preemptedByTasks.add(next);
+						preemptedByTasks.add(nextName);
 						// System.out.println(preemptedBy);
 						task.put("preemptedBy", preemptedByTasks);
 
@@ -181,7 +184,8 @@ class parser {
 					} else {
 						event.put("preempted", false);
 					}
-					event.put("active", next);
+					event.put("activeName", nextName);
+					event.put("activePID", nextPID);
 					
 				}
 				
