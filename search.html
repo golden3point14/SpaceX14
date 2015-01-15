@@ -1,55 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
+
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
 
   <title>SpaceShark</title>
-  <link rel="stylesheet" type="text/css" href="assets/css/jquery.dataTables.css">
-  <style type="text/css" class="init">
-  </style>
 
-  <link href="assets/css/dc.css" rel="stylesheet" type="text/css" />
-  <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-  <link href="assets/css/searchbar.css" rel="stylesheet" type="text/css" />
-  <link href="assets/css/home.css" rel="stylesheet" type="text/css" />
-  <script type="text/javascript" language="javascript" src="assets/js/jquery.js"></script>
-  <script type="text/javascript" language="javascript" src="assets/js/jquery.dataTables.js"></script>
-  <script type="text/javascript" language="javascript" src="http://datatables.net/release-datatables/extensions/Scroller/js/dataTables.scroller.js"></script>
+   <script type="text/javascript" src="assets/js/jquery.js"></script>
+  <script type="text/javascript" src="assets/js/jquery.dataTables.js"></script>
+  <script type="text/javascript" src="http://datatables.net/release-datatables/extensions/Scroller/js/dataTables.scroller.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="assets/css/jquery.dataTables.css"/>
+  <link type="text/css" rel="stylesheet" href="assets/css/dc.css"/>
+  <link type="text/css" rel="stylesheet" href="assets/css/bootstrap.min.css"/>
+  <link type="text/css" rel="stylesheet" href="assets/css/searchbar.css"/>
+  <link type="text/css" rel="stylesheet" href="assets/css/home.css"/>
+
+  <style type="text/css" class="init"></style>
 
 </head>
 
 <body>
+
   <div class="sidebar" id="sidebar"></div>
+
   <div class="content">
-<!--     <table cellpadding="3" cellspacing="0" border="0" style="width: 67%; margin: 0 auto 2em auto;">
-      <tbody>
-        <tr id="filter_col1" data-column="0">
-            <td>CPU</td>
-            <td align="center"><input type="text" class="column_filter" id="cpu_filter"></td>
-        </tr>
-        <tr id="filter_col2" data-column="1">
-            <td>Start Time</td>
-            <td align="center"><input type="text" class="column_filter" id="startTime_filter"></td>
-        </tr>
-        <tr id="filter_col3" data-column="2">
-            <td>Process Name</td>
-            <td align="center"><input type="text" class="column_filter" id="process_filter"></td>
-        </tr>
-        <tr id="filter_col4" data-column="3">
-            <td>PID</td>
-            <td align="center"><input type="text" class="column_filter" id="pid_filter"></td>
-        </tr>
-        <tr id="filter_col5" data-column="4">
-            <td>Event Type</td>
-            <td align="center"><input type="text" class="column_filter" id="eventType_filter"></td>
-        </tr>
-        <tr id="filter_col6" data-column="5">
-            <td>Extra Info</td>
-            <td align="center"><input type="text" class="column_filter" id="extraInfo_filter"></td>
-        </tr>
-      </tbody>
-    </table> -->
     <table id="table_id" class="table-hover display">
       <thead>
           <tr>
@@ -63,8 +39,11 @@
       </thead>
     </table>
   </div>
+
   <script type="text/javascript" src="assets/js/sidebar.js"></script>
-  <script type="text/javascript" language="javascript" src="assets/js/typeahead.bundle.js"></script>
+  <script type="text/javascript" src="assets/js/typeahead.bundle.js"></script>
   <script type="text/javascript" src="assets/js/search.js"></script>
+
 </body>
+
 </html>
