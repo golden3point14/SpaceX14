@@ -1,6 +1,6 @@
 var files;
-var eventJSON;
-var taskJSON;
+var events;
+var tasks;
 var reader = new FileReader();
 // var autocompleteEventTypes;
 var autocompleteNames;
@@ -51,32 +51,80 @@ $('#processButton').css('background-color', '#315B7E');
     db = e.target.result;
 
     //get data
-    var xact = db.transaction(["Events"], "readonly");
-    var xact2 = db.transaction(["Tasks"], "readonly");
-    var xact3 = db.transaction(["AutocompleteNames"], "readonly");
-    var objectStore = xact.objectStore("Events");
-    var objectStore2 = xact2.objectStore("Tasks");
-    var objectStore3 = xact3.objectStore("AutocompleteNames");
-    var ob = objectStore.get(1); //temporary hard-coded
-    var ob2 = objectStore2.get(1);
-    var ob3 = objectStore3.get(1);
+    var eventsRequest = db.transaction(["Events"], "readonly")
+                         .objectStore("Events").get(1);
+    var tasksRequest = db.transaction(["Tasks"], "readonly")
+                         .objectStore("Tasks").get(1);
+    var taskNamesRequest = db.transaction(["AutocompleteNames"], "readonly")
+                         .objectStore("AutocompleteNames").get(1);
 
-    ob.onsuccess = function(e) {console.log("e is the JSONevents");
-                                //console.log(e.target.result);
-                                eventJSON = e.target.result;
-                                // currentResults = eventJSON;
-                                // console.log("currentResults.length:"+currentResults.length);
-                                // displayTable();
-						                  }
+    eventsRequest.onsuccess = function(e) {
+            events = e.target.result;
+            var currentTaskName = window.localStorage.getItem("cellData");
+            
+            if (currentTaskName) {
+              // Get switch events where current task was being swapped in or out,
+              // e.g. where event.name or event.activeName are current task
+              currentTaskSwitches = _.filter(events, function(e) { 
+                return e.eventType === "sched_switch" && 
+                      (e.name === currentTaskName || e.activeName === currentTaskName)});
 
-    ob2.onsuccess = function(e) {console.log("e is the JSONevents");
-                                taskJSON = e.target.result;
+              // R - running
+              // W - waiting
+              // B - blocked
+              var labelEventState = function(switchEvent) {
+                // We are switching to this task, so state is running
+                if (switchEvent.activeName === currentTaskName) {
+                  switchEvent.state = "R";
+                } else {
+                  // If event is a preemption, task is being put back into
+                  // run queue to wait for the scheduler
+                  if (switchEvent.preempted) {
+                    switchEvent.state = "B";
+                  } else {
+                    // sleepy task
+                    switchEvent.state = "W";
+                  }
+                }
+                return switchEvent;
+              }
+
+              // Map state to each switch: running, waiting, or blocked
+              // A switch with activeName of current task is running
+              // A switch with name of current task is waiting or blocked
+              //   R or S value shows state the task is left in
+              labeledTaskSwitches = _.map(currentTaskSwitches, labelEventState);
+              // NOTE TO SELF TODO FIXME task not uniquely identified by name - should use PID - issues?
+
+
+             // console.log(labeledTaskSwitches);
+              var lastIndex = labeledTaskSwitches.length - 1;
+              // Get proper duration times between switches
+              for (var i = 0; i < lastIndex; i++) {
+                labeledTaskSwitches[i].processTime = 
+                  labeledTaskSwitches[i + 1].startTime - labeledTaskSwitches[i].startTime;
+              }
+              // Last event special
+              labeledTaskSwitches[lastIndex].processTime = 0;
+
+              totalTime = _.reduce(labeledTaskSwitches, function(sum, next) { return sum += next.processTime }, 0);
+
+              // Normalize
+              var earliestTime = labeledTaskSwitches[0].startTime;
+              labeledTaskSwitches = _.map(labeledTaskSwitches, function(task) { task.normalStartTime = task.startTime - earliestTime; return task; });
+
+              // gantt
+              var gantt = d3.gantt("MAIN").taskTypes(["R", "W", "B"]).timeDomain(totalTime).yAttribute("state").yLabel("State ");
+              gantt(labeledTaskSwitches); 
+            }
+          }
+
+    tasksRequest.onsuccess = function(e) {
+                                tasks = e.target.result;
                               }
 
-    ob3.onsuccess = function(e) {console.log("e is the JSONevents");
-                                //console.log(e.target.result);
+    taskNamesRequest.onsuccess = function(e) {
                                 autocompleteNames = e.target.result;
-                                // console.log("autocompleteNames"+autocompleteNames);
                                 autoCompleteNames();
                                 clickSearch();
                                 autoSearch();
@@ -130,10 +178,7 @@ $('#search-process').typeahead({
 function searchTasks(filterString)
 {
   if (filterString != "") {
-  // console.log(taskJSON);
-  var tasks = _.filter(taskJSON, function(e){return e.name === filterString;});
- // console.log(tasks);
- currentTasks = tasks;
+  currentTasks = _.filter(tasks, function(e){return e.name === filterString;});
   var data = [];
   var newData = [];
 
