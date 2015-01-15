@@ -127,7 +127,7 @@ d3.gantt = function(chartType) {
      .data(tasks, keyFunction).enter()
      .append("rect")
      .attr("class", function(d){ 
-         if (d.name === '<idle>') {
+         if (d.activeName === '<idle>') {
            return 'idle';
          }
          var className;
