@@ -218,7 +218,7 @@ function addCycleAttribute()
 // allows users to choose from all available CPUs
 function addOptions()
 {
-	for (var i=0; i<numCPUs; i++)
+	for (var i=0; i<numCPUs; i++	)
 	{
 		var option = document.createElement("option");
 		option.text = i;

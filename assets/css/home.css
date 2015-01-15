@@ -32,6 +32,7 @@ body {
 	padding: 10px 10px 10px 160px;
 	/*overflow-y:visible;*/
 	max-width: 100%
+	width: 500px;
 }
 
 .sidebutton {
@@ -163,9 +164,13 @@ div.tooltip {
 
 .chart {
 	overflow-x: auto;
-	max-width: 100%;
 }
 
 table {
 	font-size: 12px;
+}
+
+#ganttChart {
+	width: 1000px;
+	overflow-x: auto;
 }

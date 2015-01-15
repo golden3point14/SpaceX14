@@ -48,7 +48,7 @@ d3.gantt = function(chartType) {
       return "translate(" + x(d[xStartAttribute]) + "," + y(d[yAttribute]) + ")";
     };
 
-    var x;
+    var x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd]).range([ 0, width ]);
     var y;
     var originalTimeDomainEnd;
     var xAxis;
@@ -77,6 +77,7 @@ d3.gantt = function(chartType) {
     };
 
     var zoom = d3.behavior.zoom()
+    .x(x)
       .on("zoom", zoomed);
 
     var make_x_axis = function () {
@@ -88,23 +89,25 @@ d3.gantt = function(chartType) {
     };
 
     function zoomed() {
-      timeDomainEnd = originalTimeDomainEnd / d3.event.scale;
-      x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]);
+      //$("svg").css("transform","translate(0,0)scale("+d3.event.scale+",1)");
+      //timeDomainEnd = originalTimeDomainEnd / d3.event.scale;
+      x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width * d3.event.scale ]);
       xAxis = d3.svg.axis().scale(x).orient("bottom");
       d3.select(".x.axis").call(xAxis);
       d3.selectAll("rect").attr("transform", zoomRectTransform);
-      timeDomainStart 
+      d3.select("svg").attr("width", width*d3.event.scale);
     }
     
   function gantt(tasks) {
     initTimeDomain(tasks);
     initAxis();
 
-    var svg = d3.select(".content")
+    var svg = d3.select("#ganttChart")
                 .append("svg")
                   .attr("class", "chart")
                   .attr("width", width + margin.left + margin.right)
                   .attr("height", height + margin.top + margin.bottom)
+                  .call(zoom)
                 .append("g")
                   .attr("class", "gantt-chart")
                   .attr("width", width + margin.left + margin.right)
@@ -144,7 +147,7 @@ d3.gantt = function(chartType) {
          if (d.eventType == "print") {return (x(d.duration));}
          else {return (x(d[xDuration]));}
          })
-     .call(zoom)
+     
      .on("mouseover", function(d) {      
             div.transition()        
                 .duration(200)      
