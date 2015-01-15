@@ -106,53 +106,62 @@ function openDB()
     console.log("openRequest success!");
     db = e.target.result;
 
-    var xact = db.transaction(["Events"],"readwrite");
-    var xact2 = db.transaction(["Tasks"], "readwrite");
-    var xact3 = db.transaction(["numCPUs"], "readwrite");
-    var xact4 = db.transaction(["AutocompleteEventTypes"], "readwrite");
-    var xact5 = db.transaction(["AutocompleteNames"], "readwrite");
-    var xactCycles = db.transaction(["cycleEvents"], "readwrite");
-    var store = xact.objectStore("Events");
-    var store2 = xact2.objectStore("Tasks");
-    var store3 = xact3.objectStore("numCPUs");
-    var store4 = xact4.objectStore("AutocompleteEventTypes");
-    var store5 = xact5.objectStore("AutocompleteNames");
-    var storeCycles = xactCycles.objectStore("cycleEvents");
-    var requestCycles = storeCycles.put(JSONcycleEvents, 1);
-    var request3 = store3.put(JSONnumCPUs, 1);
-    var request = store.put(JSONevents, 1);
-    var request4 = store4.put(JSONautocompleteEventTypes, 1);
-    var request5 = store5.put(JSONautocompleteNames, 1);
-    var request2 = store2.put(JSONtasks, 1);
+    var cyclesRequest = db.transaction(["cycleEvents"], "readwrite")
+    					.objectStore("cycleEvents").put(JSONcycleEvents,1);
+    var eventsRequest = db.transaction(["Events"],"readwrite")
+    					.objectStore("Events").put(JSONevents,1);
+   
+    var numCPUsRequest = db.transaction(["numCPUs"], "readwrite")
+    					.objectStore("numCPUs").put(JSONnumCPUs,1);
+    var eventTypesRequest = db.transaction(["AutocompleteEventTypes"], "readwrite")
+    					.objectStore("AutocompleteEventTypes")
+    					.put(JSONautocompleteEventTypes,1);
+    var namesRequest = db.transaction(["AutocompleteNames"], "readwrite")
+    					.objectStore("AutocompleteNames").put(JSONautocompleteNames,1);
     
+    
+    var tasksRequest = db.transaction(["Tasks"], "readwrite")
+    					.objectStore("Tasks").put(JSONtasks,1);
+      
 
     // some kind of error handling
-    requestCycles.onerror = function(e) {console.log("error", e.target.error.name);}
+    cyclesRequest.onerror = function(e) {console.log("error", e.target.error.name);}
 
-    requestCycles.onsuccess = function(e) {console.log("cycleEvents added");}
+    cyclesRequest.onsuccess = function(e) {
 
-    request.onerror = function(e) {console.log("Error", e.target.error.name);}
+    	console.log("cycleEvents added");
+    	
+    	eventsRequest.onerror = function(f) {console.log("Error", f.target.error.name);}
 
-    request.onsuccess = function(e) {console.log("added events");}
+    	eventsRequest.onsuccess = function(f) {
+    		console.log("added events");
 
-     // some kind of error handling
-   
+    		numCPUsRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
 
-    request3.onerror = function(e) {console.log("Error", e.target.error.name);}
+    		numCPUsRequest.onsuccess = function(e) {
+    			console.log("added numCPUs");
+    			
+    			eventTypesRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
 
-    request3.onsuccess = function(e) {console.log("added numCPUs");}
+    			eventTypesRequest.onsuccess = function(e) {
+    				console.log("added autocompleteEventTypes");
+    				
+    				namesRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
 
-    request4.onerror = function(e) {console.log("Error", e.target.error.name);}
+    				namesRequest.onsuccess = function(e) {
+    					console.log("added autocompleteNames");
 
-    request4.onsuccess = function(e) {console.log("added autocompleteEventTypes");}
+    					tasksRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
 
-    request5.onerror = function(e) {console.log("Error", e.target.error.name);}
-
-    request5.onsuccess = function(e) {console.log("added autocompleteNames");}
-
-     request2.onerror = function(e) {console.log("Error", e.target.error.name);}
-
-    request2.onsuccess = function(e) {console.log("added tasks"); document.location.href='main.html';}
+    					tasksRequest.onsuccess = function(e) {
+    						console.log("added tasks");
+    						document.location.href='main.html';
+    					}
+    				}
+    			}
+    		}    		
+    	}
+    }
 
   }
 
