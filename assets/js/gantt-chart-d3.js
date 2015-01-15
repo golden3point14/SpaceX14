@@ -126,10 +126,10 @@ d3.gantt = function(chartType) {
          var className;
          switch(chartType){
             case "MAIN":
-              className = d.active;
+              className = d.activeName+d.activePID;
               break;
             case "CYCLES":
-              className = d.active;
+              className = d.activeName;
               break;
          }
          return className;
@@ -149,7 +149,7 @@ d3.gantt = function(chartType) {
             div.transition()        
                 .duration(200)      
                 .style("opacity", .9);      
-            div .html("Running: " + d.active + "<br/> prior PID: " + d.pid + 
+            div .html("Running: " + d.activeName + "<br/>PID: " + d.activePID + 
               "<br/> Start time: " + d.startTime + "<br/> Duration: " + 
               d[xDuration] + "<br/> Extra Info: " + d.extraInfo
               )
