@@ -5,6 +5,7 @@
 
 var mainType = "MAIN";
 var cyclesType = "CYCLES";
+var processType = "PROCESS";
 
 d3.gantt = function(chartType) {
     var FIT_TIME_DOMAIN_MODE = "fit";
@@ -31,11 +32,14 @@ d3.gantt = function(chartType) {
     var height;
     // var height = document.body.clientHeight - margin.top - margin.bottom-5;
     switch(chartType) {
-      case "MAIN":
+      case mainType:
         height = 300;
         break;
-      case "CYCLES":
+      case cyclesType:
         height = 4000;
+        break;
+      default:
+        height = 300;
         break;
     }
     var width = document.body.clientWidth - margin.right - margin.left - 150;
@@ -128,10 +132,13 @@ d3.gantt = function(chartType) {
          }
          var className;
          switch(chartType){
-            case "MAIN":
+            case mainType:
               className = d.activeName+d.activePID;
               break;
-            case "CYCLES":
+            case processType:
+              className = d.state;
+              break;
+            default:
               className = d.activeName;
               break;
          }

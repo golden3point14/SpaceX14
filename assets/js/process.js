@@ -114,7 +114,7 @@ $('#processButton').css('background-color', '#315B7E');
               labeledTaskSwitches = _.map(labeledTaskSwitches, function(task) { task.normalStartTime = task.startTime - earliestTime; return task; });
 
               // gantt
-              var gantt = d3.gantt("MAIN").taskTypes(["R", "W", "B"]).timeDomain(totalTime).yAttribute("state").yLabel("State ");
+              var gantt = d3.gantt("PROCESS").taskTypes(["sched_switch"]).timeDomain(totalTime).yAttribute("eventType").yLabel("");
               gantt(labeledTaskSwitches); 
             }
           }
