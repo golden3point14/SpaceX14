@@ -19,68 +19,72 @@ function openDB()
 		db = e.target.result;
 
 		//get data
-		var xactCPU = db.transaction(["numCPUs"], "readwrite");
-		var storeCPU = xactCPU.objectStore("numCPUs");
-		var resultCPU = storeCPU.get(1);
-		var xactCycles = db.transaction(["cycleEvents"], "readwrite");
-		var storeCycles = xactCycles.objectStore("cycleEvents");
-		var resultCycles = storeCycles.get(1);
+
+		var numCPUsRequest = db.transaction(["numCPUs"], "readonly")
+	    					.objectStore("numCPUs").get(1);
+
+	    var cyclesRequest = db.transaction(["cycleEvents"], "readonly")
+	    					.objectStore("cycleEvents").get(1);
+
+	    var eventsRequest = db.transaction(["Events"],"readonly")
+	    					.objectStore("Events").get(1);
 
 		//error handling
-		resultCPU.onerror = function(e) {console.log("error", e.target.error.name);}
+		numCPUsRequest.onerror = function(e) {console.log("error", e.target.error.name);}
 
 		//success
-		resultCPU.onsuccess = function(e)
+		numCPUsRequest.onsuccess = function(e)
 		{
 			numCPUs = e.target.result;
 			addOptions();
-		}
 
-		resultCycles.onerror = function(e){console.log("error", e.target.error.name);}
+			cyclesRequest.onerror = function(e){console.log("error", e.target.error.name);}
+			
+			cyclesRequest.onsuccess = function(e)
+			{			
+				cycleEvents = e.target.result;
 
-		resultCycles.onsuccess = function(e)
-		{
-			var xactEvents = db.transaction(["Events"], "readonly");
-			var storeEvents = xactEvents.objectStore("Events");
-			var resultEvents = storeEvents.get(1);
-
-			cycleEvents = e.target.result;
-
-			resultEvents.onerror = function(f){console.log("error", f.target.error.name);}
-			resultEvents.onsuccess = function(f)
-			{
-				events = f.target.result;
-
-				numCycles = cycleEvents.length;
-
-				// Categorize all events into cycles
-				addCycleAttribute();
-
-				var switchCycleEvents = getCycleEventsForCPU();
-
-				timeDomainEnd = getLongestCycleDuration(switchCycleEvents);
-
-				gantt = d3.gantt(chartType).taskTypes(_.range(numCycles,-1,-1))
-								.timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ");
-
-				gantt(switchCycleEvents);
-
-				var xactTaskNames = db.transaction(["AutocompleteNames"], "readonly");
-				var storeTaskNames = xactTaskNames.objectStore("AutocompleteNames");
-				var resultTaskNames = storeTaskNames.get(1);
-
-				resultTaskNames.onerror = function(h) {console.log("error", h.target.error.name);}
-
-				resultTaskNames.onsuccess = function(h)
+				eventsRequest.onerror = function(f){console.log("error", f.target.error.name);}
+				
+				eventsRequest.onsuccess = function(f)
 				{
-					taskNames = h.target.result;
+					events = f.target.result;
 
-					setColoringOfTasks();
+					numCycles = cycleEvents.length;
+
+					// Categorize all events into cycles
+					addCycleAttribute();
+
+					var switchCycleEvents = getCycleEventsForCPU();
+
+					timeDomainEnd = getLongestCycleDuration(switchCycleEvents);
+
+					gantt = d3.gantt(chartType).taskTypes(_.range(numCycles,-1,-1))
+									.timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ");
+
+					gantt(switchCycleEvents);
+
+					var xactTaskNames = db.transaction(["AutocompleteNames"], "readonly");
+					var storeTaskNames = xactTaskNames.objectStore("AutocompleteNames");
+					var resultTaskNames = storeTaskNames.get(1);
+
+					resultTaskNames.onerror = function(h) {console.log("error", h.target.error.name);}
+
+					resultTaskNames.onsuccess = function(h)
+					{
+						taskNames = h.target.result;
+
+						setColoringOfTasks();
+					}
+
 				}
 
 			}
-
 		}
+
+		
+
+
 	}
 }
 
