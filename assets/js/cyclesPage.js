@@ -266,6 +266,11 @@ function getCycleLength(e)
       var endTime = getLongestCPUDuration(events);
       cycleEvents = [];
 
+      // No.
+      if (cycleLength == 0) {
+        return;
+      }
+
       // while we are less than the end time, make a cycle event
       // TODO FIXME consider putting in indexedDB so it will not disappear
       while (normalizedStartTime < endTime) {
@@ -300,8 +305,10 @@ function makeGantt() {
     bottom: 20,
     left: 70
   }
+
+  var height = (numCycles + 1) * 35;
   gantt = d3.gantt(chartType).taskTypes(_.range(numCycles,-1,-1))
-          .timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ").margin(margin);
+          .timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ").margin(margin).height(height);
 
   gantt(switchCycleEvents);
 }
