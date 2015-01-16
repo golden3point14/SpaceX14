@@ -24,31 +24,19 @@ function openDB()
 {
   var openRequest = indexedDB.open("events", 8);
 
+  openRequest.onerror = function(e)
+  {
+    console.log("Error in OpenRequest");
+    console.dir(e);
+  }
+
   openRequest.onupgradeneeded =  function(e)
   {
     console.log("upgrading...");
 
     var thisDB = e.target.result;
 
-    if (!thisDB.objectStoreNames.contains("Events"))
-      {
-        thisDB.createObjectStore("Events");
-        console.log("created events");
-      }
-
-    if (!thisDB.objectStoreNames.contains("Tasks"))
-    {
-      thisDB.createObjectStore("Tasks");
-      console.log("created tasks");
-    }
-
-    if (!thisDB.objectStoreNames.contains("numCPUs"))
-    {
-      thisDB.createObjectStore("numCPUs");
-      console.log("created CPUs");
-    }
-    
-
+    checkStoresExist(thisDB);
   }
 
   openRequest.onsuccess = function(e)
@@ -56,62 +44,55 @@ function openDB()
     console.log("openRequest success!");
     db = e.target.result;
 
-    var xact = db.transaction(["Events"],"readwrite");
-    var xact2 = db.transaction(["Tasks"], "readwrite");
-    var xact3 = db.transaction(["numCPUs"], "readwrite");
-    var store = xact.objectStore("Events");
-    var store2 = xact2.objectStore("Tasks");
-    var store3 = xact3.objectStore("numCPUs");
-    var result = store.get(1);
-    var result2 = store2.get(1);
-    var result3 = store3.get(1);
+    var eventsRequest = db.transaction(["Events"],"readwrite")
+              .objectStore("Events").get(1);
+
+    var tasksRequest = db.transaction(["Tasks"], "readwrite")
+              .objectStore("Tasks").get(1);
+
+    var numCPUsRequest = db.transaction(["numCPUs"], "readwrite")
+              .objectStore("numCPUs").get(1);
+
+
 
     // some kind of error handling
-    result.onerror = function(e) {console.log("Error", e.target.error.name);}
+    eventsRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
 
-    result.onsuccess = function(e) {
-                                      JSONevents = e.target.result;
-                                      
-                                  }
+    eventsRequest.onsuccess = function(e) {
+          JSONevents = e.target.result;
+           // some kind of error handling
+          tasksRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
 
-     // some kind of error handling
-    result2.onerror = function(e) {console.log("Error", e.target.error.name);}
+          tasksRequest.onsuccess = function(e) {
+                  JSONtasks = e.target.result;
+                  getTopPreemptions();
+                  getTopRuntime();
+                  getTopWaittime();
 
-    result2.onsuccess = function(e) {JSONtasks = e.target.result;
-                                      getTopPreemptions();
-                                    getTopRuntime();
-                                    getTopWaittime();
+                  numCPUsRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
 
-                                    }
+                  numCPUsRequest.onsuccess = function(e) {
+                    numCPUs = e.target.result;
 
-    result3.onerror = function(e) {console.log("Error", e.target.error.name);}
+                    switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
+                    // this is the time of the last event for the end of the chart
+                    
+                    maxDuration = getLongestCPUDuration(switchEvents);
+                    
 
-    result3.onsuccess = function(e) {
-                                    numCPUs = e.target.result;
+                    var gantt = d3.gantt(chartType).taskTypes(_.range(numCPUs)).timeDomain(maxDuration);
+                    switchEvents = normalizeStartTime(switchEvents);
+                    
+                    switchEvents = calculateDurationBetweenSwitches(switchEvents, numCPUs);
 
-                                    switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
-                                    // this is the time of the last event for the end of the chart
-                                    
-                                    maxDuration = getLongestCPUDuration(switchEvents);
-                                    
-
-                                    var gantt = d3.gantt(chartType).taskTypes(_.range(numCPUs)).timeDomain(maxDuration);
-                                    switchEvents = normalizeStartTime(switchEvents);
-                                    
-                                    switchEvents = calculateDurationBetweenSwitches(switchEvents, numCPUs);
-
-                                    
-                                    gantt(switchEvents); //feeding it the relevant events
-                                    setColoringOfTasks();
-                                    $('.loader').fadeOut("slow");
+                    
+                    gantt(switchEvents); //feeding it the relevant events
+                    setColoringOfTasks();
+                    $('.loader').fadeOut("slow");
+                  }
+        }
     }
-
   }
-
-  openRequest.onerror = function(e)
-  {
-    console.log("Error in OpenRequest");
-    console.dir(e); }
 }
 
 function setColoringOfTasks() {
@@ -276,7 +257,7 @@ function calculateDurationBetweenSwitches(switchEvents, numCPUs) {
 
 function calculateDuration(eventList) {
   return _.reduce(eventList, function(sum, next) { return sum += next.duration }, 0)
-};
+}
 
 function getLongestCPUDuration(switchEvents)
 {
@@ -287,13 +268,30 @@ function getLongestCPUDuration(switchEvents)
 
 document.addEventListener("load", openDB());
 
-// $('#preemption-list tr').click(function(e){
-//     console.log($(e.target).text());
-//     clickCell($(e.target).text()); // using jQuery
-// })
-
 function clickCell(cellData)
 {
   window.localStorage.setItem("cellData", cellData);
   window.location.href = "process.html";
+}
+
+// NOT TESTED???
+// for IndexedDB related code 
+function checkStoresExist(thisDB) {
+  if (!thisDB.objectStoreNames.contains("Events"))
+      {
+        thisDB.createObjectStore("Events");
+        console.log("created events");
+     }
+
+    if (!thisDB.objectStoreNames.contains("Tasks"))
+    {
+      thisDB.createObjectStore("Tasks");
+      console.log("created tasks");
+    }
+
+    if (!thisDB.objectStoreNames.contains("numCPUs"))
+    {
+      thisDB.createObjectStore("numCPUs");
+      console.log("numCPUs created");
+    }
 }
