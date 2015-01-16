@@ -25,7 +25,14 @@ $('#searchButton').css('background-color', '#315B7E');
     		scrollY:        450,
     		scrollCollapse: true,
     		order:          [[1, 'asc']],
-        aoColumns: [{"sWidth": "40px"}, null, {"sWidth": "120px"}, {"sWidth": "40px"}, {"sWidth": "140px"}, null]
+        columns: [
+          { "title" : "CPU" },
+          { "title" : "Start time" },
+          { "title" : "Name" },
+          { "title" : "PID" },
+          { "title" : "Event type" },
+          { "title" : "Extra info" }
+          ]
         } );
 
       $('#table_id tbody').on( 'click', 'tr', function () {
