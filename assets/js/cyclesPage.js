@@ -59,26 +59,7 @@ function openDB()
 					{
             // User print markers existed
             if (cycleEvents && cycleEvents.length != 0) {
-
-              numCycles = cycleEvents.length;
-
-              // Categorize all events into cycles
-              addCycleAttribute();
-
-              var switchCycleEvents = getCycleEventsForCPU();
-
-              timeDomainEnd = getLongestCycleDuration(switchCycleEvents);
-
-              var margin = {
-                top: 20,
-                right: 40,
-                bottom: 20,
-                left: 70
-              }
-              gantt = d3.gantt(chartType).taskTypes(_.range(numCycles,-1,-1))
-                      .timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ").margin(margin);
-
-              gantt(switchCycleEvents);
+              makeGantt();
             } else {
               // Allow user to set interval
             }
@@ -186,10 +167,10 @@ function normalizeStartTime(switchCycleEvents, numCycles)
 // Calculate the total duration of all events in a list
 function calculateDuration(eventList) {
   
-  var earliestEventTime = eventList[0].normalStartTime;
+  //var earliestEventTime = eventList[0].normalStartTime;
 
-  return _.reduce(eventList, function(sum, next) { return sum += next.duration; }, 0)
-  			+ earliestEventTime;
+  return _.reduce(eventList, function(sum, next) { return sum += next.processTime; }, 0);
+  			//+ earliestEventTime;
  }
 
 // finds the longest cycle for the chosen CPU
@@ -250,23 +231,80 @@ function addOptions()
 
 
 // Handles user selection of new CPU from dropdown
- document.getElementById("cpu").onchange = function (e) {
- 	currentCPU = e.target.value;
- 	var switchCycleEvents = getCycleEventsForCPU();
- 	d3.selectAll("svg").remove();
- 	gantt(switchCycleEvents);
+document.getElementById("cpu").onchange = function (e) {
+  currentCPU = e.target.value;
+  var switchCycleEvents = getCycleEventsForCPU();
+  d3.selectAll("svg").remove();
+  gantt(switchCycleEvents);
+}
 
- }
+function calculateSimpleDuration(eventList) {
+  return _.reduce(eventList, function(sum, next) { return sum += next.duration; }, 0);
+}
 
- function getCycleLength(e)
+function getLongestCPUDuration(events)
+{
+  eventsByCPU = _.groupBy(events, function(e){return e.cpu;});
+
+  return _.max(_.map(eventsByCPU, calculateSimpleDuration));
+}
+
+function getCycleLength(e)
  {
+
  	//check if enter was hit
  	if(e.keyCode == 13)
  	{
  		e.preventDefault();
- 		console.log(document.getElementById("cycleLength").checkValidity());
+    var cycleInput = document.getElementById("cycleLength");
+    if (cycleInput.checkValidity()) {
+      var cycleLength = parseFloat(cycleInput.value);
+
+      var normalizedStartTime = cycleLength;
+      var nextStartTime = events[0].startTime + cycleLength;
+
+      var endTime = getLongestCPUDuration(events);
+      cycleEvents = [];
+
+      // while we are less than the end time, make a cycle event
+      // TODO FIXME consider putting in indexedDB so it will not disappear
+      while (normalizedStartTime < endTime) {
+        var newCycle = {"startTime" : nextStartTime};
+        cycleEvents.push(newCycle);
+        nextStartTime += cycleLength;
+        normalizedStartTime += cycleLength;
+      }
+     
+      makeGantt();
+    }
  	}
- }
+}
+
+function makeGantt() {
+  d3.selectAll("svg").remove();
+  numCycles = cycleEvents.length;
+
+  // Categorize all events into cycles
+  addCycleAttribute();
+  console.log(events);
+
+  var switchCycleEvents = getCycleEventsForCPU();
+  console.log(switchCycleEvents);
+
+  timeDomainEnd = getLongestCycleDuration(switchCycleEvents);
+  console.log(timeDomainEnd);
+
+  var margin = {
+    top: 20,
+    right: 40,
+    bottom: 20,
+    left: 70
+  }
+  gantt = d3.gantt(chartType).taskTypes(_.range(numCycles,-1,-1))
+          .timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ").margin(margin);
+
+  gantt(switchCycleEvents);
+}
 
 document.addEventListener("load", openDB());
 document.getElementById("cycleLength").addEventListener("keypress", getCycleLength)
