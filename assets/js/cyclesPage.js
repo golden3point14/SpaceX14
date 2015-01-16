@@ -50,28 +50,39 @@ function openDB()
 				{
 					events = f.target.result;
 
-					numCycles = cycleEvents.length;
+					var taskNamesRequest = db.transaction(["AutocompleteNames"], "readonly")
+                                   .objectStore("AutocompleteNames").get(1);
 
-					// Categorize all events into cycles
-					addCycleAttribute();
+					taskNamesRequest.onerror = function(h) {console.log("error", h.target.error.name);}
 
-					var switchCycleEvents = getCycleEventsForCPU();
-
-					timeDomainEnd = getLongestCycleDuration(switchCycleEvents);
-
-					gantt = d3.gantt(chartType).taskTypes(_.range(numCycles,-1,-1))
-									.timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ");
-
-					gantt(switchCycleEvents);
-
-					var xactTaskNames = db.transaction(["AutocompleteNames"], "readonly");
-					var storeTaskNames = xactTaskNames.objectStore("AutocompleteNames");
-					var resultTaskNames = storeTaskNames.get(1);
-
-					resultTaskNames.onerror = function(h) {console.log("error", h.target.error.name);}
-
-					resultTaskNames.onsuccess = function(h)
+					taskNamesRequest.onsuccess = function(h)
 					{
+            // User print markers existed
+            if (cycleEvents && cycleEvents != []) {
+
+              numCycles = cycleEvents.length;
+
+              // Categorize all events into cycles
+              addCycleAttribute();
+
+              var switchCycleEvents = getCycleEventsForCPU();
+
+              timeDomainEnd = getLongestCycleDuration(switchCycleEvents);
+
+              var margin = {
+                top: 20,
+                right: 40,
+                bottom: 20,
+                left: 70
+              }
+              gantt = d3.gantt(chartType).taskTypes(_.range(numCycles,-1,-1))
+                      .timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ").margin(margin);
+
+              gantt(switchCycleEvents);
+            } else {
+              // Allow user to set interval
+            }
+
 						taskNames = h.target.result;
 
 						setColoringOfTasks();
