@@ -5,6 +5,7 @@ var reader = new FileReader();
 // var autocompleteEventTypes;
 var autocompleteNames;
 var currentTasks;
+var gantt;
 
 $('#processButton').css('background-color', '#315B7E');
 
@@ -32,12 +33,6 @@ $('#processButton').css('background-color', '#315B7E');
       console.log("created tasks");
     }
     
-    // if (!thisDB.objectStoreNames.contains("AutocompleteEventTypes"))
-    // {
-    //   thisDB.createObjectStore("AutocompleteEventTypes");
-    //   console.log("created autocompleteEventTypes");
-    // }
-
     if (!thisDB.objectStoreNames.contains("AutocompleteNames"))
     {
       thisDB.createObjectStore("AutocompleteNames");
@@ -63,59 +58,7 @@ $('#processButton').css('background-color', '#315B7E');
             var currentTaskName = window.localStorage.getItem("cellData");
             
             if (currentTaskName) {
-              // Get switch events where current task was being swapped in or out,
-              // e.g. where event.name or event.activeName are current task
-              currentTaskSwitches = _.filter(events, function(e) { 
-                return e.eventType === "sched_switch" && 
-                      (e.name === currentTaskName || e.activeName === currentTaskName)});
-
-              // R - running
-              // W - waiting
-              // B - blocked
-              var labelEventState = function(switchEvent) {
-                // We are switching to this task, so state is running
-                if (switchEvent.activeName === currentTaskName) {
-                  switchEvent.state = "R";
-                } else {
-                  // If event is a preemption, task is being put back into
-                  // run queue to wait for the scheduler
-                  if (switchEvent.preempted) {
-                    switchEvent.state = "B";
-                  } else {
-                    // sleepy task
-                    switchEvent.state = "W";
-                  }
-                }
-                return switchEvent;
-              }
-
-              // Map state to each switch: running, waiting, or blocked
-              // A switch with activeName of current task is running
-              // A switch with name of current task is waiting or blocked
-              //   R or S value shows state the task is left in
-              labeledTaskSwitches = _.map(currentTaskSwitches, labelEventState);
-              // NOTE TO SELF TODO FIXME task not uniquely identified by name - should use PID - issues?
-
-
-             // console.log(labeledTaskSwitches);
-              var lastIndex = labeledTaskSwitches.length - 1;
-              // Get proper duration times between switches
-              for (var i = 0; i < lastIndex; i++) {
-                labeledTaskSwitches[i].processTime = 
-                  labeledTaskSwitches[i + 1].startTime - labeledTaskSwitches[i].startTime;
-              }
-              // Last event special
-              labeledTaskSwitches[lastIndex].processTime = 0;
-
-              totalTime = _.reduce(labeledTaskSwitches, function(sum, next) { return sum += next.processTime }, 0);
-
-              // Normalize
-              var earliestTime = labeledTaskSwitches[0].startTime;
-              labeledTaskSwitches = _.map(labeledTaskSwitches, function(task) { task.normalStartTime = task.startTime - earliestTime; return task; });
-
-              // gantt
-              var gantt = d3.gantt("PROCESS").taskTypes(["sched_switch"]).timeDomain(totalTime).yAttribute("eventType").yLabel("");
-              gantt(labeledTaskSwitches); 
+              makeGantt(currentTaskName);
             }
           }
 
@@ -126,7 +69,6 @@ $('#processButton').css('background-color', '#315B7E');
     taskNamesRequest.onsuccess = function(e) {
                                 autocompleteNames = e.target.result;
                                 autoCompleteNames();
-                                clickSearch();
                                 autoSearch();
                               }
   }
@@ -136,6 +78,79 @@ $('#processButton').css('background-color', '#315B7E');
     console.log("Error in OpenRequest");
     console.dir(e);
   }
+}
+
+// Add a .state attribute to switch events, indicating
+// if the process was running, waiting, or blocked for the
+// duration of that event.
+//    R - running
+//    B - blocked
+//    W - waiting
+function labelEventState(switchEvent, currentTaskName) {
+  // We are switching to this task, so state is running
+  if (switchEvent.activeName === currentTaskName) {
+    switchEvent.state = "R";
+  } else {
+    // If event is a preemption, task is being put back into
+    // run queue to wait for the scheduler
+    if (switchEvent.preempted) {
+      switchEvent.state = "B";
+    } else {
+      // sleepy task
+      switchEvent.state = "W";
+    }
+  }
+  return switchEvent;
+}
+
+// Add .processTime attribute that indicates time between
+// the beginning of the current switch event and the next
+function calculateDurations(labeledTaskSwitches) {
+  var lastIndex = labeledTaskSwitches.length - 1;
+  // Get proper duration times between switches
+  for (var i = 0; i < lastIndex; i++) {
+    labeledTaskSwitches[i].processTime = 
+      labeledTaskSwitches[i + 1].startTime - labeledTaskSwitches[i].startTime;
+  }
+  // Last event special
+  labeledTaskSwitches[lastIndex].processTime = 0;
+
+  return labeledTaskSwitches;
+}
+
+function getRelevantSwitches(currentTaskName) {
+  // Get switch events where current task was being swapped in or out,
+  // e.g. where event.name or event.activeName are current task
+  currentTaskSwitches = _.filter(events, function(e) {
+    return e.eventType === "sched_switch" &&
+          (e.name === currentTaskName || e.activeName === currentTaskName)});
+
+  // Map state to each switch: running, waiting, or blocked
+  labeledTaskSwitches = _.map(currentTaskSwitches, function(e) { return labelEventState(e, currentTaskName);});
+
+  // Calculate how long task was in each state
+  labeledTaskSwitches = calculateDurations(labeledTaskSwitches);
+
+
+  // Normalize
+  labeledTaskSwitches = normalize(labeledTaskSwitches);
+
+  return labeledTaskSwitches;
+}
+
+// Normalize
+function normalize(labeledTaskSwitches) {
+  var earliestTime = labeledTaskSwitches[0].startTime;
+  return _.map(labeledTaskSwitches, function(task) { task.normalStartTime = task.startTime - earliestTime; return task; });
+}
+
+function makeGantt(currentTaskName) {
+  var currentTaskSwitches = getRelevantSwitches(currentTaskName);
+
+  totalTime = _.reduce(labeledTaskSwitches, function(sum, next) { return sum += next.processTime }, 0);
+
+  gantt = d3.gantt("PROCESS").taskTypes(["sched_switch"]).timeDomain(totalTime).yAttribute("eventType").yLabel("");
+  gantt(currentTaskSwitches);
 }
 
 var substringMatcher = function(strs) {
@@ -163,16 +178,27 @@ var substringMatcher = function(strs) {
 };
 
 function autoCompleteNames() {
-$('#search-process').typeahead({
-  hint: true,
-  highlight: true,
-  minLength: 1
-},
-{
-  name: 'autocompleteNames',
-  displayKey: 'value',
-  source: substringMatcher(autocompleteNames)
-});
+  // Setup typeahead to search task names
+  $('#search-process').typeahead({
+      hint: true,
+      highlight: true,
+      minLength: 1
+    },
+    {
+      name: 'autocompleteNames',
+      displayKey: 'value',
+      source: substringMatcher(autocompleteNames)
+  })
+  .on('typeahead:autocompleted', function($e, chosenProcess) {
+      $('#search-process').typeahead('close');
+
+     var filterString = chosenProcess["value"];
+     window.localStorage.setItem("cellData", filterString);
+
+     searchTasks(filterString); // Update table of preemptions
+     d3.selectAll("svg").remove(); // Remove old chart
+     makeGantt(filterString);
+  });
 }
 
 function searchTasks(filterString)
@@ -245,16 +271,7 @@ function searchTasks(filterString)
   }               
 }
 
-function clickSearch() {
-  $('.tt-dropdown-menu').click(function() {
-             var filterString = $('.tt-input').val();
-             window.localStorage.setItem("cellData", filterString);
-             searchTasks(filterString);
-      });
-}
-
 function autoSearch() {
-  // console.log(window.localStorage.getItem("cellData"));
   searchTasks(window.localStorage.getItem("cellData"));
 }
 
