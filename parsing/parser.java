@@ -189,11 +189,13 @@ class parser {
 					
 				}
 				
-				//EXAMPLE ffffffff810f3fec START: Cycle 24 1413589739.264370 (0.067290)
-				//EXAMPLE ffffffff810f3fec STOP: Cycle 24.
+				//EXAMPLE: c0095a18 CYCLE_START: sync_time=728.3360000
 				if  (eventType.equals("print"))
 				{
-					//String[] printInfo = extraInfo.split(" ");
+					String[] info = extraInfo.split(" ");
+					
+					if (info[1].equals("CYCLE_START:"))
+					{
 					
 						event.put("userMark", "START");
 						
@@ -201,6 +203,7 @@ class parser {
 						startCycles.put("startTime", startTime);
 						startCycles.put("extraInfo", extraInfo);
 						cycleEvents.add(startCycles);
+					}
 				}
 				
 				currentLine += 1;
