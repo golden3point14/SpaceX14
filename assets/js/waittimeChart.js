@@ -26,7 +26,14 @@ document.addEventListener("DOMContentLoaded", openDB());
 
 function openDB()
 {
+
   var openRequest = indexedDB.open("events", 8);
+
+  openRequest.onerror = function(e)
+  {
+    console.log("Error in OpenRequest");
+    console.dir(e);
+  }
 
   openRequest.onupgradeneeded =  function(e)
   {
@@ -34,17 +41,7 @@ function openDB()
 
     var thisDB = e.target.result;
 
-    if (!thisDB.objectStoreNames.contains("Events"))
-      {
-        thisDB.createObjectStore("Events");
-        console.log("created events");
-      }
-
-    if (!thisDB.objectStoreNames.contains("Tasks"))
-    {
-      thisDB.createObjectStore("Tasks");
-      console.log("created tasks");
-    }
+    checkStoresExist(thisDB);
     
 
   }
@@ -54,23 +51,19 @@ function openDB()
     console.log("openRequest success!");
     db = e.target.result;
 
-    //get data
-    var xact = db.transaction(["Tasks"], "readonly");
-    var objectStore = xact.objectStore("Tasks");
-    var ob = objectStore.get(1); //temporary hard-coded
-    ob.onsuccess = function(e) { console.log("e is the JSONtasks");
-                                 // console.log(e.target.result);
+     //get data
+    var tasksRequest = db.transaction(["Tasks"], "readonly")
+                .objectStore("Tasks").get(1);
+    
+    tasksRequest.onerror = function(e) {console.log("error", e.target.error.name);}
+    
+    tasksRequest.onsuccess = function(e) {
                                  JSONtasks = e.target.result;
                                  useDatabaseData();
                                }
     
   }
 
-  openRequest.onerror = function(e)
-  {
-    console.log("Error in OpenRequest");
-    console.dir(e);
-  }
 }
 
 
@@ -204,4 +197,14 @@ function useDatabaseData() {
   // render the content
   dc.renderAll();
 
+}
+
+// NOT TESTED???
+// For IndexedDB code
+function checkStoresExist(thisDB) {
+  if (!thisDB.objectStoreNames.contains("Tasks"))
+  {
+    thisDB.createObjectStore("Tasks");
+    console.log("created tasks");
+  }
 }
