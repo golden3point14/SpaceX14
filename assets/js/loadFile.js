@@ -180,7 +180,6 @@ function handleUseOld(evt)
 	    var tasksRequest = db.transaction(["Tasks"], "readonly")
 	    					.objectStore("Tasks").get(1);
 	      
-
 	    // some kind of error handling
 	    cyclesRequest.onerror = function(e) {console.log("error", e.target.error.name);}
 

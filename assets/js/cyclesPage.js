@@ -58,7 +58,7 @@ function openDB()
 					taskNamesRequest.onsuccess = function(h)
 					{
             // User print markers existed
-            if (cycleEvents && cycleEvents != []) {
+            if (cycleEvents && cycleEvents.length != 0) {
 
               numCycles = cycleEvents.length;
 
@@ -247,7 +247,7 @@ function addOptions()
 	}
 }
 
- document.addEventListener("load", openDB());
+
 
 // Handles user selection of new CPU from dropdown
  document.getElementById("cpu").onchange = function (e) {
@@ -257,3 +257,16 @@ function addOptions()
  	gantt(switchCycleEvents);
 
  }
+
+ function getCycleLength(e)
+ {
+ 	//check if enter was hit
+ 	if(e.keyCode == 13)
+ 	{
+ 		e.preventDefault();
+ 		console.log(document.getElementById("cycleLength").checkValidity());
+ 	}
+ }
+
+document.addEventListener("load", openDB());
+document.getElementById("cycleLength").addEventListener("keypress", getCycleLength)
