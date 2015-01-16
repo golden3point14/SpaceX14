@@ -103,6 +103,7 @@ function openDB()
                                     
                                     gantt(switchEvents); //feeding it the relevant events
                                     setColoringOfTasks();
+                                    $('.loader').fadeOut("slow");
     }
 
   }

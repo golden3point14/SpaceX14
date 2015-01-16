@@ -107,6 +107,7 @@ $('#searchButton').css('background-color', '#315B7E');
                                 currentResults = eventJSON;
                                 console.log("currentResults.length:"+currentResults.length);
                                 displayTable();
+                                $('.loader').fadeOut("slow");
 						                  }
 
     ob2.onsuccess = function(e) {console.log("e is the JSONevents");
