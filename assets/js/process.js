@@ -155,20 +155,13 @@ function makeGantt(currentTaskName) {
 
 var substringMatcher = function(strs) {
   return function findMatches(q, cb) {
-    var matches, substrRegex;
- 
     // an array that will be populated with substring matches
-    matches = [];
+    var matches = [];
  
-    // regex used to determine if a string contains the substring `q`
-    substrRegex = new RegExp(q, 'i');
- 
-    // iterate through the pool of strings and for any string that
-    // contains the substring `q`, add it to the `matches` array
-    $.each(strs, function(i, str) {
-      if (substrRegex.test(str)) {
-        // the typeahead jQuery plugin expects suggestions to a
-        // JavaScript object, refer to typeahead docs for more info
+    _.map(strs, function(str) {
+      // Check if user query q is substring of str
+      if (str.indexOf(q) != -1) {
+        // Typeahead expects javascript object
         matches.push({ value: str });
       }
     });
@@ -189,16 +182,23 @@ function autoCompleteNames() {
       displayKey: 'value',
       source: substringMatcher(autocompleteNames)
   })
-  .on('typeahead:autocompleted', function($e, chosenProcess) {
-      $('#search-process').typeahead('close');
-
-     var filterString = chosenProcess["value"];
-     window.localStorage.setItem("cellData", filterString);
-
-     searchTasks(filterString); // Update table of preemptions
-     d3.selectAll("svg").remove(); // Remove old chart
-     makeGantt(filterString);
+  .on('typeahead:autocompleted', function($e, chosenTask) {
+    changeToNewTask(chosenTask);
+  })
+  .on('typeahead:selected', function($e, chosenTask) {
+    changeToNewTask(chosenTask);
   });
+}
+
+function changeToNewTask(chosenTask) {
+  $('#search-process').typeahead('close');
+
+  var filterString = chosenTask["value"];
+  window.localStorage.setItem("cellData", filterString);
+
+  searchTasks(filterString); // Update table of preemptions
+  d3.selectAll("svg").remove(); // Remove old chart
+  makeGantt(filterString);
 }
 
 function searchTasks(filterString)
