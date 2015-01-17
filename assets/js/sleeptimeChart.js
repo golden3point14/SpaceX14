@@ -34,17 +34,6 @@ function openDB()
     console.dir(e);
   }
 
-  openRequest.onupgradeneeded =  function(e)
-  {
-    console.log("upgrading...");
-
-    var thisDB = e.target.result;
-
-    checkStoresExist(thisDB);
-    
-
-  }
-
   openRequest.onsuccess = function(e)
   {
     console.log("openRequest success!");
@@ -198,14 +187,4 @@ function useDatabaseData() {
   // render the content
   dc.renderAll();
 
-}
-
-// NOT TESTED???
-// For IndexedDB code
-function checkStoresExist(thisDB) {
-  if (!thisDB.objectStoreNames.contains("Tasks"))
-  {
-    thisDB.createObjectStore("Tasks");
-    console.log("created tasks");
-  }
 }

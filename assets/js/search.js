@@ -58,15 +58,6 @@ $('#searchButton').css('background-color', '#315B7E');
         console.dir(e);
      }
 
-  openRequest.onupgradeneeded =  function(e)
-  {
-    console.log("upgrading...");
-
-    var thisDB = e.target.result;
-
-    checkStoresExist(thisDB);
-  }
-
   openRequest.onsuccess = function(e)
   {
     console.log("openRequest success!");
@@ -164,55 +155,10 @@ function clickSearch() {
       });
 }
 
-// function filterColumn ( i ) {
-//     $('#table_id').dataTable().column( i ).search(
-//         $('#col'+i+'_filter').val()
-//     ).draw();
-// }
-
 function clickCell(cellData)
 {
   window.localStorage.setItem("cellData", cellData);
   window.location.href = "process.html";
-}
-
-// NOT TESTED??? 
-function checkStoresExist(thisDB) {
-  if (!thisDB.objectStoreNames.contains("Events"))
-      {
-        thisDB.createObjectStore("Events");
-        console.log("created events");
-     }
-
-    if (!thisDB.objectStoreNames.contains("Tasks"))
-    {
-      thisDB.createObjectStore("Tasks");
-      console.log("created tasks");
-    }
-
-    if (!thisDB.objectStoreNames.contains("numCPUs"))
-    {
-      thisDB.createObjectStore("numCPUs");
-      console.log("numCPUs created");
-    }
-
-    if (!thisDB.objectStoreNames.contains("AutocompleteEventTypes"))
-    {
-      thisDB.createObjectStore("AutocompleteEventTypes");
-      console.log("autocompleteEventTypes created");
-    }
-
-    if (!thisDB.objectStoreNames.contains("AutocompleteNames"))
-    {
-      thisDB.createObjectStore("AutocompleteNames");
-      console.log("autocompleteNames created");
-    }
-
-    if (!thisDB.objectStoreNames.contains("cycleEvents"))
-    {
-      thisDB.createObjectStore("cycleEvents");
-      console.log("cycleEvents created");
-    }
 }
 
 document.addEventListener("load", openDB());

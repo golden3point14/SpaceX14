@@ -16,15 +16,6 @@ function openDB()
     console.dir(e);
   }
 
-  openRequest.onupgradeneeded =  function(e)
-  {
-    console.log("upgrading...");
-
-    var thisDB = e.target.result;
-
-    checkStoresExist(thisDB);
-  }
-
   openRequest.onsuccess = function(e)
   {
     console.log("openRequest success!");
@@ -254,26 +245,4 @@ function clickCell(cellData)
 {
   window.localStorage.setItem("cellData", cellData);
   window.location.href = "process.html";
-}
-
-// NOT TESTED???
-// for IndexedDB related code 
-function checkStoresExist(thisDB) {
-  if (!thisDB.objectStoreNames.contains("Events"))
-      {
-        thisDB.createObjectStore("Events");
-        console.log("created events");
-     }
-
-    if (!thisDB.objectStoreNames.contains("Tasks"))
-    {
-      thisDB.createObjectStore("Tasks");
-      console.log("created tasks");
-    }
-
-    if (!thisDB.objectStoreNames.contains("numCPUs"))
-    {
-      thisDB.createObjectStore("numCPUs");
-      console.log("numCPUs created");
-    }
 }
