@@ -60,6 +60,7 @@ $('#processButton').css('background-color', '#315B7E');
             if (currentTaskName) {
               makeGantt(currentTaskName);
             }
+            $('.loader').fadeOut("slow");
           }
 
     tasksRequest.onsuccess = function(e) {

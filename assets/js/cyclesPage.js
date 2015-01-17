@@ -67,6 +67,7 @@ function openDB()
 						taskNames = h.target.result;
 
 						setColoringOfTasks();
+            $('.loader').fadeOut("slow");
 					}
 
 				}
