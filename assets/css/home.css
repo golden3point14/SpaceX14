@@ -13,6 +13,7 @@ table {
 
 .table-hover tbody tr:hover td {
   background-color: #B1DCFE !important;
+  cursor: pointer;
 }
 
 .sidebar {

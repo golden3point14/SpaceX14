@@ -1,20 +1,6 @@
-var preemptionSorted;
-var runTimesorted;
-var waitTimesorted;
-
-var JSONobj;
-
 var JSONevents;
 var JSONtasks;
 var numCPUs;
-
-var files;
-
-var reader = new FileReader(); 
-
-var db;
-
-var SCALE_FACTOR = 100000; // Scales the duration so things are actually visible
 
 var chartType = "MAIN"; //for gantt
 
@@ -42,7 +28,7 @@ function openDB()
   openRequest.onsuccess = function(e)
   {
     console.log("openRequest success!");
-    db = e.target.result;
+    var db = e.target.result;
 
     var eventsRequest = db.transaction(["Events"],"readwrite")
               .objectStore("Events").get(1);
@@ -52,8 +38,6 @@ function openDB()
 
     var numCPUsRequest = db.transaction(["numCPUs"], "readwrite")
               .objectStore("numCPUs").get(1);
-
-
 
     // some kind of error handling
     eventsRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
@@ -79,13 +63,11 @@ function openDB()
                     
                     maxDuration = getLongestCPUDuration(switchEvents);
                     
-
                     var gantt = d3.gantt(chartType).taskTypes(_.range(numCPUs)).timeDomain(maxDuration);
                     switchEvents = normalizeStartTime(switchEvents);
                     
                     switchEvents = calculateDurationBetweenSwitches(switchEvents, numCPUs);
 
-                    
                     gantt(switchEvents); //feeding it the relevant events
                     setColoringOfTasks();
                     $('.loader').fadeOut("slow");
@@ -159,7 +141,7 @@ function getTopPreemptions()
   var displayNum = 10;
 
 	//sort processes by preemptionCount
- 	preemptionSorted = _.sortBy(JSONtasks, function(element){return -1*(element.preemptionCount);});
+ 	var preemptionSorted = _.sortBy(JSONtasks, function(element){return -1*(element.preemptionCount);});
  	//remove <idle>
  	preemptionSorted = _.select(preemptionSorted, function(element){return (element.name != "<idle>") && (element.preemptionCount != 0);});
 
@@ -184,7 +166,7 @@ function getTopPreemptions()
 function getTopRuntime()
 {
   //sort processes by preemptionCount
-  runTimeSorted = _.sortBy(JSONtasks, function(element){return -1*(element.totalRuntime);});
+  var runTimeSorted = _.sortBy(JSONtasks, function(element){return -1*(element.totalRuntime);});
   //remove <idle>
   runTimeSorted = _.select(runTimeSorted, function(element){return (element.name != "<idle>") && (element.totalRuntime != 0);});
   
@@ -206,7 +188,7 @@ function getTopRuntime()
 function getTopWaittime()
 {
   //sort processes by preemptionCount
-  waitTimeSorted = _.sortBy(JSONtasks, function(element){return -1*(element.totalWaittime);});
+  var waitTimeSorted = _.sortBy(JSONtasks, function(element){return -1*(element.totalWaittime);});
   //remove <idle>
   waitTimeSorted = _.select(waitTimeSorted, function(element){return (element.name != "<idle>") && (element.totalWaittime != 0);});
   

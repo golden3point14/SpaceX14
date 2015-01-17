@@ -40,12 +40,14 @@ function openDB()
 
 			cyclesRequest.onerror = function(e){console.log("error", e.target.error.name);}
 			
+      // Get cycle events
 			cyclesRequest.onsuccess = function(e)
 			{			
 				cycleEvents = e.target.result;
 
 				eventsRequest.onerror = function(f){console.log("error", f.target.error.name);}
 				
+        // Get events
 				eventsRequest.onsuccess = function(f)
 				{
 					events = f.target.result;
@@ -55,30 +57,84 @@ function openDB()
 
 					taskNamesRequest.onerror = function(h) {console.log("error", h.target.error.name);}
 
+          // get list of task names
 					taskNamesRequest.onsuccess = function(h)
 					{
             // User print markers existed
             if (cycleEvents && cycleEvents.length != 0) {
               makeGantt();
-            } else {
-              // Allow user to set interval
-            }
+            } 
 
 						taskNames = h.target.result;
 
 						setColoringOfTasks();
+
             $('.loader').fadeOut("slow");
 					}
-
 				}
-
 			}
 		}
-
-		
-
-
 	}
+}
+
+function makeGantt() {
+  // Remove an old chart if it exists
+  d3.selectAll("svg").remove();
+  numCycles = cycleEvents.length;
+
+  // Categorize all events into cycles
+  addCycleAttribute();
+
+  // Only use switch events on the chart, after
+  // normalizing their start times within their cycles
+  // and calculating the durations between them
+  var switchCycleEvents = getCycleEventsForCPU();
+
+  timeDomainEnd = getLongestCycleDuration(switchCycleEvents);
+
+  var margin = {
+    top: 20,
+    right: 40,
+    bottom: 20,
+    left: 70
+  }
+
+  var height = (numCycles + 1) * 35;
+  gantt = d3.gantt(chartType).taskTypes(_.range(numCycles,-1,-1))
+          .timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ").margin(margin).height(height);
+
+  gantt(switchCycleEvents);
+}
+
+// Sorts events by cycle by assigning a "cycles" attribute
+// uses the print markers in cycleEvents as "end points"
+// compares startTime of event to startTime of a cycleEvent to determine
+// what cycle it belongs to
+// event.cycle is an integer.
+function addCycleAttribute()
+{
+	var currEventIndex = 0; //events index
+
+		var currCycle = 0;
+
+		// Loop through all cycles, comparing the start time of the cycle
+		// to the start time of events to cateogorize events
+		for (currCycle; currCycle<cycleEvents.length;currCycle++)
+		{
+			var currEvent = events[currEventIndex];
+			while (currEvent.startTime < cycleEvents[currCycle].startTime)
+			{
+				currEvent.cycle = currCycle;
+				currEventIndex++;
+				currEvent = events[currEventIndex];
+			}
+		}
+		// All remaining events go into the last cycle
+		for (currEventIndex; currEventIndex<events.length;currEventIndex++)
+		{
+			currEvent = events[currEventIndex];
+			currEvent.cycle = currCycle;
+		}
 }
 
 function getCycleEventsForCPU() {
@@ -89,44 +145,6 @@ function getCycleEventsForCPU() {
 	switchCycleEvents = calculateDurationBetweenSwitches(switchCycleEvents);
 
 	return switchCycleEvents;
-}
-
-function setColoringOfTasks() {
-	// For each task, create a CSS class with a random color
-  for (var i = 0; i < taskNames.length; i++) {
-    
-    if (taskNames[i] !== '<idle>') {
-
-     	// generating colors for non-cycle, non idle events
-	    var style = document.createElement('style');
-	    style.type = 'text/css';
-	    var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
-	    style.innerHTML = '.' + taskNames[i] + ' { fill: #' + color + '; }';
-	    document.getElementsByTagName('head')[0].appendChild(style);
-    } 
-    
-    // make <idle> white
-    else {
-      var style = document.createElement('style');
-      style.type = 'text/css';
-      style.innerHTML = '.idle { fill: white; }';
-      document.getElementsByTagName('head')[0].appendChild(style);
-    }
-  }
-}
-
-function calculateDurationBetweenSwitches(switchEvents)
-{
-	for (var i = 0; i < switchEvents.length - 1; i++) {
-      var currEvent = switchEvents[i];
-      currEvent.processTime = switchEvents[i + 1].startTime - currEvent.startTime;
-    }
-
-    // Set the duration of the last event to be 0, as we don't know the start time
-    // of what happened after it
-    switchEvents[switchEvents.length - 1].processTime = 0;
-
-    return switchEvents;
 }
 
 // for each event, normalizes it relative to the cycle it is in.
@@ -165,6 +183,44 @@ function normalizeStartTime(switchCycleEvents, numCycles)
 	return newSwitchEvents;
 }
 
+function calculateDurationBetweenSwitches(switchEvents)
+{
+	for (var i = 0; i < switchEvents.length - 1; i++) {
+      var currEvent = switchEvents[i];
+      currEvent.processTime = switchEvents[i + 1].startTime - currEvent.startTime;
+    }
+
+    // Set the duration of the last event to be 0, as we don't know the start time
+    // of what happened after it
+    switchEvents[switchEvents.length - 1].processTime = 0;
+
+    return switchEvents;
+}
+
+function setColoringOfTasks() {
+	// For each task, create a CSS class with a random color
+  for (var i = 0; i < taskNames.length; i++) {
+    
+    if (taskNames[i] !== '<idle>') {
+
+     	// generating colors for non-cycle, non idle events
+	    var style = document.createElement('style');
+	    style.type = 'text/css';
+	    var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
+	    style.innerHTML = '.' + taskNames[i] + ' { fill: #' + color + '; }';
+	    document.getElementsByTagName('head')[0].appendChild(style);
+    } 
+    
+    // make <idle> white
+    else {
+      var style = document.createElement('style');
+      style.type = 'text/css';
+      style.innerHTML = '.idle { fill: white; }';
+      document.getElementsByTagName('head')[0].appendChild(style);
+    }
+  }
+}
+
 // Calculate the total duration of all events in a list
 function calculateDuration(eventList) {
   
@@ -184,37 +240,6 @@ function getLongestCycleDuration(switchCycleEvents)
 	return _.max(_.map(grouped, calculateDuration));
 }
 
-// Sorts events by cycle by assigning a "cycles" attribute
-// uses the print markers in cycleEvents as "end points"
-// compares startTime of event to startTime of a cycleEvent to determine
-// what cycle it belongs to
-// event.cycle is an integer.
-function addCycleAttribute()
-{
-	var currEventIndex = 0; //events index
-
-		var currCycle = 0;
-
-		// Loop through all cycles, comparing the start time of the cycle
-		// to the start time of events to cateogorize events
-		for (currCycle; currCycle<cycleEvents.length;currCycle++)
-		{
-			var currEvent = events[currEventIndex];
-			while (currEvent.startTime < cycleEvents[currCycle].startTime)
-			{
-				currEvent.cycle = currCycle;
-				currEventIndex++;
-				currEvent = events[currEventIndex];
-			}
-		}
-		// All remaining events go into the last cycle
-		for (currEventIndex; currEventIndex<events.length;currEventIndex++)
-		{
-			currEvent = events[currEventIndex];
-			currEvent.cycle = currCycle;
-		}
-}
-
 // adds each CPU to the select menu
 // allows users to choose from all available CPUs
 function addOptions()
@@ -228,8 +253,6 @@ function addOptions()
 		select.appendChild(option);
 	}
 }
-
-
 
 // Handles user selection of new CPU from dropdown
 document.getElementById("cpu").onchange = function (e) {
@@ -252,29 +275,40 @@ function getLongestCPUDuration(events)
 
 function getCycleLength(e)
  {
-
  	//check if enter was hit
  	if(e.keyCode == 13)
  	{
  		e.preventDefault();
+
     var cycleInput = document.getElementById("cycleLength");
+
+    // Make sure user typed a valid number
     if (cycleInput.checkValidity()) {
       var cycleLength = parseFloat(cycleInput.value);
 
-      var normalizedStartTime = cycleLength;
-      var nextStartTime = events[0].startTime + cycleLength;
-
-      var endTime = getLongestCPUDuration(events);
-      cycleEvents = [];
-
-      // No.
       if (cycleLength == 0) {
         return;
       }
 
-      // while we are less than the end time, make a cycle event
-      // TODO FIXME consider putting in indexedDB so it will not disappear
+      // Cycle markers do not start at time 0, as we use the cycle
+      // start time to sort events into cycles, so no events
+      // would be in that cycle
+      var nextStartTime = events[0].startTime + cycleLength;
+      // startTime is in seconds since kernel startup. We need to compare
+      // against the duration of the longest cycle, which is just in
+      // seconds, so track both.
+      var normalizedStartTime = cycleLength;
+
+      var endTime = getLongestCPUDuration(events);
+
+      // Clear out cycle events so that more aren't added on entry of
+      // a different number
+      cycleEvents = [];
+
+      // End time is a duration in seconds, so compare to our normalized time
       while (normalizedStartTime < endTime) {
+        // but our mocked up cycle event expects time in seconds since
+        // kernel startup
         var newCycle = {"startTime" : nextStartTime};
         cycleEvents.push(newCycle);
         nextStartTime += cycleLength;
@@ -284,34 +318,6 @@ function getCycleLength(e)
       makeGantt();
     }
  	}
-}
-
-function makeGantt() {
-  d3.selectAll("svg").remove();
-  numCycles = cycleEvents.length;
-
-  // Categorize all events into cycles
-  addCycleAttribute();
-  console.log(events);
-
-  var switchCycleEvents = getCycleEventsForCPU();
-  console.log(switchCycleEvents);
-
-  timeDomainEnd = getLongestCycleDuration(switchCycleEvents);
-  console.log(timeDomainEnd);
-
-  var margin = {
-    top: 20,
-    right: 40,
-    bottom: 20,
-    left: 70
-  }
-
-  var height = (numCycles + 1) * 35;
-  gantt = d3.gantt(chartType).taskTypes(_.range(numCycles,-1,-1))
-          .timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ").margin(margin).height(height);
-
-  gantt(switchCycleEvents);
 }
 
 document.addEventListener("load", openDB());
