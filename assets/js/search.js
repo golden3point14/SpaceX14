@@ -51,8 +51,12 @@ $('#searchButton').css('background-color', '#315B7E');
   function openDB()
   {
     var openRequest = indexedDB.open("events", 8);
-    console.log("in search.js");
 
+     openRequest.onerror = function(e)
+     {
+        console.log("Error in OpenRequest");
+        console.dir(e);
+     }
 
   openRequest.onupgradeneeded =  function(e)
   {
@@ -60,29 +64,7 @@ $('#searchButton').css('background-color', '#315B7E');
 
     var thisDB = e.target.result;
 
-    if (!thisDB.objectStoreNames.contains("Events"))
-      {
-        thisDB.createObjectStore("Events");
-        console.log("created events");
-      }
-
-    if (!thisDB.objectStoreNames.contains("Tasks"))
-    {
-      thisDB.createObjectStore("Tasks");
-      console.log("created tasks");
-    }
-    
-    if (!thisDB.objectStoreNames.contains("AutocompleteEventTypes"))
-    {
-      thisDB.createObjectStore("AutocompleteEventTypes");
-      console.log("created autocompleteEventTypes");
-    }
-
-    if (!thisDB.objectStoreNames.contains("AutocompleteNames"))
-    {
-      thisDB.createObjectStore("AutocompleteNames");
-      console.log("created autocompleteNames");
-    }
+    checkStoresExist(thisDB);
   }
 
   openRequest.onsuccess = function(e)
@@ -91,18 +73,18 @@ $('#searchButton').css('background-color', '#315B7E');
     db = e.target.result;
 
     //get data
-    var xact = db.transaction(["Events"], "readonly");
-    var xact2 = db.transaction(["AutocompleteEventTypes"], "readonly");
-    var xact3 = db.transaction(["AutocompleteNames"], "readonly");
-    var objectStore = xact.objectStore("Events");
-    var objectStore2 = xact2.objectStore("AutocompleteEventTypes");
-    var objectStore3 = xact3.objectStore("AutocompleteNames");
-    var ob = objectStore.get(1); //temporary hard-coded
-    var ob2 = objectStore2.get(1);
-    var ob3 = objectStore3.get(1);
+    var eventsRequest = db.transaction(["Events"], "readonly")
+                          .objectStore("Events").get(1);
 
-    ob.onsuccess = function(e) {console.log("e is the JSONevents");
-                                //console.log(e.target.result);
+    var eventTypesRequest = db.transaction(["AutocompleteEventTypes"], "readonly")
+                              .objectStore("AutocompleteEventTypes").get(1);
+
+    var namesRequest = db.transaction(["AutocompleteNames"], "readonly")
+                          .objectStore("AutocompleteNames").get(1);
+
+    eventsRequest.onerror = function(e) {console.log("error", e.target.error);}
+
+    eventsRequest.onsuccess = function(e) {
                                 eventJSON = e.target.result;
                                 currentResults = eventJSON;
                                 console.log("currentResults.length:"+currentResults.length);
@@ -110,32 +92,24 @@ $('#searchButton').css('background-color', '#315B7E');
                                 $('.loader').fadeOut("slow");
 						                  }
 
-    ob2.onsuccess = function(e) {console.log("e is the JSONevents");
-                                //console.log(e.target.result);
+    eventTypesRequest.onerror = function(e) {console.log("error", e.target.error);}
+
+    eventTypesRequest.onsuccess = function(e) {
                                 autocompleteEventTypes = e.target.result;
-                                // console.log("autocompleteEventTypes"+autocompleteEventTypes);
                                 autoCompleteEventTypes();
                                 clickSearch();
-                                // var columnFilters = document.getElementById("columnFilters");
-                                // var table_id_wrapper = document.getElementById("table_id_wrapper");
-                                //document.getElementById("table_id_wrapper").appendChild(columnFilters);
-                                // table_id_wrapper.insertBefore(columnFilters, table_id_wrapper.firstChild);
                               }
 
-    ob3.onsuccess = function(e) {console.log("e is the JSONevents");
-                                //console.log(e.target.result);
+    namesRequest.onerror = function(e) {console.log("error", e.target.error);}
+
+    namesRequest.onsuccess = function(e) {
                                 autocompleteNames = e.target.result;
-                                // console.log("autocompleteNames"+autocompleteNames);
                                 autoCompleteNames();
                                 clickSearch();
                               }
   }
 
-  openRequest.onerror = function(e)
-  {
-    console.log("Error in OpenRequest");
-    console.dir(e);
-  }
+ 
 }
 
 var substringMatcher = function(strs) {
@@ -200,6 +174,45 @@ function clickCell(cellData)
 {
   window.localStorage.setItem("cellData", cellData);
   window.location.href = "process.html";
+}
+
+// NOT TESTED??? 
+function checkStoresExist(thisDB) {
+  if (!thisDB.objectStoreNames.contains("Events"))
+      {
+        thisDB.createObjectStore("Events");
+        console.log("created events");
+     }
+
+    if (!thisDB.objectStoreNames.contains("Tasks"))
+    {
+      thisDB.createObjectStore("Tasks");
+      console.log("created tasks");
+    }
+
+    if (!thisDB.objectStoreNames.contains("numCPUs"))
+    {
+      thisDB.createObjectStore("numCPUs");
+      console.log("numCPUs created");
+    }
+
+    if (!thisDB.objectStoreNames.contains("AutocompleteEventTypes"))
+    {
+      thisDB.createObjectStore("AutocompleteEventTypes");
+      console.log("autocompleteEventTypes created");
+    }
+
+    if (!thisDB.objectStoreNames.contains("AutocompleteNames"))
+    {
+      thisDB.createObjectStore("AutocompleteNames");
+      console.log("autocompleteNames created");
+    }
+
+    if (!thisDB.objectStoreNames.contains("cycleEvents"))
+    {
+      thisDB.createObjectStore("cycleEvents");
+      console.log("cycleEvents created");
+    }
 }
 
 document.addEventListener("load", openDB());

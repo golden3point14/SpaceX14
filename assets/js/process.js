@@ -10,34 +10,14 @@ var gantt;
 $('#processButton').css('background-color', '#315B7E');
 
 //pulls the data from the IndexedDB and displays it
-  function openDB()
+function openDB()
+{
+  var openRequest = indexedDB.open("events", 8);
+
+  openRequest.onerror = function(e)
   {
-    var openRequest = indexedDB.open("events", 8);
-
-
-  openRequest.onupgradeneeded =  function(e)
-  {
-    console.log("upgrading...");
-
-    var thisDB = e.target.result;
-
-    if (!thisDB.objectStoreNames.contains("Events"))
-      {
-        thisDB.createObjectStore("Events");
-        console.log("created events");
-      }
-
-    if (!thisDB.objectStoreNames.contains("Tasks"))
-    {
-      thisDB.createObjectStore("Tasks");
-      console.log("created tasks");
-    }
-    
-    if (!thisDB.objectStoreNames.contains("AutocompleteNames"))
-    {
-      thisDB.createObjectStore("AutocompleteNames");
-      console.log("created autocompleteNames");
-    }
+    console.log("Error in OpenRequest");
+    console.dir(e);
   }
 
   openRequest.onsuccess = function(e)
@@ -50,8 +30,10 @@ $('#processButton').css('background-color', '#315B7E');
                          .objectStore("Events").get(1);
     var tasksRequest = db.transaction(["Tasks"], "readonly")
                          .objectStore("Tasks").get(1);
-    var taskNamesRequest = db.transaction(["AutocompleteNames"], "readonly")
+    var namesRequest = db.transaction(["AutocompleteNames"], "readonly")
                          .objectStore("AutocompleteNames").get(1);
+
+    eventsRequest.onerror = function(e){console.log("error", e.target.error);}
 
     eventsRequest.onsuccess = function(e) {
             events = e.target.result;
@@ -63,21 +45,19 @@ $('#processButton').css('background-color', '#315B7E');
             $('.loader').fadeOut("slow");
           }
 
+    tasksRequest.onerror = function(e){console.log("error", e.target.error);}
+    
     tasksRequest.onsuccess = function(e) {
                                 tasks = e.target.result;
                               }
 
-    taskNamesRequest.onsuccess = function(e) {
+    namesRequest.onerror = function(e){console.log("error", e.target.error);}
+
+    namesRequest.onsuccess = function(e) {
                                 autocompleteNames = e.target.result;
                                 autoCompleteNames();
                                 autoSearch();
                               }
-  }
-
-  openRequest.onerror = function(e)
-  {
-    console.log("Error in OpenRequest");
-    console.dir(e);
   }
 }
 
