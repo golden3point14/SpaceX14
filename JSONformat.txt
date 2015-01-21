@@ -1,0 +1,50 @@
+Tasks
+	name (String)
+	pid (int)
+	events (array of int)
+		Ints that would index into the Events array to find events belonging to that task.
+	preemptedBy (array)
+		array of strings
+		Each entry is a function name. If a function preempts multiple times, it’s name appears multiple times.
+	preemptionCount (int)
+		running total
+	totalRuntime (long)
+	totalWaittime (long)
+	totalSleeptime (long)
+
+Events
+	name (String)
+	pid (int)
+	cpu (int)
+	startTime (double)
+	eventType (string)
+	extraInfo (string)
+	FOR SWITCH EVENTS
+		activeName (string)
+		activePID (string)
+		Switch events “belong” to the process that is switching out, so active indicates which process is actually beginning to run at that time.
+	FOR PRINT EVENTS
+		userMark (string)
+			Aren’t currently using this, should likely delete
+		Additionally, print events with CYCLE_START: in their extraInfo are used in creating cycleEvents
+
+cycleEvents
+	startTime (double)
+	extraInfo (string)
+	extraInfo is in the form (which is how we know they are cycle markers)
+		c0095a18 CYCLE_START: sync_time=728.3360000
+	The array is left empty if no cycle markers are provided
+
+numCPUs
+	int
+
+AutocompleteNames
+	String array
+	A list of all task names to autocomplete on the process page.
+	No names are repeated.
+
+AutocompleteEventTypes
+	string array
+	A list of all event types to autocomplete on the search bar.
+	No event type names are repeated.
+
