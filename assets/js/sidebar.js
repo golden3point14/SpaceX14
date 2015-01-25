@@ -27,12 +27,14 @@ sidebar.appendChild(statisticsDiv);
 // statsDiv.innerHTML = "Distributions";
 // sidebar.appendChild(statsDiv);
 
+/*
 var searchDiv = document.createElement('div');
 searchDiv.id = 'searchButton';
 searchDiv.className = 'sidebutton';
 searchDiv.innerHTML = "Search";
 searchDiv.setAttribute("onclick", "window.location.href='search.html';");
 sidebar.appendChild(searchDiv);
+*/
 
 var processDiv = document.createElement('div');
 processDiv.id = 'processButton';
