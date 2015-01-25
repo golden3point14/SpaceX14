@@ -26,11 +26,11 @@ $('#searchButton').css('background-color', '#315B7E');
     		scrollCollapse: true,
     		order:          [[1, 'asc']],
         columns: [
-          { "title" : "CPU" },
+          { "title" : "CPU", "width" : "40px" },
           { "title" : "Start time" },
-          { "title" : "Name" },
-          { "title" : "PID" },
-          { "title" : "Event type" },
+          { "title" : "Name", "width" : "120px" },
+          { "title" : "PID", "width" : "40px" },
+          { "title" : "Event type", "width" : "140px" },
           { "title" : "Extra info" }
           ]
         } );
