@@ -70,6 +70,8 @@ function openDB()
 
 function setColoringOfTasks() {
   // For each task, create a CSS class with a random color
+  Math.seedrandom('hello.');
+
   for (var i = 0; i < JSONtasks.length; i++) {
     
     if (JSONtasks[i].name !== '<idle>') {
