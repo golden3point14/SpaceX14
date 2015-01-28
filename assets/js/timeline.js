@@ -1,69 +1,4 @@
 var values = [];    // the list of tasks
-var reader = new FileReader(); 
-var doc = document;
-
-var db; //for indexedDB
-var JSONtasks;
-
-document.addEventListener("DOMContentLoaded", openDB());
-
-function openDB()
-{
-  var openRequest = indexedDB.open("events", 2);
-
-  openRequest.onupgradeneeded =  function(e)
-  {
-    console.log("upgrading...");
-
-    var thisDB = e.target.result;
-
-    if (!thisDB.objectStoreNames.contains("Events"))
-      {
-        thisDB.createObjectStore("Events");
-        console.log("created events");
-      }
-
-    if (!thisDB.objectStoreNames.contains("Tasks"))
-    {
-      thisDB.createObjectStore("Tasks");
-      console.log("created tasks");
-    }
-    
-
-  }
-
-  openRequest.onsuccess = function(e)
-  {
-    console.log("openRequest success!");
-    db = e.target.result;
-
-    //get data
-    var xact = db.transaction(["Tasks"], "readonly");
-    var objectStore = xact.objectStore("Tasks");
-    var ob = objectStore.get(1); //temporary hard-coded
-    ob.onsuccess = function(e) { console.log("e is the JSONtasks");
-                                 console.log(e.target.result);
-                                 JSONtasks = e.target.result;
-                                 useDatabaseData();
-                               }
-    
-  }
-
-  openRequest.onerror = function(e)
-  {
-    console.log("Error in OpenRequest");
-    console.dir(e);
-  }
-}
-
-
-function useDatabaseData() {
-  for (var i=0; i<JSONtasks.length; i++)
-  {
-      if (JSONtasks[i].name !== "<idle>") {
-        values.push(JSONtasks[i]);
-      }
-  }
 
   console.log("making timeline");
 
@@ -93,4 +28,4 @@ function useDatabaseData() {
 
   var svg = d3.select("#timeline3").append("svg").attr("width", width)
     .datum(labelTestData).call(chart);
-}
+

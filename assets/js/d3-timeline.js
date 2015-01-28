@@ -234,7 +234,7 @@
         });
       });
 
-      if (width > gParentSize.width) {
+      // if (width > gParentSize.width) {
         var move = function() {
           var x = Math.min(0, Math.max(gParentSize.width - width, d3.event.translate[0]));
           zoom.translate([x, 0]);
@@ -247,7 +247,7 @@
         gParent
           .attr("class", "scrollable")
           .call(zoom);
-      }
+      // }
 
       if (rotateTicks) {
         g.selectAll("text")
