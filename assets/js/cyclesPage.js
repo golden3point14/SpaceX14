@@ -198,6 +198,8 @@ function calculateDurationBetweenSwitches(switchEvents)
 }
 
 function setColoringOfTasks() {
+  Math.seedrandom("hello.");
+
 	// For each task, create a CSS class with a random color
   for (var i = 0; i < taskNames.length; i++) {
     
