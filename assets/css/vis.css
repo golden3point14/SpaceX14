@@ -71,7 +71,7 @@
   overflow: hidden;
 }
 
-.vis.timeline .vispanel > .content {
+.vis.timeline .vispanel > .contents {
   position: relative;
 }
 
@@ -169,9 +169,9 @@
 .vis.timeline .item {
   position: absolute;
   color: #1A1A1A;
-  border-color: #97B0F8;
+  /*border-color: #97B0F8;*/
   border-width: 1px;
-  background-color: #D5DDF6;
+  /*background-color: #D5DDF6;*/
   display: inline-block;
   padding: 5px;
 }
@@ -211,8 +211,8 @@
 }
 
 .vis.timeline .item.range {
-  border-style: solid;
-  border-radius: 2px;
+  /*border-style: solid;
+  border-radius: 2px;*/
   box-sizing: border-box;
 }
 
@@ -225,14 +225,14 @@
   margin: 0;
 }
 
-.vis.timeline .item.range .content {
+.vis.timeline .item.range .contents {
   position: relative;
   display: inline-block;
   max-width: 100%;
   overflow: hidden;
 }
 
-.vis.timeline .item.background .content {
+.vis.timeline .item.background .contents {
   position: absolute;
   display: inline-block;
   overflow: hidden;
@@ -248,7 +248,7 @@
   border-left-style: solid;
 }
 
-.vis.timeline .item .content {
+.vis.timeline .item .contents {
   white-space: nowrap;
   overflow: hidden;
 }

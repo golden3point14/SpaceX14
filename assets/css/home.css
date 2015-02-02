@@ -105,3 +105,8 @@ div.tooltip {
   z-index: 9999;
   background: url('../images/loader.gif') 40% 50% no-repeat rgb(249,249, 249); 
 }
+
+.task0 {
+  border-color: none;
+  background-color: none;
+}

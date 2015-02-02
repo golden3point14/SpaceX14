@@ -60,7 +60,7 @@ function openDB()
                     switchEvents = calculateDurationBetweenSwitches(switchEvents, numCPUs);
 
                     // gantt(switchEvents); //feeding it the relevant events
-                    // setColoringOfTasks();
+                    setColoringOfTasks();
                     makeTimeLine(switchEvents);
                     $('.loader').fadeOut("slow");
                   }
@@ -108,7 +108,8 @@ function makeTimeLine(switchEvents) {
         id: order,
         group: currEvent.cpu,
         start: start,
-        end: end
+        end: end,
+        className: "task" + currEvent.pid
       });
 
       order++;
@@ -175,7 +176,7 @@ function setColoringOfTasks() {
 
         var style = document.createElement('style');
         style.type = 'text/css';
-        style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: red; }';
+        style.innerHTML = '.task' + JSONtasks[i].pid + ' { fill: red; }';
         document.getElementsByTagName('head')[0].appendChild(style);
       } 
 
@@ -184,7 +185,7 @@ function setColoringOfTasks() {
         var style = document.createElement('style');
         style.type = 'text/css';
         var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
-        style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: #' + color + '; }';
+        style.innerHTML = '.task' + JSONtasks[i].pid + ' { background-color: #' + color + '; border-color: #' + color + '; }';
       
         document.getElementsByTagName('head')[0].appendChild(style);
       }

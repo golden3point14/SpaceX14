@@ -9421,7 +9421,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
       // contents box
       dom.content = document.createElement('div');
-      dom.content.className = 'content';
+      dom.content.className = 'contents';
       dom.box.appendChild(dom.content);
 
       // Note: we do NOT attach this item as attribute to the DOM,
@@ -9629,7 +9629,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
       // contents box (inside the background box). used for making margins
       dom.content = document.createElement('DIV');
-      dom.content.className = 'content';
+      dom.content.className = 'contents';
       dom.box.appendChild(dom.content);
 
       // line to axis
@@ -9860,7 +9860,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
       // contents box, right from the dot
       dom.content = document.createElement('div');
-      dom.content.className = 'content';
+      dom.content.className = 'contents';
       dom.point.appendChild(dom.content);
 
       // dot at start
@@ -10048,7 +10048,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
       // contents box
       dom.content = document.createElement('div');
-      dom.content.className = 'content';
+      dom.content.className = 'contents';
       dom.box.appendChild(dom.content);
 
       // attach this item as attribute
@@ -21965,9 +21965,9 @@ return /******/ (function(modules) { // webpackBootstrap
     this.dom.rightContainer.className       = 'vispanel right';
     this.dom.top.className                  = 'vispanel top';
     this.dom.bottom.className               = 'vispanel bottom';
-    this.dom.left.className                 = 'content';
-    this.dom.center.className               = 'content';
-    this.dom.right.className                = 'content';
+    this.dom.left.className                 = 'contents';
+    this.dom.center.className               = 'contents';
+    this.dom.right.className                = 'contents';
     this.dom.shadowTop.className            = 'shadow top';
     this.dom.shadowBottom.className         = 'shadow bottom';
     this.dom.shadowTopLeft.className        = 'shadow top';
