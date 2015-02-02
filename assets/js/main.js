@@ -70,16 +70,6 @@ function openDB()
 }
 
 function makeTimeLine(switchEvents) {
-  var count = 200642;
-
-  // create groups
-  // var groups = new vis.DataSet([
-  //   {id: 1, content: 'Truck&nbsp;1'},
-  //   {id: 2, content: 'Truck&nbsp;2'},
-  //   {id: 3, content: 'Truck&nbsp;3'},
-  //   {id: 4, content: 'Truck&nbsp;4'}
-  // ]);
-
   var cpus = new vis.DataSet()
   for (var i = 0; i < numCPUs; i++) {
     cpus.add({
