@@ -43,9 +43,10 @@ processDiv.innerHTML = "Process";
 processDiv.setAttribute("onclick", "window.location.href='process.html';");
 sidebar.appendChild(processDiv);
 
-// var compareDiv = document.createElement('div');
-// compareDiv.id = 'sidebutton';
-// compareDiv.className = 'sidebutton';
-// compareDiv.innerHTML = "Compare";
-// sidebar.appendChild(compareDiv);
+var compareDiv = document.createElement('div');
+compareDiv.id = 'sidebutton';
+compareDiv.className = 'sidebutton';
+compareDiv.innerHTML = "Compare";
+compareDiv.setAttribute("onclick", "window.location.href='compare.html';");
+sidebar.appendChild(compareDiv);
 

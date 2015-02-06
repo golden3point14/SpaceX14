@@ -256,4 +256,11 @@ function autoSearch() {
   searchTasks(window.localStorage.getItem("cellData"));
 }
 
+/*var pageContent = document.getElementById("ganttChart").innerHTML;
+window.localStorage.setItem("", pageContent);*/
+
+document.getElementById("compareButton").onclick = function () {
+  location.href = "compare.html";
+}
+
 document.addEventListener("load", openDB());

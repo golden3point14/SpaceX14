@@ -62,7 +62,8 @@ function openDB()
 					{
             // User print markers existed
             if (cycleEvents && cycleEvents.length != 0) {
-              makeGantt();
+              //makeGantt();
+              makeTimeLine();
             } 
 
 						taskNames = h.target.result;
@@ -75,6 +76,82 @@ function openDB()
 			}
 		}
 	}
+}
+
+function makeTimeLine() {
+  numCycles = cycleEvents.length;
+
+  // Categorize all events into cycles
+  addCycleAttribute();
+
+  var switchCycleEvents = getCycleEventsForCPU();
+
+  // Clear out old timeline, for example when user types new cycle length in box
+  // Probably faster to make an update method TODO
+  var currentTimeline = document.getElementById("ganttChart");
+  while (currentTimeline.firstChild) {
+    currentTimeline.removeChild(currentTimeline.firstChild)
+  }
+
+  // Create objects for vis.js to group by
+  // id goes from 0 -> cycleNum - 1
+  // content is label, which goes cycleNum - 1 ->  0 as we want to display last cycle at top
+  var cycles = new vis.DataSet();
+  for (var i = 0; i < numCycles; i++) {
+    cycles.add({id: i,
+      content: 'Cycle ' + (numCycles - 1 - i)
+    })
+  }
+
+  var items = new vis.DataSet();
+	var grouped = _.groupBy(switchCycleEvents, function(e){return e.cycle;});
+
+  // Create items object for vis.js
+  // Loop through switch events in each cycle, starting with last cycle
+  var order = 1;
+  for (var i = numCycles - 1; i >= 0; i--) {
+    var date = new Date();
+    for (var j = 0; j < grouped[i].length; j++) {
+      var start = new Date(date);
+      var currEvent = grouped[i][j];
+
+      date.setHours(date.getHours() + 2 + Math.floor(Math.random()*4));
+      var end = new Date(date);
+
+      items.add({
+        id: order,
+        group: currEvent.cycle,
+        start: start,
+        end: end
+      });
+
+      order++;
+    }
+  }
+
+  // specify options
+  var options = {
+    stack: false,
+    start: new Date(),
+    end: new Date(1000*60*60*24 + (new Date()).valueOf()),
+    editable: false,
+    margin: {
+      item: 10, // minimal margin between items
+      axis: 5   // minimal margin between items and the axis
+    },
+    orientation: 'top'
+  };
+
+
+  // create a Timeline
+  var container = document.getElementById('ganttChart');
+  timeline = new vis.Timeline(container, null, options);
+
+  timeline.setGroups(cycles);
+
+  timeline.setItems(items);
+
+  console.log("done making timeline");
 }
 
 function makeGantt() {
@@ -317,7 +394,8 @@ function getCycleLength(e)
         normalizedStartTime += cycleLength;
       }
      
-      makeGantt();
+      //makeGantt();
+      makeTimeLine();
     }
  	}
 }
