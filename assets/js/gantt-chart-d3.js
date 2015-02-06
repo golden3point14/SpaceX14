@@ -207,31 +207,31 @@ d3.gantt = function(chartType) {
 
         rect.transition()
           .attr("transform", rectTransform)
-	 .attr("height", function(d) { return y.rangeBand(); })
-	 .attr("width", function(d) { 
-	     return (x(d.processLength)); 
-	     });
+   .attr("height", function(d) { return y.rangeBand(); })
+   .attr("width", function(d) { 
+       return (x(d.processLength)); 
+       });
         
-	rect.exit().remove();
+  rect.exit().remove();
 
-	svg.select(".x").transition().call(xAxis);
-	svg.select(".y").transition().call(yAxis);
-	
-	return gantt;
+  svg.select(".x").transition().call(xAxis);
+  svg.select(".y").transition().call(yAxis);
+  
+  return gantt;
     };
 
     gantt.margin = function(value) {
-	if (!arguments.length)
-	    return margin;
-	margin = value;
-	return gantt;
+  if (!arguments.length)
+      return margin;
+  margin = value;
+  return gantt;
     };
 
     gantt.timeDomain = function(value) {
-	if (!arguments.length)
-	    return [ timeDomainStart, timeDomainEnd ];
-	timeDomainStart = +value[0], timeDomainEnd = +value[1];
-	return gantt;
+  if (!arguments.length)
+      return [ timeDomainStart, timeDomainEnd ];
+  timeDomainStart = +value[0], timeDomainEnd = +value[1];
+  return gantt;
     };
 
     /**
@@ -240,46 +240,46 @@ d3.gantt = function(chartType) {
      *                "fixed" - fixed domain.
      */
     gantt.timeDomainMode = function(value) {
-	if (!arguments.length)
-	    return timeDomainMode;
+  if (!arguments.length)
+      return timeDomainMode;
         timeDomainMode = value;
         return gantt;
 
     };
 
     gantt.taskTypes = function(value) {
-	if (!arguments.length)
-	    return taskTypes;
-	taskTypes = value;
-	return gantt;
+  if (!arguments.length)
+      return taskTypes;
+  taskTypes = value;
+  return gantt;
     };
     
     gantt.taskStatus = function(value) {
-	if (!arguments.length)
-	    return taskStatus;
-	taskStatus = value;
-	return gantt;
+  if (!arguments.length)
+      return taskStatus;
+  taskStatus = value;
+  return gantt;
     };
 
     gantt.width = function(value) {
-	if (!arguments.length)
-	    return width;
-	width = +value;
-	return gantt;
+  if (!arguments.length)
+      return width;
+  width = +value;
+  return gantt;
     };
 
     gantt.height = function(value) {
-	if (!arguments.length)
-	    return height;
-	height = +value;
-	return gantt;
+  if (!arguments.length)
+      return height;
+  height = +value;
+  return gantt;
     };
 
     gantt.tickFormat = function(value) {
-	if (!arguments.length)
-	    return tickFormat;
-	tickFormat = value;
-	return gantt;
+  if (!arguments.length)
+      return tickFormat;
+  tickFormat = value;
+  return gantt;
     };
 
     gantt.timeDomain = function(value) {

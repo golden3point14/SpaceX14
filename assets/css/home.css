@@ -107,6 +107,9 @@ div.tooltip {
 }
 
 .task0 {
-  border-color: none;
-  background-color: none;
+  fill: white;
+}
+
+title {
+  text-align: left;
 }

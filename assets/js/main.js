@@ -54,113 +54,18 @@ function openDB()
                     
                     maxDuration = getLongestCPUDuration(switchEvents);
                     
-                    // var gantt = d3.gantt(chartType).taskTypes(_.range(numCPUs)).timeDomain(maxDuration);
+                    var gantt = d3.gantt(chartType).taskTypes(_.range(numCPUs)).timeDomain(maxDuration);
                     switchEvents = normalizeStartTime(switchEvents);
                     
                     switchEvents = calculateDurationBetweenSwitches(switchEvents, numCPUs);
 
-                    // gantt(switchEvents); //feeding it the relevant events
+                    gantt(switchEvents); //feeding it the relevant events
                     setColoringOfTasks();
-                    makeTimeLine(switchEvents);
                     $('.loader').fadeOut("slow");
                   }
         }
     }
   }
-}
-
-function makeTimeLine(switchEvents) {
-  var count = 200642;
-
-  // create groups
-  // var groups = new vis.DataSet([
-  //   {id: 1, content: 'Truck&nbsp;1'},
-  //   {id: 2, content: 'Truck&nbsp;2'},
-  //   {id: 3, content: 'Truck&nbsp;3'},
-  //   {id: 4, content: 'Truck&nbsp;4'}
-  // ]);
-
-  var cpus = new vis.DataSet()
-  for (var i = 0; i < numCPUs; i++) {
-    cpus.add({
-      id: i,
-      content: 'CPU '+i
-    })
-  }
-
-  // create items
-  var items = new vis.DataSet();
-  var groupedByCPU = _.groupBy(switchEvents, function(e){return e.cpu;});
-
-  var order = 1;
-  var cpu = 0;
-  for (var j = 0; j < numCPUs; j++) {
-    var date = new Date();
-    for (var i = 0; i < groupedByCPU[j].length; i++) {
-      // date.setHours(date.getHours() +  4 * (Math.random() < 0.2));
-      var start = new Date(date);
-      var currEvent = groupedByCPU[j][i];
-
-      date.setHours(date.getHours() + 2 + Math.floor(Math.random()*4));
-      var end = new Date(date);
-
-      items.add({
-        id: order,
-        group: currEvent.cpu,
-        start: start,
-        end: end,
-        className: "task" + currEvent.pid
-      });
-
-      order++;
-    }
-    cpu++;
-  }
-
-  // console.log(switchEvents);
-
-  // var groupedByCPU = _.groupBy(switchEvents, function(e){return e.cpu;});
-  // // var prevEvent;
-  // var currEvent;
-  // for (var cpu = 0; cpu < numCPUs; cpu++) {
-  //   for (var i = 0; i < groupedByCPU[cpu].length; i++) {
-  //     // console.log("adding item " + i + "for cpu " + cpu);
-  //     currEvent = groupedByCPU[cpu][i];
-  //     // prevEvent = switchEvents[i-1];
-  //     // console.log(currEvent);
-
-  //     items.add({
-  //       group: currEvent.cpu,
-  //       start: currEvent.normalStartTime,
-  //       end: currEvent.normalStartTime + currEvent.processTime
-  //     })
-  //   }
-  // }
-
-
-  // specify options
-  var options = {
-    stack: false,
-    start: new Date(),
-    end: new Date(1000*60*60*24 + (new Date()).valueOf()),
-    editable: false,
-    margin: {
-      item: 10, // minimal margin between items
-      axis: 5   // minimal margin between items and the axis
-    },
-    orientation: 'top'
-  };
-
-
-  // create a Timeline
-  var container = document.getElementById('ganttChart');
-  timeline = new vis.Timeline(container, null, options);
-
-  timeline.setGroups(cpus);
-
-  timeline.setItems(items);
-
-  console.log("done making timeline");
 }
 
 function setColoringOfTasks() {
@@ -176,7 +81,7 @@ function setColoringOfTasks() {
 
         var style = document.createElement('style');
         style.type = 'text/css';
-        style.innerHTML = '.task' + JSONtasks[i].pid + ' { fill: red; }';
+        style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: red; }';
         document.getElementsByTagName('head')[0].appendChild(style);
       } 
 
@@ -185,7 +90,7 @@ function setColoringOfTasks() {
         var style = document.createElement('style');
         style.type = 'text/css';
         var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
-        style.innerHTML = '.task' + JSONtasks[i].pid + ' { background-color: #' + color + '; border-color: #' + color + '; }';
+        style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: #' + color + '; }';
       
         document.getElementsByTagName('head')[0].appendChild(style);
       }
@@ -228,10 +133,10 @@ function getTopPreemptions()
 
   var displayNum = 10;
 
-	//sort processes by preemptionCount
- 	var preemptionSorted = _.sortBy(JSONtasks, function(element){return -1*(element.preemptionCount);});
- 	//remove <idle>
- 	preemptionSorted = _.select(preemptionSorted, function(element){return (element.name != "<idle>") && (element.preemptionCount != 0);});
+  //sort processes by preemptionCount
+  var preemptionSorted = _.sortBy(JSONtasks, function(element){return -1*(element.preemptionCount);});
+  //remove <idle>
+  preemptionSorted = _.select(preemptionSorted, function(element){return (element.name != "<idle>") && (element.preemptionCount != 0);});
 
   var preemptionList = document.getElementById("preemption-list").tBodies[0];
 
