@@ -154,7 +154,10 @@ d3.gantt = function(chartType) {
          if (d.eventType == "print") {return (x(d.duration));}
          else {return (x(d[xDuration]));}
          })
-     
+     .on("click", function(d) {
+          console.log(d.startTime);
+          scrollToTime(d.startTime);
+     })
      .on("mouseover", function(d) {      
             div.transition()        
                 .duration(200)      
@@ -166,11 +169,11 @@ d3.gantt = function(chartType) {
                 .style("left", (d3.event.pageX) + "px")     
                 .style("top", (d3.event.pageY - 28) + "px");    
             })                  
-        .on("mouseout", function(d) {       
-            div.transition()        
-                .duration(200)      
-                .style("opacity", 0);   
-        });
+    .on("mouseout", function(d) {       
+        div.transition()        
+            .duration(200)      
+            .style("opacity", 0);   
+    });
     svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0, " + (height - margin.top - margin.bottom) + ")")
