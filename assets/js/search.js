@@ -163,19 +163,15 @@ function clickCell(cellData)
 
 function scrollToTime(time)
 {
-  console.log("scrolling to " + time);
+  // console.log("scrolling to " + time);
   var table = $('#table_id').DataTable();
 
   if(table) {
     table.order([[1,'asc']]);
     table.draw();
-    // console.log(table);
-    // var rows = table.rows()[0];
     var rows = table.rows()[0];
-    // console.log(rows.length);
     var index = findIndex(rows, time);
-    // var rows = table.rows()[0].filter(function (rowIdx) { return table.cell(rowIdx, 1).data() == time ? true : false; });
-    console.log("index="+index);
+    // console.log("index="+index);
     var oSettings = $('#table_id').dataTable().fnSettings();
     oSettings.oScroller.fnScrollToRow(index);
   }
