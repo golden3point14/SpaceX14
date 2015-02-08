@@ -91,11 +91,6 @@ div.tooltip {
   pointer-events: none;         
 }
 
-#ganttChart {
-	/*width: 90%;*/
-	/*overflow-x: auto;*/
-}
-
 .loader {
   position: fixed;
   left: 140px;
