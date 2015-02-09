@@ -156,7 +156,10 @@ d3.gantt = function(chartType) {
          })
      .on("click", function(d) {
           // console.log(d.startTime);
-          scrollToTime(d.startTime);
+          if (isSearch)
+          {
+            scrollToTime(d.startTime);
+          }
      })
      .on("mouseover", function(d) {      
             div.transition()        

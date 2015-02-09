@@ -5,6 +5,7 @@ var currentResults;
 var reader = new FileReader();
 var autocompleteEventTypes;
 var autocompleteNames;
+var isSearch = true;
 
 $('#searchButton').css('background-color', '#315B7E');
 
@@ -163,7 +164,7 @@ function clickCell(cellData)
 
 function scrollToTime(time)
 {
-  // console.log("scrolling to " + time);
+  console.log("scrolling to " + time);
   var table = $('#table_id').DataTable();
 
   if(table) {
@@ -171,9 +172,9 @@ function scrollToTime(time)
     table.draw();
     var rows = table.rows()[0];
     var index = findIndex(rows, time);
-    // console.log("index="+index);
+    console.log("index="+index);
     var oSettings = $('#table_id').dataTable().fnSettings();
-    oSettings.oScroller.fnScrollToRow(index);
+    oSettings.oScroller.fnScrollToRow(index, true);
   }
 }
 

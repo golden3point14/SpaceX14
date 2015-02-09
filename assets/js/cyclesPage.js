@@ -6,6 +6,8 @@ var chartType = "CYCLES"
 var taskNames;
 var numCycles;
 var gantt;
+var currentLoaded = 50;
+var isSearch = false;
 
 $('#cyclesButton').css('background-color', '#315B7E');
 
