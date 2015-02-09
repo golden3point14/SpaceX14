@@ -10,6 +10,8 @@ var currentTasks;
 var gantt;
 var isSearch = false;
 
+var maxDuration = window.localStorage.getItem("maxDuration");
+
 $('#compareButton').css('background-color', '#315B7E');
 
 //pulls the data from the IndexedDB and displays it
@@ -131,9 +133,10 @@ function normalize(labeledTaskSwitches) {
 function makeGantt(currentTaskName) {
   var currentTaskSwitches = getRelevantSwitches(currentTaskName);
 
-  totalTime = _.reduce(labeledTaskSwitches, function(sum, next) { return sum += next.processTime }, 0);
+  //originally the graphs endpoint (ie timeDomain(totalTime))
+  //totalTime = _.reduce(labeledTaskSwitches, function(sum, next) { return sum += next.processTime }, 0);
 
-  gantt = d3.gantt("PROCESS").taskTypes(["sched_switch"]).timeDomain(totalTime).yAttribute("eventType").yLabel("");
+  gantt = d3.gantt("PROCESS").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel("");
   gantt(currentTaskSwitches);
 }
 
