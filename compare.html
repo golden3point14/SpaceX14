@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+
+  <title>SpaceShark</title>
+
+  <script type="text/javascript" src="assets/js/jquery.js"></script>
+  <script type="text/javascript" src="assets/js/underscore-min.js"></script>
+  <script type="text/javascript" src="assets/js/jquery.dataTables.js"></script>
+  <script type="text/javascript" src="http://datatables.net/release-datatables/extensions/Scroller/js/dataTables.scroller.js"></script>
+  <script type="text/javascript" src="assets/js/d3.js"></script>
+  <script type="text/javascript" src="assets/js/gantt-chart-d3.js"></script>
+
+  <link  type="text/css" rel="stylesheet" href="assets/css/jquery.dataTables.css">
+  <link type="text/css" rel="stylesheet" href="assets/css/dc.css"/>
+  <link type="text/css" rel="stylesheet" href="assets/css/bootstrap.min.css"/>
+  <link type="text/css" rel="stylesheet" href="assets/css/searchbar.css"/>
+  <link type="text/css" rel="stylesheet" href="assets/css/home.css"/>
+  <link type="text/css" rel="stylesheet" href="assets/css/process.css"/>
+
+</head>
+
+<body>
+  <div class="loader"></div>
+  <div class="sidebar" id="sidebar"></div>
+  
+  <div class="content">
+    Search for a Process: <input type="text" class="search-process typeahead" id="search-process" placeholder="Process Name">
+    <!-- <div id="demo">
+      <h4 id="table_title"></h4>
+      <table cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>
+    </div> -->
+    <div id="ganttChart"></div>
+    <button type="button" id="addProcess">+ Add Process</button>
+  </div>
+
+  <script type="text/javascript" src="assets/js/sidebar.js"></script>
+  <script type="text/javascript" language="javascript" src="assets/js/typeahead.bundle.js"></script>
+  <script type="text/javascript" src="assets/js/compare.js"></script>
+
+</body>
+</html>

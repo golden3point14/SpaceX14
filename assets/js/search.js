@@ -161,4 +161,39 @@ function clickCell(cellData)
   window.location.href = "process.html";
 }
 
+function scrollToTime(time)
+{
+  // console.log("scrolling to " + time);
+  var table = $('#table_id').DataTable();
+
+  if(table) {
+    table.order([[1,'asc']]);
+    table.draw();
+    var rows = table.rows()[0];
+    var index = findIndex(rows, time);
+    // console.log("index="+index);
+    var oSettings = $('#table_id').dataTable().fnSettings();
+    oSettings.oScroller.fnScrollToRow(index);
+  }
+}
+
+function findIndex(values, target) {
+  return binarySearch(values, target, 0, values.length - 1);
+};
+
+function binarySearch(values, target, start, end) {
+  // console.log("start="+start+", end="+end);
+  var table = $('#table_id').DataTable();
+  var startTime = table.cell(start, 1).data();
+  var endTime = table.cell(end, 1).data()
+  if (startTime > endTime) { return -1; } //does not exist
+
+  var middle = Math.floor((start + end) / 2);
+  var value = table.cell(values[middle], 1).data()
+
+  if (value > target) { return binarySearch(values, target, start, middle-1); }
+  if (value < target) { return binarySearch(values, target, middle+1, end); }
+  return middle; //found!
+}
+
 document.addEventListener("load", openDB());
