@@ -136,7 +136,7 @@ function makeGantt(currentTaskName) {
   //originally the graphs endpoint (ie timeDomain(totalTime))
   //totalTime = _.reduce(labeledTaskSwitches, function(sum, next) { return sum += next.processTime }, 0);
 
-  gantt = d3.gantt("PROCESS").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel("");
+  gantt = d3.gantt("PROCESS").taskTypes(["sched_switch"]).timeDomain(totalTime).yAttribute("eventType").yLabel(currentTaskName);
   gantt(currentTaskSwitches);
 }
 
@@ -151,8 +151,8 @@ var substringMatcher = function(strs) {
         // Typeahead expects javascript object
         matches.push({ value: str });
       }
-    });
- 
+    })
+; 
     cb(matches);
   };
 };
@@ -181,13 +181,18 @@ function addAnotherTask(chosenTask) {
   $('#search-process').typeahead('close');
 
   var filterString = chosenTask["value"];
+
   window.localStorage.setItem("cellData", filterString);
 
   searchTasks(filterString); // Update table of preemptions
-  //d3.selectAll("svg").remove(); // Remove old chart
-  document.getElementById('ganttChart').innerHTML += filterString;
   makeGantt(filterString);
+
+  var btn = document.createElement("button");
+  var t = document.createTextNode("Remove Task");
+  btn.appendChild(t);
+  document.getElementById("ganttChart").appendChild(btn);
 }
+
 /*
 function changeToNewTask(chosenTask) {
   $('#search-process').typeahead('close');
@@ -210,24 +215,24 @@ function searchTasks(filterString)
   for (var i = 0; i < currentTasks.length; i++) {
     // console.log(currentTasks[i]);
     if (currentTasks[i].preemptedBy) {
-    for (var j = 0; j < currentTasks[i].preemptedBy.length; j++){
-      // data.push([currentTasks[i].preemptedBy[j]]);
-      if (!_.contains(data, currentTasks[i].preemptedBy[j])) {
-        newData.push([currentTasks[i].preemptedBy[j], 1]);
-        data.push(currentTasks[i].preemptedBy[j]);
-      } else {
-        var process = _.find(newData, function(a) {return a[0] == currentTasks[i].preemptedBy[j];});
-        data.push(currentTasks[i].preemptedBy[j]);
-        process[1]++;
+      for (var j = 0; j < currentTasks[i].preemptedBy.length; j++){
+        // data.push([currentTasks[i].preemptedBy[j]]);
+        if (!_.contains(data, currentTasks[i].preemptedBy[j])) {
+          newData.push([currentTasks[i].preemptedBy[j], 1]);
+          data.push(currentTasks[i].preemptedBy[j]);
+        } else {
+          var process = _.find(newData, function(a) {return a[0] == currentTasks[i].preemptedBy[j];});
+          data.push(currentTasks[i].preemptedBy[j]);
+          process[1]++;
+        }
       }
-    }
     }
   }
 
   /*document.getElementById('table_title').innerHTML = filterString + 
     " was preempted " + data.length + " times by:";*/
 
-
+/*
   if ( $.fn.dataTable.isDataTable( '#example' ) ) {
       // table = $('#example').DataTable();
       var table = $('#example').DataTable();
@@ -266,8 +271,8 @@ function searchTasks(filterString)
       // table.on( 'click', 'td', function () {
       //     alert( 'Clicked on cell in visible column: '+table.cell( this ).index().columnVisible );
       // } );
-  } 
-  }               
+  } */
+  }             
 }
 
 function autoSearch() {
