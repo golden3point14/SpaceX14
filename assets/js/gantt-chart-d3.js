@@ -15,7 +15,7 @@ d3.gantt = function(chartType) {
       top : 20,
       right : 40,
       bottom : 20,
-      left : 55
+      left : 65
     };
 
     var timeDomainStart = 0;
@@ -74,9 +74,10 @@ d3.gantt = function(chartType) {
     xAxis = d3.svg.axis().scale(x).orient("bottom");
 
     yAxis = d3.svg.axis().scale(y).orient("left").tickFormat(
-      function(d) {
-        return yLabel + d;
-      }
+        function(d) { 
+          if (chartType === processType) { return yLabel; }
+          else { return yLabel + d; }
+        }
       ).tickSize(0);
     };
 
