@@ -163,7 +163,6 @@ d3.gantt = function(chartType) {
          else {return (x(d[xDuration]));}
          })
      .on("click", function(d) {
-          // console.log(d.startTime);
           if (isSearch)
           {
             scrollToTime(d.startTime);

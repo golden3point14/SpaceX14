@@ -8,6 +8,7 @@ var reader = new FileReader();
 var autocompleteNames;
 var currentTasks;
 var gantt;
+var isSearch = false;
 
 $('#compareButton').css('background-color', '#315B7E');
 
