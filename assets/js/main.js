@@ -40,9 +40,6 @@ function openDB()
 
           tasksRequest.onsuccess = function(e) {
                   JSONtasks = e.target.result;
-                  getTopPreemptions();
-                  getTopRuntime();
-                  getTopWaittime();
 
                   numCPUsRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
 
@@ -106,99 +103,6 @@ function setColoringOfTasks() {
   }
 }
 
-function makeRow(task, table, attribute) {
-    var row = table.insertRow(0);
-
-    var nameCell = row.insertCell(0);
-    nameCell.innerHTML = task.name;
-
-    var pidCell = row.insertCell(1);
-    pidCell.innerHTML = task.pid;
-
-    var countCell = row.insertCell(2);
-    countCell.innerHTML = task[attribute];
-
-    row.onclick = function(myrow){
-                      return function() { 
-                         var cell = myrow.getElementsByTagName("td")[0];
-                         var id = cell.innerHTML;
-                         // console.log("id:" + id);
-                         clickCell(id);
-                      };
-                  }(row);
-}
-
-function getTopPreemptions()
-{
-
-  var displayNum = 10;
-
-  //sort processes by preemptionCount
-  var preemptionSorted = _.sortBy(JSONtasks, function(element){return -1*(element.preemptionCount);});
-  //remove <idle>
-  preemptionSorted = _.select(preemptionSorted, function(element){return (element.name != "<idle>") && (element.preemptionCount != 0);});
-
-  var preemptionList = document.getElementById("preemption-list").tBodies[0];
-
-  if (preemptionSorted.length == 0) {
-    preemptionList.style.display = "none";
-  }
-
-  for (var r = displayNum - 1; r >= 0; r--) {
-    var task = preemptionSorted[r];
-    if (task) {
-      //console.log(task);
-      makeRow(task, preemptionList, "preemptionCount");
-    }
-  }
-
-  // addRowHandlers();
-
-}
-
-function getTopRuntime()
-{
-  //sort processes by preemptionCount
-  var runTimeSorted = _.sortBy(JSONtasks, function(element){return -1*(element.totalRuntime);});
-  //remove <idle>
-  runTimeSorted = _.select(runTimeSorted, function(element){return (element.name != "<idle>") && (element.totalRuntime != 0);});
-  
-  var displayNum = 10;
-  var runtimeList = document.getElementById("runtime-list").tBodies[0];
-
-  if (runTimeSorted.length == 0) {
-    runtimeList.style.display = "none";
-  }
-
-  for (var r = displayNum - 1; r >= 0; r--) {
-      var task = runTimeSorted[r];
-    if (task) {
-      makeRow(task, runtimeList, "totalRuntime");
-    }
-  }
-}
-
-function getTopWaittime()
-{
-  //sort processes by preemptionCount
-  var waitTimeSorted = _.sortBy(JSONtasks, function(element){return -1*(element.totalWaittime);});
-  //remove <idle>
-  waitTimeSorted = _.select(waitTimeSorted, function(element){return (element.name != "<idle>") && (element.totalWaittime != 0);});
-  
-  var displayNum = 10;
-  var waittimeList = document.getElementById("waittime-list").tBodies[0];
- 
-  if (waitTimeSorted.length == 0) {
-    waittimeList.style.display = "none";
-  }
-
-  for (var r = displayNum - 1; r >= 0; r--) {
-    var task = waitTimeSorted[r];
-    if (task) {
-      makeRow(task, waittimeList, "totalWaittime");
-    }
-  }
-}
 
 function normalizeStartTime(switchEvents)
 {
@@ -248,3 +152,4 @@ function clickCell(cellData)
   window.localStorage.setItem("cellData", cellData);
   window.location.href = "process.html";
 }
+

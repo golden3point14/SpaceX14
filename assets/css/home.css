@@ -92,8 +92,8 @@ div.tooltip {
 }
 
 #ganttChart {
-	/*width: 90%;*/
-	/*overflow-x: auto;*/
+  width: 90%;
+	overflow-x: hidden;
 }
 
 .loader {
