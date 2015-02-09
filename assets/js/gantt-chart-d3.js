@@ -81,8 +81,10 @@ d3.gantt = function(chartType) {
     };
 
     var zoom = d3.behavior.zoom()
-    .x(x)
+      .x(x)
+      .scaleExtent([1,Infinity])
       .on("zoom", zoomed);
+
 
     var make_x_axis = function () {
       return xAxis;
@@ -93,13 +95,19 @@ d3.gantt = function(chartType) {
     };
 
     function zoomed() {
-      //$("svg").css("transform","translate(0,0)scale("+d3.event.scale+",1)");
-      //timeDomainEnd = originalTimeDomainEnd / d3.event.scale;
-      x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width * d3.event.scale ]);
+      // Remake the x-axis
+      x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width * d3.event.scale]);
       xAxis = d3.svg.axis().scale(x).orient("bottom");
       d3.select(".x.axis").call(xAxis);
+
+      // Scale all rectangles
       d3.selectAll("rect").attr("transform", zoomRectTransform);
-      d3.select("svg").attr("width", width*d3.event.scale);
+
+      d3.select("svg").attr("width", width*d3.event.scale); // make scrollbar happen
+
+      // Move entire chart to be centered on mouse
+      var newX = margin.left + d3.event.translate[0];
+      d3.select(".gantt-chart").attr("transform","translate(" + newX + "," + margin.top + ")");
     }
     
   function gantt(tasks) {
@@ -155,8 +163,10 @@ d3.gantt = function(chartType) {
          else {return (x(d[xDuration]));}
          })
      .on("click", function(d) {
-          // console.log(d.startTime);
-          scrollToTime(d.startTime);
+          if (isSearch)
+          {
+            scrollToTime(d.startTime);
+          }
      })
      .on("mouseover", function(d) {      
             div.transition()        
