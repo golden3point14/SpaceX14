@@ -9,6 +9,7 @@ var autocompleteNames;
 var currentTasks;
 var gantt;
 var isSearch = false;
+comparingTasks = [];
 
 $('#compareButton').css('background-color', '#315B7E');
 
@@ -40,10 +41,19 @@ function openDB()
 
     eventsRequest.onsuccess = function(e) {
             events = e.target.result;
-            var currentTaskName = window.localStorage.getItem("cellData");
+            var temp = JSON.parse(window.localStorage.getItem("compareData"));
+            // console.log(temp);
+            // comparingTasks.concat(temp);
+            // console.log(comparingTasks);
+            for (var i = 0; i < temp.length; i++) {
+              comparingTasks.push(temp[i])
+            }
+            console.log(window.localStorage);
             
-            if (currentTaskName) {
-              makeGantt(currentTaskName);
+            if (comparingTasks) {
+              for (var i = 0; i < comparingTasks.length; i++) {
+                makeGantt(comparingTasks[i]);
+              }
             }
             $('.loader').fadeOut("slow");
           }
@@ -178,7 +188,10 @@ function addAnotherTask(chosenTask) {
   $('#search-process').typeahead('close');
 
   var filterString = chosenTask["value"];
-  window.localStorage.setItem("cellData", filterString);
+  comparingTasks.push(filterString);
+  console.log(comparingTasks);
+  window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
+  console.log(window.localStorage);
 
   searchTasks(filterString); // Update table of preemptions
   //d3.selectAll("svg").remove(); // Remove old chart
@@ -268,7 +281,7 @@ function searchTasks(filterString)
 }
 
 function autoSearch() {
-  searchTasks(window.localStorage.getItem("cellData"));
+  searchTasks(window.localStorage.getItem("compareData"));
 }
 /*
 $(document).ready(function() {
