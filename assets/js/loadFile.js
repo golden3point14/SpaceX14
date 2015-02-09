@@ -16,6 +16,7 @@ var JSONautocompleteNames;
 var JSONcycleEvents;
 
 window.localStorage.setItem("cellData", "");
+window.localStorage.setItem("compareData", JSON.stringify([]));
 
 function handleFileSelect(evt) {
 	files = evt.target.files; // FileList object

@@ -9,6 +9,7 @@ var autocompleteNames;
 var currentTasks;
 var gantt;
 var isSearch = false;
+comparingTasks = [];
 
 var maxDuration = window.localStorage.getItem("maxDuration");
 
@@ -42,10 +43,19 @@ function openDB()
 
     eventsRequest.onsuccess = function(e) {
             events = e.target.result;
-            var currentTaskName = window.localStorage.getItem("cellData");
+            var temp = JSON.parse(window.localStorage.getItem("compareData"));
+            // console.log(temp);
+            // comparingTasks.concat(temp);
+            // console.log(comparingTasks);
+            for (var i = 0; i < temp.length; i++) {
+              comparingTasks.push(temp[i])
+            }
+            console.log(window.localStorage);
             
-            if (currentTaskName) {
-              makeGantt(currentTaskName);
+            if (comparingTasks) {
+              for (var i = 0; i < comparingTasks.length; i++) {
+                makeGantt(comparingTasks[i]);
+              }
             }
             $('.loader').fadeOut("slow");
           }
@@ -181,8 +191,9 @@ function addAnotherTask(chosenTask) {
   $('#search-process').typeahead('close');
 
   var filterString = chosenTask["value"];
+  comparingTasks.push(filterString);
+  window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
 
-  window.localStorage.setItem("cellData", filterString);
 
   searchTasks(filterString); // Update table of preemptions
   makeGantt(filterString);
@@ -276,7 +287,7 @@ function searchTasks(filterString)
 }
 
 function autoSearch() {
-  searchTasks(window.localStorage.getItem("cellData"));
+  searchTasks(window.localStorage.getItem("compareData"));
 }
 /*
 $(document).ready(function() {
