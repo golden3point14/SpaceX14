@@ -50,6 +50,8 @@ function openDB()
                     // this is the time of the last event for the end of the chart
                     
                     maxDuration = getLongestCPUDuration(switchEvents);
+
+                    window.localStorage.setItem("maxDuration", maxDuration);
                     
                     var gantt = d3.gantt(chartType).taskTypes(_.range(numCPUs)).timeDomain(maxDuration);
                     switchEvents = normalizeStartTime(switchEvents);
