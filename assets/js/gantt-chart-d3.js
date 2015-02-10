@@ -104,11 +104,11 @@ d3.gantt = function(chartType) {
       // Scale all rectangles
       d3.selectAll("rect").attr("transform", zoomRectTransform);
 
-      d3.select("svg").attr("width", width*d3.event.scale); // make scrollbar happen
+      d3.selectAll("svg").attr("width", width*d3.event.scale); // make scrollbar happen
 
       // Move entire chart to be centered on mouse
       var newX = margin.left + d3.event.translate[0];
-      d3.select(".gantt-chart").attr("transform","translate(" + newX + "," + margin.top + ")");
+      d3.selectAll(".gantt-chart").attr("transform","translate(" + newX + "," + margin.top + ")");
     }
     
   function gantt(tasks) {
