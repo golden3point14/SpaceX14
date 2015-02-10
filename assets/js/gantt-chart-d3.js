@@ -99,7 +99,7 @@ d3.gantt = function(chartType) {
       // Remake the x-axis
       x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width * d3.event.scale]);
       xAxis = d3.svg.axis().scale(x).orient("bottom");
-      d3.select(".x.axis").call(xAxis);
+      d3.selectAll(".x.axis").call(xAxis);
 
       // Scale all rectangles
       d3.selectAll("rect").attr("transform", zoomRectTransform);
