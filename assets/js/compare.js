@@ -12,6 +12,7 @@ var isSearch = false;
 comparingTasks = [];
 
 var maxDuration = window.localStorage.getItem("maxDuration");
+var firstEventTime = window.localStorage.getItem("firstEventTime"); //for normalizing values
 
 $('#compareButton').css('background-color', '#315B7E');
 
@@ -137,7 +138,7 @@ function getRelevantSwitches(currentTaskName) {
 // Normalize
 function normalize(labeledTaskSwitches) {
   var earliestTime = labeledTaskSwitches[0].startTime;
-  return _.map(labeledTaskSwitches, function(task) { task.normalStartTime = task.startTime - earliestTime; return task; });
+  return _.map(labeledTaskSwitches, function(task) { task.normalStartTime = task.startTime - firstEventTime; return task; });
 }
 
 function makeGantt(currentTaskName) {

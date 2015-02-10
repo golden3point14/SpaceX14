@@ -4,6 +4,8 @@ var numCPUs;
 
 var chartType = "MAIN"; //for gantt
 
+var firstEventTime;
+
 $('#mainButton').css('background-color', '#315B7E');
 
 function openDB()
@@ -49,7 +51,7 @@ function openDB()
                     switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
                     // this is the time of the last event for the end of the chart
                     
-                    maxDuration = getLongestCPUDuration(switchEvents);
+                    var maxDuration = getLongestCPUDuration(switchEvents);
 
                     window.localStorage.setItem("maxDuration", maxDuration);
                     
@@ -57,6 +59,8 @@ function openDB()
                     switchEvents = normalizeStartTime(switchEvents);
                     
                     switchEvents = calculateDurationBetweenSwitches(switchEvents, numCPUs);
+
+                    window.localStorage.setItem("firstEventTime", firstEventTime);
 
                     gantt(switchEvents); //feeding it the relevant events
                     setColoringOfTasks();
@@ -109,6 +113,7 @@ function setColoringOfTasks() {
 function normalizeStartTime(switchEvents)
 {
   var earliestTime = switchEvents[0].startTime;
+  firstEventTime = earliestTime;
   switchEvents = _.map(switchEvents, function(e) {e.normalStartTime = e.startTime - earliestTime; return e;});
   return switchEvents;
 }
