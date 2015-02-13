@@ -51,7 +51,7 @@ function openDB()
             for (var i = 0; i < temp.length; i++) {
               comparingTasks.push(temp[i])
             }
-            console.log(window.localStorage);
+            // console.log(window.localStorage);
             
             if (comparingTasks) {
               for (var i = 0; i < comparingTasks.length; i++) {
@@ -190,14 +190,29 @@ function autoCompleteNames() {
 
 function addAnotherTask(chosenTask) {
   $('#search-process').typeahead('close');
+  $('#search-process').typeahead('val', '');// Clear text from typeahead
 
   var filterString = chosenTask["value"];
-  comparingTasks.push(filterString);
-  window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
+  var display = true;
+  // check if we are already displaying this task
+  for (var i = 0; i < comparingTasks.length; i++) {
+    if (comparingTasks[i] == filterString) {
+      // console.log("You are already displaying that task.");
+      display = false;
+      break;
+    }
+  }
 
+  if (display) {
+    comparingTasks.push(filterString);
+    window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
 
-  searchTasks(filterString); // Update table of preemptions
-  makeGantt(filterString);
+    //window.location.hash = '#' + filterString; // Scroll to added graph
+    $('#addedNotify').fadeIn(200);
+    $('#addedNotify').fadeOut(1000);
+
+    searchTasks(filterString); // Update table of preemptions
+    makeGantt(filterString);
 
   var btn = document.createElement("button");
   var t = document.createTextNode("Remove Task");
@@ -216,6 +231,11 @@ function addAnotherTask(chosenTask) {
   $('btn').click(function() {
     d3.selectAll(filterString).remove()
   });
+    var btn = document.createElement("button");
+    var t = document.createTextNode("Remove Task");
+    btn.appendChild(t);
+    document.getElementById("ganttChart").appendChild(btn);
+  }
 }
 */
 

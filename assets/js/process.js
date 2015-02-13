@@ -179,6 +179,7 @@ function changeToNewTask(chosenTask) {
 
   searchTasks(filterString); // Update table of preemptions
   d3.selectAll("svg").remove(); // Remove old chart
+  $('#search-process').typeahead('val', '');// Clear text from typeahead
   makeGantt(filterString);
 }
 
