@@ -51,7 +51,7 @@ function openDB()
             for (var i = 0; i < temp.length; i++) {
               comparingTasks.push(temp[i])
             }
-            console.log(window.localStorage);
+            // console.log(window.localStorage);
             
             if (comparingTasks) {
               for (var i = 0; i < comparingTasks.length; i++) {
@@ -192,17 +192,29 @@ function addAnotherTask(chosenTask) {
   $('#search-process').typeahead('close');
 
   var filterString = chosenTask["value"];
-  comparingTasks.push(filterString);
-  window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
+  var display = true;
+  // check if we are already displaying this task
+  for (var i = 0; i < comparingTasks.length; i++) {
+    if (comparingTasks[i] == filterString) {
+      // console.log("You are already displaying that task.");
+      display = false;
+      break;
+    }
+  }
+
+  if (display) {
+    comparingTasks.push(filterString);
+    window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
 
 
-  searchTasks(filterString); // Update table of preemptions
-  makeGantt(filterString);
+    searchTasks(filterString); // Update table of preemptions
+    makeGantt(filterString);
 
-  var btn = document.createElement("button");
-  var t = document.createTextNode("Remove Task");
-  btn.appendChild(t);
-  document.getElementById("ganttChart").appendChild(btn);
+    var btn = document.createElement("button");
+    var t = document.createTextNode("Remove Task");
+    btn.appendChild(t);
+    document.getElementById("ganttChart").appendChild(btn);
+  }
 }
 
 /*
