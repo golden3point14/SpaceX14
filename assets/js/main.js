@@ -50,13 +50,13 @@ function openDB()
 
                     switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
                     // this is the time of the last event for the end of the chart
-                    
+                    switchEvents = normalizeStartTime(switchEvents);
                     var maxDuration = getLongestCPUDuration(switchEvents);
 
                     window.localStorage.setItem("maxDuration", maxDuration);
                     
                     var gantt = d3.gantt(chartType).taskTypes(_.range(numCPUs)).timeDomain(maxDuration);
-                    switchEvents = normalizeStartTime(switchEvents);
+                    // switchEvents = normalizeStartTime(switchEvents);
                     
                     switchEvents = calculateDurationBetweenSwitches(switchEvents, numCPUs);
 
@@ -148,8 +148,18 @@ function calculateDuration(eventList) {
 function getLongestCPUDuration(switchEvents)
 {
   switchEventsByCPU = _.groupBy(switchEvents, function(e){return e.cpu;});
+  var longestTime = 0;
 
-  return _.max(_.map(switchEventsByCPU, calculateDuration));
+  // return _.max(_.map(switchEventsByCPU, calculateDuration));
+  for (var cpu = 0; cpu < numCPUs; cpu++) {
+    var tempEvents = switchEventsByCPU[cpu];
+    var lastTime = tempEvents[tempEvents.length - 1].normalStartTime;
+    if (longestTime < lastTime) {
+      longestTime = lastTime;
+    }
+  }
+
+  return longestTime;
 }
 
 document.addEventListener("load", openDB());
