@@ -44,7 +44,7 @@ processDiv.setAttribute("onclick", "window.location.href='process.html';");
 sidebar.appendChild(processDiv);
 
 var compareDiv = document.createElement('div');
-compareDiv.id = 'sidebutton';
+compareDiv.id = 'compareButton';
 compareDiv.className = 'sidebutton';
 compareDiv.innerHTML = "Compare";
 compareDiv.setAttribute("onclick", "window.location.href='compare.html';");

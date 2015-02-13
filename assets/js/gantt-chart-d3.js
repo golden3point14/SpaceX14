@@ -25,6 +25,7 @@ d3.gantt = function(chartType) {
     var yAttribute = "cpu"; // By default, use cpu to group tasks on y axis
     var xStartAttribute = "normalStartTime";
     var xDuration = "processTime";
+    var id = "";
 
     var taskTypes = [];
     var taskStatus = [];
@@ -118,6 +119,7 @@ d3.gantt = function(chartType) {
     var svg = d3.select("#ganttChart")
                 .append("svg")
                   .attr("class", "chart")
+                  .attr("id", id)
                   .attr("width", width + margin.left + margin.right)
                   .attr("height", height + margin.top + margin.bottom)
                   .call(zoom)
@@ -331,6 +333,12 @@ d3.gantt = function(chartType) {
       return gantt;
     }
 
+    gantt.id = function(value) {
+      if (!arguments.length)
+        return id;
+      id = value;
+      return gantt;
+    }
     
     return gantt;
 };
