@@ -15,10 +15,10 @@
 
   <link  type="text/css" rel="stylesheet" href="assets/css/jquery.dataTables.css">
   <link type="text/css" rel="stylesheet" href="assets/css/dc.css"/>
-  <link type="text/css" rel="stylesheet" href="assets/css/bootstrap.min.css"/>
   <link type="text/css" rel="stylesheet" href="assets/css/searchbar.css"/>
   <link type="text/css" rel="stylesheet" href="assets/css/home.css"/>
   <link type="text/css" rel="stylesheet" href="assets/css/process.css"/>
+  <link type="text/css" rel="stylesheet" href="assets/css/bootstrap.min.css"/>
 
 </head>
 
@@ -27,7 +27,14 @@
   <div class="sidebar" id="sidebar"></div>
   
   <div class="content">
-    Search for a Process: <input type="text" class="search-process typeahead" id="search-process" placeholder="Process Name">
+    <div class="row">
+      <div class="span5">
+        Search for a Process: <input type="text" class="search-process typeahead input-medium" id="search-process" placeholder="Process Name">
+      </div>
+      <div class="span3">
+        <div id="addedNotify" class="alert alert-success" style="display: none">Task added</div>
+      </div>
+    </div>
     <!-- <div id="demo">
       <h4 id="table_title"></h4>
       <table cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>

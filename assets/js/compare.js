@@ -190,6 +190,7 @@ function autoCompleteNames() {
 
 function addAnotherTask(chosenTask) {
   $('#search-process').typeahead('close');
+  $('#search-process').typeahead('val', '');// Clear text from typeahead
 
   var filterString = chosenTask["value"];
   var display = true;
@@ -206,6 +207,9 @@ function addAnotherTask(chosenTask) {
     comparingTasks.push(filterString);
     window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
 
+    //window.location.hash = '#' + filterString; // Scroll to added graph
+    $('#addedNotify').fadeIn(200);
+    $('#addedNotify').fadeOut(1000);
 
     searchTasks(filterString); // Update table of preemptions
     makeGantt(filterString);
