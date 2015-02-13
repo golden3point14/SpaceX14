@@ -214,16 +214,17 @@ function addAnotherTask(chosenTask) {
     searchTasks(filterString); // Update table of preemptions
     makeGantt(filterString);
 
-  var btn = document.createElement("button");
-  var t = document.createTextNode("Remove Task");
-  var idString = filterString+"Button";
-  btn.id = "hi";
-  btn.appendChild(t);
-  document.getElementById("ganttChart").appendChild(btn);
+    var btn = document.createElement("button");
+    var t = document.createTextNode("Remove Task");
+    var idString = filterString+"Button";
+    btn.id = "hi";
+    btn.appendChild(t);
+    document.getElementById("ganttChart").appendChild(btn);
 
-  document.getElementById("hi").onclick = function() {
-    console.log("whaaat");
-    d3.selectAll(filterString).remove();
+    document.getElementById("hi").onclick = function() {
+      console.log("whaaat");
+      d3.select(filterString).remove();
+    }
   }
 }
 
