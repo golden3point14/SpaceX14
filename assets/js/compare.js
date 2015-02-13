@@ -217,13 +217,16 @@ function addAnotherTask(chosenTask) {
     var btn = document.createElement("button");
     var t = document.createTextNode("Remove Task");
     var idString = filterString+"Button";
-    btn.id = "hi";
+    btn.id = idString;
     btn.appendChild(t);
     document.getElementById("ganttChart").appendChild(btn);
 
-    document.getElementById("hi").onclick = function() {
+    document.getElementById(idString).onclick = function() {
       console.log("whaaat");
-      d3.select(filterString).remove();
+      console.log(filterString);
+      d3.select("#"+filterString).remove();
+      localStorage.removeItem(filterString);
+      console.log("should have removed");
     }
   }
 }
