@@ -222,31 +222,23 @@ function addAnotherTask(chosenTask) {
     document.getElementById("ganttChart").appendChild(btn);
 
     document.getElementById(idString).onclick = function() {
-      console.log("whaaat");
       console.log(filterString);
       d3.select("#"+filterString).remove();
-      localStorage.removeItem(filterString);
+      window.localStorage.getItem(filterString);
+      window.localStorage.removeItem(filterString);
+      var index = comparingTasks.indexOf(filterString);
+
+      if(index >-1) {
+        comparingTasks.splice(index,1);
+      }
+
+      window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
+      var child = document.getElementById(idString);
+      child.parentNode.removeChild(child);
       console.log("should have removed");
     }
   }
 }
-
-/*function removeGraph() {
-  $('btn').click(function() {
-    d3.selectAll(filterString).remove()
-  });
-    var btn = document.createElement("button");
-    var t = document.createTextNode("Remove Task");
-    btn.appendChild(t);
-    document.getElementById("ganttChart").appendChild(btn);
-  }
-}
-*/
-
-/*document.getElementById("btn").onclick = function () {
-  d3.selectAll(filterString).remove();
-}
-*/
 
 /*
 function changeToNewTask(chosenTask) {
