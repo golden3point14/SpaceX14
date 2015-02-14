@@ -105,7 +105,8 @@ function makeGantt() {
   gantt = d3.gantt(chartType).taskTypes(_.range(numCycles,-1,-1))
           .timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ").margin(margin).height(height);
 
-  gantt(switchCycleEvents);
+  gantt(switchCycleEvents, "#ganttChart1");
+  gantt(switchCycleEvents, "#ganttChart2");
 }
 
 // Sorts events by cycle by assigning a "cycles" attribute
@@ -253,13 +254,13 @@ function addOptions()
 		var option = document.createElement("option");
 		option.text = i;
 		option.value = i;
-		var select = document.getElementById("cpu");
+		var select = document.getElementById("cpu1");
 		select.appendChild(option);
 	}
 }
 
 // Handles user selection of new CPU from dropdown
-document.getElementById("cpu").onchange = function (e) {
+document.getElementById("cpu1").onchange = function (e) {
   currentCPU = e.target.value;
   var switchCycleEvents = getCycleEventsForCPU();
   d3.selectAll("svg").remove();
@@ -284,7 +285,7 @@ function getCycleLength(e)
  	{
  		e.preventDefault();
 
-    var cycleInput = document.getElementById("cycleLength");
+    var cycleInput = document.getElementById("cycleLength1");
 
     // Make sure user typed a valid number
     if (cycleInput.checkValidity()) {
@@ -325,4 +326,4 @@ function getCycleLength(e)
 }
 
 document.addEventListener("load", openDB());
-document.getElementById("cycleLength").addEventListener("keypress", getCycleLength)
+document.getElementById("cycleLength1").addEventListener("keypress", getCycleLength)

@@ -113,3 +113,8 @@ div.tooltip {
 title {
   text-align: left;
 }
+
+.cyclesDiv {
+  display: : inline-block;
+  width: 30%;
+}

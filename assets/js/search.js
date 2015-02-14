@@ -23,8 +23,9 @@ $('#searchButton').css('background-color', '#315B7E');
     		data:           data,
     		deferRender:    true,
     		dom:            "frtiS",
-    		scrollY:        450,
+    		scrollY:        200,
     		scrollCollapse: true,
+        stateSave:      true,
     		order:          [[1, 'asc']],
         columns: [
           { "title" : "CPU", "width" : "40px" },

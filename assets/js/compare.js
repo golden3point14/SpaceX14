@@ -148,7 +148,7 @@ function makeGantt(currentTaskName) {
   //totalTime = _.reduce(labeledTaskSwitches, function(sum, next) { return sum += next.processTime }, 0);
 
   gantt = d3.gantt("PROCESS").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel(currentTaskName).id(currentTaskName);
-  gantt(currentTaskSwitches);
+  gantt(currentTaskSwitches, "#ganttChart");
 }
 
 var substringMatcher = function(strs) {

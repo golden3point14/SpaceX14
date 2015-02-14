@@ -62,7 +62,7 @@ function openDB()
 
                     window.localStorage.setItem("firstEventTime", firstEventTime);
 
-                    gantt(switchEvents); //feeding it the relevant events
+                    gantt(switchEvents, "#ganttChart"); //feeding it the relevant events
                     setColoringOfTasks();
                     $('.loader').fadeOut("slow");
                   }

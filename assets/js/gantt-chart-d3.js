@@ -112,11 +112,11 @@ d3.gantt = function(chartType) {
       d3.selectAll(".gantt-chart").attr("transform","translate(" + newX + "," + margin.top + ")");
     }
     
-  function gantt(tasks) {
+  function gantt(tasks, div) {
     initTimeDomain(tasks);
     initAxis();
 
-    var svg = d3.select("#ganttChart")
+    var svg = d3.select(div)
                 .append("svg")
                   .attr("class", "chart")
                   .attr("id", id)
