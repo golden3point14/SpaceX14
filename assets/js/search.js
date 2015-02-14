@@ -168,13 +168,17 @@ function scrollToTime(time)
   var table = $('#table_id').DataTable();
 
   if(table) {
-    table.order([[1,'asc']]);
-    table.draw();
+    if ((table.order()[0][0] != 1) || (table.order()[0[1] != 'asc'])) {
+      table.order([[1,'asc']]);
+      table.draw();
+    }
     var rows = table.rows()[0];
     var index = findIndex(rows, time);
     console.log("index="+index);
     var oSettings = $('#table_id').dataTable().fnSettings();
+    // oSettings.oScroller.fnScrollToRow(index, false);
     oSettings.oScroller.fnScrollToRow(index, true);
+    // table.draw()
   }
 }
 
