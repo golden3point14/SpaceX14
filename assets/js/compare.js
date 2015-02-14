@@ -146,8 +146,14 @@ function makeGantt(currentTaskName) {
 
   //originally the graphs endpoint (ie timeDomain(totalTime))
   //totalTime = _.reduce(labeledTaskSwitches, function(sum, next) { return sum += next.processTime }, 0);
+  margin = {
+    top: 0,
+    bottom: 10,
+    left: 105,
+    right: 0
+  }
 
-  gantt = d3.gantt("PROCESS").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel(currentTaskName).id(currentTaskName);
+  gantt = d3.gantt("PROCESS").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel(currentTaskName).id(currentTaskName).height(100).margin(margin);
   gantt(currentTaskSwitches);
 }
 
