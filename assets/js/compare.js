@@ -146,9 +146,17 @@ function makeGantt(currentTaskName) {
 
   //originally the graphs endpoint (ie timeDomain(totalTime))
   //totalTime = _.reduce(labeledTaskSwitches, function(sum, next) { return sum += next.processTime }, 0);
+  margin = {
+    top: 0,
+    bottom: 10,
+    left: 105,
+    right: 0
+  }
+
 
   gantt = d3.gantt("PROCESS").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel(currentTaskName).id(currentTaskName);
   gantt(currentTaskSwitches, "#ganttChart");
+
 }
 
 var substringMatcher = function(strs) {
@@ -222,31 +230,23 @@ function addAnotherTask(chosenTask) {
     document.getElementById("ganttChart").appendChild(btn);
 
     document.getElementById(idString).onclick = function() {
-      console.log("whaaat");
       console.log(filterString);
       d3.select("#"+filterString).remove();
-      localStorage.removeItem(filterString);
+      window.localStorage.getItem(filterString);
+      window.localStorage.removeItem(filterString);
+      var index = comparingTasks.indexOf(filterString);
+
+      if(index >-1) {
+        comparingTasks.splice(index,1);
+      }
+
+      window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
+      var child = document.getElementById(idString);
+      child.parentNode.removeChild(child);
       console.log("should have removed");
     }
   }
 }
-
-/*function removeGraph() {
-  $('btn').click(function() {
-    d3.selectAll(filterString).remove()
-  });
-    var btn = document.createElement("button");
-    var t = document.createTextNode("Remove Task");
-    btn.appendChild(t);
-    document.getElementById("ganttChart").appendChild(btn);
-  }
-}
-*/
-
-/*document.getElementById("btn").onclick = function () {
-  d3.selectAll(filterString).remove();
-}
-*/
 
 /*
 function changeToNewTask(chosenTask) {
