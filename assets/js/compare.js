@@ -56,6 +56,8 @@ function openDB()
             if (comparingTasks) {
               for (var i = 0; i < comparingTasks.length; i++) {
                 makeGantt(comparingTasks[i]);
+                console.log(comparingTasks[i]);
+                makeRemoveButton(comparingTasks[i]);
               }
             }
             $('.loader').fadeOut("slow");
@@ -215,26 +217,29 @@ function addAnotherTask(chosenTask) {
     comparingTasks.push(filterString);
     window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
 
-    //window.location.hash = '#' + filterString; // Scroll to added graph
     $('#addedNotify').fadeIn(200);
     $('#addedNotify').fadeOut(1000);
 
     searchTasks(filterString); // Update table of preemptions
     makeGantt(filterString);
+    makeRemoveButton(filterString);
+  }
+}
 
+function makeRemoveButton(taskName) {
     var btn = document.createElement("button");
     var t = document.createTextNode("Remove Task");
-    var idString = filterString+"Button";
+    var idString = taskName + "Button";
     btn.id = idString;
+    btn.className = "removeButton btn";
     btn.appendChild(t);
     document.getElementById("ganttChart").appendChild(btn);
 
     document.getElementById(idString).onclick = function() {
-      console.log(filterString);
-      d3.select("#"+filterString).remove();
-      window.localStorage.getItem(filterString);
-      window.localStorage.removeItem(filterString);
-      var index = comparingTasks.indexOf(filterString);
+      d3.select("#"+taskName).remove();
+      window.localStorage.getItem(taskName);
+      window.localStorage.removeItem(taskName);
+      var index = comparingTasks.indexOf(taskName);
 
       if(index >-1) {
         comparingTasks.splice(index,1);
@@ -243,23 +248,9 @@ function addAnotherTask(chosenTask) {
       window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
       var child = document.getElementById(idString);
       child.parentNode.removeChild(child);
-      console.log("should have removed");
     }
-  }
 }
 
-/*
-function changeToNewTask(chosenTask) {
-  $('#search-process').typeahead('close');
-
-  var filterString = chosenTask["value"];
-  window.localStorage.setItem("cellData", filterString);
-
-  searchTasks(filterString); // Update table of preemptions
-  d3.selectAll("svg").remove(); // Remove old chart
-  makeGantt(filterString);
-}
-*/
 function searchTasks(filterString)
 {
   if (filterString != "") {
@@ -279,65 +270,15 @@ function searchTasks(filterString)
           var process = _.find(newData, function(a) {return a[0] == currentTasks[i].preemptedBy[j];});
           data.push(currentTasks[i].preemptedBy[j]);
           process[1]++;
+          }
         }
       }
     }
   }
-
-  /*document.getElementById('table_title').innerHTML = filterString + 
-    " was preempted " + data.length + " times by:";*/
-
-/*
-  if ( $.fn.dataTable.isDataTable( '#example' ) ) {
-      // table = $('#example').DataTable();
-      var table = $('#example').DataTable();
-      table.destroy();
-      table = $('#example').dataTable( {
-      data: newData,
-      columns: [
-          { "title": "Process Name" },
-          { "title": "Number of Preemptions" }
-      ],
-      deferRender:    true,
-      dom:            "frtiS",
-      scrollY:        400,
-      scrollCollapse: true,
-      order:          [[1, 'desc']]
-    } ); 
-
-      // table.on( 'click', 'td', function () {
-      //     alert( 'Clicked on cell in visible column: '+table.cell( this ).index().columnVisible );
-      // } );
-  }
-  else {
-      var table = $('#example').dataTable( {
-      data: newData,
-      columns: [
-          { "title": "Process Name" },
-          { "title": "Number of Preemptions" }
-      ],
-      deferRender:    true,
-      dom:            "frtiS",
-      scrollY:        400,
-      scrollCollapse: true,
-      order:          [[1, 'desc']]
-    } ); 
-
-      // table.on( 'click', 'td', function () {
-      //     alert( 'Clicked on cell in visible column: '+table.cell( this ).index().columnVisible );
-      // } );
-  } */
-  }             
 }
 
 function autoSearch() {
   searchTasks(window.localStorage.getItem("compareData"));
 }
-/*
-$(document).ready(function() {
-	console.log("starting to load table");
-	$('#ganttChart').load('process.html #ganttChart');
-	console.log("should have loaded table");
-});*/
 
 document.addEventListener("load", openDB());
