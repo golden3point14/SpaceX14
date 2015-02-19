@@ -43,7 +43,7 @@ d3.gantt = function(chartType) {
         height = 300;
         break;
     }
-    var width = document.body.clientWidth * .8 - margin.right - margin.left - 150;
+    var width = document.body.clientWidth - margin.right - margin.left - 150;
 
     var keyFunction = function(d) {
       return d[xStartAttribute] + d[yAttribute] + (d[xStartAttribute] + d[xDuration]);
