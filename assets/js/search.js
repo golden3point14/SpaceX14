@@ -6,6 +6,7 @@ var reader = new FileReader();
 var autocompleteEventTypes;
 var autocompleteNames;
 var isSearch = true;
+var tableRows;
 
 $('#searchButton').css('background-color', '#315B7E');
 
@@ -197,7 +198,6 @@ function scrollToTime(time)
     var oSettings = $('#table_id').dataTable().fnSettings();
     // oSettings.oScroller.fnScrollToRow(index, false);
     oSettings.oScroller.fnScrollToRow(index, true);
-    // table.draw()
   }
 }
 

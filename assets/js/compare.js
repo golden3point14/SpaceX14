@@ -56,7 +56,7 @@ function openDB()
             if (comparingTasks) {
               for (var i = 0; i < comparingTasks.length; i++) {
                 makeGantt(comparingTasks[i]);
-                console.log(comparingTasks[i]);
+                // console.log(comparingTasks[i]);
                 makeRemoveButton(comparingTasks[i]);
               }
             }
@@ -155,8 +155,11 @@ function makeGantt(currentTaskName) {
     right: 0
   }
 
+  var safeTaskName = makeSafeForCSS(currentTaskName);
+  // console.log(currentTaskName);
+  // console.log(safeTaskName);
 
-  gantt = d3.gantt("PROCESS").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel(currentTaskName).id(currentTaskName).height(100).margin(margin);
+  gantt = d3.gantt("PROCESS").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel(currentTaskName).id(safeTaskName).height(100).margin(margin);
   gantt(currentTaskSwitches, "#ganttChart");
 
 }
@@ -227,16 +230,18 @@ function addAnotherTask(chosenTask) {
 }
 
 function makeRemoveButton(taskName) {
+    var safeTaskName = makeSafeForCSS(taskName);
+
     var btn = document.createElement("button");
     var t = document.createTextNode("Remove Task");
-    var idString = taskName + "Button";
+    var idString = safeTaskName + "Button";
     btn.id = idString;
     btn.className = "removeButton btn";
     btn.appendChild(t);
     document.getElementById("ganttChart").appendChild(btn);
 
     document.getElementById(idString).onclick = function() {
-      d3.select("#"+taskName).remove();
+      d3.select("#"+safeTaskName).remove();
       window.localStorage.getItem(taskName);
       window.localStorage.removeItem(taskName);
       var index = comparingTasks.indexOf(taskName);
@@ -279,6 +284,10 @@ function searchTasks(filterString)
 
 function autoSearch() {
   searchTasks(window.localStorage.getItem("compareData"));
+}
+
+function makeSafeForCSS(str) {
+  return str.replace(/\/|:/g, "");
 }
 
 document.addEventListener("load", openDB());

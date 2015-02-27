@@ -100,13 +100,21 @@ d3.gantt = function(chartType) {
 
     function zoomStartHandler() {
       var currScale = window.localStorage.getItem("currScale");
-      var currTranslate = window.localStorage.getItem("currTranslate");
-      console.log("BEGIN" + currScale);
-      //zoomed(currScale, currTranslate);
+      var currTranslateX = window.localStorage.getItem("currTranslateX");
+      var currTranslateY = window.localStorage.getItem("currTranslateY");
+
       if (currScale != zoom.scale())
       {
         zoom.scale(currScale);
       }
+
+      if (currTranslateX != zoom.translate()[0] || currTranslateY != zoom.translate()[1])
+      {
+
+        console.log("should be numbers " + currTranslateX + ", " + currTranslateY);
+        zoom.translate([currTranslateX, currTranslateY]);
+      }
+
     }
 
     function zoomed() {
@@ -115,8 +123,6 @@ d3.gantt = function(chartType) {
       x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width * d3.event.scale]);
       xAxis = d3.svg.axis().scale(x).orient("bottom");
       d3.selectAll(".x.axis").call(xAxis);
-
-      console.log("DURING" + d3.event.scale);
 
       // Scale all rectangles
       d3.selectAll("rect").attr("transform", zoomRectTransform);
@@ -133,7 +139,8 @@ d3.gantt = function(chartType) {
       // TESTING
       // push d3.event.scale and d3.event.translate[0] up to local storage
       window.localStorage.setItem("currScale", zoom.scale());
-      window.localStorage.setItem("currTranslate", zoom.translate()); //NEED TO INTERRUPT PANNING
+      window.localStorage.setItem("currTranslateX", zoom.translate()[0]);
+      window.localStorage.setItem("currTranslateY", zoom.translate()[1]);
       // next need a way to check if a given graphs scale/translate matches this or not, BEFORE mouse event takes affect
     }
     
