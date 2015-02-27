@@ -6,6 +6,7 @@
 var mainType = "MAIN";
 var cyclesType = "CYCLES";
 var processType = "PROCESS";
+var compareType = "COMPARE";
 
 d3.gantt = function(chartType) {
     var FIT_TIME_DOMAIN_MODE = "fit";
@@ -43,7 +44,15 @@ d3.gantt = function(chartType) {
         height = 300;
         break;
     }
-    var width = document.body.clientWidth - margin.right - margin.left - 150;
+    var width;
+    switch(chartType) {
+      case compareType:
+        width = document.body.clientWidth * 0.89 - margin.right - margin.left - 150;
+        break;
+      default:
+        width = document.body.clientWidth - margin.right - margin.left - 150;
+        break;
+    }
 
     var keyFunction = function(d) {
       return d[xStartAttribute] + d[yAttribute] + (d[xStartAttribute] + d[xDuration]);
@@ -127,10 +136,6 @@ d3.gantt = function(chartType) {
       // Scale all rectangles
       d3.selectAll("rect").attr("transform", zoomRectTransform);
 
-
-      d3.selectAll("svg").attr("width", width*d3.event.scale);
-
-
       // Move entire chart to be centered on mouse
       var newX = margin.left + d3.event.translate[0];
       d3.selectAll(".gantt-chart").attr("transform","translate(" + newX + "," + margin.top + ")");
@@ -150,7 +155,7 @@ d3.gantt = function(chartType) {
 
     var svg = d3.select(div)
                 .append("svg")
-                  .attr("class", "chart")
+                  .attr("class", "chart " + chartType)
                   .attr("id", id)
                   .attr("width", width + margin.left + margin.right)
                   .attr("height", height + margin.top + margin.bottom)
@@ -181,6 +186,9 @@ d3.gantt = function(chartType) {
             case processType:
               className = d.state;
               break;
+            case compareType:
+              className = d.state;
+              break;
             default:
               className = d.activeName;
               break;
@@ -198,7 +206,7 @@ d3.gantt = function(chartType) {
          else {return (x(d[xDuration]));}
          })
      .on("click", function(d) {
-          if (isSearch)
+          if (chartType == mainType)
           {
             scrollToTime(d.startTime);
           }

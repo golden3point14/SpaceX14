@@ -2,7 +2,6 @@ var JSONevents;
 var JSONtasks;
 var numCPUs;
 var currentResults;
-var isSearch = true;
 
 var chartType = "MAIN"; //for gantt
 
