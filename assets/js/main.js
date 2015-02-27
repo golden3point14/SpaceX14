@@ -1,6 +1,8 @@
 var JSONevents;
 var JSONtasks;
 var numCPUs;
+var currentResults;
+var isSearch = true;
 
 var chartType = "MAIN"; //for gantt
 
@@ -20,16 +22,16 @@ function openDB()
 
   openRequest.onsuccess = function(e)
   {
-    console.log("openRequest success!");
+    console.log("openRequest success from main!");
     var db = e.target.result;
 
-    var eventsRequest = db.transaction(["Events"],"readwrite")
+    var eventsRequest = db.transaction(["Events"],"readonly")
               .objectStore("Events").get(1);
 
-    var tasksRequest = db.transaction(["Tasks"], "readwrite")
+    var tasksRequest = db.transaction(["Tasks"], "readonly")
               .objectStore("Tasks").get(1);
 
-    var numCPUsRequest = db.transaction(["numCPUs"], "readwrite")
+    var numCPUsRequest = db.transaction(["numCPUs"], "readonly")
               .objectStore("numCPUs").get(1);
 
     // some kind of error handling
@@ -37,6 +39,7 @@ function openDB()
 
     eventsRequest.onsuccess = function(e) {
           JSONevents = e.target.result;
+          currentResults = e.target.result;
            // some kind of error handling
           tasksRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
 
@@ -64,6 +67,7 @@ function openDB()
 
                     gantt(switchEvents, "#ganttChart"); //feeding it the relevant events
                     setColoringOfTasks();
+                    displayTable();
                     $('.loader').fadeOut("slow");
                   }
         }
@@ -170,3 +174,100 @@ function clickCell(cellData)
   window.location.href = "process.html";
 }
 
+  function displayTable() {
+  	$(document).ready(function() {
+    	var data = [];
+    	for ( var i=0 ; i<currentResults.length ; i++ ) {
+        if(currentResults[i].name=="<idle>") {
+          currentResults[i].name='idle';
+        } 
+    	data.push( [ currentResults[i].cpu, currentResults[i].startTime, currentResults[i].name, currentResults[i].pid, currentResults[i].eventType, currentResults[i].extraInfo ] );
+    	}
+
+    	var oTable = $('#table_id').dataTable( {
+    		data:           data,
+    		deferRender:    true,
+    		dom:            "frtiS",
+    		scrollY:        200,
+    		scrollCollapse: true,
+        stateSave:      true,
+    		order:          [[1, 'asc']],
+        columns: [
+          { "title" : "CPU", "width" : "40px" },
+          { "title" : "Start time" },
+          { "title" : "Name", "width" : "120px" },
+          { "title" : "PID", "width" : "40px" },
+          { "title" : "Event type", "width" : "140px" },
+          { "title" : "Extra info" }
+          ]
+        } );
+
+      $('#table_id tbody').on( 'click', 'tr', function () {
+        var cellData = oTable.fnGetData(this);
+        // console.log( 'Clicked on: '+ cellData[2]);
+        clickCell(cellData[2]);
+      } );
+      
+  //     $('input.column_filter').on( 'keyup click', function () {
+  //     filterColumn( $(this).parents('tr').attr('data-column') );
+  // });
+  	} );
+  }
+
+var substringMatcher = function(strs) {
+  return function findMatches(q, cb) {
+    // an array that will be populated with substring matches
+    var matches = [];
+ 
+    // iterate through the pool of strings and for any string that
+    // contains the substring `q`, add it to the `matches` array
+    $.each(strs, function(i, str) {
+      // Check if user query q is substring of str
+      if (str.indexOf(q) != -1) {
+        // Typeahead expects javascript object
+        matches.push({ value: str });
+      }
+    });
+ 
+    cb(matches);
+  };
+};
+ 
+function scrollToTime(time)
+{
+  console.log("scrolling to " + time);
+  var table = $('#table_id').DataTable();
+
+  if(table) {
+    if ((table.order()[0][0] != 1) || (table.order()[0[1] != 'asc'])) {
+      table.order([[1,'asc']]);
+      table.draw();
+    }
+    var rows = table.rows()[0];
+    var index = findIndex(rows, time);
+    console.log("index="+index);
+    var oSettings = $('#table_id').dataTable().fnSettings();
+    // oSettings.oScroller.fnScrollToRow(index, false);
+    oSettings.oScroller.fnScrollToRow(index, true);
+    // table.draw()
+  }
+}
+
+function findIndex(values, target) {
+  return binarySearch(values, target, 0, values.length - 1);
+};
+
+function binarySearch(values, target, start, end) {
+  // console.log("start="+start+", end="+end);
+  var table = $('#table_id').DataTable();
+  var startTime = table.cell(start, 1).data();
+  var endTime = table.cell(end, 1).data()
+  if (startTime > endTime) { return -1; } //does not exist
+
+  var middle = Math.floor((start + end) / 2);
+  var value = table.cell(values[middle], 1).data()
+
+  if (value > target) { return binarySearch(values, target, start, middle-1); }
+  if (value < target) { return binarySearch(values, target, middle+1, end); }
+  return middle; //found!
+}

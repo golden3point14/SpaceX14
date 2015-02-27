@@ -24,7 +24,7 @@ $('#searchButton').css('background-color', '#315B7E');
     		data:           data,
     		deferRender:    true,
     		dom:            "frtiS",
-    		scrollY:        200,
+    		scrollY:        400,
     		scrollCollapse: true,
         stateSave:      true,
     		order:          [[1, 'asc']],
