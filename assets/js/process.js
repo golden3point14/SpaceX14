@@ -221,18 +221,18 @@ function searchTasks(filterString)
       var table = $('#example').DataTable();
       table.destroy();
       table = $('#example').dataTable( {
-      data: newData,
-      columns: [
-          { "title": "Process Name" },
-          { "title": "Number of Preemptions" }
-      ],
-      deferRender:    true,
-      dom:            "frtiS",
-      scrollY:        400,
-      scrollCollapse: true,
-      order:          [[1, 'desc']],
-      bFilter:        false
-    } ); 
+        data: newData,
+        columns: [
+            { "title": "Process Name" },
+            { "title": "Number of Preemptions" }
+        ],
+        deferRender:    true,
+        dom:            "frtiS",
+        scrollY:        400,
+        scrollCollapse: true,
+        order:          [[1, 'desc']],
+        bFilter:        false
+      } ); 
 
       // table.on( 'click', 'td', function () {
       //     alert( 'Clicked on cell in visible column: '+table.cell( this ).index().columnVisible );
@@ -240,18 +240,18 @@ function searchTasks(filterString)
   }
   else {
       var table = $('#example').dataTable( {
-      data: newData,
-      columns: [
-          { "title": "Process Name" },
-          { "title": "Number of Preemptions" }
-      ],
-      deferRender:    true,
-      dom:            "frtiS",
-      scrollY:        400,
-      scrollCollapse: true,
-      order:          [[1, 'desc']],
-      bFilter:        false
-    } ); 
+        data: newData,
+        columns: [
+            { "title": "Process Name" },
+            { "title": "Number of Preemptions" }
+        ],
+        deferRender:    true,
+        dom:            "frtiS",
+        scrollY:        400,
+        scrollCollapse: true,
+        order:          [[1, 'desc']],
+        bFilter:        false
+      } ); 
 
       // table.on( 'click', 'td', function () {
       //     alert( 'Clicked on cell in visible column: '+table.cell( this ).index().columnVisible );
