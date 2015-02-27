@@ -91,9 +91,15 @@ div.tooltip {
   pointer-events: none;         
 }
 
-#ganttChart {
-  width: 90%;
-	overflow-x: hidden;
+.chart {
+  width: 90%
+}
+
+.removeButton {
+  vertical-align: top !important;
+  margin-top: 25px;
+  margin-left: 10px;
+  width: 9%;
 }
 
 .loader {

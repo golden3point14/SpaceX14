@@ -260,8 +260,21 @@ function autoSearch() {
 /*var pageContent = document.getElementById("ganttChart").innerHTML;
 window.localStorage.setItem("", pageContent);*/
 
-document.getElementById("compareButton").onclick = function () {
-  location.href = "compare.html";
-}
+document.getElementById("compare").addEventListener("click", function() {
+  currentTask = window.localStorage.getItem("cellData");
+
+  // Check that there is a current task
+  if (currentTask) {
+    comparingTasks = JSON.parse(window.localStorage.getItem("compareData"));
+
+    // If not already on the compare page, add it
+    if (comparingTasks.indexOf(currentTask) == -1) {
+      comparingTasks.push(currentTask)
+      window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
+    }
+  }
+
+  window.location.href = "compare.html";
+});
 
 document.addEventListener("load", openDB());
