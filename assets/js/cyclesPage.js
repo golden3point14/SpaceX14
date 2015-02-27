@@ -9,7 +9,7 @@ var gantt;
 var currentLoaded = 50;
 var isSearch = false;
 
-$('#cyclesButton').css('background-color', '#315B7E');
+document.getElementById('cyclesButton').style.backgroundColor = '#315B7E';
 
 function openDB()
 {
@@ -71,7 +71,7 @@ function openDB()
 
 						setColoringOfTasks();
 
-            $('.loader').fadeOut("slow");
+            document.getElementById('loader').style.display = "none";
 					}
 				}
 			}
