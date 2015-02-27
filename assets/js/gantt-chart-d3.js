@@ -99,9 +99,10 @@ d3.gantt = function(chartType) {
     };
 
     function zoomStartHandler() {
-      // check if scale thing is the same as scale thing in local storage
-      // if not, make it so\
-      console.log("BEGIN" + d3.selectAll("svg").attr("scale"));
+      var currScale = window.localStorage.getItem("currScale");
+      var currTranslate = window.localStorage.getItem("currTranslate");
+      console.log("BEGIN" + currScale);
+      //zoomed(currScale, currTranslate);
     }
 
     function zoomed() {
@@ -127,8 +128,8 @@ d3.gantt = function(chartType) {
 
       // TESTING
       // push d3.event.scale and d3.event.translate[0] up to local storage
-      //window.localStorage.setItem("compareScale", d3.event.scale);
-      //window.localStorage.setItem("compareTranslate", d3.event.translate[0]); //NEED TO INTERRUPT PANNING
+      window.localStorage.setItem("currScale", d3.event.scale);
+      window.localStorage.setItem("currTranslate", d3.event.translate[0]); //NEED TO INTERRUPT PANNING
       // next need a way to check if a given graphs scale/translate matches this or not, BEFORE mouse event takes affect
     }
     
