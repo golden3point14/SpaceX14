@@ -20,14 +20,8 @@ $('#searchButton').css('background-color', '#315B7E');
     	data.push( [ currentResults[i].cpu, currentResults[i].startTime, currentResults[i].name, currentResults[i].pid, currentResults[i].eventType, currentResults[i].extraInfo ] );
     	}
 
-    	var oTable = $('#table_id').dataTable( {
+    	/*var oTable = $('#table_id').dataTable( {
     		data:           data,
-    		deferRender:    true,
-    		dom:            "frtiS",
-    		scrollY:        400,
-    		scrollCollapse: true,
-        stateSave:      true,
-    		order:          [[1, 'asc']],
         columns: [
           { "title" : "CPU", "width" : "40px" },
           { "title" : "Start time" },
@@ -35,8 +29,32 @@ $('#searchButton').css('background-color', '#315B7E');
           { "title" : "PID", "width" : "40px" },
           { "title" : "Event type", "width" : "140px" },
           { "title" : "Extra info" }
-          ]
-        } );
+        ],
+    		deferRender:    true,
+    		dom:            "frtiS",
+    		scrollY:        100,
+    		scrollCollapse: true,
+        stateSave:      true,
+    		order:          [[1, 'asc']],
+        } );*/
+
+      var table = $('#table_id').dataTable( {
+        data: newData,
+        columns: [
+          { "title" : "CPU", "width" : "40px" },
+          { "title" : "Start time" },
+          { "title" : "Name", "width" : "120px" },
+          { "title" : "PID", "width" : "40px" },
+          { "title" : "Event type", "width" : "140px" },
+          { "title" : "Extra info" }
+        ],
+        deferRender:    true,
+        dom:            "frtiS",
+        scrollY:        400,
+        scrollCollapse: true,
+        order:          [[1, 'asc']],
+        bFilter:        false
+      } ); 
 
       $('#table_id tbody').on( 'click', 'tr', function () {
         var cellData = oTable.fnGetData(this);
