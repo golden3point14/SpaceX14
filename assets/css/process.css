@@ -9,3 +9,8 @@
 .B {
   fill: red;
 }
+
+#legend {
+  margin-top: 15px;
+  margin-left: 65%;
+}
