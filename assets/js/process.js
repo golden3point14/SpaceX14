@@ -225,7 +225,8 @@ function searchTasks(filterString)
       dom:            "frtiS",
       scrollY:        400,
       scrollCollapse: true,
-      order:          [[1, 'desc']]
+      order:          [[1, 'desc']],
+      bFilter:        false
     } ); 
 
       // table.on( 'click', 'td', function () {
@@ -243,7 +244,8 @@ function searchTasks(filterString)
       dom:            "frtiS",
       scrollY:        400,
       scrollCollapse: true,
-      order:          [[1, 'desc']]
+      order:          [[1, 'desc']],
+      bFilter:        false
     } ); 
 
       // table.on( 'click', 'td', function () {
