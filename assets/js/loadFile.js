@@ -15,10 +15,12 @@ var JSONautocompleteEventTypes;
 var JSONautocompleteNames;
 var JSONcycleEvents;
 
-window.localStorage.setItem("cellData", "");
-window.localStorage.setItem("compareData", JSON.stringify([]));
+// window.localStorage.setItem("cellData", "");
+// window.localStorage.setItem("compareData", JSON.stringify([]));
 
 function handleFileSelect(evt) {
+    window.localStorage.setItem("cellData", "");
+    window.localStorage.setItem("compareData", JSON.stringify([]));
 	files = evt.target.files; // FileList object
     // files is a FileList of File objects. List some properties.
     var output = [];

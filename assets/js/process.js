@@ -41,6 +41,7 @@ function openDB()
             
             if (currentTaskName) {
               makeGantt(currentTaskName);
+              displayLegend();
             }
             $('.loader').fadeOut("slow");
           }
@@ -50,7 +51,6 @@ function openDB()
     tasksRequest.onsuccess = function(e) {
                                 tasks = e.target.result;
                               }
-
     namesRequest.onerror = function(e){console.log("error", e.target.error);}
 
     namesRequest.onsuccess = function(e) {
@@ -134,6 +134,10 @@ function makeGantt(currentTaskName) {
   gantt(currentTaskSwitches, "#ganttChart");
 }
 
+function displayLegend() {
+  document.getElementById("legend").style.display = "block";
+}
+
 var substringMatcher = function(strs) {
   return function findMatches(q, cb) {
     // an array that will be populated with substring matches
@@ -178,9 +182,10 @@ function changeToNewTask(chosenTask) {
   window.localStorage.setItem("cellData", filterString);
 
   searchTasks(filterString); // Update table of preemptions
-  d3.selectAll("svg").remove(); // Remove old chart
+  d3.selectAll(".chart").remove(); // Remove old chart
   $('#search-process').typeahead('val', '');// Clear text from typeahead
   makeGantt(filterString);
+  displayLegend();
 }
 
 function searchTasks(filterString)
@@ -225,7 +230,8 @@ function searchTasks(filterString)
       dom:            "frtiS",
       scrollY:        400,
       scrollCollapse: true,
-      order:          [[1, 'desc']]
+      order:          [[1, 'desc']],
+      bFilter:        false
     } ); 
 
       // table.on( 'click', 'td', function () {
@@ -243,7 +249,8 @@ function searchTasks(filterString)
       dom:            "frtiS",
       scrollY:        400,
       scrollCollapse: true,
-      order:          [[1, 'desc']]
+      order:          [[1, 'desc']],
+      bFilter:        false
     } ); 
 
       // table.on( 'click', 'td', function () {
