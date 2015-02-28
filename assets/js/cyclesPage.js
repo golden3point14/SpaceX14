@@ -1,13 +1,12 @@
 var numCPUs;
 var cycleEvents;
 var events;
-var currentCPU = 0;
 var chartType = "CYCLES"
 var taskNames;
 var numCycles;
-var gantt;
 var currentLoaded = 50;
 var isSearch = false;
+var selectedCPUS = [0, 1]; // TODO this should be kept in local storage
 
 document.getElementById('cyclesButton').style.backgroundColor = '#315B7E';
 
@@ -64,7 +63,9 @@ function openDB()
 					{
             // User print markers existed
             if (cycleEvents && cycleEvents.length != 0) {
-              makeGantt();
+              for (var i = 0; i < selectedCPUS.length; i++) {
+                makeGantt(selectedCPUS[i]);
+              }
             } 
 
 						taskNames = h.target.result;
@@ -79,9 +80,7 @@ function openDB()
 	}
 }
 
-function makeGantt() {
-  // Remove an old chart if it exists
-  d3.selectAll("svg").remove();
+function makeGantt(currentCPU) {
   numCycles = cycleEvents.length;
 
   // Categorize all events into cycles
@@ -90,7 +89,7 @@ function makeGantt() {
   // Only use switch events on the chart, after
   // normalizing their start times within their cycles
   // and calculating the durations between them
-  var switchCycleEvents = getCycleEventsForCPU();
+  var switchCycleEvents = getCycleEventsForCPU(currentCPU);
 
   timeDomainEnd = getLongestCycleDuration(switchCycleEvents);
 
@@ -102,11 +101,23 @@ function makeGantt() {
   }
 
   var height = (numCycles + 1) * 35;
-  gantt = d3.gantt(chartType).taskTypes(_.range(numCycles,-1,-1))
-          .timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ").margin(margin).height(height);
+  // Divide window up by number of CPUs displayed. 80 is to deal with set size of sidebar
+  var width = (document.body.clientWidth / selectedCPUS.length) - 80 - margin.right - margin.left;
+  var gantt = d3.gantt(chartType).taskTypes(_.range(numCycles,-1,-1))
+          .timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ").margin(margin)
+          .height(height)
+          .width(width);
 
-  gantt(switchCycleEvents, "#ganttChart1");
-  gantt(switchCycleEvents, "#ganttChart2");
+  // TODO no order is enforced so unchecking CPU 0 and rechecking is confusing
+  // Create a new div for this chart and place it inside our div for all gantt charts
+  var chartDiv = document.createElement("div");
+  chartDiv.id = "ganttChart" + currentCPU;
+  chartDiv.style.display = "inline-block";
+
+  document.getElementById("ganttCharts").appendChild(chartDiv);
+  var chartID = '#ganttChart' + currentCPU;
+
+  gantt(switchCycleEvents, chartID);
 }
 
 // Sorts events by cycle by assigning a "cycles" attribute
@@ -140,7 +151,7 @@ function addCycleAttribute()
 		}
 }
 
-function getCycleEventsForCPU() {
+function getCycleEventsForCPU(currentCPU) {
 	var switchCycleEvents = _.filter(events, function(e){ return e.cpu == currentCPU && e.eventType === "sched_switch"; });
 	
 	switchCycleEvents = normalizeStartTime(switchCycleEvents, numCycles);
@@ -245,26 +256,37 @@ function getLongestCycleDuration(switchCycleEvents)
 	return _.max(_.map(grouped, calculateDuration));
 }
 
-// adds each CPU to the select menu
+// adds each CPU as a checkbox
 // allows users to choose from all available CPUs
 function addOptions()
 {
 	for (var i=0; i<numCPUs; i++	)
 	{
-		var option = document.createElement("option");
-		option.text = i;
-		option.value = i;
-		var select = document.getElementById("cpu1");
-		select.appendChild(option);
-	}
-}
+		var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.name = i;
+		checkbox.value = i;
+		checkbox.checked = true;
+    
+    var label = document.createElement("label");
+    label.className = "checkbox cpu-checkbox";
+    label.appendChild(document.createTextNode("CPU " + i));
+    label.appendChild(checkbox);
 
-// Handles user selection of new CPU from dropdown
-document.getElementById("cpu1").onchange = function (e) {
-  currentCPU = e.target.value;
-  var switchCycleEvents = getCycleEventsForCPU();
-  d3.selectAll("svg").remove();
-  gantt(switchCycleEvents);
+		var container = document.getElementById("cpu-checkboxes");
+		container.appendChild(label);
+
+    checkbox.onclick = function() {
+      if (this.checked) {
+        makeGantt(this.value);
+        //selectedCPUS.push(this.value);
+      } else {
+        var chart = document.getElementById("ganttChart" + this.value);
+        chart.parentNode.removeChild(chart);
+        //selectedCPUS.splice(selectedCPUS.indexOf(this.value), 1);
+      }
+    }
+	}
 }
 
 function calculateSimpleDuration(eventList) {
@@ -320,7 +342,14 @@ function getCycleLength(e)
         normalizedStartTime += cycleLength;
       }
      
-      makeGantt();
+      for (var i = 0; i < selectedCPUS.length; i++) {
+        // Remove the old chart
+        var chart = document.getElementById("ganttChart" + i);
+        chart.parentNode.removeChild(chart);
+        
+        // generate new chart
+        makeGantt(selectedCPUS[i]);
+      }
     }
  	}
 }

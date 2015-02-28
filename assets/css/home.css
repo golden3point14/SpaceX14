@@ -133,3 +133,7 @@ title {
   width: 100% !important;
 }
 
+.cpu-checkbox {
+  display: inline-block;
+  margin-left: 10px;
+}
