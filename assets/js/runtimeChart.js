@@ -145,8 +145,8 @@ function useDatabaseData()
   // distribution side bar stuff
   var histogrambutton = dc.rowChart("#histogram-button");
   var runchartbutton = dc.rowChart("#runchart-button");
-  // var waitchartbutton = dc.rowChart("#waitchart-button");
-  // var sleepchartbutton = dc.rowChart("#sleepchart-button");
+  var waitchartbutton = dc.rowChart("#waitchart-button");
+  var sleepchartbutton = dc.rowChart("#sleepchart-button");
 
   var buttonwidth = 210;
 
@@ -170,25 +170,25 @@ function useDatabaseData()
 
   runchartbutton.xAxis().tickFormat(function(v) { return ""; });
 
-  // waitchartbutton
-  //   .width(buttonwidth)
-  //   .height(values.length * 10)
-  //   .dimension(pidDimension)
-  //   .group(typeGroupWait)
-  //   .renderLabel(false)
-  //   .ordering(function(d) { return -processFromPid(d.key, values).totalWaittime; });
+  waitchartbutton
+    .width(buttonwidth)
+    .height(values.length * 10)
+    .dimension(pidDimension)
+    .group(typeGroupWait)
+    .renderLabel(false)
+    .ordering(function(d) { return -processFromPid(d.key, values).totalWaittime; });
 
-  // waitchartbutton.xAxis().tickFormat(function(v) { return ""; });
+  waitchartbutton.xAxis().tickFormat(function(v) { return ""; });
 
-  // sleepchartbutton
-  //   .width(buttonwidth)
-  //   .height(values.length * 10)
-  //   .dimension(pidDimension)
-  //   .group(typeGroupSleep)
-  //   .renderLabel(false)
-  //   .ordering(function(d) { return -processFromPid(d.key, values).totalSleeptime; });
+  sleepchartbutton
+    .width(buttonwidth)
+    .height(values.length * 10)
+    .dimension(pidDimension)
+    .group(typeGroupSleep)
+    .renderLabel(false)
+    .ordering(function(d) { return -processFromPid(d.key, values).totalSleeptime; });
 
-  // sleepchartbutton.xAxis().tickFormat(function(v) { return ""; });
+  sleepchartbutton.xAxis().tickFormat(function(v) { return ""; });
 
   // render the content
   dc.renderAll();
