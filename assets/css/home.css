@@ -128,3 +128,8 @@ title {
   display: : inline-block;
   width: 30%;
 }
+
+.dataTables_scrollHead, .dataTables_scrollHeadInner, .dataTable {
+  width: 100% !important;
+}
+
