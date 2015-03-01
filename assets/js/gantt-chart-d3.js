@@ -109,8 +109,8 @@ d3.gantt = function(chartType) {
 
     function zoomStartHandler() {
       var currScale = window.localStorage.getItem("compareCurrScale");
-      var currTranslateX = window.localStorage.getItem("currTranslateX");
-      var currTranslateY = window.localStorage.getItem("currTranslateY");
+      var currTranslateX = window.localStorage.getItem("compareCurrTranslateX");
+      var currTranslateY = window.localStorage.getItem("compareCurrTranslateY");
 
       if (currScale != zoom.scale())
       {
@@ -153,8 +153,8 @@ d3.gantt = function(chartType) {
       // TESTING
       // push d3.event.scale and d3.event.translate[0] up to local storage
       window.localStorage.setItem("compareCurrScale", zoom.scale());
-      window.localStorage.setItem("currTranslateX", zoom.translate()[0]);
-      window.localStorage.setItem("currTranslateY", zoom.translate()[1]);
+      window.localStorage.setItem("compareCurrTranslateX", zoom.translate()[0]);
+      window.localStorage.setItem("compareCurrTranslateY", zoom.translate()[1]);
       // next need a way to check if a given graphs scale/translate matches this or not, BEFORE mouse event takes affect
     }
     
