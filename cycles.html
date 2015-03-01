@@ -24,40 +24,20 @@
         <div class="content" id="content">
 
           <div class="row">
-            <div class="span3">
-              <label for="cpu" class="control-label">Select a cpu</label>
-              <select name="cpu" id="cpu1" class="form-control">
-              </select>
+            <div class="span6">
+              <form class="form-inline">
+                <label for="cycleLength" class="control-label">
+                  Set a cycle length (seconds)</label>
+                <input type="text" name="cycleLength" min="0" id="cycleLength1"
+                      pattern="^\d*\.?\d+$" class="form-control">
+              </form>
             </div>
-            <div class="span3">
-              <label for="cycleLength" class="control-label">
-                Set a cycle length (seconds)</label>
-              <input type="text" name="cycleLength" min="0" id="cycleLength1"
-                    pattern="^\d*\.?\d+$" class="form-control">
-            </div>
+            <div id="cpu-checkboxes" class="span5"></div>
           </div>
-      <div id="ganttChart1"></div>
+      <div id="ganttCharts" class="row"></div>
     </div>
 
-    <div class="cyclesDiv">
-<!-- 
-      <form action='#' class="form-inline">
-            <div class="control-group">
-              <label for="cpu" class="control-label">Select a cpu</label>
-              <select name="cpu" id="cpu2" class="form-control">
-              </select>
-            </div>
-            <div class="control-group">
-              <label for="cycleLength" class="control-label">
-                Set a cycle length (seconds)</label>
-              <input type="text" name="cycleLength" min="0" id="cycleLength2"
-                    pattern="^\d*\.?\d+$" class="form-control">
-            </div>
-          </form>
-      <div id="ganttChart2"></div>
-    </div> -->
-    
-    </div>
+    <div class="cyclesDiv"></div>
   
     <script type="text/javascript" src="assets/js/sidebar.js"></script>
     <script type="text/javascript" src="assets/js/cyclesPage.js"></script>
