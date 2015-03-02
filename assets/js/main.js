@@ -189,7 +189,7 @@ function clickCell(cellData)
     		dom:            "frtiS",
     		scrollY:        400,
     		scrollCollapse: true,
-        stateSave:      true,
+        // stateSave:      true,
     		order:          [[1, 'asc']],
         columns: [
           { "title" : "CPU", "width" : "40px" },
@@ -246,9 +246,7 @@ function scrollToTime(time)
     var index = findIndex(rows, time);
     console.log("index="+index);
     var oSettings = $('#table_id').dataTable().fnSettings();
-    // oSettings.oScroller.fnScrollToRow(index, false);
-    oSettings.oScroller.fnScrollToRow(index, true);
-    // table.draw()
+    oSettings.oScroller.fnScrollToRow(index, false);
   }
 }
 
