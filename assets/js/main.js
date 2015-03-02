@@ -234,20 +234,29 @@ var substringMatcher = function(strs) {
  
 function scrollToTime(time)
 {
-  console.log("scrolling to " + time);
   var table = $('#table_id').DataTable();
 
+  // If the table is not sorted by time, then sort it by time
   if(table) {
     if ((table.order()[0][0] != 1) || (table.order()[0[1] != 'asc'])) {
       table.order([[1,'asc']]);
       table.draw();
     }
+
+    // Find the row index
     var rows = table.rows()[0];
     var index = findIndex(rows, time);
-    console.log("index="+index);
+
+    // Scroll to that row
     var oSettings = $('#table_id').dataTable().fnSettings();
     oSettings.oScroller.fnScrollToRow(index, false);
   }
+}
+
+function selectRow(index) {
+  var table = $('#table_id').DataTable();
+  table.$('tr.selected').removeClass('selected');
+  $(table.row(index).nodes()).addClass('selected');
 }
 
 function findIndex(values, target) {
@@ -255,7 +264,6 @@ function findIndex(values, target) {
 };
 
 function binarySearch(values, target, start, end) {
-  // console.log("start="+start+", end="+end);
   var table = $('#table_id').DataTable();
   var startTime = table.cell(start, 1).data();
   var endTime = table.cell(end, 1).data()
