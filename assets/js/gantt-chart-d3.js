@@ -8,6 +8,10 @@ var cyclesType = "CYCLES";
 var processType = "PROCESS";
 var compareType = "COMPARE";
 
+var currScale;
+var currTranslateX;
+var currTranslateY;
+
 d3.gantt = function(chartType) {
     var FIT_TIME_DOMAIN_MODE = "fit";
     var FIXED_TIME_DOMAIN_MODE = "fixed";
@@ -108,11 +112,26 @@ d3.gantt = function(chartType) {
     };
 
     function zoomStartHandler() {
-      var currScale = window.localStorage.getItem("compareCurrScale");
-      var currTranslateX = window.localStorage.getItem("compareCurrTranslateX");
-      var currTranslateY = window.localStorage.getItem("compareCurrTranslateY");
+   
+      switch (chartType)
+      {
+        case compareType:
+          getStorage("compare");
+          break;
+        case mainType:
+          getStorage("main");
+          break;
+        case cyclesType:
+          getStorage("cycles");
+          break;
+        case processType:
+          getStorage("process");
+          break;
+        default:
+          break; 
+      }
 
-      if (currScale != zoom.scale())
+      if (!isNaN(currScale) && currScale != zoom.scale())
       {
         zoom.scale(currScale);
       }
@@ -120,15 +139,19 @@ d3.gantt = function(chartType) {
       if (currTranslateX != zoom.translate()[0] || currTranslateY != zoom.translate()[1])
       {
 
-        if (!isNaN(currTranslateX) || !isNaN(currTranslateY))
+        if (isNaN(currTranslateX) || isNaN(currTranslateY))
         {
           // do nothing
         }
 
         else
         {
-          console.log("should be numbers " + currTranslateX + ", " + currTranslateY);
-          zoom.translate([currTranslateX, currTranslateY]);
+          //zoom.translate([currTranslateX, currTranslateY]);
+          //oldTranslate = zoom.translate()[0] - currTranslateX;
+          //zoom.translate()[0] = currTranslateX;
+          zoom.translate([currTranslateX,currTranslateY]);
+
+          //d3.selectAll(".gantt-chart").attr("transform","translate(" + oldTranslate + "," + margin.top + ")");
         }
         
       }
@@ -149,16 +172,52 @@ d3.gantt = function(chartType) {
       var newX = margin.left + d3.event.translate[0];
       d3.selectAll(".gantt-chart").attr("transform","translate(" + newX + "," + margin.top + ")");
 
-
-      // TESTING
-      // push d3.event.scale and d3.event.translate[0] up to local storage
-      window.localStorage.setItem("compareCurrScale", zoom.scale());
-      window.localStorage.setItem("compareCurrTranslateX", zoom.translate()[0]);
-      window.localStorage.setItem("compareCurrTranslateY", zoom.translate()[1]);
-      // next need a way to check if a given graphs scale/translate matches this or not, BEFORE mouse event takes affect
+      switch (chartType)
+      {
+        case compareType:
+          setStorage("compare");
+          break;
+        case mainType:
+          setStorage("main");
+          break;
+        case cyclesType:
+          setStorage("cycles");
+          break;
+        case processType:
+          setStorage("process");
+          break;
+        default:
+          break;
+      }
     }
+
+    // helper function to set appropriate items in local storage
+  function setStorage(pageName)
+  {
+    var scaleLevel = zoom.scale();
+   
+    var translateX = zoom.translate()[0];
+    console.log("x translate " + translateX);
+   
+    var translateY = zoom.translate()[1];
+   
+    window.localStorage.setItem(pageName+"CurrScale", scaleLevel);
+    window.localStorage.setItem(pageName+"CurrTranslateX", translateX);
+    window.localStorage.setItem(pageName+"CurrTranslateY", translateY);
+  }
+
+  // helper function to get appropriate items in local storage
+  function getStorage(pageName)
+  {
+     currScale = window.localStorage.getItem(pageName+"CurrScale");
+     currTranslateX = window.localStorage.getItem(pageName+"CurrTranslateX");
+     currTranslateY = window.localStorage.getItem(pageName+"CurrTranslateY");
+  }
     
   function gantt(tasks, div) {
+
+
+
     initTimeDomain(tasks);
     initAxis();
 
@@ -175,6 +234,7 @@ d3.gantt = function(chartType) {
                   .attr("height", height + margin.top + margin.bottom)
                   .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
+   
 
     var div = d3.select("body").append("div")   
     .attr("class", "tooltip")               
@@ -239,10 +299,30 @@ d3.gantt = function(chartType) {
     svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0, " + (height - margin.top - margin.bottom) + ")")
-    .transition()
-    .call(xAxis);
+    .transition();
+    //.call(xAxis);
     
     svg.append("g").attr("class", "y axis").transition().call(yAxis);
+
+    //attempts to make it load zoomed WBROOKS
+
+    zoomStartHandler();
+
+    x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width * zoom.scale()]);
+    xAxis = d3.svg.axis().scale(x).orient("bottom");
+    d3.selectAll(".x.axis").call(xAxis);
+
+    // Scale all rectangles
+    d3.selectAll("rect").attr("transform", function(d){
+                                          return "translate(" + x(d[xStartAttribute]) + "," + y(d[yAttribute]) + ")scale(" + zoom.scale() + ", 1)";
+                                        })
+
+    var newX = margin.left + parseInt(currTranslateX)
+    console.log(newX);
+    console.log(zoom.scale());
+      d3.selectAll(".gantt-chart").attr("transform","translate(" + newX + "," + margin.top + ")");
+
+    //end attempts
 
    return gantt;
 
