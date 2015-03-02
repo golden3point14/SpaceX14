@@ -308,19 +308,28 @@ d3.gantt = function(chartType) {
 
     zoomStartHandler();
 
-    x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width * zoom.scale()]);
+    if (!isNaN(currScale))
+    {
+      x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width * zoom.scale()]);
     xAxis = d3.svg.axis().scale(x).orient("bottom");
     d3.selectAll(".x.axis").call(xAxis);
 
     // Scale all rectangles
     d3.selectAll("rect").attr("transform", function(d){
-                                          return "translate(" + x(d[xStartAttribute]) + "," + y(d[yAttribute]) + ")scale(" + zoom.scale() + ", 1)";
+                                          if (d)
+                                            return "translate(" + x(d[xStartAttribute]) + "," + y(d[yAttribute]) + ")scale(" + zoom.scale() + ", 1)";
                                         })
+    }
 
-    var newX = margin.left + parseInt(currTranslateX)
+    if (!isNaN(currTranslateX))
+    {
+      var newX = margin.left + parseInt(currTranslateX)
     console.log(newX);
     console.log(zoom.scale());
       d3.selectAll(".gantt-chart").attr("transform","translate(" + newX + "," + margin.top + ")");
+    }
+
+    
 
     //end attempts
 
