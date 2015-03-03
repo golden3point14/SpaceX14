@@ -160,6 +160,7 @@ function makeGantt(currentTaskName) {
   // console.log(safeTaskName);
 
   gantt = d3.gantt("COMPARE").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel(currentTaskName).id(safeTaskName).height(100).margin(margin);
+  console.log(currentTaskSwitches[0]);
   gantt(currentTaskSwitches, "#ganttChart");
 
 }
