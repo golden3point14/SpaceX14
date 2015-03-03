@@ -308,7 +308,7 @@ d3.gantt = function(chartType) {
 
     zoomStartHandler();
 
-    if (!isNaN(currScale))
+    if (!isNaN(parseInt(currScale)))
     {
       x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width * zoom.scale()]);
     xAxis = d3.svg.axis().scale(x).orient("bottom");
@@ -321,7 +321,7 @@ d3.gantt = function(chartType) {
                                         })
     }
 
-    if (!isNaN(currTranslateX))
+    if (!isNaN(parseInt(currTranslateX)))
     {
       var newX = margin.left + parseInt(currTranslateX)
     console.log(newX);
