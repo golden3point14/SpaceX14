@@ -21,7 +21,16 @@ var JSONcycleEvents;
 function handleFileSelect(evt) {
     window.localStorage.setItem("cellData", "");
     window.localStorage.setItem("compareData", JSON.stringify([]));
-	files = evt.target.files; // FileList object
+
+    // Reset saved state of graphs on all pages
+    var ganttPages = ["compare", "main", "process", "cycles"];
+    for (var i = 0; i < ganttPages.length; i++) {
+      window.localStorage.setItem(ganttPages[i] + "CurrScale", 1);
+      window.localStorage.setItem(ganttPages[i] + "CurrXTranslate", "");
+      window.localStorage.setItem(ganttPages[i] + "CurrYTranslate", "");
+    }
+
+    files = evt.target.files; // FileList object
     // files is a FileList of File objects. List some properties.
     var output = [];
     for (var i = 0, f; f = files[i]; i++) {
