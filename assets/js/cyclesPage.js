@@ -120,7 +120,9 @@ function makeGantt(currentCPU) {
 
   var height = (numCycles + 1) * 35;
   // Divide window up by number of CPUs displayed. 80 is to deal with set size of sidebar
-  var width = (document.body.clientWidth / selectedCPUs.length) - 80 - margin.right - margin.left;
+  // Each chart div has a margin of 20px, so also subtract this off
+  var numDisplayed = selectedCPUs.length;
+  var width = (document.body.clientWidth / selectedCPUs.length) - 80 - margin.right - margin.left - 20 * numDisplayed;
   var gantt = d3.gantt(chartType).taskTypes(_.range(numCycles,-1,-1))
           .timeDomain(timeDomainEnd).yAttribute("cycle").yLabel("Cycle ").margin(margin)
           .height(height)
@@ -130,6 +132,7 @@ function makeGantt(currentCPU) {
   var chartDiv = document.createElement("div");
   chartDiv.id = "ganttChart" + currentCPU;
   chartDiv.style.display = "inline-block";
+  chartDiv.style.marginLeft = "20px";
 
   document.getElementById("ganttCharts").appendChild(chartDiv);
   var chartID = '#ganttChart' + currentCPU;
@@ -369,14 +372,6 @@ function getCycleLength(e)
       }
      
       drawAllCharts();
-     // for (var i = 0; i < selectedCPUs.length; i++) {
-     //   // Remove the old chart
-     //   var chart = document.getElementById("ganttChart" + i);
-     //   chart.parentNode.removeChild(chart);
-     //   
-     //   // generate new chart
-     //   makeGantt(selectedCPUs[i]);
-     // }
     }
  	}
 }
