@@ -15,9 +15,6 @@ var JSONautocompleteEventTypes;
 var JSONautocompleteNames;
 var JSONcycleEvents;
 
-// window.localStorage.setItem("cellData", "");
-// window.localStorage.setItem("compareData", JSON.stringify([]));
-
 function handleFileSelect(evt) {
     window.localStorage.setItem("cellData", "");
     window.localStorage.setItem("compareData", JSON.stringify([]));
@@ -26,8 +23,8 @@ function handleFileSelect(evt) {
     var ganttPages = ["compare", "main", "process", "cycles"];
     for (var i = 0; i < ganttPages.length; i++) {
       window.localStorage.setItem(ganttPages[i] + "CurrScale", 1);
-      window.localStorage.setItem(ganttPages[i] + "CurrXTranslate", "");
-      window.localStorage.setItem(ganttPages[i] + "CurrYTranslate", "");
+      window.localStorage.setItem(ganttPages[i] + "CurrTranslateX", "");
+      window.localStorage.setItem(ganttPages[i] + "CurrTranslateY", "");
     }
 
     files = evt.target.files; // FileList object

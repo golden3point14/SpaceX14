@@ -113,23 +113,7 @@ d3.gantt = function(chartType) {
 
     function zoomStartHandler() {
    
-      switch (chartType)
-      {
-        case compareType:
-          getStorage("compare");
-          break;
-        case mainType:
-          getStorage("main");
-          break;
-        case cyclesType:
-          getStorage("cycles");
-          break;
-        case processType:
-          getStorage("process");
-          break;
-        default:
-          break; 
-      }
+      getStorage(chartType.toLowerCase());
 
       if (!isNaN(currScale) && currScale != zoom.scale())
       {
@@ -172,28 +156,14 @@ d3.gantt = function(chartType) {
       var newX = margin.left + d3.event.translate[0];
       d3.selectAll(".gantt-chart").attr("transform","translate(" + newX + "," + margin.top + ")");
 
-      switch (chartType)
-      {
-        case compareType:
-          setStorage("compare");
-          break;
-        case mainType:
-          setStorage("main");
-          break;
-        case cyclesType:
-          setStorage("cycles");
-          break;
-        case processType:
-          setStorage("process");
-          break;
-        default:
-          break;
-      }
+      setStorage(chartType.toLowerCase());
     }
 
     // helper function to set appropriate items in local storage
   function setStorage(pageName)
   {
+    if (pageName === "") { return; }
+
     var scaleLevel = zoom.scale();
    
     var translateX = zoom.translate()[0];
@@ -201,14 +171,16 @@ d3.gantt = function(chartType) {
    
     var translateY = zoom.translate()[1];
    
-    window.localStorage.setItem(pageName+"CurrScale", scaleLevel);
-    window.localStorage.setItem(pageName+"CurrTranslateX", translateX);
-    window.localStorage.setItem(pageName+"CurrTranslateY", translateY);
+    window.localStorage.setItem(pageName + "CurrScale", scaleLevel);
+    window.localStorage.setItem(pageName + "CurrTranslateX", translateX);
+    window.localStorage.setItem(pageName + "CurrTranslateY", translateY);
   }
 
   // helper function to get appropriate items in local storage
   function getStorage(pageName)
   {
+    if (pageName === "") { return; }
+
      currScale = window.localStorage.getItem(pageName+"CurrScale");
      currTranslateX = window.localStorage.getItem(pageName+"CurrTranslateX");
      currTranslateY = window.localStorage.getItem(pageName+"CurrTranslateY");
