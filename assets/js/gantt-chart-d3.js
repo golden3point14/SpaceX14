@@ -112,15 +112,24 @@ d3.gantt = function(chartType) {
     };
 
     function zoomStartHandler() {
-   
+
       getStorage(chartType.toLowerCase());
 
-      if (!isNaN(currScale) && currScale != zoom.scale())
+      if (!isNaN(currScale) && currScale !== zoom.scale())
       {
         zoom.scale(currScale);
+        x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width * zoom.scale()]);
+        xAxis = d3.svg.axis().scale(x).orient("bottom");
+        d3.selectAll(".x.axis").call(xAxis);
+
+        // Scale all rectangles
+        d3.selectAll("rect").attr("transform", function(d){
+                                          if (d)
+                                            return "translate(" + x(d[xStartAttribute]) + "," + y(d[yAttribute]) + ")scale(" + zoom.scale() + ", 1)";
+                                        })
       }
 
-      if (currTranslateX != zoom.translate()[0] || currTranslateY != zoom.translate()[1])
+      if (currTranslateX !== zoom.translate()[0] || currTranslateY !== zoom.translate()[1])
       {
 
         if (isNaN(currTranslateX) || isNaN(currTranslateY))
@@ -130,12 +139,10 @@ d3.gantt = function(chartType) {
 
         else
         {
-          //zoom.translate([currTranslateX, currTranslateY]);
-          //oldTranslate = zoom.translate()[0] - currTranslateX;
-          //zoom.translate()[0] = currTranslateX;
-          zoom.translate([currTranslateX,currTranslateY]);
+          zoom.translate([currTranslateX, currTranslateY]);
 
-          //d3.selectAll(".gantt-chart").attr("transform","translate(" + oldTranslate + "," + margin.top + ")");
+          var newX = margin.left + parseFloat(currTranslateX);
+          d3.selectAll(".gantt-chart").attr("transform","translate(" + newX + "," + margin.top + ")");
         }
         
       }
@@ -167,7 +174,6 @@ d3.gantt = function(chartType) {
     var scaleLevel = zoom.scale();
    
     var translateX = zoom.translate()[0];
-    console.log("x translate " + translateX);
    
     var translateY = zoom.translate()[1];
    
@@ -181,9 +187,9 @@ d3.gantt = function(chartType) {
   {
     if (pageName === "") { return; }
 
-     currScale = window.localStorage.getItem(pageName+"CurrScale");
-     currTranslateX = window.localStorage.getItem(pageName+"CurrTranslateX");
-     currTranslateY = window.localStorage.getItem(pageName+"CurrTranslateY");
+     currScale = parseFloat(window.localStorage.getItem(pageName+"CurrScale"));
+     currTranslateX = parseFloat(window.localStorage.getItem(pageName+"CurrTranslateX"));
+     currTranslateY = parseFloat(window.localStorage.getItem(pageName+"CurrTranslateY"));
   }
     
   function gantt(tasks, div) {
@@ -199,6 +205,12 @@ d3.gantt = function(chartType) {
                   .attr("id", id)
                   .attr("width", width + margin.left + margin.right)
                   .attr("height", height + margin.top + margin.bottom)
+                  .on("mousedown", function(d) {
+                      zoomStartHandler();
+                  })
+                  .on("wheel", function(d) {
+                      zoomStartHandler();
+                  })
                   .call(zoom)
                 .append("g")
                   .attr("class", "gantt-chart")
@@ -271,39 +283,13 @@ d3.gantt = function(chartType) {
     svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0, " + (height - margin.top - margin.bottom) + ")")
-    .transition();
-    //.call(xAxis);
+    .transition()
+    .call(xAxis);
     
     svg.append("g").attr("class", "y axis").transition().call(yAxis);
 
-    //attempts to make it load zoomed WBROOKS
-
-    zoomStartHandler();
-
-    if (!isNaN(parseInt(currScale)))
-    {
-      x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width * zoom.scale()]);
-    xAxis = d3.svg.axis().scale(x).orient("bottom");
-    d3.selectAll(".x.axis").call(xAxis);
-
-    // Scale all rectangles
-    d3.selectAll("rect").attr("transform", function(d){
-                                          if (d)
-                                            return "translate(" + x(d[xStartAttribute]) + "," + y(d[yAttribute]) + ")scale(" + zoom.scale() + ", 1)";
-                                        })
-    }
-
-    if (!isNaN(parseInt(currTranslateX)))
-    {
-      var newX = margin.left + parseInt(currTranslateX)
-    console.log(newX);
-    console.log(zoom.scale());
-      d3.selectAll(".gantt-chart").attr("transform","translate(" + newX + "," + margin.top + ")");
-    }
-
-    
-
-    //end attempts
+    //load at correct zoom/translate
+    zoomStartHandler();    
 
    return gantt;
 
