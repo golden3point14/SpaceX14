@@ -140,6 +140,7 @@ title {
 
 .item {
   position: relative;
+  width: 100%;
 }
 
 /* other items appear above handle */

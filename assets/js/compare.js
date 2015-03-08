@@ -157,30 +157,33 @@ function makeGantt(currentTaskName) {
 
   var safeTaskName = makeSafeForCSS(currentTaskName);
 
-  var $ganttChart = $('#ganttChart').packery({
+  var $container = $('#ganttChart').packery({
     columnWidth: 2000,
     rowHeight: 115
   })
+
+  $container.packery( 'on', 'dragItemPositioned', orderItems );
 
   var div = document.createElement("div");
   var handle = document.createElement("div");
   div.id = safeTaskName + "Div";
   div.className = "item";
+  div.title = currentTaskName;
   handle.className = "handle";
   div.appendChild(handle);
   document.getElementById("ganttChart").appendChild(div);
 
-  $ganttChart.find('.item').each( function (i, itemElem ) {
-    var draggie = new Draggabilly(itemElem, {
+
+    var draggie = new Draggabilly(div, {
       handle: '.handle',
       axis: 'y'
     });
 
-    $ganttChart.packery('bindDraggabillyEvents', draggie);
-  });
+    $container.append(div).packery( 'appended', div);
+    $container.packery('bindDraggabillyEvents', draggie);
+
     
   gantt = d3.gantt("COMPARE").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel(currentTaskName).id(safeTaskName).height(100).margin(margin);
-  // console.log(currentTaskSwitches[0]);
   gantt(currentTaskSwitches, "#" + safeTaskName + "Div");
 
 }
@@ -276,6 +279,9 @@ function makeRemoveButton(taskName) {
       var child = document.getElementById(idString);
       child.parentNode.removeChild(child);
 
+      $('#ganttChart').packery('remove', div);
+      $('#ganttChart').packery();
+
       var div = document.getElementById(safeTaskName + "Div");
       div.parentNode.removeChild(div);
     }
@@ -289,10 +295,8 @@ function searchTasks(filterString)
   var newData = [];
 
   for (var i = 0; i < currentTasks.length; i++) {
-    // console.log(currentTasks[i]);
     if (currentTasks[i].preemptedBy) {
       for (var j = 0; j < currentTasks[i].preemptedBy.length; j++){
-        // data.push([currentTasks[i].preemptedBy[j]]);
         if (!_.contains(data, currentTasks[i].preemptedBy[j])) {
           newData.push([currentTasks[i].preemptedBy[j], 1]);
           data.push(currentTasks[i].preemptedBy[j]);
@@ -315,4 +319,19 @@ function makeSafeForCSS(str) {
   return str.replace(/\/|:/g, "");
 }
 
+function orderItems() {
+    var itemElems = $('#ganttChart').packery('getItemElements');
+
+    // reset / empty oder array
+    var sortOrder = [];
+    sortOrder.length = 0;
+    for (var i=0; i< itemElems.length; i++) {
+      sortOrder[i] = itemElems[i].getAttribute("title");
+    }
+
+    // save ordering
+    localStorage.setItem('compareData', JSON.stringify(sortOrder) );
+  }
+
 document.addEventListener("load", openDB());
+
