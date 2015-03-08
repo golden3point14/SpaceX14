@@ -151,12 +151,10 @@ title {
    takes up entire size of parent */
 .item .handle {
   position: absolute;
-  /*left: 0;
-  top: 0;*/
   width: 100%;
   height: 100%;
 }
 
 .handle:hover {
-  background: #09F;
+  background: #C1CED8;
 }
