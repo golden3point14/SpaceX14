@@ -137,3 +137,26 @@ title {
   display: inline-block;
   margin-left: 10px;
 }
+
+.item {
+  position: relative;
+}
+
+/* other items appear above handle */
+.item > * {
+  position: relative;
+}
+
+/* handle appears behind other elements
+   takes up entire size of parent */
+.item .handle {
+  position: absolute;
+  /*left: 0;
+  top: 0;*/
+  width: 100%;
+  height: 100%;
+}
+
+.handle:hover {
+  background: #09F;
+}

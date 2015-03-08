@@ -158,13 +158,21 @@ function makeGantt(currentTaskName) {
   var safeTaskName = makeSafeForCSS(currentTaskName);
 
   var div = document.createElement("div");
+  var handle = document.createElement("div");
   div.id = safeTaskName + "Div";
+  div.className = "item";
+  handle.className = "handle";
+  div.appendChild(handle);
   document.getElementById("ganttChart").appendChild(div);
+
+  var draggie = new Draggabilly(div, {
+    handle: '.handle',
+    axis: 'y'
+  });
 
   gantt = d3.gantt("COMPARE").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel(currentTaskName).id(safeTaskName).height(100).margin(margin);
   console.log(currentTaskSwitches[0]);
   gantt(currentTaskSwitches, "#" + safeTaskName + "Div");
-  // gantt(currentTaskSwitches, "#ganttChart");
 
 }
 
