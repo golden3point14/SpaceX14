@@ -156,12 +156,32 @@ function makeGantt(currentTaskName) {
   }
 
   var safeTaskName = makeSafeForCSS(currentTaskName);
-  // console.log(currentTaskName);
-  // console.log(safeTaskName);
 
+  var $ganttChart = $('#ganttChart').packery({
+    columnWidth: 2000,
+    rowHeight: 115
+  })
+
+  var div = document.createElement("div");
+  var handle = document.createElement("div");
+  div.id = safeTaskName + "Div";
+  div.className = "item";
+  handle.className = "handle";
+  div.appendChild(handle);
+  document.getElementById("ganttChart").appendChild(div);
+
+  $ganttChart.find('.item').each( function (i, itemElem ) {
+    var draggie = new Draggabilly(itemElem, {
+      handle: '.handle',
+      axis: 'y'
+    });
+
+    $ganttChart.packery('bindDraggabillyEvents', draggie);
+  });
+    
   gantt = d3.gantt("COMPARE").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel(currentTaskName).id(safeTaskName).height(100).margin(margin);
-  console.log(currentTaskSwitches[0]);
-  gantt(currentTaskSwitches, "#ganttChart");
+  // console.log(currentTaskSwitches[0]);
+  gantt(currentTaskSwitches, "#" + safeTaskName + "Div");
 
 }
 
@@ -239,7 +259,8 @@ function makeRemoveButton(taskName) {
     btn.id = idString;
     btn.className = "removeButton btn";
     btn.appendChild(t);
-    document.getElementById("ganttChart").appendChild(btn);
+    document.getElementById(safeTaskName + "Div").appendChild(btn);
+    // document.getElementById("ganttChart").appendChild(btn);
 
     document.getElementById(idString).onclick = function() {
       d3.select("#"+safeTaskName).remove();
@@ -254,6 +275,9 @@ function makeRemoveButton(taskName) {
       window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
       var child = document.getElementById(idString);
       child.parentNode.removeChild(child);
+
+      var div = document.getElementById(safeTaskName + "Div");
+      div.parentNode.removeChild(div);
     }
 }
 

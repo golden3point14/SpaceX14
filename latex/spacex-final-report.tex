@@ -156,15 +156,23 @@ Rachel Macfarlane}
 
 
 %%% Content.
-\section{Introduction}
+\section{Introduction} % May Lynn
 SpaceX is an American space transport company that designs and manufactures
-rockets.
+advanced rockets and spacecrafts. The eventual goal of the company is to allow people to live on other planets. There is a variety of software on which these rockets depend to be successful, including simulations, flight software, and data analysis. These types of software can have problems that are often hard to catch and very time consuming to debug.
 
-\section{Background}
+\section{Background} % May Lynn
 \subsection{Tracing and Debugging}
-\subsection{Existing Tool}
+The data that SpaceX developers examine in order to find software bugs is called a kernel trace, which documents the different programs running on a computer over a certain span of time, keeping track of when each program was running on each processor. 
 
-\section{Problem Statement}
+In order to find potential bugs in their software, SpaceX developers look for problems like unexpected preemptions, priority inversions, and breaks in the pattern of programs being run. A preemption occurs when one program is running, and is then blocked by another program starting to run on the same CPU. A priority inversion occurs when a high-priority program is indirectly blocked by something of lower priority using up a shared resource that the higher priority program needs in order to run. The software running on SpaceX rockets has deadlines for programs at regular intervals because timing is very important in rocket flight, so when there is a break in this cyclical pattern of processes this means that there is likely a bug in the software.
+\subsection{Existing Tool}
+SpaceX currently uses a tool called kernelshark to visualize this trace data and help find any bugs or anomalies. We were informed by our liaisons that this debugging process can take up to several days, so searching for bugs using this tool uses up a lot of valuable time. Much of the user expeience of kernelshark is outdated or could use improvements. The kernelshark tool consists of a graphical display of the programs running on a computer over time, as well as a tabular view of the same information, in the form of CPU events such as processes switching, waking, or sleeping.
+\includegraphics[width=5in]{kshark-open.png}\\
+\\
+Using only this visualization, it can be difficult to see where the cyclical deadlines for the programs begin and end, making it hard to find when something misses a deadline. In addition, the tabular display of the CPU events in the bottom part of the screen has minimal search functionality and the different columns of the table are not sortable.
+
+\section{Problem Statement} % May Lynn
+Our team will make it easier and faster for SpaceX engineers to find software problems by creating a tool that visualizes rocket data and highlights problem areas. We will create an improved user experience and provide more visualizations of the data than the old tool.
 
 \section{SpaceShark}
 \subsection{Design}

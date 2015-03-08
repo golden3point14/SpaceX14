@@ -89,7 +89,7 @@ d3.gantt = function(chartType) {
 
     yAxis = d3.svg.axis().scale(y).orient("left").tickFormat(
         function(d) { 
-          if (chartType === processType) { return yLabel; }
+          if ((chartType === processType) || (chartType === compareType)) { return yLabel; }
           else { return yLabel + d; }
         }
       ).tickSize(0);
