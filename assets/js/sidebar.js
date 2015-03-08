@@ -3,7 +3,7 @@ var sidebar = document.getElementById('sidebar');
 var mainDiv = document.createElement('div');
 mainDiv.id = 'mainButton';
 mainDiv.className = 'sidebutton';
-mainDiv.innerHTML = "Main";
+mainDiv.innerHTML = "Overview";
 mainDiv.setAttribute("onclick", "window.location.href='main.html';");
 sidebar.appendChild(mainDiv);
 
@@ -17,7 +17,7 @@ sidebar.appendChild(cyclesDiv);
 var statisticsDiv = document.createElement('div');
 statisticsDiv.id = 'statisticsButton';
 statisticsDiv.className = 'sidebutton';
-statisticsDiv.innerHTML = "Statistics";
+statisticsDiv.innerHTML = "Task Statistics";
 statisticsDiv.setAttribute("onclick", "window.location.href='histogram.html';");
 sidebar.appendChild(statisticsDiv);
 
@@ -39,14 +39,14 @@ sidebar.appendChild(searchDiv);
 var processDiv = document.createElement('div');
 processDiv.id = 'processButton';
 processDiv.className = 'sidebutton';
-processDiv.innerHTML = "Process";
+processDiv.innerHTML = "Task State";
 processDiv.setAttribute("onclick", "window.location.href='process.html';");
 sidebar.appendChild(processDiv);
 
 var compareDiv = document.createElement('div');
 compareDiv.id = 'compareButton';
 compareDiv.className = 'sidebutton';
-compareDiv.innerHTML = "Compare";
+compareDiv.innerHTML = "Compare Tasks";
 compareDiv.setAttribute("onclick", "window.location.href='compare.html';");
 sidebar.appendChild(compareDiv);
 
