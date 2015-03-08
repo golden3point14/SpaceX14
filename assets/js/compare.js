@@ -156,12 +156,15 @@ function makeGantt(currentTaskName) {
   }
 
   var safeTaskName = makeSafeForCSS(currentTaskName);
-  // console.log(currentTaskName);
-  // console.log(safeTaskName);
+
+  var div = document.createElement("div");
+  div.id = safeTaskName + "Div";
+  document.getElementById("ganttChart").appendChild(div);
 
   gantt = d3.gantt("COMPARE").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel(currentTaskName).id(safeTaskName).height(100).margin(margin);
   console.log(currentTaskSwitches[0]);
-  gantt(currentTaskSwitches, "#ganttChart");
+  gantt(currentTaskSwitches, "#" + safeTaskName + "Div");
+  // gantt(currentTaskSwitches, "#ganttChart");
 
 }
 
@@ -239,7 +242,8 @@ function makeRemoveButton(taskName) {
     btn.id = idString;
     btn.className = "removeButton btn";
     btn.appendChild(t);
-    document.getElementById("ganttChart").appendChild(btn);
+    document.getElementById(safeTaskName + "Div").appendChild(btn);
+    // document.getElementById("ganttChart").appendChild(btn);
 
     document.getElementById(idString).onclick = function() {
       d3.select("#"+safeTaskName).remove();
@@ -254,6 +258,9 @@ function makeRemoveButton(taskName) {
       window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
       var child = document.getElementById(idString);
       child.parentNode.removeChild(child);
+
+      var div = document.getElementById(safeTaskName + "Div");
+      div.parentNode.removeChild(div);
     }
 }
 
