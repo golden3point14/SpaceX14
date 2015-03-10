@@ -120,7 +120,7 @@ d3.gantt = function(chartType) {
         zoom.scale(currScale);
         x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width * zoom.scale()]);
         xAxis = d3.svg.axis().scale(x).orient("bottom");
-        d3.selectAll(".x.axis").call(xAxis);
+        // d3.selectAll(".x.axis").call(xAxis);
 
         // Scale all rectangles
         d3.selectAll("rect").attr("transform", function(d){
@@ -128,6 +128,8 @@ d3.gantt = function(chartType) {
                                             return "translate(" + x(d[xStartAttribute]) + "," + y(d[yAttribute]) + ")scale(" + zoom.scale() + ", 1)";
                                         })
       }
+
+      d3.selectAll(".x.axis").call(xAxis);
 
       if (currTranslateX !== zoom.translate()[0] || currTranslateY !== zoom.translate()[1])
       {
@@ -283,8 +285,8 @@ d3.gantt = function(chartType) {
     svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0, " + (height - margin.top - margin.bottom) + ")")
-    .transition()
-    .call(xAxis);
+    .transition();
+    //.call(xAxis);
     
     svg.append("g").attr("class", "y axis").transition().call(yAxis);
 
