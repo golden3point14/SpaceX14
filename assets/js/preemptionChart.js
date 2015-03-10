@@ -6,6 +6,7 @@ var doc = document;
 
 var db; //for indexedDB
 var JSONtasks;
+var colors = [];
 
 $('#statisticsButton').css('background-color', '#315B7E');
 $('#histogram-button').css('background-color', '#315B7E');
@@ -74,7 +75,7 @@ function openDB()
 
 function useDatabaseData()
 {
-
+  setColoringOfTasks();
   for (var i=0; i<JSONtasks.length; i++)
   {
     if (JSONtasks[i].name !== "<idle>") {
@@ -137,12 +138,13 @@ function useDatabaseData()
       return process.name + "\n" + process.preemptionCount + " preemptions";
     })
     .renderTitle(false)
+    .colorCalculator(function(d,i){
+      var process = processFromPid(d.key, values);
+      return "#" + colors[process.name];
+    })
     .margins({top: 0, right: 0, bottom: -1, left: 10});
 
-  // histogram.filter = function() {
-  //   // console.log(histogram.keyAccessor()(d));
-  //   window.location.href = "process.html";
-  // };
+  // histogram.colorCalculator(function(d,i){return colors[d.name]});
 
   histogram.onClick = function(d) {
     // console.log("clicked on the chart");
@@ -154,8 +156,8 @@ function useDatabaseData()
   // distribution side bar stuff
   var histogrambutton = dc.rowChart("#histogram-button");
   var runchartbutton = dc.rowChart("#runchart-button");
-  var waitchartbutton = dc.rowChart("#waitchart-button");
-  var sleepchartbutton = dc.rowChart("#sleepchart-button");
+  // var waitchartbutton = dc.rowChart("#waitchart-button");
+  // var sleepchartbutton = dc.rowChart("#sleepchart-button");
 
   var buttonwidth = 210;
 
@@ -165,6 +167,10 @@ function useDatabaseData()
     .dimension(pidDimension)
     .group(typeGroupPreemp)
     .renderLabel(false)
+    .colorCalculator(function(d,i){
+      var process = processFromPid(d.key, values);
+      return "#" + colors[process.name];
+    })
     .ordering(function(d) { return -processFromPid(d.key, values).preemptionCount; });
        
   histogrambutton.xAxis().tickFormat(function(v) { return ""; });
@@ -175,31 +181,49 @@ function useDatabaseData()
     .dimension(pidDimension)
     .group(typeGroupRun)
     .renderLabel(false)
+    .colorCalculator(function(d,i){
+      var process = processFromPid(d.key, values);
+      return "#" + colors[process.name];
+    })
     .ordering(function(d) { return -processFromPid(d.key, values).totalRuntime; });
 
   runchartbutton.xAxis().tickFormat(function(v) { return ""; });
 
-  waitchartbutton
-    .width(buttonwidth)
-    .height(values.length * 10)
-    .dimension(pidDimension)
-    .group(typeGroupWait)
-    .renderLabel(false)
-    .ordering(function(d) { return -processFromPid(d.key, values).totalWaittime; });
+  // waitchartbutton
+  //   .width(buttonwidth)
+  //   .height(values.length * 10)
+  //   .dimension(pidDimension)
+  //   .group(typeGroupWait)
+  //   .renderLabel(false)
+  //   .ordering(function(d) { return -processFromPid(d.key, values).totalWaittime; });
 
-  waitchartbutton.xAxis().tickFormat(function(v) { return ""; });
+  // waitchartbutton.xAxis().tickFormat(function(v) { return ""; });
 
-  sleepchartbutton
-    .width(buttonwidth)
-    .height(values.length * 10)
-    .dimension(pidDimension)
-    .group(typeGroupSleep)
-    .renderLabel(false)
-    .ordering(function(d) { return -processFromPid(d.key, values).totalSleeptime; });
+  // sleepchartbutton
+  //   .width(buttonwidth)
+  //   .height(values.length * 10)
+  //   .dimension(pidDimension)
+  //   .group(typeGroupSleep)
+  //   .renderLabel(false)
+  //   .ordering(function(d) { return -processFromPid(d.key, values).totalSleeptime; });
 
-  sleepchartbutton.xAxis().tickFormat(function(v) { return ""; });
+  // sleepchartbutton.xAxis().tickFormat(function(v) { return ""; });
 
 
   // render the content
   dc.renderAll();
 }
+
+function setColoringOfTasks() {
+  // For each task, create a CSS class with a random color
+  Math.seedrandom('hello.');
+
+  for (var i = 0; i < JSONtasks.length; i++) {
+    
+    if (JSONtasks[i].name !== '<idle>') {
+        var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
+        colors[JSONtasks[i].name] = color;
+    }
+  } 
+}
+
