@@ -13,9 +13,6 @@ var currTranslateX;
 var currTranslateY;
 
 d3.gantt = function(chartType) {
-    var FIT_TIME_DOMAIN_MODE = "fit";
-    var FIXED_TIME_DOMAIN_MODE = "fixed";
-    
     var margin = {
       top : 20,
       right : 40,
@@ -25,7 +22,6 @@ d3.gantt = function(chartType) {
 
     var timeDomainStart = 0;
     var timeDomainEnd = 0;
-    var timeDomainMode = FIT_TIME_DOMAIN_MODE;// fixed or fit
 
     var yAttribute = "cpu"; // By default, use cpu to group tasks on y axis
     var xStartAttribute = "normalStartTime";
@@ -96,7 +92,6 @@ d3.gantt = function(chartType) {
     };
 
     var zoom = d3.behavior.zoom()
-      .x(x)
       .scaleExtent([1,Infinity])
       .on("zoomstart", zoomStartHandler)
       .on("zoom", zoomed);
@@ -152,18 +147,16 @@ d3.gantt = function(chartType) {
     }
 
     function zoomed() {
-
       // Remake the x-axis
       x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width * d3.event.scale]);
       xAxis = d3.svg.axis().scale(x).orient("bottom");
       d3.selectAll(".x.axis").call(xAxis);
 
+      // Move entire chart to be centered on mouse
+      d3.selectAll(".gantt-chart").attr("transform","translate(" + d3.event.translate[0] + "," + margin.top + ")");
+
       // Scale all rectangles
       d3.selectAll("rect").attr("transform", zoomRectTransform);
-
-      // Move entire chart to be centered on mouse
-      var newX = margin.left + d3.event.translate[0];
-      d3.selectAll(".gantt-chart").attr("transform","translate(" + newX + "," + margin.top + ")");
 
       setStorage(chartType.toLowerCase());
     }
@@ -348,19 +341,8 @@ d3.gantt = function(chartType) {
   return gantt;
     };
 
-    /**
-     * @param {string}
-     *                vale The value can be "fit" - the domain fits the data or
-     *                "fixed" - fixed domain.
+    /* Chart options
      */
-    gantt.timeDomainMode = function(value) {
-  if (!arguments.length)
-      return timeDomainMode;
-        timeDomainMode = value;
-        return gantt;
-
-    };
-
     gantt.taskTypes = function(value) {
   if (!arguments.length)
       return taskTypes;
