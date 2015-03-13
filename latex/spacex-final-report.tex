@@ -25,7 +25,7 @@
 
 %%% For your ``statement of work'' (or ``work statement''), specify
 %%% the ``proposal'' document-class option to the hmcclinic class.
-\documentclass[midyear]{hmcclinic}
+\documentclass{hmcclinic}
 \usepackage{graphicx}
 
 %%% The major difference between the statement of work and a midyear
@@ -156,7 +156,8 @@ Rachel Macfarlane}
 
 
 %%% Content.
-\section{Introduction} % May Lynn
+\chapter{Background} % May Lynn
+\section{Introduction}
 SpaceX is an American space transport company that designs and manufactures
 advanced rockets and spacecrafts. The eventual goal of the company is to allow
 people to live on other planets. SpaceX rockets depend on a variety of software
@@ -164,12 +165,12 @@ to be successful, including simulations, flight software, and data analysis.
 Almost of this software is written in-house and is complex enough that subtle
 problems are often hard to catch and very time consuming to debug.
 
-\section{Background} % May Lynn
-\subsection{Tracing and Debugging}
+%\section{Background} % May Lynn
+\section{Tracing and Debugging}
 The data that SpaceX developers examine in order to find software bugs is called a kernel trace, which documents the different programs running on a computer over a certain span of time, keeping track of when each program was running on each processor. 
 
 In order to find potential bugs in their software, SpaceX developers look for problems like unexpected preemptions, priority inversions, and breaks in the pattern of programs being run. A preemption occurs when one program is running, and is then blocked by another program starting to run on the same CPU. A priority inversion occurs when a high-priority program is indirectly blocked by something of lower priority using up a shared resource that the higher priority program needs in order to run. The software running on SpaceX rockets has deadlines for programs at regular intervals because timing is very important in rocket flight, so when there is a break in this cyclical pattern of processes this means that there is likely a bug in the software.
-\subsection{Existing Tool}
+\section{Existing Tool}
 SpaceX currently uses a tool called kernelshark to visualize this trace data and help find any bugs or anomalies. We were informed by our liaisons that this debugging process can take up to several days, so searching for bugs using this tool uses up a lot of valuable time. Much of the user expeience of kernelshark is outdated or could use improvements. The kernelshark tool consists of a graphical display of the programs running on a computer over time, as well as a tabular view of the same information, in the form of CPU events such as processes switching, waking, or sleeping.
 \includegraphics[width=5in]{kshark-open.png}\\
 \\
@@ -178,17 +179,17 @@ Using only this visualization, it can be difficult to see where the cyclical dea
 \section{Problem Statement} % May Lynn
 Our team will make it easier and faster for SpaceX engineers to find software problems by creating a tool that visualizes rocket data and highlights problem areas. We will create an improved user experience and provide more visualizations of the data than the old tool.
 
-\section{SpaceShark}
-\subsection{Design}
-\subsection{Architecture} % Wendy
-\subsection{Parser} % Wendy
+\chapter{SpaceShark}
+\section{Design}
+\section{Architecture} % Wendy
+\section{Parser} % Wendy
 
-\section{User Feedback} % Alix
-\subsection{General Feedback} % Alix
-\subsection{Feedback on Specific Pages} % Alix
+\chapter{User Feedback} % Alix
+\section{General Feedback} % Alix
+\section{Feedback on Specific Pages} % Alix
 
-\section{Challenges}
-\subsection{trace-cmd versioning} % Rachel
+\chapter{Challenges}
+\section{trace-cmd versioning} % Rachel
   As already described, we collect data using a command-line utility called
   trace-cmd. trace-cmd records various events in the Linux kernel while it runs
   and then outputs this information into a data file with a particular binary
@@ -207,7 +208,7 @@ Our team will make it easier and faster for SpaceX engineers to find software pr
   a consistent format. This creates a dependency on a particular version
   of trace-cmd. Our liaisons have been using trace-cmd version 2.2.1, so
   our parser expects input data to be in the format of 2.2.1.
-\subsection{Selection of charting tool} % Rachel
+\section{Selection of charting tool} % Rachel
   We chose to use web technologies because we felt there was a wealth of
   charting and UI/UX tools that we could use. We spent several weeks
   experimenting with different charts for the main page. The main page renders a
@@ -215,13 +216,13 @@ Our team will make it easier and faster for SpaceX engineers to find software pr
   bars. This chart needed to be responsive to zooming and dragging, and to
   dealing with click events to move to a particular time in the table of events
   displayed below it.
-\subsection{Batch loading}
+\section{Batch loading}
 
-\section{Future Work}
-\subsection{Known bugs}
-\subsection{Extensions}
-\subsection{Scalability}
-\subsection{more user testing - results}
+\chapter{Future Work}
+\section{Known bugs}
+\section{Extensions}
+\section{Scalability}
+\section{more user testing - results}
 
 \end{document}
 
