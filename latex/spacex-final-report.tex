@@ -233,7 +233,51 @@ Our team will make it easier and faster for SpaceX engineers to find software pr
 
 \chapter{User Feedback} % Alix
 \section{General Feedback} % Alix
+During a week long site visit at SpaceX, we were able to user test with four SpaceX engineers. User testing played a major component in making sure that we were creating a tool that the engineers would be able to use to find errors in their rocket software. We found there was a discrepancy between what we thought would be useful for engineers and what engineers actually found useful. In addition, there was also a slight discrepancy between design choices that both our team and the liaisons agreed on at the beginning of the year and actually seeing and having the engineers test those features.
+
+A common thing that we were told is that overall our tool was not cohesive. In other words, there wasn't enough connection between the various pages of our tool. More specifically we weren't showing the connection between processes, which, after all, is of most interest to SpaceX engineers and not data in complete isolation. The majority of the feedback that we received pertained to the main page, process page, and cycles page.
+
 \section{Feedback on Specific Pages} % Alix
+
+\subsubsection{Main Page}
+The purpose of the main page is to be able to look at an overview of all the data, and then later be able to look at more specific details that are of particular interest to the user.
+
+As seen in Figure 1, the main page of kernelshark featured a graphical display of the processes running over time and a tabular version of the same information. The main problems with the existing main page is that zooming on the graph was not intuitive and was unpredictable. A user would be able to drag a box around any part of the graph and be able to zoom into that specific block of time, but zooming out using this same dragging technique was not intuitive and not reliable. In addition, the various filters seen directly above the table did not properly filter out any information, if at all. Because of the inefficiencies of the existing making page, we decided to create a new main page from scratch. 
+
+Before winter break, our tool featured a graphical representation of processes running over time, as well three tables that displayed the top ten preempted, longest running, and longest waiting processes. Through user testing, we found that three out of four users mentioned that they did not find the statistics helpful. Because only one user found the statistics useful at all, we decided as a team that it would be best to omit them from our tool.
+
+Two of the users mentioned that the typical workflow of the tool would be to visually find the problem in the graph, zoom in to that particular strange spot in the graph, be able to jump to that spot in the events list, and then scan a tabular version of the events list. In order to have this workflow, we would need to have the tabular version of the graph on the main page. Thus, we decided that the main page of our tool will have both the graphical version of the time series data, as well as the tabular version of it.
+
+Figure 2 shows what our main page currently looks like compared to kernelshark:
+
+FIGURE 2 (SCREENSHOT OF MAIN PAGE)
+
+Our main page and kernelshark's main page, in comparison, look very similar, but our tool has far improved and working functionality. For example, our tool can now filter the events list table correctly, jump from a specific point in the graph to the same point represented in the table, and can click on a particular task in the table to view more information about it.
+
+\subsubsection{Process Page}
+The purpose of the process page is to be able to look at a specific view of a process and potentially find something strange, such as a process being unexpectedly preempted many times.
+
+kernelshark did not feature any additional pages besides the main page, so it's clear why SpaceX engineers would want to have the ability to look at the difficult ftrace data in more than one way. Thus it's clear why engineers would want to be able focus on data on a process level.
+
+(SCREENSHOT OF MOCKUP)
+
+Since there was no existing process page, we designed a mockup of it at the beginning of the project. It features many different kinds of visualizations, such as histograms of how long it was in each state for, a scatterplot of what preempted it, a table of what preempted it, pie charts representing the data in cycles, and a graphical display of the time series data highlighting the process in the graph. Through user feedback with the liaisons, we found that our mockup included way too much information that SpaceX engineers would not have found useful. Since preemptions are of most interest and are generally the cause of problems, we really wanted to focus on this on the process page.
+
+(SCREENSHOT OF PROCESS PAGE)
+
+On the process page, the user is able to type in particular process, see how many times it was preempted and which processes preempted it, as well as a graph showing how long it was in each state (running, waiting, preempted) for. This design has a much more minimalistic page view compared to the mockup, but includes much more useful information.
+
+Since kernelshark did not have a process page, it's clear to see why this page would be helpful for SpaceX engineers. Being able to use the tool at the process level is something that the engineers were never able to do. The process page clearly encapsulates the idea of being able to look at a specific view of a process, while also getting the context of how it connects to other processes.
+
+\subsubsection{Cycles Page}
+The idea behind the cycles page was to be able to find anomalies quickly. Having the main graph split up into cycles, can clearly show the user where something strange might be happening. More specifically, if there is a spot in the graph that doesn't show up in any of the previous cycles, then that point would be of particular interest to SpaceX engineers.
+
+As stated before, kernelshark was only a single page tool. 
+
+Since there was no existing 
+
+We received nearly all positive feedback on the cycles page. A
+
 
 \chapter{Challenges}
 \section{trace-cmd versioning} % Rachel
