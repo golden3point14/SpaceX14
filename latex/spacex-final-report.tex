@@ -188,9 +188,18 @@ Our team will make it easier and faster for SpaceX engineers to find software pr
 
   \subsection{Nodewebkit and HTML} %Rachel
   \subsection{Overview Page}
+  
+The purpose of the Overview Page is to be able to look at an overview of all the data, and then later be able to look at more specific details that are of particular interest to the user.
+  
   \subsection{Cycles Page}
+  
+The idea behind the cycles page was to be able to find anomalies quickly. Having the main graph split up into cycles, can clearly show the user where something strange might be happening. More specifically, if there is a spot in the graph that doesn't show up in any of the previous cycles, then that point would be of particular interest to SpaceX engineers.
+  
   \subsection{Task Statistics Page}
   \subsection{Task State}
+  
+The purpose of the Task State Page is to be able to look at a specific view of a process and potentially find something strange, such as a process being unexpectedly preempted many times.
+  
   \subsection{Compare Tasks}
 
 \section{Architecture} % Wendy
@@ -339,7 +348,6 @@ A common thing that we were told is that overall our tool was not cohesive. In o
 \section{Feedback on Specific Pages} % Alix
 
 \subsubsection{Main Page}
-The purpose of the main page is to be able to look at an overview of all the data, and then later be able to look at more specific details that are of particular interest to the user.
 
 As seen in Figure 1, the main page of kernelshark featured a graphical display of the processes running over time and a tabular version of the same information. The main problems with the existing main page is that zooming on the graph was not intuitive and was unpredictable. A user would be able to drag a box around any part of the graph and be able to zoom into that specific block of time, but zooming out using this same dragging technique was not intuitive and not reliable. In addition, the various filters seen directly above the table did not properly filter out any information, if at all. Because of the inefficiencies of the existing making page, we decided to create a new main page from scratch. 
 
@@ -354,7 +362,6 @@ FIGURE 2 (SCREENSHOT OF MAIN PAGE)
 Our main page and kernelshark's main page, in comparison, look very similar, but our tool has far improved and working functionality. For example, our tool can now filter the events list table correctly, jump from a specific point in the graph to the same point represented in the table, and can click on a particular task in the table to view more information about it.
 
 \subsubsection{Process Page}
-The purpose of the process page is to be able to look at a specific view of a process and potentially find something strange, such as a process being unexpectedly preempted many times.
 
 kernelshark did not feature any additional pages besides the main page, so it's clear why SpaceX engineers would want to have the ability to look at the difficult ftrace data in more than one way. Thus it's clear why engineers would want to be able focus on data on a process level.
 
@@ -369,7 +376,6 @@ On the process page, the user is able to type in particular process, see how man
 Since kernelshark did not have a process page, it's clear to see why this page would be helpful for SpaceX engineers. Being able to use the tool at the process level is something that the engineers were never able to do. The process page clearly encapsulates the idea of being able to look at a specific view of a process, while also getting the context of how it connects to other processes.
 
 \subsubsection{Cycles Page}
-The idea behind the cycles page was to be able to find anomalies quickly. Having the main graph split up into cycles, can clearly show the user where something strange might be happening. More specifically, if there is a spot in the graph that doesn't show up in any of the previous cycles, then that point would be of particular interest to SpaceX engineers.
 
 As stated before, kernelshark was only a single page tool. 
 
