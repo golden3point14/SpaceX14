@@ -183,7 +183,7 @@ Our team will make it easier and faster for SpaceX engineers to find software pr
 \section{Design}
 \section{Architecture} % Wendy
 
-  Architecture (overview)
+  \subsection{Overview}
 
   [architecture slide picture helpful here]
 
@@ -192,7 +192,9 @@ Our team will make it easier and faster for SpaceX engineers to find software pr
   as long as output/inputs remain the same, internal changes to one section will
   not affect the other at all.
 
-  Trace-cmd Data is collected by using a command-line utility called trace-cmd.
+  \subsection{Trace-cmd}
+
+  Data is collected by using a command-line utility called trace-cmd.
   trace-cmd records various events in the Linux kernel while it runs and then
   outputs this information into a data file with a particular binary format.
   trace-cmd also has a ``report`` option, which takes an existing trace file and
@@ -210,8 +212,8 @@ Our team will make it easier and faster for SpaceX engineers to find software pr
    parser expects input data to be in the format of 2.2.1.
 
 
-
-  Parser Next the parser takes in this raw data, and ultimately outputs the data
+  \subsection{Parser}
+  Next the parser takes in this raw data, and ultimately outputs the data
   reformatted into JSON with additional information. As a result of the
   particular version of trace-cmd, we know exactly how the file will be
   formatted. Each line in the input file is a single recorded event with a
@@ -247,10 +249,11 @@ Our team will make it easier and faster for SpaceX engineers to find software pr
   this way, but as it is currently functional, these changes have not been high
   priority.
 
-  Web Application
+  \subsection{Web Application}
 
+  \subsubsection{IndexedDB}
 
-  IndexedDB The application takes the JSON string and loads it into IndexedDB, a
+  The application takes the JSON string and loads it into IndexedDB, a
   browser-based database. IndexedDB is built into most browsers, including
   node-webkit. More information on the details of IndexedDB can be found here
   (FIXME put a url?). We are basically using IndexedDB to store strings between
@@ -273,7 +276,9 @@ Our team will make it easier and faster for SpaceX engineers to find software pr
   unusually long files or files with 4 or more CPUs (not exactly sure what the
   number is here)
 
-  Local Storage Our application also makes use of Local Storage, another tool
+  \subsubsection{Local Storage}
+
+  Our application also makes use of Local Storage, another tool
   built into most browsers and node-webkit. This is a small and quick to access
   storage method. We primarily use it to save state between pages, notably
   display states. One example is the zoom level of the graph, which does not
@@ -282,7 +287,9 @@ Our team will make it easier and faster for SpaceX engineers to find software pr
   load the same data we still have their state changes saved. If they load a new
   file Local Storage is cleared.
 
-  Overall Application Structure The general structure of our code is similar to
+  \subsubsection{Overal Application Structure}
+
+  The general structure of our code is similar to
   most web applications. In the root we have HTML files, which call to
   Javascript and CSS files, located in assets/js and assets/css respectively.
   HTML files do not have any Javascript or CSS inside them, but exclusively call
@@ -291,7 +298,8 @@ Our team will make it easier and faster for SpaceX engineers to find software pr
   have used a number of Javascript libraries. (List them? Point to our Git?
   Mer?)
 
-  Primary Javascript/CSS files One of the primary Javascript files we've worked
+  \subsubsection{Primary Javascript/CSS files}
+  One of the primary Javascript files we've worked
   with and changed is gantt-chart-d3.js. This file is the logic for all of the
   graphs. We have added a ton of functionality to the original file, including a
   system to case on what page the graph is on and behave accordingly. For
