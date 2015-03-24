@@ -222,21 +222,54 @@ Our team will make it easier and faster for SpaceX engineers to find software pr
     members were familar with, we decided to take this route.
   \subsection{Overview Page}
   
-The purpose of the Overview Page is to be able to look at an overview of all the data, and then later be able to look at more specific details that are of particular interest to the user.
+  \includegraphics[scale=0.25]{overview-page.png}
   
+The purpose of the Overview Page is to be able to look at an overview of all the data, and then later be able to look at more specific details that are of particular interest to the user.
+
+    The code for the Overview Page is found within assets/js/main.js. This file is
+    responsible for fetching and loading the data, creating a timeline
+    visualization that the user can pan and zoom into, and creating a table that
+    lists all events in the trace. The code for the chart and table is found in
+    gantt-chart-d3.js and dataTables.scroller.js, respectively.
   \subsection{Cycles Page} %Alix
+
+  \includegraphics[scale=0.25]{cycles-page.png}
   
 The idea behind the cycles page was to be able to find anomalies quickly. Having the main graph split up into cycles, can clearly show the user where something strange might be happening. More specifically, if there is a spot in the graph that doesn't show up in any of the previous cycles, then that point would be of particular interest to SpaceX engineers.
+
+    The code for the cycles page is within assets/js/cyclesPage.js. This once again
+    uses gantt-chart-d3.js to create the visualization after fetching the data.
+    The page also has buttons to toggle on and off different CPUs, which removes
+    or adds charts for these CPUs, rescaling other charts to use the full window
+    space. Cycles are precomputed if print events exist within the trace. If
+    not, the page will be blank when it first renders. The user can enter a
+    number in the top box to set the period of desired cycles, which will then
+    display a chart of cycles of that length. This feature also works even if
+    print events are present in the data.
   
   \subsection{Task Statistics Page} %May Lynn
+
+  \includegraphics[scale=0.25]{task-statistics-page.png}
 
 The purpose of the Task Statistics page is to give an overview of the preemption count and runtime of each task. The page displays bar charts of the preemption count and runtime for each task, sorted from highest to lowest, as well as the averages and standard deviations of each.
 
   \subsection{Task State}
+
+  \includegraphics[scale=0.25]{task-state-page.png}
   
-The purpose of the Task State Page is to be able to look at a specific view of a process and potentially find something strange, such as a process being unexpectedly preempted many times.
+    The purpose of the Task State Page is to be able to look at a specific view of a
+    process and potentially find something strange, such as a process being
+    unexpectedly preempted many times. The user can click the ``+ Compare'' button
+    at the bottom to add this to a series of side-by-side graphs for comparison.
+
+    The code for this page is within assets/js/process.js. This page uses
+    gantt-chart-d3.js for the chart and dataScroller.js to create the table of
+    preemptions. The search box autocompletes task names using twitter
+    typeahead.
   
   \subsection{Compare Tasks} %Wendy
+
+  \includegraphics[scale=0.25]{compare-page.png}
  
 The Compare Tasks page allows users to view the same graph as the Task State
 page, but for multiple tasks. Tasks can be reordered so that specific tasks can
@@ -248,7 +281,7 @@ comparisons between tasks.
 
   \subsection{Overview}
 
-  [architecture slide picture helpful here]
+  \includegraphics[scale=0.25]{architecture.png}
 
   Our application has three main portions: the raw input, the parser and it's
   output, and the web-based desktop application. The sections are modular, and
