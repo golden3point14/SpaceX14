@@ -236,7 +236,13 @@ The purpose of the Task Statistics page is to give an overview of the preemption
   
 The purpose of the Task State Page is to be able to look at a specific view of a process and potentially find something strange, such as a process being unexpectedly preempted many times.
   
-  \subsection{Compare Tasks}
+  \subsection{Compare Tasks} %Wendy
+ 
+The Compare Tasks page allows users to view the same graph as the Task State
+page, but for multiple tasks. Tasks can be reordered so that specific tasks can
+be compared side by side for the same time period. This provides similar
+functionality as the Task State page but with the additional benefit of
+comparisons between tasks.
 
 \section{Architecture} % Wendy
 
@@ -448,12 +454,49 @@ We received nearly all positive feedback on the cycles page. A
   bars. This chart needed to be responsive to zooming and dragging, and to
   dealing with click events to move to a particular time in the table of events
   displayed below it.
-\section{Batch loading}
+\section{Speed} %Wendy
+The data SpaceX will be using with our tool is very large, and becomes even
+larger once we have parsed it. As a result, some parts of the tool load slowly,
+and this is something we are still working on fixing. One main fix we have
+implemented is batch loading the list of events on the main page so that the
+user can start interacting with the tool without waiting to load the entire
+table, especially since all of the table is typically not needed.
+
+Having done some profiling, we know that pulling data from IndexedDB is the
+slowest part of our application, but at this point in time we do not have a way
+to fix this.
 
 \chapter{Future Work}
 \section{Known bugs}
+  
+All graphs can be dragged until they become no longer visible. While they can
+be dragged back using the white space, this is not good for a user experience.
+
+Graphs and other images do not resize when the window resizes unless the page
+is reloaded.
+
+Zooming in on a graph removes the graph name. Additionally, the x-axes do not
+develop more ticks as you zoom in, making it harder to get a sense of scale.
+
 \section{Extensions}
+  SpaceX developers indicated an interest in interleaving the graphs of multiple
+  CPUs on the Cycles page.  This would make it easier to compare cycle
+  anomalies across CPUs, as this would cause the timestamps to align. Making
+  this possible would require tweaking the graph infrastructure, and creating an
+  interface for users to choose if they want the graphs interleaved or not, and
+  which cycle numbers to display.
 \section{Scalability}
+  Overall, the application should be made faster. We are not entirely sure how
+  to improve this at the moment. IndexedDB is the slowest part of the
+  application at current.
+
+Additionally, if given files above a certain size, typically using more than 4
+cores, the parsed version will be too large for IndexedDB to load, and
+sometimes too large for the parser to handle as well.
+
+There are two possibilities for fixing this. One is to prune the JSON or
+finder a more compressed method of storing the data. The other is to find a
+substitute for IndexedDB that is faster.
 \section{more user testing - results}
 
 \end{document}
