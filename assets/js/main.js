@@ -50,23 +50,37 @@ function openDB()
                   numCPUsRequest.onsuccess = function(e) {
                     numCPUs = e.target.result;
 
+                    // filter so that we only have switch events
                     switchEvents = _.filter(JSONevents, function(e){return e.eventType === "sched_switch";});
-                    // this is the time of the last event for the end of the chart
+                    
+                    // takes the start time of the events and normalizes them to zero.
                     switchEvents = normalizeStartTime(switchEvents);
+                    
+                    // this is the time of the last event, used as the end of the chart
                     var maxDuration = getLongestCPUDuration(switchEvents);
 
+                    // save this value for later use on other pages.
                     window.localStorage.setItem("maxDuration", maxDuration);
                     
+                    // set up the gantt chart
                     var gantt = d3.gantt(chartType).taskTypes(_.range(numCPUs)).timeDomain(maxDuration);
-                    // switchEvents = normalizeStartTime(switchEvents);
                     
+                    // calculate how long each event lasts
                     switchEvents = calculateDurationBetweenSwitches(switchEvents, numCPUs);
 
+                    // save the first event time for later use
                     window.localStorage.setItem("firstEventTime", firstEventTime);
 
-                    gantt(switchEvents, "#ganttChart"); //feeding it the relevant events
+                    // pass the gantt chart the events
+                    gantt(switchEvents, "#ganttChart");
+
+                    // set the colors
                     setColoringOfTasks();
+
+                    // load the tables
                     displayTable();
+
+                    // fadeout the loader
                     $('.loader').fadeOut("slow");
                   }
         }
@@ -101,18 +115,11 @@ function setColoringOfTasks() {
         document.getElementsByTagName('head')[0].appendChild(style);
       }
     } 
-
-    // make <idle> white
-    else {
-      // var style = document.createElement('style');
-      // style.type = 'text/css';
-      // style.innerHTML = '.idle { fill: white; }';
-      // document.getElementsByTagName('head')[0].appendChild(style);
-    }
   }
 }
 
-
+// normalizes all the start times with respect to 0 and the first event
+// this allows us to have the graph start at zero.
 function normalizeStartTime(switchEvents)
 {
   var earliestTime = switchEvents[0].startTime;
@@ -121,6 +128,9 @@ function normalizeStartTime(switchEvents)
   return switchEvents;
 }
 
+// finds how long each event lasted. This is done per CPU,
+// to avoid accidentally marking events across CPUs.
+// Stores it in the processTime of an event.
 function calculateDurationBetweenSwitches(switchEvents, numCPUs) {
   var groupedByCPU = _.groupBy(switchEvents, function(e){return e.cpu;});
 
@@ -144,10 +154,13 @@ function calculateDurationBetweenSwitches(switchEvents, numCPUs) {
   return newSwitchEvents;
 }
 
+// calculates the duration of all events, not just switch events.
 function calculateDuration(eventList) {
   return _.reduce(eventList, function(sum, next) { return sum += next.duration }, 0)
 }
 
+// Determine which CPU ran the longest
+// This gives us the end time for the graph.
 function getLongestCPUDuration(switchEvents)
 {
   switchEventsByCPU = _.groupBy(switchEvents, function(e){return e.cpu;});
@@ -165,6 +178,7 @@ function getLongestCPUDuration(switchEvents)
   return longestTime;
 }
 
+// event handler
 document.addEventListener("load", openDB());
 
 function clickCell(cellData)
