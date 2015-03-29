@@ -181,51 +181,56 @@ function getLongestCPUDuration(switchEvents)
 // event handler
 document.addEventListener("load", openDB());
 
+// Click a row in the graph and get redirected to that
+// particular task on the process page
 function clickCell(cellData)
 {
   window.localStorage.setItem("cellData", cellData);
   window.location.href = "process.html";
 }
 
-  function displayTable() {
-  	$(document).ready(function() {
-    	var data = [];
-    	for ( var i=0 ; i<currentResults.length ; i++ ) {
-        if(currentResults[i].name=="<idle>") {
-          currentResults[i].name='idle';
-        } 
-    	data.push( [ currentResults[i].cpu, currentResults[i].startTime, currentResults[i].name, currentResults[i].pid, currentResults[i].eventType, currentResults[i].extraInfo ] );
-    	}
+// Creates the events list table
+function displayTable() {
+	$(document).ready(function() {
+    // Retrieve all the data about a particular task
+  	var data = [];
+  	for ( var i=0 ; i<currentResults.length ; i++ ) {
+      // Changes the formatting of idle events from "<idle>"
+      // in the raw data, to "idle" in the table
+      if(currentResults[i].name=="<idle>") {
+        currentResults[i].name='idle';
+      } 
+  	data.push( [ currentResults[i].cpu, currentResults[i].startTime, currentResults[i].name, currentResults[i].pid, currentResults[i].eventType, currentResults[i].extraInfo ] );
+  	}
 
-    	var oTable = $('#table_id').dataTable( {
-    		data:           data,
-    		deferRender:    true,
-    		dom:            "frtiS",
-    		scrollY:        400,
-    		scrollCollapse: true,
-        stateSave: true,
-    		order:          [[1, 'asc']],
-        columns: [
-          { "title" : "CPU", "width" : "40px" },
-          { "title" : "Start time" },
-          { "title" : "Name", "width" : "120px" },
-          { "title" : "PID", "width" : "40px" },
-          { "title" : "Event type", "width" : "140px" },
-          { "title" : "Extra info" }
-          ]
-        } );
-
-      $('#table_id tbody').on( 'click', 'tr', function () {
-        var cellData = oTable.fnGetData(this);
-        // console.log( 'Clicked on: '+ cellData[2]);
-        clickCell(cellData[2]);
+    // Creates the dataTable
+  	var oTable = $('#table_id').dataTable( {
+  		data:           data,
+  		deferRender:    true,
+  		dom:            "frtiS",
+  		scrollY:        400,
+  		scrollCollapse: true,
+      stateSave: true,
+  		order:          [[1, 'asc']],
+      columns: [
+        { "title" : "CPU", "width" : "40px" },
+        { "title" : "Start time" },
+        { "title" : "Name", "width" : "120px" },
+        { "title" : "PID", "width" : "40px" },
+        { "title" : "Event type", "width" : "140px" },
+        { "title" : "Extra info" }
+        ]
       } );
-      
-  //     $('input.column_filter').on( 'keyup click', function () {
-  //     filterColumn( $(this).parents('tr').attr('data-column') );
-  // });
-  	} );
-  }
+
+    // Click in the body of the table and get taken to that 
+    // particular task on the process page
+    $('#table_id tbody').on( 'click', 'tr', function () {
+      var cellData = oTable.fnGetData(this);
+      // console.log( 'Clicked on: '+ cellData[2]);
+      clickCell(cellData[2]);
+    } );
+	} );
+}
 
 var substringMatcher = function(strs) {
   return function findMatches(q, cb) {
@@ -241,13 +246,11 @@ var substringMatcher = function(strs) {
         matches.push({ value: str });
       }
     });
- 
     cb(matches);
   };
 };
  
-function scrollToTime(time)
-{
+function scrollToTime(time) {
   var table = $('#table_id').DataTable();
 
   // If the table is not sorted by time, then sort it by time
@@ -268,12 +271,6 @@ function scrollToTime(time)
     // Save the scroll state
     window.localStorage.setItem("tableScroll", index);
   }
-}
-
-function selectRow(index) {
-  var table = $('#table_id').DataTable();
-  table.$('tr.selected').removeClass('selected');
-  $(table.row(index).nodes()).addClass('selected');
 }
 
 function findIndex(values, target) {
