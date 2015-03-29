@@ -396,7 +396,29 @@ comparisons between tasks.
   and then there are a number of shared files that multiple or all pages use. We
   have used a number of Javascript libraries. (List them? Point to our Git?
   Mer?)
+  \subsubsection{Calling the Graph}
+  Before giving the graph the events list, it is passed through a number of
+  helper functions first. 
+  
+  \begin{itemize}
 
+    \item The list is filtered to only contain switch
+  events. 
+  
+    \item The list is normalized to the first event as time zero. 
+  
+    \item The duration of the longest running CPU is acquired, to be used as the endpoint
+  for the graph. 
+  
+    \item The gantt chart is passed it's parameters in preparation to be
+  drawn, not including the events. 
+  
+   \item The events have their duration calculated, to
+  determine how large each rectangle should be drawn.
+  
+   \item The gantt chart is passed the events and drawn, and the colors are set.
+
+  \end{itemize}
   \subsubsection{Primary Javascript/CSS files}
   One of the primary Javascript files we've worked
   with and changed is gantt-chart-d3.js. This file is the logic for all of the
