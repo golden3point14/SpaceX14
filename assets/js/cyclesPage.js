@@ -93,11 +93,12 @@ function drawAllCharts() {
       chart.parentNode.removeChild(chart);
     }
 
-    // Draw chart
+    // Draw chart for each CPU we want to display
     makeGantt(selectedCPUs[i]);
   }
 }
 
+// makes and draws the graphs
 function makeGantt(currentCPU) {
   numCycles = cycleEvents.length;
 
@@ -137,6 +138,7 @@ function makeGantt(currentCPU) {
   document.getElementById("ganttCharts").appendChild(chartDiv);
   var chartID = '#ganttChart' + currentCPU;
 
+  // actually draw the gantt chart
   gantt(switchCycleEvents, chartID);
 }
 
@@ -182,6 +184,7 @@ function getCycleEventsForCPU(currentCPU) {
 }
 
 // for each event, normalizes it relative to the cycle it is in.
+// ie, normalize to 0 as the start time of the cycle.
 function normalizeStartTime(switchCycleEvents, numCycles)
 {
 	var grouped = _.groupBy(switchCycleEvents, function(e){return e.cycle;});
@@ -217,6 +220,7 @@ function normalizeStartTime(switchCycleEvents, numCycles)
 	return newSwitchEvents;
 }
 
+// determine how long a switch event should show for
 function calculateDurationBetweenSwitches(switchEvents)
 {
 	for (var i = 0; i < switchEvents.length - 1; i++) {
@@ -231,6 +235,7 @@ function calculateDurationBetweenSwitches(switchEvents)
     return switchEvents;
 }
 
+// color the tasks using a random seed.
 function setColoringOfTasks() {
   Math.seedrandom("hello.");
 
@@ -318,10 +323,12 @@ function addOptions()
 	}
 }
 
+// calculate total duration of all events passed in
 function calculateSimpleDuration(eventList) {
   return _.reduce(eventList, function(sum, next) { return sum += next.duration; }, 0);
 }
 
+// determine which CPU runs for the longest
 function getLongestCPUDuration(events)
 {
   eventsByCPU = _.groupBy(events, function(e){return e.cpu;});
@@ -329,6 +336,7 @@ function getLongestCPUDuration(events)
   return _.max(_.map(eventsByCPU, calculateSimpleDuration));
 }
 
+// get a user entered cycle length to apply to the graph
 function getCycleLength(e)
  {
  	//check if enter was hit
@@ -371,6 +379,7 @@ function getCycleLength(e)
         normalizedStartTime += cycleLength;
       }
      
+      // given the new cycle length, remake the graphs
       drawAllCharts();
     }
  	}
