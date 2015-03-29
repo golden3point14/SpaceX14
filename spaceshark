@@ -1,0 +1,34 @@
+#!/bin/bash
+
+parsing=
+filename=
+
+function usage
+{
+  echo "usage: spaceshark [-p file ]"
+}
+
+
+while [ "$1" != "" ]; do
+  case $1 in
+    -p | --parse )        shift
+                          parsing=1
+                          echo "$1"
+                          filename=$1
+                          ;;
+    -h | --help )         usage
+                          exit
+                          ;;
+    * )                   usage
+                          exit 1
+  esac
+  shift
+done
+
+echo "$1"
+
+if [ "$parsing" = "1" ]; then
+  java -jar spaceshark.jar $filename
+fi
+
+./app
