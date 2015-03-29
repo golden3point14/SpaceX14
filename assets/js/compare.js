@@ -1,10 +1,7 @@
-//document.getElementById("ganttChart").innerHTML=window.localStorage.getItem("ganttChart");
-
 var files;
 var events;
 var tasks;
 var reader = new FileReader();
-// var autocompleteEventTypes;
 var autocompleteNames;
 var currentTasks;
 var gantt;
@@ -17,18 +14,15 @@ var firstEventTime = window.localStorage.getItem("firstEventTime"); //for normal
 $('#compareButton').css('background-color', '#315B7E');
 
 //pulls the data from the IndexedDB and displays it
-function openDB()
-{
+function openDB() {
   var openRequest = indexedDB.open("events", 8);
 
-  openRequest.onerror = function(e)
-  {
+  openRequest.onerror = function(e) {
     console.log("Error in OpenRequest");
     console.dir(e);
   }
 
-  openRequest.onsuccess = function(e)
-  {
+  openRequest.onsuccess = function(e) {
     console.log("openRequest success!");
     db = e.target.result;
 
@@ -40,42 +34,44 @@ function openDB()
     var namesRequest = db.transaction(["AutocompleteNames"], "readonly")
                          .objectStore("AutocompleteNames").get(1);
 
-    eventsRequest.onerror = function(e){console.log("error", e.target.error);}
+    eventsRequest.onerror = function(e) {
+      console.log("error", e.target.error);
+    }
 
     eventsRequest.onsuccess = function(e) {
-            events = e.target.result;
-            var temp = JSON.parse(window.localStorage.getItem("compareData"));
-            // console.log(temp);
-            // comparingTasks.concat(temp);
-            // console.log(comparingTasks);
-            for (var i = 0; i < temp.length; i++) {
-              comparingTasks.push(temp[i])
-            }
-            // console.log(window.localStorage);
-            
-            if (comparingTasks) {
-              for (var i = 0; i < comparingTasks.length; i++) {
-                makeGantt(comparingTasks[i]);
-                // console.log(comparingTasks[i]);
-                makeRemoveButton(comparingTasks[i]);
-              }
-            }
-            $('.loader').fadeOut("slow");
-          }
+      events = e.target.result;
+      var temp = JSON.parse(window.localStorage.getItem("compareData"));
 
-    tasksRequest.onerror = function(e){console.log("error", e.target.error);}
-    
+      for (var i = 0; i < temp.length; i++) {
+        comparingTasks.push(temp[i])
+      }
+      
+      if (comparingTasks) {
+        for (var i = 0; i < comparingTasks.length; i++) {
+          makeGantt(comparingTasks[i]);
+          makeRemoveButton(comparingTasks[i]);
+        }
+      }
+      $('.loader').fadeOut("slow");
+    }
+
+    tasksRequest.onerror = function(e) {
+      console.log("error", e.target.error);
+    }
+
     tasksRequest.onsuccess = function(e) {
-                                tasks = e.target.result;
-                              }
+      tasks = e.target.result;
+    }
 
-    namesRequest.onerror = function(e){console.log("error", e.target.error);}
+    namesRequest.onerror = function(e) {
+      console.log("error", e.target.error);
+    }
 
     namesRequest.onsuccess = function(e) {
-                                autocompleteNames = e.target.result;
-                                autoCompleteNames();
-                                autoSearch();
-                              }
+      autocompleteNames = e.target.result;
+      autoCompleteNames();
+      autoSearch();
+    }
   }
 }
 
@@ -130,7 +126,6 @@ function getRelevantSwitches(currentTaskName) {
   // Calculate how long task was in each state
   labeledTaskSwitches = calculateDurations(labeledTaskSwitches);
 
-
   // Normalize
   labeledTaskSwitches = normalize(labeledTaskSwitches);
 
@@ -173,19 +168,16 @@ function makeGantt(currentTaskName) {
   div.appendChild(handle);
   document.getElementById("ganttChart").appendChild(div);
 
+  var draggie = new Draggabilly(div, {
+    handle: '.handle',
+    axis: 'y'
+  });
 
-    var draggie = new Draggabilly(div, {
-      handle: '.handle',
-      axis: 'y'
-    });
-
-    $container.append(div).packery( 'appended', div);
-    $container.packery('bindDraggabillyEvents', draggie);
-
+  $container.append(div).packery( 'appended', div);
+  $container.packery('bindDraggabillyEvents', draggie);
     
   gantt = d3.gantt("COMPARE").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel(currentTaskName).id(safeTaskName).height(100).margin(margin);
   gantt(currentTaskSwitches, "#" + safeTaskName + "Div");
-
 }
 
 var substringMatcher = function(strs) {
@@ -199,8 +191,7 @@ var substringMatcher = function(strs) {
         // Typeahead expects javascript object
         matches.push({ value: str });
       }
-    })
-; 
+    }); 
     cb(matches);
   };
 };
@@ -208,14 +199,14 @@ var substringMatcher = function(strs) {
 function autoCompleteNames() {
   // Setup typeahead to search task names
   $('#search-process').typeahead({
-      hint: true,
-      highlight: true,
-      minLength: 1
-    },
-    {
-      name: 'autocompleteNames',
-      displayKey: 'value',
-      source: substringMatcher(autocompleteNames)
+    hint: true,
+    highlight: true,
+    minLength: 1
+  },
+  {
+    name: 'autocompleteNames',
+    displayKey: 'value',
+    source: substringMatcher(autocompleteNames)
   })
   .on('typeahead:autocompleted', function($e, chosenTask) {
     addAnotherTask(chosenTask);
@@ -234,12 +225,12 @@ function addAnotherTask(chosenTask) {
   // check if we are already displaying this task
   for (var i = 0; i < comparingTasks.length; i++) {
     if (comparingTasks[i] == filterString) {
-      // console.log("You are already displaying that task.");
       display = false;
       break;
     }
   }
 
+  // otherwise add the task
   if (display) {
     comparingTasks.push(filterString);
     window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
@@ -253,42 +244,42 @@ function addAnotherTask(chosenTask) {
   }
 }
 
+// Makes remove button for every task
 function makeRemoveButton(taskName) {
-    var safeTaskName = makeSafeForCSS(taskName);
+  var safeTaskName = makeSafeForCSS(taskName);
 
-    var btn = document.createElement("button");
-    var t = document.createTextNode("Remove Task");
-    var idString = safeTaskName + "Button";
-    btn.id = idString;
-    btn.className = "removeButton btn";
-    btn.appendChild(t);
-    document.getElementById(safeTaskName + "Div").appendChild(btn);
-    // document.getElementById("ganttChart").appendChild(btn);
+  var btn = document.createElement("button");
+  var t = document.createTextNode("Remove Task");
+  var idString = safeTaskName + "Button";
+  btn.id = idString;
+  btn.className = "removeButton btn";
+  btn.appendChild(t);
+  document.getElementById(safeTaskName + "Div").appendChild(btn);
 
-    document.getElementById(idString).onclick = function() {
-      d3.select("#"+safeTaskName).remove();
-      window.localStorage.getItem(taskName);
-      window.localStorage.removeItem(taskName);
-      var index = comparingTasks.indexOf(taskName);
+  document.getElementById(idString).onclick = function() {
+    d3.select("#"+safeTaskName).remove();
+    window.localStorage.getItem(taskName);
+    window.localStorage.removeItem(taskName);
+    var index = comparingTasks.indexOf(taskName);
 
-      if(index >-1) {
-        comparingTasks.splice(index,1);
-      }
-
-      window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
-      var child = document.getElementById(idString);
-      child.parentNode.removeChild(child);
-
-      $('#ganttChart').packery('remove', div);
-      $('#ganttChart').packery();
-
-      var div = document.getElementById(safeTaskName + "Div");
-      div.parentNode.removeChild(div);
+    if(index >-1) {
+      comparingTasks.splice(index,1);
     }
+
+    // Updates local storage and removes the graph
+    window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
+    var child = document.getElementById(idString);
+    child.parentNode.removeChild(child);
+
+    $('#ganttChart').packery('remove', div);
+    $('#ganttChart').packery();
+
+    var div = document.getElementById(safeTaskName + "Div");
+    div.parentNode.removeChild(div);
+  }
 }
 
-function searchTasks(filterString)
-{
+function searchTasks(filterString) {
   if (filterString != "") {
   currentTasks = _.filter(tasks, function(e){return e.name === filterString;});
   var data = [];
@@ -315,23 +306,24 @@ function autoSearch() {
   searchTasks(window.localStorage.getItem("compareData"));
 }
 
+// Displays tasks that have ":" or "/" in their name
 function makeSafeForCSS(str) {
   return str.replace(/\/|:/g, "");
 }
 
 function orderItems() {
-    var itemElems = $('#ganttChart').packery('getItemElements');
+  var itemElems = $('#ganttChart').packery('getItemElements');
 
-    // reset / empty oder array
-    var sortOrder = [];
-    sortOrder.length = 0;
-    for (var i=0; i< itemElems.length; i++) {
-      sortOrder[i] = itemElems[i].getAttribute("title");
-    }
-
-    // save ordering
-    localStorage.setItem('compareData', JSON.stringify(sortOrder) );
+  // reset / empty oder array
+  var sortOrder = [];
+  sortOrder.length = 0;
+  for (var i=0; i< itemElems.length; i++) {
+    sortOrder[i] = itemElems[i].getAttribute("title");
   }
+
+  // save ordering
+  localStorage.setItem('compareData', JSON.stringify(sortOrder) );
+}
 
 document.addEventListener("load", openDB());
 
