@@ -6,7 +6,6 @@ var JSONtasks;
 var files;
 
 var reader = new FileReader(); 
-
 var db;
 
 var JSONnumCPUs;
@@ -16,6 +15,7 @@ var JSONautocompleteNames;
 var JSONcycleEvents;
 
 function handleFileSelect(evt) {
+    document.getElementsByClassName("loader")[0].style.display = "block";
     window.localStorage.setItem("cellData", "");
     window.localStorage.setItem("compareData", JSON.stringify([]));
 
@@ -152,6 +152,7 @@ function openDB()
 
 function handleUseOld(evt)
 {
+  document.getElementsByClassName("loader")[0].style.display = "block";
 	var openRequest = indexedDB.open("events", 8);
 
 	openRequest.onerror = function(e)
@@ -238,42 +239,30 @@ function handleUseOld(evt)
 
 // NOT TESTED??? 
 function checkStoresExist(thisDB) {
-	if (!thisDB.objectStoreNames.contains("Events"))
-      {
-        thisDB.createObjectStore("Events");
-        console.log("created events");
-     }
+  var stores = ["Events", "Tasks", "numCPUs", "AutocompleteEventTypes", "AutocompleteNames", "cycleEvents"];
 
-    if (!thisDB.objectStoreNames.contains("Tasks"))
-    {
-      thisDB.createObjectStore("Tasks");
-      console.log("created tasks");
-    }
+  for (var i = 0; i < stores.length; i++) {
+    if (!thisDB.objectStoreNames.contains(stores[i]))
+        {
+          thisDB.createObjectStore(stores[i]);
+       }
+  }
+}
 
-    if (!thisDB.objectStoreNames.contains("numCPUs"))
-    {
-    	thisDB.createObjectStore("numCPUs");
-    	console.log("numCPUs created");
-    }
-
-    if (!thisDB.objectStoreNames.contains("AutocompleteEventTypes"))
-    {
-    	thisDB.createObjectStore("AutocompleteEventTypes");
-    	console.log("autocompleteEventTypes created");
-    }
-
-    if (!thisDB.objectStoreNames.contains("AutocompleteNames"))
-    {
-    	thisDB.createObjectStore("AutocompleteNames");
-    	console.log("autocompleteNames created");
-    }
-
-    if (!thisDB.objectStoreNames.contains("cycleEvents"))
-    {
-    	thisDB.createObjectStore("cycleEvents");
-    	console.log("cycleEvents created");
-    }
+// Have to hide input of file type in node-webkit, so there is indirection between
+// clicking a button and causing a click on the hidden file dialogue
+function openDialogue(evt) {
+  var chooser = document.querySelector('#files');
+  chooser.click();
 }
 
 document.getElementById('files').addEventListener('change', handleFileSelect, false);
 document.getElementById('old').addEventListener('click', handleUseOld, false);
+document.getElementById('file').addEventListener('click', openDialogue, false);
+
+// Hide the "Use last data" button if this is the first time the app is opened
+var hasEverExisted = window.localStorage.getItem("hasEverExisted");
+if (!hasEverExisted) {
+  document.getElementById('old').style.display = "none";
+}
+window.localStorage.setItem("hasEverExisted", 1);
