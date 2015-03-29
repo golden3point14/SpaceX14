@@ -2,6 +2,8 @@ var JSONevents;
 var JSONtasks;
 var numCPUs;
 var currentResults;
+var autocompleteEventTypes;
+var autocompleteNames;
 
 var chartType = "MAIN"; //for gantt
 
@@ -26,6 +28,12 @@ function openDB()
 
     var eventsRequest = db.transaction(["Events"],"readonly")
               .objectStore("Events").get(1);
+
+    var eventTypesRequest = db.transaction(["AutocompleteEventTypes"], "readonly")
+                              .objectStore("AutocompleteEventTypes").get(1);
+
+    var namesRequest = db.transaction(["AutocompleteNames"], "readonly")
+                          .objectStore("AutocompleteNames").get(1);
 
     var tasksRequest = db.transaction(["Tasks"], "readonly")
               .objectStore("Tasks").get(1);
@@ -70,6 +78,21 @@ function openDB()
                     $('.loader').fadeOut("slow");
                   }
         }
+    eventTypesRequest.onerror = function(e) {console.log("error", e.target.error);}
+
+    eventTypesRequest.onsuccess = function(e) {
+                                autocompleteEventTypes = e.target.result;
+                                autoCompleteEventTypes();
+                                clickSearch();
+                              }
+
+    namesRequest.onerror = function(e) {console.log("error", e.target.error);}
+
+    namesRequest.onsuccess = function(e) {
+                                autocompleteNames = e.target.result;
+                                autoCompleteNames();
+                                clickSearch();
+                              }
     }
   }
 }
@@ -278,4 +301,50 @@ function binarySearch(values, target, start, end) {
   if (value > target) { return binarySearch(values, target, start, middle-1); }
   if (value < target) { return binarySearch(values, target, middle+1, end); }
   return middle; //found!
+}
+
+function autoCompleteEventTypes() {
+  $('input').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 1
+  },
+  {
+    name: 'autocompleteEventTypes',
+    displayKey: 'value',
+    source: substringMatcher(autocompleteEventTypes)
+  })
+    .on('typeahead:autocompleted', function($e, chosenTask) {
+    changeToNewTask(chosenTask);
+  })
+  .on('typeahead:selected', function($e, chosenTask) {
+    changeToNewTask(chosenTask);
+  });
+}
+
+function autoCompleteNames() {
+  // Setup typeahead to search task names
+  $('#process_filter').typeahead({
+      hint: true,
+      highlight: true,
+      minLength: 1
+  },
+  {
+    name: 'autocompleteNames',
+    displayKey: 'value',
+    source: substringMatcher(autocompleteNames)
+  })
+  .on('typeahead:autocompleted', function($e, chosenTask) {
+    changeToNewTask(chosenTask);
+  })
+  .on('typeahead:selected', function($e, chosenTask) {
+    changeToNewTask(chosenTask);
+  });
+}
+
+function clickSearch() {
+  $('.tt-dropdown-menu').click(function() {
+             var filterString = $('.tt-input').val();
+             $('#table_id').dataTable().fnFilter(filterString);
+      });
 }
