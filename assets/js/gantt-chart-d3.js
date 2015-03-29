@@ -3,15 +3,29 @@
  * @version 2.1
  */
 
+// These four types refer to the four pages
+// that have graphs. Each page has different requirements
+// for their graph in terms of size or functionality,
+// so by passing the type of chart desired into
+// the graph we can customize as desired.
 var mainType = "MAIN";
 var cyclesType = "CYCLES";
 var processType = "PROCESS";
 var compareType = "COMPARE";
 
+// global variables used to keep track of
+// how zoomed in/translated a graph is.
+// These values are put into local storage
+// when the user leaves a page with a graph,
+// so that the state is saved when the user returns.
+// Additionally, any page with multiple graphs
+// uses these values to remain consistently
+// zoomed/translated across all graphs on the page.
 var currScale;
 var currTranslateX;
 var currTranslateY;
 
+// the main function used to create the graph.
 d3.gantt = function(chartType) {
     var margin = {
       top : 20,
@@ -24,7 +38,7 @@ d3.gantt = function(chartType) {
     var timeDomainEnd = 0;
 
     var yAttribute = "cpu"; // By default, use cpu to group tasks on y axis
-    var xStartAttribute = "normalStartTime";
+    var xStartAttribute = "normalStartTime"; //an attribute on events, with the time normalized to 0
     var xDuration = "processTime";
     var id = "";
 
@@ -35,7 +49,7 @@ d3.gantt = function(chartType) {
     // var height = document.body.clientHeight - margin.top - margin.bottom-5;
     switch(chartType) {
       case mainType:
-        height = 300;
+        height = 300; // these heights would be better as percentages but we have not yet implemented that
         break;
       case cyclesType:
         height = 4000;
@@ -44,20 +58,24 @@ d3.gantt = function(chartType) {
         height = 300;
         break;
     }
+
     var width;
     switch(chartType) {
       case compareType:
-        width = document.body.clientWidth * 0.89 - margin.right - margin.left - 150;
+        width = document.body.clientWidth * 0.89 - margin.right - margin.left - 150; // slightly smaller due
+                                                                                     // to remove button
         break;
       default:
         width = document.body.clientWidth - margin.right - margin.left - 150;
         break;
     }
 
+    // for choosing the x and y attributes of the graph
     var keyFunction = function(d) {
       return d[xStartAttribute] + d[yAttribute] + (d[xStartAttribute] + d[xDuration]);
     };
 
+    // for adjusting the rectangles basied on translating
     var rectTransform = function(d) {
       return "translate(" + x(d[xStartAttribute]) + "," + y(d[yAttribute]) + ")";
     };
@@ -69,11 +87,13 @@ d3.gantt = function(chartType) {
     var yAxis;
     var yLabel = "CPU ";
 
+    // initializes the time domain
     var initTimeDomain = function(tasks) {
       timeDomainStart = 0;
       originalTimeDomainEnd = timeDomainEnd;
     };
 
+    // initializes the axes
     var initAxis = function() {
 
     // Set the pixel width of the scale based on the width of the window, and
@@ -91,6 +111,7 @@ d3.gantt = function(chartType) {
       ).tickSize(0);
     };
 
+    // creating functions to handle zooming and translating
     var zoom = d3.behavior.zoom()
       .scaleExtent([1,Infinity])
       .on("zoomstart", zoomStartHandler)
@@ -101,15 +122,23 @@ d3.gantt = function(chartType) {
       return xAxis;
     };
     
+    // to adjust rectangles based on zooming (implicitly also translating)
     var zoomRectTransform = function(d) {
       if (d)
         return "translate(" + x(d[xStartAttribute]) + "," + y(d[yAttribute]) + ")scale(" + d3.event.scale + ", 1)";
     };
 
+    // fires before a zoom event actually happens.
+    // Ultimately this function is meant to make sure the
+    // the graph is zoomed in and translated correctly
+    // based on prior states before handling the zoom/translate event.
     function zoomStartHandler() {
 
+      // gets the expected state from local storage
       getStorage(chartType.toLowerCase());
 
+      // if there was a prior zoom state and it differs from what the graph thinks it was
+      // set the graph's values to match the prior state.
       if (!isNaN(currScale) && currScale !== zoom.scale())
       {
         zoom.scale(currScale);
@@ -126,6 +155,8 @@ d3.gantt = function(chartType) {
 
       d3.selectAll(".x.axis").call(xAxis);
 
+      // if there was a prior tranlsate state and it differs from what the graph thinks it was
+      // set the graph's values to match the prior state.
       if (currTranslateX !== zoom.translate()[0] || currTranslateY !== zoom.translate()[1])
       {
 
@@ -146,6 +177,7 @@ d3.gantt = function(chartType) {
 
     }
 
+    // actually handles the zoom event
     function zoomed() {
       // Remake the x-axis
       x = d3.scale.linear().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width * d3.event.scale]);
@@ -158,12 +190,15 @@ d3.gantt = function(chartType) {
       // Scale all rectangles
       d3.selectAll("rect").attr("transform", zoomRectTransform);
 
+      // change the stored values to reflect this change in state
       setStorage(chartType.toLowerCase());
     }
 
     // helper function to set appropriate items in local storage
+    // based on the graph's current state.
   function setStorage(pageName)
   {
+    // catches weirdness
     if (pageName === "") { return; }
 
     var scaleLevel = zoom.scale();
@@ -177,7 +212,7 @@ d3.gantt = function(chartType) {
     window.localStorage.setItem(pageName + "CurrTranslateY", translateY);
   }
 
-  // helper function to get appropriate items in local storage
+  // helper function to get the previous graph state from local storage.
   function getStorage(pageName)
   {
     if (pageName === "") { return; }
@@ -187,9 +222,8 @@ d3.gantt = function(chartType) {
      currTranslateY = parseFloat(window.localStorage.getItem(pageName+"CurrTranslateY"));
   }
     
+  // actually rendering the graph
   function gantt(tasks, div) {
-
-
 
     initTimeDomain(tasks);
     initAxis();
@@ -289,7 +323,7 @@ d3.gantt = function(chartType) {
    return gantt;
 
     };
-    
+    // It seems that we don't actually use this function.
     gantt.redraw = function(tasks) {
         initTimeDomain(tasks);
         initAxis();
