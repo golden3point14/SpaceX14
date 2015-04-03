@@ -1,3 +1,4 @@
+var gui = require('nw.gui');
 var JSONobj;
 
 var JSONevents;
@@ -37,19 +38,7 @@ function handleFileSelect(evt) {
                   '</li>');
 
     	reader.onload = function(evt) {
-
-    		var contents = evt.target.result;
-    		var obj = JSON.parse(contents);
-  			var JSONObj = obj;
-  			JSONtasks = obj.tasks;
-        	JSONevents = obj.events;
-        	JSONnumCPUs = obj.numCPU;
-        	JSONautocompleteEventTypes = obj.autocompleteEventTypes;
-        	JSONautocompleteNames = obj.autocompleteNames;
-        	JSONcycleEvents = obj.cycleEvents;
-
-        	openDB();
-
+        extractJSON(evt.target.result);
 		  };
 
     	reader.onerror = function(evt) {
@@ -57,9 +46,21 @@ function handleFileSelect(evt) {
 		};
 
     reader.readAsText(f);
-
  	}
 
+}
+
+function extractJSON(contents) {
+  var obj = JSON.parse(contents);
+  var JSONObj = obj;
+  JSONtasks = obj.tasks;
+  JSONevents = obj.events;
+  JSONnumCPUs = obj.numCPU;
+  JSONautocompleteEventTypes = obj.autocompleteEventTypes;
+  JSONautocompleteNames = obj.autocompleteNames;
+  JSONcycleEvents = obj.cycleEvents;
+
+  openDB();
 }
 
 // sets up the database
@@ -259,6 +260,23 @@ function openDialogue(evt) {
 document.getElementById('files').addEventListener('change', handleFileSelect, false);
 document.getElementById('old').addEventListener('click', handleUseOld, false);
 document.getElementById('file').addEventListener('click', openDialogue, false);
+
+if (gui.App.argv[0]) {
+  var str = document.URL;
+  var fileURL = str.substring(str, str.length - 13);
+  fileURL = fileURL + gui.App.argv[0] + ".json";
+
+  var rawFile = new XMLHttpRequest();
+  rawFile.open("GET", fileURL, false);
+
+  rawFile.onreadystatechange = function ()
+  {
+    document.getElementsByClassName("loader")[0].style.display = "block";
+    extractJSON(rawFile.responseText);
+  }
+
+  rawFile.send();
+}
 
 // Hide the "Use last data" button if this is the first time the app is opened
 var hasEverExisted = window.localStorage.getItem("hasEverExisted");
