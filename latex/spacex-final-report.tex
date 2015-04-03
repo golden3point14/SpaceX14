@@ -494,11 +494,15 @@ Since kernelshark did not have a process page, it's clear to see why this page w
 
 \subsubsection{Cycles Page}
 
-As stated before, kernelshark was only a single page tool. 
+As stated before, kernelshark was only a single page tool. Therefore, the cycles page did not previously exist. The cycles page should be able to let the user easily find anomalies by splitting up the overview page graph visualization into cycles.
 
-Since there was no existing 
+The following image shows our initial mockup of the cycles page:
 
-We received nearly all positive feedback on the cycles page. A
+\begin{center}
+\includegraphics[width=4in]{oldcycles.png}
+\end{center}
+
+We received nearly all positive feedback on the cycles page. The only change that we made was very minor; rather than ordering the cycles from first cycle to last cycle, we changed it to be ordered from last cycle to first. We made this change because anomalies are normally found within the last cycle, which SpaceX engineers would want to see displayed prominently at the top of the page.
 
 
 \chapter{Challenges}
