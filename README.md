@@ -9,6 +9,7 @@ The parser relies on trace-cmd version 2.2.1.2.1
 
 ## Downloads
 * Mac: [64 bit](https://github.com/golden3point14/SpaceX14/releases/download/v1Mac/SpaceShark_Mac.zip)
+* Linux: [64 bit](https://github.com/golden3point14/SpaceX14/releases/download/v1Linux/spaceshark.tar.gz)
 
 ## Instructions
 
