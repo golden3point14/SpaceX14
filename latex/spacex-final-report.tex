@@ -468,21 +468,25 @@ Before winter break, our tool featured a graphical representation of processes r
 
 Two of the users mentioned that the typical workflow of the tool would be to visually find the problem in the graph, zoom in to that particular strange spot in the graph, be able to jump to that spot in the events list, and then scan a tabular version of the events list. In order to have this workflow, we would need to have the tabular version of the graph on the main page. Thus, we decided that the main page of our tool will have both the graphical version of the time series data, as well as the tabular version of it.
 
-Figure 2 shows what our main page currently looks like compared to kernelshark:
-
-FIGURE 2 (SCREENSHOT OF MAIN PAGE)
+This figure shows what our main page currently looks like compared to kernelshark:
+\begin{center}
+\includegraphics[width=4in]{overview-page.png}
+\end{center}
 
 Our main page and kernelshark's main page, in comparison, look very similar, but our tool has far improved and working functionality. For example, our tool can now filter the events list table correctly, jump from a specific point in the graph to the same point represented in the table, and can click on a particular task in the table to view more information about it.
 
 \subsubsection{Process Page}
 
 kernelshark did not feature any additional pages besides the main page, so it's clear why SpaceX engineers would want to have the ability to look at the difficult ftrace data in more than one way. Thus it's clear why engineers would want to be able focus on data on a process level.
-
-(SCREENSHOT OF MOCKUP)
+\begin{center}
+\includegraphics[width=4in]{perProcess-49.png}
+\end{center}
 
 Since there was no existing process page, we designed a mockup of it at the beginning of the project. It features many different kinds of visualizations, such as histograms of how long it was in each state for, a scatterplot of what preempted it, a table of what preempted it, pie charts representing the data in cycles, and a graphical display of the time series data highlighting the process in the graph. Through user feedback with the liaisons, we found that our mockup included way too much information that SpaceX engineers would not have found useful. Since preemptions are of most interest and are generally the cause of problems, we really wanted to focus on this on the process page.
 
-(SCREENSHOT OF PROCESS PAGE)
+\begin{center}
+\includegraphics[width=4in]{task-state-page.png}
+\end{center}
 
 On the process page, the user is able to type in particular process, see how many times it was preempted and which processes preempted it, as well as a graph showing how long it was in each state (running, waiting, preempted) for. This design has a much more minimalistic page view compared to the mockup, but includes much more useful information.
 
