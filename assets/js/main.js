@@ -267,9 +267,6 @@ function scrollToTime(time) {
     // Scroll to that row
     var oSettings = $('#table_id').dataTable().fnSettings();
     oSettings.oScroller.fnScrollToRow(index, false);
-
-    // Save the scroll state
-    window.localStorage.setItem("tableScroll", index);
   }
 }
 
