@@ -220,6 +220,11 @@ Our goals for this project were to make it easier and faster for SpaceX engineer
     applications with no reliance on the internet. As this allowed us to take
     advantage of many existing UI widgit and charting libraries that many team
     members were familar with, we decided to take this route.
+
+\subsection{Load File Page}
+The purpose of the Load file page is to allow the user to choose which JSON file to load as their data, or choose to use the data that was previously used if this is not the user's first time using the tool.
+
+The code for the Load File page can be found in assets/js/loadFile.js.
   \subsection{Overview Page} 
   
   \includegraphics[scale=0.25]{overview-page.png}
@@ -289,9 +294,9 @@ The code for this page is within assets/js/process.js. This page uses
 \section{Architecture} % Wendy
 
   \subsection{Overview}
-
-  \includegraphics[scale=0.25]{architecture.png}
-
+\begin{center}
+  \includegraphics[scale=0.18]{architecture_diagram.png}
+\end{center}
   Our application has three main portions: the raw input, the parser and it's
   output, and the web-based desktop application. The sections are modular, and
   as long as output/inputs remain the same, internal changes to one section will
