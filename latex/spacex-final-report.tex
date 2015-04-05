@@ -220,7 +220,7 @@ Our team will make it easier and faster for SpaceX engineers to find software pr
     applications with no reliance on the internet. As this allowed us to take
     advantage of many existing UI widgit and charting libraries that many team
     members were familar with, we decided to take this route.
-  \subsection{Overview Page}
+  \subsection{Overview Page} 
   
   \includegraphics[scale=0.25]{overview-page.png}
   
@@ -231,6 +231,10 @@ The purpose of the Overview Page is to be able to look at an overview of all the
     visualization that the user can pan and zoom into, and creating a table that
     lists all events in the trace. The code for the chart and table is found in
     gantt-chart-d3.js and dataTables.scroller.js, respectively.
+
+    The gantt chart features both double click zooming and mouse scroll zooming. Users can click on a specific point in the graph and the table will update its position and jump to that event. 
+
+    The columns of the table consist of the CPU, start time, name, PID, event type, and extra info about a particular event. By default, the table is displayed in ascending order from the first events start time to the last events start time. Hovering over any of the table cells highlights that entire row. Users can also [[double]] click on a event to be redirected to that task on the Task State page. The search feature does multi-column filtering based on the search input. All columns headers are clickable to be ordered in ascending or descending order. Below the table, it shows the total number of entries and the range of entries that the user is currently viewing.
   \subsection{Cycles Page} %Alix
 
   \includegraphics[scale=0.25]{cycles-page.png}
