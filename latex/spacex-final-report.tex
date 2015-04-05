@@ -394,6 +394,33 @@ The code for this page is within assets/js/process.js. This page uses
   load the same data we still have their state changes saved. If they load a new
   file Local Storage is cleared.
 
+Here is a list of the Local Storage variables that we are using, and what they are for:
+\begin{itemize}
+\item cellData: A string containing the name and PID of the task currently being shown on the Task State page 
+\item compareCurrScale
+\item compareCurrTranslateX		
+\item compareCurrTranslateY		
+\item compareData: A list containing strings with the names and PIDs of the tasks currently being shown on the  Compare Tasks page
+\item currScale	
+\item currTranslate	
+\item currTranslateX	
+\item currTranslateY	
+\item cyclesCurrScale	
+\item cyclesCurrTranslateX		
+\item cyclesCurrTranslateY		
+\item displayedCPUs: A list of the CPU numbers that are being displayed on the Cycles page
+\item firstEventTime	
+\item hasEverExisted: We check this variable to see if there is content in Local Storage so that we know whether or not to give the user an option to use their previous data on the Load File page	
+\item mainCurrScale	
+\item mainCurrTranslateX	
+\item mainCurrTranslateY
+\item maxDuration
+\item processCurrScale	
+\item processCurrTranslateX		
+\item processCurrTranslateY		
+\end{itemize}
+DataTables also makes use of Local Storage in order to save the scroll position of the table.
+
   \subsubsection{Overal Application Structure}
 
   The general structure of our code is similar to
