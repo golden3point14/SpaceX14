@@ -1,11 +1,15 @@
 #!/bin/bash
 
 parsing=
+using_json=
 filename=
 
 function usage
 {
-  echo "usage: spaceshark [-p file ]"
+  echo "usage: spaceshark [[-p | --parse] file] [[-o | --open] file]
+
+  parse   Parse a .dat file and open it.
+  open    Open an already parsed .json file."
 }
 
 
@@ -13,8 +17,12 @@ while [ "$1" != "" ]; do
   case $1 in
     -p | --parse )        shift
                           parsing=1
-                          echo "$1"
                           filename=$1
+                          using_json=1
+                          ;;
+    -o | --open )         shift
+                          using_json=1
+                          filename=${1::-5} # Remove .json
                           ;;
     -h | --help )         usage
                           exit
@@ -28,7 +36,21 @@ done
 echo "$1"
 
 if [ "$parsing" = "1" ]; then
+  # Run the parser on the input file, remove .dat from
+  # the filename
   java -jar spaceshark.jar $filename
+  filename=${filename::-4}
 fi
 
-./app
+if [ "$using_json" = "1" ]; then
+  # Application uses tmp chromium directory, pass actual
+  # path to file instead
+  path=`pwd`"/"$filename
+  echo "Launching..."
+  # The application will exit immediately if given foo.json
+  # Instead pass foo and tack on json in application
+  ./app $path
+else
+  echo "Launching..."
+  ./app
+fi

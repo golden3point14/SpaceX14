@@ -71,13 +71,12 @@ function openDB()
 
   openRequest.onerror = function(e)
   {
-    console.log("Error in OpenRequest");
+    console.error("Error in OpenRequest");
     console.dir(e);
   }
 
   openRequest.onupgradeneeded =  function(e)
   {
-    console.log("upgrading...");
 
     var thisDB = e.target.result;
 
@@ -86,7 +85,6 @@ function openDB()
 
   openRequest.onsuccess = function(e)
   {
-    console.log("openRequest success!");
     db = e.target.result;
 
     var cyclesRequest = db.transaction(["cycleEvents"], "readwrite")
@@ -110,36 +108,30 @@ function openDB()
       
 
     // some kind of error handling
-    cyclesRequest.onerror = function(e) {console.log("error", e.target.error.name);}
+    cyclesRequest.onerror = function(e) {console.error("error", e.target.error.name);}
 
     cyclesRequest.onsuccess = function(e) {
 
-    	console.log("cycleEvents added");
-    	
-    	eventsRequest.onerror = function(f) {console.log("Error", f.target.error.name);}
+    	eventsRequest.onerror = function(f) {console.error("Error", f.target.error.name);}
 
     	eventsRequest.onsuccess = function(f) {
-    		console.log("added events");
 
-    		numCPUsRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
+    		numCPUsRequest.onerror = function(e) {console.error("Error", e.target.error.name);}
 
     		numCPUsRequest.onsuccess = function(e) {
-    			console.log("added numCPUs");
     			
-    			eventTypesRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
+    			eventTypesRequest.onerror = function(e) {console.error("Error", e.target.error.name);}
 
     			eventTypesRequest.onsuccess = function(e) {
-    				console.log("added autocompleteEventTypes");
     				
-    				namesRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
+    				namesRequest.onerror = function(e) {console.error("Error", e.target.error.name);}
 
     				namesRequest.onsuccess = function(e) {
-    					console.log("added autocompleteNames");
 
-    					tasksRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
+    					tasksRequest.onerror = function(e) {console.error("Error", e.target.error.name);}
 
     					tasksRequest.onsuccess = function(e) {
-    						console.log("added tasks");
+
     						document.location.href='main.html';
     					}
     				}
@@ -262,17 +254,27 @@ document.getElementById('old').addEventListener('click', handleUseOld, false);
 document.getElementById('file').addEventListener('click', openDialogue, false);
 
 if (gui.App.argv[0]) {
-  var str = document.URL;
-  var fileURL = str.substring(str, str.length - 13);
-  fileURL = fileURL + gui.App.argv[0] + ".json";
+  fileURL = gui.App.argv[0] + ".json";
 
   var rawFile = new XMLHttpRequest();
   rawFile.open("GET", fileURL, false);
 
   rawFile.onreadystatechange = function ()
   {
-    document.getElementsByClassName("loader")[0].style.display = "block";
-    extractJSON(rawFile.responseText);
+    // ready state of 4 indicates the operation is complete
+    if (rawFile.readyState === 4)
+    {
+      // status of 200 indicates successful request
+      if (rawFile.status === 200 || rawFile.status == 0)
+      {
+        if (rawFile.responseText) {
+          document.getElementsByClassName("loader")[0].style.display = "block";
+          extractJSON(rawFile.responseText);
+        } else {
+          console.log("Unable to open file: " + fileURL);
+        }
+      }
+    }
   }
 
   rawFile.send();

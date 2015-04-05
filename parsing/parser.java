@@ -20,8 +20,9 @@ class parser {
 		// If an argument is provided, attempt to use generate a report from it with trace-cmd report
 		// Otherwise just run trace-cmd report, which will look for a file called trace.dat
 		Process proc;
+    String filename = "trace.dat";
 		if (args.length > 0) {
-			String filename = args[0];
+      filename = args[0];
 			File f = new File(filename);
 			if (f.exists() && !f.isDirectory()) {
 				String command = "trace-cmd report " + filename;
@@ -227,11 +228,12 @@ class parser {
 
 		// System.out.println(autocompleteNames);
 		
-		writeJSON(mainObj);
+		writeJSON(mainObj, filename);
 	}
 	
-	public static void writeJSON(JSONObject obj) throws IOException {
-		FileWriter file = new FileWriter("test.json");
+	public static void writeJSON(JSONObject obj, String filename) throws IOException {
+    // A filename something.dat should have .dat removed so it can be written to something.json
+		FileWriter file = new FileWriter(filename.substring(0, filename.length() - 4) + ".json");
 		file.write(JSONValue.toJSONString(obj));
 		file.flush();
 		file.close();
