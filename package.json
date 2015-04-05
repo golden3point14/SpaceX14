@@ -10,7 +10,7 @@
     "url": "git://github.com/golden3point14/SpaceX14.git"
   },
   "window": {
-    "toolbar": false,
+    "toolbar": true,
     "resizable": true,
     "width": 1500,
     "height": 800,

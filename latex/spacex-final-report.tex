@@ -365,7 +365,7 @@ The code for this page is within assets/js/process.js. This page uses
   The application takes the JSON string and loads it into IndexedDB, a
   browser-based database. IndexedDB is built into most browsers, including
   node-webkit. More information on the details of IndexedDB can be found here
-  (FIXME put a url?). We are basically using IndexedDB to store strings between
+  (https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB\_API). We are basically using IndexedDB to store strings between
   pages. It also maintains storage between application sessions. Therefore, we
   are able to have the choice to load the same file again, without reselecting
   it. If the user chooses to load a new file, we just write over this.
@@ -382,8 +382,7 @@ The code for this page is within assets/js/process.js. This page uses
   as Local Storage did not have enough space for our large files.
 
   IndexedDB also has  a size limit, but this is typically not reached except for
-  unusually long files or files with 4 or more CPUs (not exactly sure what the
-  number is here)
+  unusually long files or files with 4 or more CPUs.
 
   \subsubsection{Local Storage}
 
@@ -396,6 +395,33 @@ The code for this page is within assets/js/process.js. This page uses
   load the same data we still have their state changes saved. If they load a new
   file Local Storage is cleared.
 
+Here is a list of the Local Storage variables that we are using, and what they are for:
+\begin{itemize}
+\item cellData: A string containing the name and PID of the task currently being shown on the Task State page 
+\item compareCurrScale
+\item compareCurrTranslateX		
+\item compareCurrTranslateY		
+\item compareData: A list containing strings with the names and PIDs of the tasks currently being shown on the  Compare Tasks page
+\item currScale	
+\item currTranslate	
+\item currTranslateX	
+\item currTranslateY	
+\item cyclesCurrScale	
+\item cyclesCurrTranslateX		
+\item cyclesCurrTranslateY		
+\item displayedCPUs: A list of the CPU numbers that are being displayed on the Cycles page
+\item firstEventTime	
+\item hasEverExisted: We check this variable to see if there is content in Local Storage so that we know whether or not to give the user an option to use their previous data on the Load File page	
+\item mainCurrScale	
+\item mainCurrTranslateX	
+\item mainCurrTranslateY
+\item maxDuration
+\item processCurrScale	
+\item processCurrTranslateX		
+\item processCurrTranslateY		
+\end{itemize}
+DataTables also makes use of Local Storage in order to save the scroll position of the table.
+
   \subsubsection{Overal Application Structure}
 
   The general structure of our code is similar to
@@ -404,10 +430,9 @@ The code for this page is within assets/js/process.js. This page uses
   HTML files do not have any Javascript or CSS inside them, but exclusively call
   to other functions for this. Each page has it's own specific Javascript file,
   and then there are a number of shared files that multiple or all pages use. We
-  have used a number of Javascript libraries. (List them? Point to our Git?
-  Mer?)
-  \subsubsection{Calling the Graph}
-  Before giving the graph the events list, it is passed through a number of
+  have used a number of Javascript libraries.
+  \subsubsection{Drawing the Graph}
+  Before passing the graph the events list, it is passed through a number of
   helper functions first. 
   
   \begin{itemize}
@@ -458,7 +483,7 @@ The code for this page is within assets/js/process.js. This page uses
 % datatables - https://www.datatables.net/
 \item Twitter Typeahead (twitter.github.io/typeahead.js)
 % typeahead - https://twitter.github.io/typeahead.js/
-
+\item Underscore (underscorejs.org)
 %% FIXME - any more?
 \end{itemize}
 
@@ -554,6 +579,10 @@ We wanted to take this idea further by providing detailed information and
 statistics about individual tasks. This would give users a different way to view
 their data, hopefully expediting the debugging process.
 
+<<<<<<< HEAD
+=======
+Kernelshark did not feature any additional pages besides the main page, so it's clear why SpaceX engineers would want to have the ability to look at the difficult ftrace data in more than one way. Thus it's clear why engineers would want to be able focus on data on a process level.
+>>>>>>> c4f9c9794346a40ea934d3ce61f326a9cbb1fdbf
 \begin{center}
 \includegraphics[width=4in]{perProcess-49.png}
 \end{center}
