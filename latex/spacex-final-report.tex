@@ -194,16 +194,16 @@ columns of the table are not sortable. Individual timelines for tasks can be
 displayed below this main chart, but the menu to select a task does not have
 any searching capability and does not order the tasks in any discernable way.
 
-\section{Problem Statement} % May Lynn
-Our team will make it easier and faster for SpaceX engineers to find software problems by creating a tool that visualizes rocket data and highlights problem areas. We will create an improved user experience and provide more visualizations of the data than the old tool.
+\section{Project Goals} % May Lynn
+Our goals for this project were to make it easier and faster for SpaceX engineers to find software problems by creating a tool that visualizes rocket data and highlights problem areas. We have created an improved user experience and provided more visualizations of the data than the old tool. We have called the tool that we created SpaceShark.
 
 \chapter{SpaceShark}
 \section{Design} %Everyone gets a part
 
-  Spaceshark is meant to make it easier for SpaceX engineers to find bugs. We
+  SpaceShark is meant to make it easier for SpaceX engineers to find bugs. We
   accomplish this through a variety of pages that serve unique purposes, giving
   engineers many options in how they want to approach finding a problem. Below
-  we will detail the purpose of each page and how they accomplish their
+  we describe how we made the tool as well as the purpose of each page n the tool and how they accomplish their
   respective goals.
 
   \subsection{Nodewebkit and HTML} %Rachel
@@ -281,7 +281,7 @@ The Compare Tasks page allows users to view the same graph as the Task State
 page, but for multiple tasks. Tasks can be reordered so that specific tasks can
 be compared side by side for the same time period. This provides similar
 functionality as the Task State page but with the additional benefit of
-comparisons between tasks.
+comparisons between tasks. This makes it simple to examine interactions between two or more tasks, to see how they are affecting one another.
 
 The code for this page is within assets/js/process.js. This page uses
     gantt-chart-d3.js for the chart, and draggabilly.js and packery.js to make the rows of graphs rearrangable.
