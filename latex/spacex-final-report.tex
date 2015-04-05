@@ -251,7 +251,9 @@ The idea behind the cycles page was to be able to find anomalies quickly. Having
 
   \includegraphics[scale=0.25]{task-statistics-page.png}
 
-The purpose of the Task Statistics page is to give an overview of the preemption count and runtime of each task. The page displays bar charts of the preemption count and runtime for each task, sorted from highest to lowest, as well as the averages and standard deviations of each.
+The purpose of the Task Statistics page is to give an overview of the preemption count and runtime of each task. The page displays bar charts of the preemption count and runtime for each task, sorted from highest to lowest, as well as the averages and standard deviations of each. This makes it very easy to see if there are any outliers with a large number of preemptions or a long runtime, or to check if a task is behaving as expected.
+
+The code for this page is within assets/js/preemptionChart.js and assets/js/runtimeChart.js. The bar graphs use the dc.js dimensional charting library.
 
   \subsection{Task State}
 
@@ -259,8 +261,8 @@ The purpose of the Task Statistics page is to give an overview of the preemption
   
     The purpose of the Task State Page is to be able to look at a specific view of a
     process and potentially find something strange, such as a process being
-    unexpectedly preempted many times. The user can click the ``+ Compare'' button
-    at the bottom to add this to a series of side-by-side graphs for comparison.
+    unexpectedly preempted many times. A table showing how many times the task was preempted, and by which task is shown, so that it is easy to spot if something is being unexpectedly preempted many times by a task that should not be preempting it. The graph of the task is color coded based on the current state of the task, so that the user can see at a glance when the task is running, waiting, or preempted, as well as how much time the task is spending in these states. This can make it easier to find potential priority inversions. The user can click the ``+ Compare'' button
+    at the bottom to add this to a series of side-by-side graphs for comparison, which is described in the next section.
 
     The code for this page is within assets/js/process.js. This page uses
     gantt-chart-d3.js for the chart and dataScroller.js to create the table of
@@ -276,6 +278,9 @@ page, but for multiple tasks. Tasks can be reordered so that specific tasks can
 be compared side by side for the same time period. This provides similar
 functionality as the Task State page but with the additional benefit of
 comparisons between tasks.
+
+The code for this page is within assets/js/process.js. This page uses
+    gantt-chart-d3.js for the chart, and draggabilly.js and packery.js to make the rows of graphs rearrangable.
 
 \section{Architecture} % Wendy
 
