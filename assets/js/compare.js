@@ -306,9 +306,9 @@ function autoSearch() {
   searchTasks(window.localStorage.getItem("compareData"));
 }
 
-// Displays tasks that have ":" or "/" in their name
+// Removes characters that are illegal for css class names from a string
 function makeSafeForCSS(str) {
-  return str.replace(/\/|:/g, "");
+  return str.replace(/\/|:|.| /g, "");
 }
 
 function orderItems() {
