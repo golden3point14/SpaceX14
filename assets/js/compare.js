@@ -61,6 +61,9 @@ function openDB() {
 
     tasksRequest.onsuccess = function(e) {
       tasks = e.target.result;
+      makeAutocompleteList();
+      autoCompleteNames();
+      autoSearch();
     }
 
     namesRequest.onerror = function(e) {
@@ -68,10 +71,19 @@ function openDB() {
     }
 
     namesRequest.onsuccess = function(e) {
-      autocompleteNames = e.target.result;
-      autoCompleteNames();
-      autoSearch();
+      // autocompleteNames = e.target.result;
+      // autoCompleteNames();
+      // autoSearch();
     }
+  }
+}
+
+function makeAutocompleteList()
+{
+  autocompleteNames = [];
+  for (var i = 0; i < tasks.length; i++) {
+    //console.log(tasks[i].name);
+    autocompleteNames.push(tasks[i].name + ", PID: " + tasks[i].pid);
   }
 }
 
@@ -81,9 +93,9 @@ function openDB() {
 //    R - running
 //    B - blocked
 //    W - waiting
-function labelEventState(switchEvent, currentTaskName) {
+function labelEventState(switchEvent, currentPID) {
   // We are switching to this task, so state is running
-  if (switchEvent.activeName === currentTaskName) {
+  if (switchEvent.activePID === currentPID) {
     switchEvent.state = "R";
   } else {
     // If event is a preemption, task is being put back into
@@ -113,15 +125,20 @@ function calculateDurations(labeledTaskSwitches) {
   return labeledTaskSwitches;
 }
 
-function getRelevantSwitches(currentTaskName) {
+function getRelevantSwitches(filterString) {
+  var currentTaskName = makeCurrentTaskName(filterString);
+  var currentPID = makeCurrentPID(filterString);
+
   // Get switch events where current task was being swapped in or out,
   // e.g. where event.name or event.activeName are current task
   currentTaskSwitches = _.filter(events, function(e) {
     return e.eventType === "sched_switch" &&
-          (e.name === currentTaskName || e.activeName === currentTaskName)});
+          (e.pid == currentPID || e.activePID == currentPID)});
+
+
 
   // Map state to each switch: running, waiting, or blocked
-  labeledTaskSwitches = _.map(currentTaskSwitches, function(e) { return labelEventState(e, currentTaskName);});
+  labeledTaskSwitches = _.map(currentTaskSwitches, function(e) { return labelEventState(e, currentPID);});
 
   // Calculate how long task was in each state
   labeledTaskSwitches = calculateDurations(labeledTaskSwitches);
@@ -138,8 +155,22 @@ function normalize(labeledTaskSwitches) {
   return _.map(labeledTaskSwitches, function(task) { task.normalStartTime = task.startTime - firstEventTime; return task; });
 }
 
-function makeGantt(currentTaskName) {
-  var currentTaskSwitches = getRelevantSwitches(currentTaskName);
+function makeCurrentTaskName(filterString) {
+  var indexOfPID = filterString.indexOf(", PID:");
+  var currentTaskName = filterString.slice(0,indexOfPID);
+  return currentTaskName;
+}
+
+function makeCurrentPID(filterString) {
+  var indexOfPID = filterString.indexOf("PID:");
+  var currentPID = filterString.slice(indexOfPID + 5);
+  return currentPID;
+}
+
+function makeGantt(filterString) {
+  var currentTaskName = makeCurrentTaskName(filterString);
+  var currentPID = makeCurrentPID(filterString);
+  var currentTaskSwitches = getRelevantSwitches(filterString);
 
   //originally the graphs endpoint (ie timeDomain(totalTime))
   //totalTime = _.reduce(labeledTaskSwitches, function(sum, next) { return sum += next.processTime }, 0);
@@ -150,7 +181,7 @@ function makeGantt(currentTaskName) {
     right: 0
   }
 
-  var safeTaskName = makeSafeForCSS(currentTaskName);
+  var safeTaskName = makeSafeForCSS(filterString);
 
   var $container = $('#ganttChart').packery({
     columnWidth: 2000,
@@ -163,7 +194,7 @@ function makeGantt(currentTaskName) {
   var handle = document.createElement("div");
   div.id = safeTaskName + "Div";
   div.className = "item";
-  div.title = currentTaskName;
+  div.title = filterString;
   handle.className = "handle";
   div.appendChild(handle);
   document.getElementById("ganttChart").appendChild(div);
@@ -175,8 +206,9 @@ function makeGantt(currentTaskName) {
 
   $container.append(div).packery( 'appended', div);
   $container.packery('bindDraggabillyEvents', draggie);
+
     
-  gantt = d3.gantt("COMPARE").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel(currentTaskName).id(safeTaskName).height(100).margin(margin);
+  gantt = d3.gantt("COMPARE").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel(filterString).id(safeTaskName).height(100).margin(margin);
   gantt(currentTaskSwitches, "#" + safeTaskName + "Div");
 }
 
@@ -281,7 +313,7 @@ function makeRemoveButton(taskName) {
 
 function searchTasks(filterString) {
   if (filterString != "") {
-  currentTasks = _.filter(tasks, function(e){return e.name === filterString;});
+  currentTasks = _.filter(tasks, function(e){return (filterString).indexOf("PID: "+e.pid) > -1;});
   var data = [];
   var newData = [];
 
@@ -308,7 +340,7 @@ function autoSearch() {
 
 // Removes characters that are illegal for css class names from a string
 function makeSafeForCSS(str) {
-  return str.replace(/\/|:|.| /g, "");
+  return str.replace(/\/|:|\.|\ |,/g, "");
 }
 
 function orderItems() {
