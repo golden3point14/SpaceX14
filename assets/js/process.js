@@ -2,7 +2,6 @@ var files;
 var events;
 var tasks;
 var reader = new FileReader();
-// var autocompleteEventTypes;
 var autocompleteNames;
 var currentTasks;
 var gantt;
@@ -138,6 +137,7 @@ function displayLegend() {
   document.getElementById("legend").style.display = "block";
 }
 
+// Finds possible search matches based on user input
 var substringMatcher = function(strs) {
   return function findMatches(q, cb) {
     // an array that will be populated with substring matches
@@ -150,7 +150,6 @@ var substringMatcher = function(strs) {
         matches.push({ value: str });
       }
     });
- 
     cb(matches);
   };
 };
@@ -188,6 +187,8 @@ function changeToNewTask(chosenTask) {
   displayLegend();
 }
 
+// Filters out all of the tasks that was preempted by a searched task and displays
+// the result in a table
 function searchTasks(filterString)
 {
   if (filterString != "") {
@@ -196,48 +197,44 @@ function searchTasks(filterString)
   var newData = [];
 
   for (var i = 0; i < currentTasks.length; i++) {
-    // console.log(currentTasks[i]);
     if (currentTasks[i].preemptedBy) {
-    for (var j = 0; j < currentTasks[i].preemptedBy.length; j++){
-      // data.push([currentTasks[i].preemptedBy[j]]);
-      if (!_.contains(data, currentTasks[i].preemptedBy[j])) {
-        newData.push([currentTasks[i].preemptedBy[j], 1]);
-        data.push(currentTasks[i].preemptedBy[j]);
-      } else {
-        var process = _.find(newData, function(a) {return a[0] == currentTasks[i].preemptedBy[j];});
-        data.push(currentTasks[i].preemptedBy[j]);
-        process[1]++;
+      for (var j = 0; j < currentTasks[i].preemptedBy.length; j++) {
+        if (!_.contains(data, currentTasks[i].preemptedBy[j])) {
+          newData.push([currentTasks[i].preemptedBy[j], 1]);
+          data.push(currentTasks[i].preemptedBy[j]);
+        } else {
+          var process = _.find(newData, function(a) {return a[0] == currentTasks[i].preemptedBy[j];});
+          data.push(currentTasks[i].preemptedBy[j]);
+          process[1]++;
+        }
       }
-    }
     }
   }
 
   document.getElementById('table_title').innerHTML = filterString + 
     " was preempted " + data.length + " times by:";
 
-
+  // Table that lists the tasks that preempted the searched task
+  // If searching for another task, create the new table
   if ( $.fn.dataTable.isDataTable( '#example' ) ) {
-      // table = $('#example').DataTable();
-      var table = $('#example').DataTable();
-      table.destroy();
-      table = $('#example').dataTable( {
-        data: newData,
-        columns: [
+      var table = $('#example').DataTable();  // Creates the table
+      table.destroy();                        // Removes the old table
+      table = $('#example').dataTable( {      // Makes the new table 
+        data: newData,                        // Puts the filtered preemptedBy list in the table
+        columns: [                            // Creates the columns
             { "title": "Process Name" },
             { "title": "Number of Preemptions" }
         ],
         deferRender:    true,
-        dom:            "frtiS",
-        scrollY:        400,
-        scrollCollapse: true,
-        order:          [[1, 'desc']],
-        bFilter:        false
+        dom:            "frtiS",              // Defins what appears on the page and in what order
+                                              // f = filtering input, r = processing display element, t = table, i = table info summary, S = scrolling
+        scrollY:        400,                  // Enables vertical scrolling within the 400 height constraint
+        scrollCollapse: true,                 // Makes window resizing nicer
+        order:          [[1, 'desc']],        // Initially orders table from task that preempted the most to least
+        bFilter:        false                 // Doesn't allow smart filtering
       } ); 
-
-      // table.on( 'click', 'td', function () {
-      //     alert( 'Clicked on cell in visible column: '+table.cell( this ).index().columnVisible );
-      // } );
   }
+  // Used to create the first table
   else {
       var table = $('#example').dataTable( {
         data: newData,
@@ -252,21 +249,16 @@ function searchTasks(filterString)
         order:          [[1, 'desc']],
         bFilter:        false
       } ); 
-
-      // table.on( 'click', 'td', function () {
-      //     alert( 'Clicked on cell in visible column: '+table.cell( this ).index().columnVisible );
-      // } );
-  } 
+    } 
   }               
 }
 
+// Gets cellData from local storage
 function autoSearch() {
   searchTasks(window.localStorage.getItem("cellData"));
 }
 
-/*var pageContent = document.getElementById("ganttChart").innerHTML;
-window.localStorage.setItem("", pageContent);*/
-
+// User can click the compare button
 document.getElementById("compare").addEventListener("click", function() {
   currentTask = window.localStorage.getItem("cellData");
 
@@ -280,7 +272,7 @@ document.getElementById("compare").addEventListener("click", function() {
       window.localStorage.setItem("compareData", JSON.stringify(comparingTasks));
     }
   }
-
+  // Redirects user to the compare page
   window.location.href = "compare.html";
 });
 
