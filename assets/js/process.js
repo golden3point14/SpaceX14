@@ -49,14 +49,26 @@ function openDB()
     
     tasksRequest.onsuccess = function(e) {
                                 tasks = e.target.result;
+                                makeAutocompleteList();
+                                autoCompleteNames();
+                                autoSearch();
                               }
     namesRequest.onerror = function(e){console.log("error", e.target.error);}
 
     namesRequest.onsuccess = function(e) {
-                                autocompleteNames = e.target.result;
-                                autoCompleteNames();
-                                autoSearch();
+                                // autocompleteNames = e.target.result;
+                                // autoCompleteNames();
+                                // autoSearch();
                               }
+  }
+}
+
+function makeAutocompleteList()
+{
+  autocompleteNames = [];
+  for (var i = 0; i < tasks.length; i++) {
+    //console.log(tasks[i].name);
+    autocompleteNames.push(tasks[i].name + ", PID: " + tasks[i].pid);
   }
 }
 
@@ -66,9 +78,9 @@ function openDB()
 //    R - running
 //    B - blocked
 //    W - waiting
-function labelEventState(switchEvent, currentTaskName) {
+function labelEventState(switchEvent, currentPID) {
   // We are switching to this task, so state is running
-  if (switchEvent.activeName === currentTaskName) {
+  if (switchEvent.activePID === currentPID) {
     switchEvent.state = "R";
   } else {
     // If event is a preemption, task is being put back into
@@ -98,19 +110,23 @@ function calculateDurations(labeledTaskSwitches) {
   return labeledTaskSwitches;
 }
 
-function getRelevantSwitches(currentTaskName) {
+function getRelevantSwitches(filterString) {
+  var currentTaskName = makeCurrentTaskName(filterString);
+  var currentPID = makeCurrentPID(filterString);
+
   // Get switch events where current task was being swapped in or out,
   // e.g. where event.name or event.activeName are current task
   currentTaskSwitches = _.filter(events, function(e) {
     return e.eventType === "sched_switch" &&
-          (e.name === currentTaskName || e.activeName === currentTaskName)});
+          (e.pid == currentPID || e.activePID == currentPID)});
+
+
 
   // Map state to each switch: running, waiting, or blocked
-  labeledTaskSwitches = _.map(currentTaskSwitches, function(e) { return labelEventState(e, currentTaskName);});
+  labeledTaskSwitches = _.map(currentTaskSwitches, function(e) { return labelEventState(e, currentPID);});
 
   // Calculate how long task was in each state
   labeledTaskSwitches = calculateDurations(labeledTaskSwitches);
-
 
   // Normalize
   labeledTaskSwitches = normalize(labeledTaskSwitches);
@@ -124,12 +140,26 @@ function normalize(labeledTaskSwitches) {
   return _.map(labeledTaskSwitches, function(task) { task.normalStartTime = task.startTime - earliestTime; return task; });
 }
 
-function makeGantt(currentTaskName) {
-  var currentTaskSwitches = getRelevantSwitches(currentTaskName);
+function makeCurrentTaskName(filterString) {
+  var indexOfPID = filterString.indexOf(", PID:");
+  var currentTaskName = filterString.slice(0,indexOfPID);
+  return currentTaskName;
+}
+
+function makeCurrentPID(filterString) {
+  var indexOfPID = filterString.indexOf("PID:");
+  var currentPID = filterString.slice(indexOfPID + 5);
+  return currentPID;
+}
+
+function makeGantt(filterString) {
+  var currentTaskName = makeCurrentTaskName(filterString);
+  var currentPID = makeCurrentPID(filterString);
+  var currentTaskSwitches = getRelevantSwitches(filterString);
 
   totalTime = _.reduce(labeledTaskSwitches, function(sum, next) { return sum += next.processTime }, 0);
 
-  gantt = d3.gantt("PROCESS").taskTypes(["sched_switch"]).timeDomain(totalTime).yAttribute("eventType").yLabel(currentTaskName);
+  gantt = d3.gantt("PROCESS").taskTypes(["sched_switch"]).timeDomain(totalTime).yAttribute("eventType").yLabel(filterString);
   gantt(currentTaskSwitches, "#ganttChart");
 }
 
@@ -189,16 +219,15 @@ function changeToNewTask(chosenTask) {
 
 // Filters out all of the tasks that was preempted by a searched task and displays
 // the result in a table
-function searchTasks(filterString)
-{
+function searchTasks(filterString) {
   if (filterString != "") {
-  currentTasks = _.filter(tasks, function(e){return e.name === filterString;});
+  currentTasks = _.filter(tasks, function(e){return (filterString).indexOf("PID: "+e.pid) > -1;});
   var data = [];
   var newData = [];
 
   for (var i = 0; i < currentTasks.length; i++) {
     if (currentTasks[i].preemptedBy) {
-      for (var j = 0; j < currentTasks[i].preemptedBy.length; j++) {
+      for (var j = 0; j < currentTasks[i].preemptedBy.length; j++){
         if (!_.contains(data, currentTasks[i].preemptedBy[j])) {
           newData.push([currentTasks[i].preemptedBy[j], 1]);
           data.push(currentTasks[i].preemptedBy[j]);
@@ -206,10 +235,12 @@ function searchTasks(filterString)
           var process = _.find(newData, function(a) {return a[0] == currentTasks[i].preemptedBy[j];});
           data.push(currentTasks[i].preemptedBy[j]);
           process[1]++;
+          }
         }
       }
     }
-  }
+  
+
 
   document.getElementById('table_title').innerHTML = filterString + 
     " was preempted " + data.length + " times by:";
