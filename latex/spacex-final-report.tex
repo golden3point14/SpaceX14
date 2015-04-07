@@ -422,6 +422,9 @@ The code for this page is within assets/js/process.js. This page uses
 
   \end{verbatim}
 
+  To see an example, view Appendix A at the end of the report.
+  \newline
+  \newline
   As long as this file remains the same, any changes to the internals of the
   parser will not affect the application itself. Additionally, this will allow
   someone with a different output to write their own parser to create the same
@@ -897,7 +900,7 @@ substitute for IndexedDB that is faster.
 \section{more user testing - results}
 
 
-
+\chapter{Appendix}
 \newpage
 \appendix
 \section{Example JSON} \label{App:AppendixA}
@@ -912,7 +915,10 @@ Tasks
 
 Events
 {
-  [name: python, pid: 34602, cpu: 2, startTime: 12500, eventType: sched_switch 
+  [name: python, pid: 34602, cpu: 2, startTime: 12500, eventType: sched_switch,
+    extraInfo: prev_comm=trace-cmd prev_pid=34602 prev prio = 120 prev_state=S
+    ==> next_comm=swapper/2 next_pid=300 next_prio=120 kworker-2418 [001]
+  1681.955177, activeName: kworker, activePID=300], [name:...], ...
 }
 
 \end{verbatim}
