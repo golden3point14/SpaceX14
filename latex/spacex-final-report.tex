@@ -180,7 +180,7 @@ problems like unexpected preemptions, priority inversions, and breaks in the
 pattern of tasks being run. A preemption occurs when one program is running, and
 is then blocked by another program starting to run on the same CPU. A priority
 inversion occurs when a high-priority task is indirectly blocked by something of
-lower priority using up a shared resource that the higher priority task needs in
+lower priority using a shared resource that the higher priority task needs in
 order to run. The software running on SpaceX rockets has deadlines for tasks at regular intervals because timing is very important in rocket flight, so when there is a break in this cyclical pattern of processes this means that there is likely a bug in the software.
 \section{Existing Tool}
 SpaceX currently uses a tool called kernelshark to visualize this trace data and help find any bugs or anomalies. We were informed by our liaisons that this debugging process can take up to several days, so searching for bugs using this tool uses up a lot of valuable time. Much of the user expeience of kernelshark is outdated or could use improvements. The kernelshark tool consists of a graphical display of the programs running on a computer over time, as well as a tabular view of the same information, in the form of CPU events such as processes switching, waking, or sleeping.
@@ -243,12 +243,23 @@ The purpose of the Overview Page is to be able to look at an overview of all the
 
     The gantt chart features both double click zooming and mouse scroll zooming. Users can click on a specific point in the graph and the table will update its position and jump to that event. 
 
-    The columns of the table consist of the CPU, start time, name, PID, event type, and extra info about a particular event. By default, the table is displayed in ascending order from the first events start time to the last events start time. Hovering over any of the table cells highlights that entire row. Users can also [[double]] click on a event to be redirected to that task on the Task State page. The search feature does multi-column filtering based on the search input. All columns headers are clickable to be ordered in ascending or descending order. Below the table, it shows the total number of entries and the range of entries that the user is currently viewing.
+    The columns of the table consist of the CPU, start time, name, PID, event
+    type, and extra info about a particular event. By default, the table is
+    displayed in ascending order from the first events start time to the last
+    events start time. Hovering over any of the table cells highlights that
+    entire row. Users can also double-click on a event to be redirected to that
+    task on the Task State page. The search feature does multi-column filtering
+    based on the search input. All columns headers are clickable to be ordered
+    in ascending or descending order. Below the table, it shows the total number
+    of entries and the range of entries that the user is currently viewing.
   \subsection{Cycles Page} %Alix
 
   \includegraphics[scale=0.25]{cycles-page.png}
   
-The idea behind the cycles page was to be able to find anomalies quickly. Having the main graph split up into cycles, can clearly show the user where something strange might be happening. More specifically, if there is a spot in the graph that doesn't show up in any of the previous cycles, then that point would be of particular interest to SpaceX engineers.
+  As tasks run in cyclical patterns on SpaceX rockets, being able to compare
+  across cycles is very important to find strange behavior. The cycles page
+  breaks the data into cycles and stacks them, allowing a user to easily scan
+  down this chart.
 
     The code for the cycles page is within assets/js/cyclesPage.js. This once again
     uses gantt-chart-d3.js to create the visualization after fetching the data.
@@ -258,7 +269,9 @@ The idea behind the cycles page was to be able to find anomalies quickly. Having
     not, the page will be blank when it first renders. The user can enter a
     number in the top box to set the period of desired cycles, which will then
     display a chart of cycles of that length. This feature also works even if
-    print events are present in the data.
+    print events are present in the data. On SpaceX rockets, the period of a cycle 
+    is the same across CPUs, so entering a number at the top applies the change
+    to all currently displayed charts.
   
   \subsection{Task Statistics Page} %May Lynn
 
@@ -272,10 +285,14 @@ The code for this page is within assets/js/preemptionChart.js and assets/js/runt
 
   \includegraphics[scale=0.25]{task-state-page.png}
   
-    The purpose of the Task State Page is to be able to look at a specific view of a
-    process and potentially find something strange, such as a process being
-    unexpectedly preempted many times. A table showing how many times the task was preempted, and by which task is shown, so that it is easy to spot if something is being unexpectedly preempted many times by a task that should not be preempting it. The graph of the task is color coded based on the current state of the task, so that the user can see at a glance when the task is running, waiting, or preempted, as well as how much time the task is spending in these states. This can make it easier to find potential priority inversions. The user can click the ``+ Compare'' button
-    at the bottom to add this to a series of side-by-side graphs for comparison, which is described in the next section.
+    The Task State Page display information about a single task. The user is
+    able to see interactions between other tasks and this task with a table of
+    preemptions. Users can jump to tasks that preempted the current one by
+    clicking on a row in this table. Additionally, the task's state over time
+    is displayed at the bottom. Possible task states are preempted, waiting, or
+    running. The user can click the ``+ Compare'' button at the
+    bottom to add this to a series of side-by-side graphs for comparison, which
+    is described in the next section.
 
     The code for this page is within assets/js/process.js. This page uses
     gantt-chart-d3.js for the chart and dataScroller.js to create the table of
@@ -290,7 +307,8 @@ The Compare Tasks page allows users to view the same graph as the Task State
 page, but for multiple tasks. Tasks can be reordered so that specific tasks can
 be compared side by side for the same time period. This provides similar
 functionality as the Task State page but with the additional benefit of
-comparisons between tasks. This makes it simple to examine interactions between two or more tasks, to see how they are affecting one another.
+comparisons between tasks. This makes it simple to examine interactions between
+two or more tasks.
 
 The code for this page is within assets/js/process.js. This page uses
     gantt-chart-d3.js for the chart, and draggabilly.js and packery.js to make the rows of graphs rearrangable.
@@ -301,7 +319,7 @@ The code for this page is within assets/js/process.js. This page uses
 \begin{center}
   \includegraphics[scale=0.18]{architecture_diagram.png}
 \end{center}
-  Our application has three main portions: the raw input, the parser and it's
+  Our application has three main portions: the raw input, the parser and its
   output, and the web-based desktop application. The sections are modular, and
   as long as output/inputs remain the same, internal changes to one section will
   not affect the other at all.
@@ -312,7 +330,7 @@ The code for this page is within assets/js/process.js. This page uses
   trace-cmd records various events in the Linux kernel while it runs and then
   outputs this information into a data file with a particular binary format.
   trace-cmd is a powerful tool and can be used to trace many different types of
-  events. The type of events records are specified by the user when they run
+  events. The type of events recorded are specified by the user when they run
   the tool. Our goal is to help visualize scheduling data: what tasks were
   scheduled to run, wait, and migrate between CPUs over the time of the trace.
   We therefore assume that the user has taken a trace that captures scheduling
@@ -342,13 +360,13 @@ The code for this page is within assets/js/process.js. This page uses
 \footnotesize\begin{verbatim}<idle>-0   [002]  2296.990243: sched_wakeup: comm=nautilus pid=2390 prio=120\end{verbatim}
   
 \normalsize
-  Here, the task associated with the event is ``idle'' which has a PID of 0. The
-  second field gives the CPU number, and the third the the start time, which
-  is measured in milliseconds since kernel boot. The event type, which is 
+  Here, the task associated with the event is named ``idle'' and has a PID of
+  0. The second field gives the CPU number, and the third the the start time,
+  which is measured in milliseconds since kernel boot. The event type, which is
   wakeup, migrate, or switch for schedule events, is given after this. The last
   field is extra information and varies in formatting based on the type of
-  event. For the wakeup event, the name, PID, and priority of the task
-  being woken up are displayed.
+  event. For the wakeup event, the name, PID, and priority of the task being
+  woken up are displayed.
 
   To parse these event lines, we read our file line by line and break on
   whitespace. Then it is easy to extract fields one by one. To deal with the
@@ -442,16 +460,13 @@ The code for this page is within assets/js/process.js. This page uses
   this way, but as it is currently functional, these changes have not been high
   priority.
 
-  The parser has not been packaged with the application, and currently stands as
-  it's own tool.
-
   \subsection{Web Application}
 
   \subsubsection{IndexedDB}
 
-  The application takes the JSON string and loads it into IndexedDB, a
+  The application takes the JSON file and loads it into IndexedDB, a
   browser-based database. IndexedDB is built into most browsers, including
-  node-webkit. More information on the details of IndexedDB can be found here
+  node-webkit, which actually runs Chromium. More information on the details of IndexedDB can be found here
   (https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB\_API).
   We use IndexedDB to store data between pages. It also
   maintains storage between application sessions. Therefore, we are able to have
@@ -475,7 +490,8 @@ The code for this page is within assets/js/process.js. This page uses
   as Local Storage did not have enough space for our large files.
 
   IndexedDB also has  a size limit, but this is typically not reached except for
-  unusually long files or files with 4 or more CPUs.
+  unusually long files or files with 4 or more CPUs. Our liaisons have indicated
+  that the trace files they deal with do not exceed 4 CPUs.
 
   \subsubsection{Local Storage}
 
@@ -542,7 +558,7 @@ DataTables also makes use of Local Storage in order to save the scroll position 
       In the original events list, the start times of events are given in
       milliseconds since kernel boot, which is not relevant. We separate our
       events by CPU, and for each grouping of events, shift the start times
-      so that the first one occurs at zero. (was this necessary to do?)
+      so that the first one occurs at zero.
   
     \item The graph needs to know its time domain, so we calculate this
       endpoint. How this calculation is performed depends on which page we are
@@ -631,8 +647,8 @@ DataTables also makes use of Local Storage in order to save the scroll position 
 \end{itemize}
 
 \section{Packaging and Distribution}
-  Our code is publicly available on github at
-  github.com/golden3point14/SpaceX14. The README provides a link to download a
+  Our code is publicly available on Github at
+  github.com/golden3point14/SpaceX14. The README of this repository provides a link to download a
   64 bit Linux version of the application. This release is a zip file that
   contains an executable, the parser, a short wrapper script, and two additional
   files that are necessary to get the executable to run: nw.pak and icudlt.dat.
@@ -850,18 +866,27 @@ to fix this.
 
 \chapter{Future Work}
 \section{Known bugs}
+
+  We have documented bugs and like-to-haves on our Computer Science hosted trac
+  site using the ticketing system. Outstanding issues at this time are
+
+  \begin{itemize}
   
-All graphs can be dragged until they become no longer visible. While they can
-be dragged back using the white space, this is not good for a user experience.
+  \item All graphs can be dragged until they become no longer visible. While
+    they can be dragged back using the white space, this is not good for a user
+    experience.
 
-Graphs and other images do not resize when the window resizes unless the page
-is reloaded.
+  \item Graphs and other images do not resize when the window resizes unless the
+    page is reloaded.
 
-Zooming in on a graph removes the graph name. Additionally, the x-axes do not
-develop more ticks as you zoom in, making it harder to get a sense of scale.
+\end{itemize}
 
-All known bugs are recorded as tickets on the Harvey Mudd College Computer Science 
-Department trac site.
+  Additionally, there is some refactoring that could be done to make the code
+  clearer. For most of the semester, we referred to the overview page as the
+  ``main'' page and the task state page as the ``process'' page before adopting
+  new labels. These old page titles are still used in our code. As described in
+  the parser section of this report, improvements could also be made to its
+  structure.
 
 \section{Extensions}
   SpaceX developers indicated an interest in interleaving the graphs of multiple
@@ -888,6 +913,8 @@ There are two possibilities for fixing this. One is to prune the JSON or
 finder a more compressed method of storing the data. The other is to find a
 substitute for IndexedDB that is faster.
 \section{more user testing - results}
+ We will be conducting more user testing next week and add this to our report
+ after that.
 
 
 
