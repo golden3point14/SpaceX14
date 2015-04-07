@@ -341,6 +341,7 @@ The code for this page is within assets/js/process.js. This page uses
    
 \footnotesize\begin{verbatim}<idle>-0   [002]  2296.990243: sched_wakeup: comm=nautilus pid=2390 prio=120\end{verbatim}
   
+\normalsize
   Here, the task associated with the event is ``idle'' which has a PID of 0. The
   second field gives the CPU number, and the third the the start time, which
   is measured in milliseconds since kernel boot. The event type, which is 
@@ -817,13 +818,21 @@ is reloaded.
 Zooming in on a graph removes the graph name. Additionally, the x-axes do not
 develop more ticks as you zoom in, making it harder to get a sense of scale.
 
+All known bugs are recorded as tickets on the Harvey Mudd College Computer Science 
+Department trac site.
+
 \section{Extensions}
   SpaceX developers indicated an interest in interleaving the graphs of multiple
   CPUs on the Cycles page.  This would make it easier to compare cycle
   anomalies across CPUs, as this would cause the timestamps to align. Making
   this possible would require tweaking the graph infrastructure, and creating an
   interface for users to choose if they want the graphs interleaved or not, and
-  which cycle numbers to display.
+  which cycle numbers to display. Here is a mockup that we have created:
+
+\begin{center}
+\includegraphics[width=4in]{futureCycles.png}
+\end{center}
+
 \section{Scalability}
   Overall, the application should be made faster. We are not entirely sure how
   to improve this at the moment. IndexedDB is the slowest part of the
