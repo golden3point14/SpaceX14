@@ -369,6 +369,59 @@ The code for this page is within assets/js/process.js. This page uses
   the web application. The JSON formatting has these elements:
 
   [see JSON format drive file]
+  \begin{verbatim}
+  Tasks
+    name (string)
+    pid (int)
+    events (array of ints)
+      These ints index into the Events array to find events beloning to that task
+    preemptedBy (array of strings)
+      Each entry is a function name. Names are not unique.
+    preemptionCount (int)
+      A running total of times preempted.
+    totalRuntime (long)
+    totalWaittime (long)
+    totalSleeptime (long)
+
+  Events
+    name (string)
+    pid (int)
+    cpu (int)
+    startTime (double)
+    eventType (string)
+    extraInfo (string)
+
+    FOR SWITCH EVENTS
+      activeName (string)
+      activePID (string)
+      Switch events ``belong'' to the task switching out.
+      Active refers to the task switching in.
+
+    FOR PRINT EVENTS
+      userMark (string)
+        this is not currently being used
+      Print events with extraInfo beginning with ``CYCLE_START:''
+        are used in auto generating cycleEvents.
+
+  cycleEvents (array of events)
+    startTime (double)
+    extraInfo (string)
+    extraInfo is in the form
+      c0095a18 CYCLE_START: sync_time=728.3360000
+    cycleEvents is left empty if no cycle markers exist.
+
+  numCPUs (int)
+    the number of CPUs in the trace.
+
+  AutocompleteNames (array of strings)
+    A list of all task names to autocomplete on the Task State page
+    No names are repeated.
+
+  AutocompleteEventTypes (array of strings)
+    A list of all event types to autocomplete on the search bar.
+    No event type names are repeated.
+
+  \end{verbatim}
 
   As long as this file remains the same, any changes to the internals of the
   parser will not affect the application itself. Additionally, this will allow
