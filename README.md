@@ -13,7 +13,16 @@ The parser relies on trace-cmd version 2.2.1.2.1
 
 ## Instructions
 
-Please follow the following instructions to parse a .dat file and run our visualization.
+The 64 bit Linux release contains several files: the parser, the application executable,
+two auxillary files necessary for the application to run, and a wrapper script.
+
+The parser can be run without the application with `java -jar spaceshark.jar <filename>`.
+To run the application, type `./spaceshark` within the unzipped directory. The application
+can also be run with an unparsed .dat file using `./spaceshark -p <filename>`, or with
+a parsed JSON file using `./spaceshark -o <filename>`. 
+
+If instead you have cloned the repository, you can run the parser and application with the
+following steps.
 
 ### Parser
 The code for the parser is located in parser.java. A filename to a .dat can be optionally
