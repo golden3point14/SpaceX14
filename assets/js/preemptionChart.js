@@ -147,17 +147,16 @@ function useDatabaseData()
   // histogram.colorCalculator(function(d,i){return colors[d.name]});
 
   histogram.onClick = function(d) {
-    // console.log("clicked on the chart");
-    // console.log(processFromPid(d.key, values).name);
-    window.localStorage.setItem("cellData", processFromPid(d.key, values).name);
+    var processname = processFromPid(d.key, values).name;
+    var cellData = processname + ", PID: "+d.key;
+    window.localStorage.setItem("cellData", cellData);
     window.location.href = "process.html";
   };
 
   // distribution side bar stuff
   var histogrambutton = dc.rowChart("#histogram-button");
   var runchartbutton = dc.rowChart("#runchart-button");
-  // var waitchartbutton = dc.rowChart("#waitchart-button");
-  // var sleepchartbutton = dc.rowChart("#sleepchart-button");
+
 
   var buttonwidth = 210;
 
@@ -188,26 +187,6 @@ function useDatabaseData()
     .ordering(function(d) { return -processFromPid(d.key, values).totalRuntime; });
 
   runchartbutton.xAxis().tickFormat(function(v) { return ""; });
-
-  // waitchartbutton
-  //   .width(buttonwidth)
-  //   .height(values.length * 10)
-  //   .dimension(pidDimension)
-  //   .group(typeGroupWait)
-  //   .renderLabel(false)
-  //   .ordering(function(d) { return -processFromPid(d.key, values).totalWaittime; });
-
-  // waitchartbutton.xAxis().tickFormat(function(v) { return ""; });
-
-  // sleepchartbutton
-  //   .width(buttonwidth)
-  //   .height(values.length * 10)
-  //   .dimension(pidDimension)
-  //   .group(typeGroupSleep)
-  //   .renderLabel(false)
-  //   .ordering(function(d) { return -processFromPid(d.key, values).totalSleeptime; });
-
-  // sleepchartbutton.xAxis().tickFormat(function(v) { return ""; });
 
 
   // render the content

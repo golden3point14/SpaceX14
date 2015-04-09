@@ -183,8 +183,9 @@ document.addEventListener("load", openDB());
 
 // Click a row in the graph and get redirected to that
 // particular task on the process page
-function clickCell(cellData)
+function clickCell(processname, pid)
 {
+  var cellData = processname + ", PID: "+pid;
   window.localStorage.setItem("cellData", cellData);
   window.location.href = "process.html";
 }
@@ -227,7 +228,7 @@ function displayTable() {
     $('#table_id tbody').on( 'click', 'tr', function () {
       var cellData = oTable.fnGetData(this);
       // console.log( 'Clicked on: '+ cellData[2]);
-      clickCell(cellData[2]);
+      clickCell(cellData[2], cellData[3]);
     } );
 	} );
 }
