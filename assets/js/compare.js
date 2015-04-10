@@ -63,7 +63,6 @@ function openDB() {
       tasks = e.target.result;
       makeAutocompleteList();
       autoCompleteNames();
-      autoSearch();
     }
 
     namesRequest.onerror = function(e) {
@@ -206,7 +205,7 @@ function makeGantt(filterString) {
 
   $container.append(div).packery( 'appended', div);
   $container.packery('bindDraggabillyEvents', draggie);
-
+  $container.fadeIn();
     
   gantt = d3.gantt("COMPARE").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel(filterString).id(safeTaskName).height(100).margin(margin);
   gantt(currentTaskSwitches, "#" + safeTaskName + "Div");
@@ -254,8 +253,10 @@ function addAnotherTask(chosenTask) {
 
   var filterString = chosenTask["value"];
   var display = true;
+  console.log(filterString);
   // check if we are already displaying this task
   for (var i = 0; i < comparingTasks.length; i++) {
+    console.log(comparingTasks[i]);
     if (comparingTasks[i] == filterString) {
       display = false;
       break;
@@ -270,7 +271,6 @@ function addAnotherTask(chosenTask) {
     $('#addedNotify').fadeIn(200);
     $('#addedNotify').fadeOut(1000);
 
-    searchTasks(filterString); // Update table of preemptions
     makeGantt(filterString);
     makeRemoveButton(filterString);
   }
@@ -309,33 +309,6 @@ function makeRemoveButton(taskName) {
     var div = document.getElementById(safeTaskName + "Div");
     div.parentNode.removeChild(div);
   }
-}
-
-function searchTasks(filterString) {
-  if (filterString != "") {
-  currentTasks = _.filter(tasks, function(e){return (filterString).indexOf("PID: "+e.pid) > -1;});
-  var data = [];
-  var newData = [];
-
-  for (var i = 0; i < currentTasks.length; i++) {
-    if (currentTasks[i].preemptedBy) {
-      for (var j = 0; j < currentTasks[i].preemptedBy.length; j++){
-        if (!_.contains(data, currentTasks[i].preemptedBy[j])) {
-          newData.push([currentTasks[i].preemptedBy[j], 1]);
-          data.push(currentTasks[i].preemptedBy[j]);
-        } else {
-          var process = _.find(newData, function(a) {return a[0] == currentTasks[i].preemptedBy[j];});
-          data.push(currentTasks[i].preemptedBy[j]);
-          process[1]++;
-          }
-        }
-      }
-    }
-  }
-}
-
-function autoSearch() {
-  searchTasks(window.localStorage.getItem("compareData"));
 }
 
 // Removes characters that are illegal for css class names from a string
