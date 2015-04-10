@@ -81,7 +81,7 @@ Rachel Macfarlane}
 \advisor{Ben Wiedermann}
 
 %% Liaison's name or names?
-\liaison{Jesse Keller \and Jessica Hester \and Jim Gruen}
+\liaison{Jesse Keller \and Jessica Hester '13 \and Jim Gruen}
 
 %%% End of information section.
 
@@ -183,9 +183,14 @@ inversion occurs when a high-priority task is indirectly blocked by something of
 lower priority using a shared resource that the higher priority task needs in
 order to run. The software running on SpaceX rockets has deadlines for tasks at regular intervals because timing is very important in rocket flight, so when there is a break in this cyclical pattern of processes this means that there is likely a bug in the software.
 \section{Existing Tool}
-SpaceX currently uses a tool called kernelshark to visualize this trace data and help find any bugs or anomalies. We were informed by our liaisons that this debugging process can take up to several days, so searching for bugs using this tool uses up a lot of valuable time. Much of the user expeience of kernelshark is outdated or could use improvements. The kernelshark tool consists of a graphical display of the programs running on a computer over time, as well as a tabular view of the same information, in the form of CPU events such as processes switching, waking, or sleeping.
-\includegraphics[width=5in]{kshark-open.png}\\
-\\
+SpaceX currently uses a tool called Kernelshark to visualize this trace data and help find any bugs or anomalies. We were informed by our liaisons that this debugging process can take up to several days, so searching for bugs using this tool uses up a lot of valuable time. Much of the user experience of Kernelshark is outdated or could use improvements. Kernelshark is a single page tool, as seen in Figure 1.1.
+
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=5in]{kshark-open.png}
+  \caption{Kernelshark consists of a graphical display of the programs running on a computer over time, as well as a tabular view of the same information, in the form of CPU events such as processes switching, waking, or sleeping.}
+\end{figure}
+
 Using only this visualization, it can be difficult to see where the cyclical
 deadlines for the programs begin and end, making it hard to find when something
 misses a deadline. In addition, the tabular display of the CPU events in the
@@ -223,16 +228,24 @@ Our goals for this project were to make it easier and faster for SpaceX engineer
     members were familar with, we decided to take this route.
 
 \subsection{Load File Page}
-\begin{center}
-\includegraphics[scale=0.75]{loadFile-buttons.png}
-\end{center}
-The purpose of the Load file page is to allow the user to choose which JSON file to load as their data, or choose to use the data that was previously used if this is not the user's first time using the tool. This allows the user to easily resume their work if they were previously examining a specific file.
+
+\begin{figure}[h!]
+  \centering
+      \includegraphics[scale=0.75]{loadFile-buttons.png}
+  \caption{Choose File selects a new file and Use Last Data selects a file that has been previously been loaded into the tool.}
+  \end{figure}
+
+When the user first loads our tool, they will see the above screen in Figure 2.1. The purpose of the Load file page is to allow the user to choose which JSON file to load as their data, or choose to use the data that was previously used if this is not the user's first time using the tool. This allows the user to easily resume their work if they were previously examining a specific file.
 
 The code for the Load File page can be found in assets/js/loadFile.js.
 
   \subsection{Overview Page} 
   
-  \includegraphics[scale=0.25]{overview-page.png}
+  \begin{figure}[h!]
+  \centering
+      \includegraphics[width=5in]{overview-page.png}
+  \caption{The top chart shows a graphical display of the programs running on the computer over time, and the bottom table shows a tabular version of this same information.}
+  \end{figure}
   
 The goal of the Overview Page is to be able to initially look at an overall view of the data, and then later be able to delve deeper into more specific details of the same data that are of particular interest to the user. More specifically the both the graph and the table display the events list and through zooming, dragging, and clicking, we are able to find out more information about a specific event.
 
@@ -256,9 +269,14 @@ The goal of the Overview Page is to be able to initially look at an overall view
     based on the search input. All columns headers are clickable to be ordered
     in ascending or descending order. Below the table, it shows the total number
     of entries and the range of entries that the user is currently viewing.
+    
   \subsection{Cycles Page} %Alix
 
-  \includegraphics[scale=0.25]{cycles-page.png}
+  \begin{figure}[h!]
+  \centering
+      \includegraphics[width=5in]{cycles-page.png}
+  \caption{The Cycles page displays graphs of each CPU. The user is allowed to input their own cycle intervals.}
+  \end{figure}
   
   As tasks run in cyclical patterns on SpaceX rockets, being able to compare
   across cycles is very important to find strange behavior. The cycles page
@@ -279,7 +297,7 @@ The goal of the Overview Page is to be able to initially look at an overall view
   
   \subsection{Task Statistics Page} %May Lynn
 
-  \includegraphics[scale=0.25]{task-statistics-page.png}
+  \includegraphics[width=5in]{task-statistics-page.png}
 
 The purpose of the Task Statistics page is to give an overview of the preemption count and runtime of each task. The page displays bar charts of the preemption count and runtime for each task, sorted from highest to lowest, as well as the averages and standard deviations of each. This makes it very easy to see if there are any outliers with a large number of preemptions or a long runtime, or to check if a task is behaving as expected.
 
@@ -562,7 +580,7 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   array of all events needs to be passed through several helper functions
   before it is ready to be given to the graph.
   
-  \begin{itemize}
+  \begin{enumerate}
 
     \item The events list is filtered to only contain switch events. Switch
       events are all that are needed to determine which task was running, or
@@ -606,7 +624,7 @@ DataTables also makes use of Local Storage in order to save the scroll position 
      this process was actually quick, and decided this change was very low
      priority.
 
-  \end{itemize}
+  \end{enumerate}
   \subsubsection{Primary Javascript/CSS files}
   One of the primary Javascript files we've worked
   with and changed is gantt-chart-d3.js. This file is the logic for all of the
@@ -913,6 +931,8 @@ to fix this.
 \begin{center}
 \includegraphics[width=4in]{futureCycles.png}
 \end{center}
+
+It is also possible that the loaded files will contain more than two CPU's. For clear visual purposes, we only want to be displaying two CPU's graphs on the Cycles page. In the case that we have more than two CPU's, we would hope to be able to paginate the graphs. This does not seem to be a crucial extension of our work, since our liaisons have specifically told us that they generally expect to only have two CPU's in their trace files.
 
 \section{Scalability}
   Overall, the application should be made faster. We are not entirely sure how
