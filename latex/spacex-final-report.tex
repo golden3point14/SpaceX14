@@ -1067,13 +1067,19 @@ Events
 
 \section{Glossary}
 \begin{itemize}[ ]
+\item {\bf Blocked:} When a task is runnable but another task is running on the same CPU, thereby blocking it from being able to run.
 \item {\bf Cycle:} The interval between the regular deadlines that tasks running on a SpaceX rocket need to meet.
 \item {\bf CPU:} The Central Processing Unit; the part of the computer that carries out instructions.
+\item{\bf Event:} A specific activity of a task taking place at a single point in time that can denote a change in its state or some other action.
+\item {\bf PID:} A process identifier; a number attatched to a process that is unique to that process.
 \item {\bf Preemption:} When a running task is blocked by another program starting to run on the same CPU. 
 \item {\bf Priority Inversion:} When a high-priority task is indirectly blocked by something of
 lower priority using a shared resource that the higher priority task needs in
 order to run. 
-\item {\bf Task:} A program running on a computer.
+\item{\bf Process:} A program that can have many threads.
+\item {\bf Running:} The state of a task when it is being executed on the CPU.
+\item {\bf Task:} A single thread of a process; a series of events.
+\item {\bf Waiting:} The state of a task when it cannot run, due to being blocked or waiting on some piece of information.
 \end{itemize}
 \end{document}
 
