@@ -195,7 +195,7 @@ The software running on SpaceX rockets has deadlines for tasks at regular interv
 \section{Existing Tool}
 SpaceX currently uses a tool called KernelShark to visualize this trace data and help find any bugs or anomalies. We were informed by our liaisons that this debugging process can take up to several days, so searching for bugs using this tool uses up a lot of valuable time. KernelShark is a single page tool, as seen in Figure 1.1.\\
 
-\begin{figure}[h!]
+\begin{figure}[H]
   \centering
       \includegraphics[width=5in]{kshark-open.png}
   \caption{KernelShark consists of a graphical display of the programs running on a computer over time (top half of screen), as well as a tabular view of the same information, in the form of CPU events such as processes switching, waking, or sleeping (bottom half of screen).}
@@ -239,7 +239,7 @@ Our goals for this project were to make it easier and faster for SpaceX engineer
 
 \subsection{Load File Page}
 
-\begin{figure}[h!]
+\begin{figure}[H]
   \centering
       \includegraphics[scale=0.75]{loadFile-buttons.png}
   \caption{Choose File selects a new file and Use Last Data selects a file that has been previously been loaded into the tool.}
@@ -251,7 +251,7 @@ The code for the Load File page can be found in assets/js/loadFile.js.
 
   \subsection{Overview Page} 
   
-  \begin{figure}[h!]
+  \begin{figure}[H]
   \centering
       \includegraphics[width=5in]{overview-page.png}
   \caption{The top chart shows a graphical display of the programs running on the computer over time, and the bottom table shows a tabular version of this same information.}
@@ -282,10 +282,12 @@ The goal of the Overview Page is to be able to initially look at an overall view
     
   \subsection{Cycles Page} %Alix
 
-  \begin{figure}[!htbp]
+  \begin{figure}[H]
   \centering
       \includegraphics[width=5in]{cycles-page.png}
-  \caption{The Cycles page displays graphs of each CPU. The user is allowed to input their own cycle intervals.}
+  \caption{The Cycles page displays graphs of each CPU. The user is allowed to
+  input their own cycle intervals using the box in the top left. The checkboxes
+at the top allow the user to toggle which CPUs display.}
   \end{figure}
   
   As tasks run in cyclical patterns on SpaceX rockets, being able to compare
@@ -307,8 +309,12 @@ The goal of the Overview Page is to be able to initially look at an overall view
   
   \subsection{Task Statistics Page} %May Lynn
 
-
+  \begin{figure}[H]
   \includegraphics[width=5in]{task-statistics-page.png}
+  \caption{The left column allows the user to navigate the bar charts, while
+    also serving as a quick thumbnail view of each one. The right side displays
+  the bar chart in a larger, more detailed view.}
+  \end{figure}
 
 The purpose of the Task Statistics page is to give an overview of the preemption count and runtime of each task. The page displays bar charts of the preemption count and runtime for each task, sorted from highest to lowest, as well as the averages and standard deviations of each. This makes it very easy to see if there are any outliers with a large number of preemptions or a long runtime, or to check if a task is behaving as expected.
 
@@ -316,8 +322,14 @@ The code for this page is within assets/js/preemptionChart.js and assets/js/runt
 
   \subsection{Task State}
 
+  \begin{figure}[H]
   \includegraphics[scale=0.25]{task-state-page.png}
-  
+  \caption{The top of the Task State page displays a navigable table of tasks
+  the preempted the current task. The bottom half is a graph represented the
+state of the current task over time. The three possible states are preempted,
+waiting, and running.}
+\end{figure}
+
     The Task State Page display information about a single task. The user is
     able to see interactions between other tasks and this task with a table of
     preemptions. Users can jump to tasks that preempted the current one by
@@ -333,9 +345,13 @@ The code for this page is within assets/js/preemptionChart.js and assets/js/runt
     Typeahead.
   
   \subsection{Compare Tasks} %Wendy
-
+  
+  \begin{figure}[H]
   \includegraphics[scale=0.25]{compare-page.png}
- 
+  \caption{The Compare page vertically displays the Task State graphs for
+  multiple tasks. They can be added, reordered, or removed all from this page.}
+  \end{figure}
+
 The Compare Tasks page allows users to view the same graph as the Task State
 page, but for multiple tasks. Tasks can be reordered so that specific tasks can
 be compared side by side for the same time period. This provides similar
@@ -358,9 +374,11 @@ The code for this page is within assets/js/process.js. This page uses
 \section{Architecture} % Wendy
 
   \subsection{Overview}
-\begin{center}
+  \begin{figure}[H]
+    \begin{center}
   \includegraphics[scale=0.18]{architecture_diagram.png}
 \end{center}
+\end{figure}
   Our application has three main portions: the raw input, the parser and its
   output, and the web-based desktop application. The sections are modular, and
   as long as output/inputs remain the same, internal changes to one section will
@@ -405,7 +423,9 @@ The code for this page is within assets/js/process.js. This page uses
   CPUs in the captured trace. Each line in the remainder of the file is a
   single recorded event with a number of fields separated by whitespace.
    
+  \begin{figure}
   \includegraphics[scale=0.4]{parserExample.png}
+  \end{figure}
 
   These five fields appear for every event, but the content of extra information
   varies based on the type of event. The units on the time stamp of the event,
@@ -815,7 +835,7 @@ This gives our Overview page the context that SpaceX engineers are looking for.
 It is easy to find something interesting on the graph, and then get the details
 on it via the tabular display.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{overview-page.png}
 \caption{A current screenshot of our Overview page. At the top is a graphical
@@ -844,7 +864,7 @@ statistics about individual tasks. This would give users a different way to view
 their data, which our liaisons thought would be helpful
 in the debugging process.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{perProcess-49.png}
 \caption{The first mock-up we created for the Task State page.}
@@ -862,7 +882,7 @@ not have found useful. Since preemptions are generally
 indicative of problems, we really wanted to focus on this on the Task State
 page.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{task-state-page.png}
 \caption{A screenshot of the current version of the Task State page. The three
@@ -895,7 +915,7 @@ manually determine where cycles were.
 The Cycles page in our tool lets the user easily find anomalies by splitting up
 the Overview page graph visualization into cycles.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{oldcycles.png}
 \caption{A mock-up of the Cycles page. Initially only one CPU at a time could be
@@ -915,7 +935,7 @@ suggested that we add the ability to enter in cycle length and have it display
 cycles based on that. We chose to implement this, taking this page from having
 very specific requirements to being usable with any data.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{cycles-page.png}
 \caption{A screenshot of the current Cycles page. Multiple CPUs can be displayed
@@ -1011,9 +1031,11 @@ left allows users to choose their own cycle length.}
   interface for users to choose if they want the graphs interleaved or not, and
   which cycle numbers to display. Here is a mockup:
 
+  \begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{futureCycles.png}
 \end{center}
+\end{figure}
 
 It is also possible that the loaded files will contain more than two CPU's. For clear visual purposes, we only want to be displaying two CPU's graphs on the Cycles page. In the case that we have more than two CPU's, we would hope to be able to paginate the graphs. This does not seem to be a crucial extension of our work, since our liaisons have specifically told us that they generally expect to only have two CPU's in their trace files.
 
