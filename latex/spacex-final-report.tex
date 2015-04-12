@@ -554,8 +554,10 @@ The code for this page is within assets/js/process.js. This page uses
 
   The application takes the JSON file and loads it into IndexedDB, a
   browser-based database. IndexedDB is built into most browsers, including
-  node-webkit, which actually runs Chromium. More information on the details of IndexedDB can be found here
-  (https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB\_API).
+  node-webkit, which actually runs Chromium. More information on the details of IndexedDB can be found here:
+\begin{center}
+  https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB\_API
+\end{center}
   We use IndexedDB to store data between pages. It also
   maintains storage between application sessions. Therefore, we are able to have
   the choice to load the same file again, without reselecting it. If the user
@@ -743,13 +745,17 @@ DataTables also makes use of Local Storage in order to save the scroll position 
 
 \section{Packaging and Distribution}
   Our code is publicly available on Github at
-  github.com/golden3point14/SpaceX14. The README of this repository provides a link to download a
+\begin{center}
+  github.com/golden3point14/SpaceX14
+\end{center}
+The README of this repository provides a link to download a
   64 bit Linux version of the application. This release is a zip file that
   contains an executable, the parser, a short wrapper script, and two additional
   files that are necessary to get the executable to run: nw.pak and icudlt.dat.
   The short wrapper script is called spaceshark and has the following usage:
 
-\begin{verbatim}spaceshark [-p | --parse filename] [-o | --open filename] [ -h | --help]\end{verbatim}
+\begin{verbatim}spaceshark [-p | --parse filename] [-o | --open filename] 
+           [ -h | --help]\end{verbatim}
 
   The first option allows the user to pass an unparsed trace file to the
   application. The parser will be run and output a JSON file, which will be
@@ -1074,17 +1080,29 @@ substitute for IndexedDB that is faster.
 \begin{verbatim}
 Tasks
 {
-  [name: python, pid: 34602, events: [1,5,8,23,52...], preemptedBy: [kworker,
-  systemhousekeeper,...], preemptionCount: 564, totalRuntime: 10000,
-  totalWaittime: 20386, totalSleeptime: 52], [name:...],...   
+  [name: python, pid: 34602, events: [1,5,8,23,52...], 
+   preemptedBy: [kworker, systemhousekeeper,...], 
+   preemptionCount: 564, totalRuntime: 10000,
+   totalWaittime: 20386, totalSleeptime: 52], [name:...],
+
+   ...   
 }
 
 Events
 {
-  [name: python, pid: 34602, cpu: 2, startTime: 12500, eventType: sched_switch,
-    extraInfo: prev_comm=trace-cmd prev_pid=34602 prev prio = 120 prev_state=S
-    ==> next_comm=swapper/2 next_pid=300 next_prio=120 kworker-2418 [001]
-  1681.955177, activeName: kworker, activePID=300], [name:...], ...
+  [name: python, 
+   pid: 34602, 
+   cpu: 2, startTime: 12500, 
+   eventType: sched_switch,
+   extraInfo: prev_comm=trace-cmd prev_pid=34602 
+       prev prio = 120 prev_state=S ==> next_comm=swapper/2 
+       next_pid=300 next_prio=120 kworker-2418 [001]
+       1681.955177, 
+   activeName: kworker, 
+   activePID=300], 
+   [name:...], 
+
+   ...
 }
 \end{verbatim}
 
