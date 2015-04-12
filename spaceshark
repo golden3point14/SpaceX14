@@ -3,6 +3,7 @@
 parsing=
 using_json=
 filename=
+fullpath=
 
 function usage
 {
@@ -12,6 +13,12 @@ function usage
   open    Open an already parsed .json file."
 }
 
+# Filename is given as a relative path, make it absolute
+function abspath {                                               
+      cd "$(dirname $filename)"
+      fullpath="$(pwd)/$(basename "$filename")"
+      cd "$OLDPWD"
+}
 
 while [ "$1" != "" ]; do
   case $1 in
@@ -19,10 +26,13 @@ while [ "$1" != "" ]; do
                           parsing=1
                           filename=$1
                           using_json=1
+                          abspath
                           ;;
     -o | --open )         shift
                           using_json=1
-                          filename=${1::-5} # Remove .json
+                          filename=$1
+                          abspath
+                          fullpath=${fullpath::-5} # Remove .json
                           ;;
     -h | --help )         usage
                           exit
@@ -35,21 +45,21 @@ done
 
 echo "$1"
 
+
 if [ "$parsing" = "1" ]; then
   # Run the parser on the input file, remove .dat from
   # the filename
-  java -jar spaceshark.jar $filename
-  filename=${filename::-4}
+  java -jar spaceshark.jar $fullpath
+  fullpath=${fullpath::-4}
 fi
 
 if [ "$using_json" = "1" ]; then
   # Application uses tmp chromium directory, pass actual
   # path to file instead
-  path=`pwd`"/"$filename
   echo "Launching..."
   # The application will exit immediately if given foo.json
   # Instead pass foo and tack on json in application
-  ./app $path
+  ./app $fullpath
 else
   echo "Launching..."
   ./app
