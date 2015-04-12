@@ -29,8 +29,7 @@ function openDB()
                          .objectStore("Events").get(1);
     var tasksRequest = db.transaction(["Tasks"], "readonly")
                          .objectStore("Tasks").get(1);
-    var namesRequest = db.transaction(["AutocompleteNames"], "readonly")
-                         .objectStore("AutocompleteNames").get(1);
+
 
     eventsRequest.onerror = function(e){console.log("error", e.target.error);}
 
@@ -53,13 +52,7 @@ function openDB()
                                 autoCompleteNames();
                                 autoSearch();
                               }
-    namesRequest.onerror = function(e){console.log("error", e.target.error);}
 
-    namesRequest.onsuccess = function(e) {
-                                // autocompleteNames = e.target.result;
-                                // autoCompleteNames();
-                                // autoSearch();
-                              }
   }
 }
 

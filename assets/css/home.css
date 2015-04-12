@@ -51,23 +51,6 @@ table {
 	cursor: pointer;
 }
 
-
-.mainlist {
-  display: inline-block;
-  vertical-align: top;
-  width: 32%;
-  margin-left: 5px;
-  margin-right: 5px;
-  max-height: 250px;
-  overflow-y: auto;
-}
-
-#lists {
-  width: 100%;
-  height: 250px;
-  display: none;
-}
-
 /* Centers buttons on loadFile page */
 .center {
 	width: 400px;
@@ -114,10 +97,6 @@ div.tooltip {
   height:100%;
   z-index: 9999;
   background: url('../images/loader.gif') 40% 50% no-repeat rgb(255, 255, 255); 
-}
-
-.task0 {
-  fill: white;
 }
 
 title {

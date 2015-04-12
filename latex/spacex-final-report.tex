@@ -27,7 +27,8 @@
 %%% the ``proposal'' document-class option to the hmcclinic class.
 \documentclass{hmcclinic}
 \usepackage{graphicx}
-%\usepackage{glossaries}
+\usepackage{enumerate}
+\usepackage{paralist}
 
 %%% The major difference between the statement of work and a midyear
 %%% or final report is that the statement of work is typeset as an
@@ -82,7 +83,7 @@ Rachel Macfarlane}
 \advisor{Ben Wiedermann}
 
 %% Liaison's name or names?
-\liaison{Jesse Keller \and Jessica Hester '13 \and Jim Gruen}
+\liaison{Jim Gruen \and Jessica Hester '13 \and Jesse Keller }
 
 %%% End of information section.
 
@@ -161,14 +162,16 @@ Rachel Macfarlane}
 %%% Content.
 \chapter{Background} % May Lynn
 \section{Introduction}
+
 SpaceX is an American space transport company that designs and manufactures
-advanced rockets and spacecrafts. SpaceX rockets depend on a variety of software
+advanced rockets and spacecraft. SpaceX rockets depend on a variety of software
 to be successful, including simulations, flight software, and data analysis.
 Almost all of this software is written in-house and is complex enough that subtle
 problems are often hard to catch and very time consuming to debug.
 
 %\section{Background} % May Lynn
 \section{Tracing and Debugging}
+
 The data that SpaceX developers examine in order to find software bugs is called
 a kernel trace, which documents the different tasks running on a computer over a
 certain span of time, keeping track of when each task was running on each processor. 
@@ -181,21 +184,21 @@ In order to find potential bugs in their software, SpaceX developers look for
 problems like unexpected preemptions, priority inversions, and breaks in the
 pattern of tasks being run. These terms are defined below:
 \begin{itemize}
-\item A preemption occurs when one program is running, and
+\item A {\bf preemption} occurs when one program is running, and
 is then blocked by another program starting to run on the same CPU. 
-\item A priority
-inversion occurs when a high-priority task is indirectly blocked by something of
+\item A {\bf priority
+inversion} occurs when a high-priority task is indirectly blocked by something of
 lower priority using a shared resource that the higher priority task needs in
 order to run. 
 \end{itemize}
 The software running on SpaceX rockets has deadlines for tasks at regular intervals because timing is very important in rocket flight, so when there is a break in this cyclical pattern of processes this means that there is likely a bug in the software. These cyclical patterns of processes are called ``cycles''.
 \section{Existing Tool}
-SpaceX currently uses a tool called Kernelshark to visualize this trace data and help find any bugs or anomalies. We were informed by our liaisons that this debugging process can take up to several days, so searching for bugs using this tool uses up a lot of valuable time. Kernelshark is a single page tool, as seen in Figure 1.1.
+SpaceX currently uses a tool called KernelShark to visualize this trace data and help find any bugs or anomalies. We were informed by our liaisons that this debugging process can take up to several days, so searching for bugs using this tool uses up a lot of valuable time. KernelShark is a single page tool, as seen in Figure 1.1.\\
 
 \begin{figure}[H]
   \centering
       \includegraphics[width=5in]{kshark-open.png}
-  \caption{Kernelshark consists of a graphical display of the programs running on a computer over time, as well as a tabular view of the same information, in the form of CPU events such as processes switching, waking, or sleeping.}
+  \caption{KernelShark consists of a graphical display of the programs running on a computer over time (top half of screen), as well as a tabular view of the same information, in the form of CPU events such as processes switching, waking, or sleeping (bottom half of screen).}
 \end{figure}
 
 Using only this visualization, it can be difficult to see where the cyclical
@@ -204,7 +207,7 @@ misses a deadline. In addition, the tabular display of the CPU events in the
 bottom part of the screen has minimal search functionality and the different
 columns of the table are not sortable. Individual timelines for tasks can be
 displayed below this main chart, but the menu to select a task does not have
-any searching capability and does not order the tasks in any discernable way.
+any searching capability and does not order the tasks in any discernible way.
 
 \section{Project Goals} % May Lynn
 Our goals for this project were to make it easier and faster for SpaceX engineers to find software problems by creating a tool that visualizes rocket data and highlights problem areas. We have created an improved user experience and provided more visualizations of the data than the old tool. We have called the tool that we created SpaceShark.
@@ -212,27 +215,27 @@ Our goals for this project were to make it easier and faster for SpaceX engineer
 \chapter{SpaceShark}
 \section{Design} %Everyone gets a part
 
-  SpaceShark is meant to make it easier for SpaceX engineers to find bugs. We
+  The SpaceShark tool is meant to make it easier for SpaceX engineers to find bugs. We
   accomplish this through a variety of pages that serve unique purposes, giving
-  engineers many options in how they want to approach finding a problem. First
+  engineers many options in how they want to approach finding a problem. An overview of the trace data is given on the first page that is displayed to a user, and more detailed information on each task can be found by going to the other pages. First
   we describe briefly the method we used to make the pages, and then describe
   the purpose of each page in the tool and how they accomplish their
   respective goals.
 
-  \subsection{Nodewebkit and HTML} %Rachel
+  \subsection{Node-Webkit and HTML} %Rachel
     At the beginning of the project, the team researched possible tools and
     technologies for creating our application. One possibility was simply
-    extending kernelshark, the existing tool. After looking at the code for
+    extending KernelShark, the existing tool. After looking at the code for
     this, a large number of C files, we decided it would be easier to
     reimplement and extend it in something else; understanding the code base
     would take a very long time, and we felt other languages had better
     UI and charting libraries. We looked into Java UI libraries for
     desktop applications, as well as web-technology based charting libraries.
     During this research, we found node-webkit, which allows for
-    HTML/CSS/Javascript applications to be packaged and run as desktop
+    HTML/CSS/JavaScript applications to be packaged and run as desktop
     applications with no reliance on the internet. As this allowed us to take
     advantage of many existing UI widgit and charting libraries that many team
-    members were familar with, we decided to take this route.
+    members were familiar with, we decided to take this route.
 
 \subsection{Load File Page}
 
@@ -338,8 +341,8 @@ waiting, and running.}
 
     The code for this page is within assets/js/process.js. This page uses
     gantt-chart-d3.js for the chart and dataScroller.js to create the table of
-    preemptions. The search box autocompletes task names using twitter
-    typeahead.
+    preemptions. The search box autocompletes task names using Twitter
+    Typeahead.
   
   \subsection{Compare Tasks} %Wendy
   
@@ -371,8 +374,8 @@ The code for this page is within assets/js/process.js. This page uses
 \section{Architecture} % Wendy
 
   \subsection{Overview}
-  \begin{figure}
-    \begin{center}[H]
+  \begin{figure}[H]
+    \begin{center}
   \includegraphics[scale=0.18]{architecture_diagram.png}
 \end{center}
 \end{figure}
@@ -425,7 +428,7 @@ The code for this page is within assets/js/process.js. This page uses
   \end{figure}
 
   These five fields appear for every event, but the content of extra information
-  varies based on the type of event. The units on the timestamp of the event,
+  varies based on the type of event. The units on the time stamp of the event,
   start time, are milliseconds since kernel boot.
 
   To parse these event lines, we read our file line by line and break on
@@ -586,15 +589,15 @@ Here is a list of the Local Storage variables that we are using, and what they a
 \end{itemize}
 DataTables also makes use of Local Storage in order to save the scroll position of the table.
 
-  \subsubsection{Overal Application Structure}
+  \subsubsection{Overall Application Structure}
 
   The general structure of our code is similar to
   most web applications. In the root we have HTML files, which call to
-  Javascript and CSS files, located in assets/js and assets/css respectively.
-  HTML files do not have any Javascript or CSS inside them, but exclusively call
-  to other functions for this. Each page has its own specific Javascript file,
+  JavaScript and CSS files, located in assets/js and assets/css respectively.
+  HTML files do not have any JavaScript or CSS inside them, but exclusively call
+  to other functions for this. Each page has its own specific JavaScript file,
   and then there are a number of shared files that multiple or all pages use. We
-  have used a number of Javascript libraries.
+  have used a number of JavaScript libraries.
   \subsubsection{Creating a Timeline}
   On the overview, cycles, task state, and task compare page, the same type of
   chart is used. The chart shows either which task is running at a given time,
@@ -641,15 +644,15 @@ DataTables also makes use of Local Storage in order to save the scroll position 
    \item The gantt chart is passed the events and drawn, and the colors are set.
      The chart assigns a class to each task based on its PID, and we randomly
      select a color for this class and add a style tag to the page. Our random
-     color selecton is seeded so that the same colors will be assigned every
+     color selection is seeded so that the same colors will be assigned every
      time. We considered producing a stylesheet after parsing so we did not have
      to generate this each time, but in profiling the application we saw that
      this process was actually quick, and decided this change was very low
      priority.
 
   \end{enumerate}
-  \subsubsection{Primary Javascript/CSS files}
-  One of the primary Javascript files we've worked
+  \subsubsection{Primary JavaScript/CSS files}
+  One of the primary JavaScript files we've worked
   with and changed is gantt-chart-d3.js. This file is the logic for all of the
   graphs. This file was originally written by Dimitry Kudrayvtsev, but we have
   significantly modified it to produce the behavior we want.
@@ -661,7 +664,7 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   CPU or cycle.
 
   The chart assigns classes to each rectangle so that they can easily be
-  colored (lines 259-279), and sets up a mouseover handler to display hovertext
+  colored (lines 259-279), and sets up a mouseover handler to display hover text
   over an individual event (lines 296-306). On the overview page, clicking
   on an event will scroll to it in the data table - this handler is set up on
   lines 291-295. Lastly, we added zooming behavior to the chart that is
@@ -678,11 +681,11 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   semester.
 
   Sidebar.js is a fairly simple script that creates the sidebar for all of the
-  pages, excluding the first page of the app, where the user chooses a file.
+  pages, excluding the first page of the application, where the user chooses a file.
   It controls navigation and sets highlighting of the current tab.
 
   The other non-page specific files are mostly borrowed and unedited from
-  Javascript libraries, so for documentation on those you can visit their
+  JavaScript libraries, so for documentation on those you can visit their
   respective pages online.
 \begin{itemize}
 \item d3.js (d3js.org)
@@ -814,7 +817,7 @@ tool.
 
 With KernelShark, the user could pull out a graphical display of a single
 task and put it on its own line. However, that was the extent of what
-Kernelshark did with regards to individual tasks.
+KernelShark did with regards to individual tasks.
 
 We wanted to take this idea further by providing detailed information and
 statistics about individual tasks. This would give users a different way to view
@@ -892,7 +895,15 @@ suggested that we add the ability to enter in cycle length and have it display
 cycles based on that. We chose to implement this, taking this page from having
 very specific requirements to being usable with any data.
 
-<<<<<<< HEAD
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=4in]{cycles-page.png}
+\caption{A screenshot of the current Cycles page. Multiple CPUs can be displayed
+at once using the checkboxes at the top of the screen. The input box on the top
+left allows users to choose their own cycle length.}
+\end{center}
+\end{figure}
+
 %\chapter{Challenges}
 %\section{trace-cmd versioning} % Rachel
 %  As already described, we collect data using a command-line utility called
@@ -932,55 +943,6 @@ very specific requirements to being usable with any data.
 %Having done some profiling, we know that pulling data from IndexedDB is the
 %slowest part of our application, but at this point in time we do not have a way
 %to fix this.
-=======
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=4in]{cycles-page.png}
-\caption{A screenshot of the current Cycles page. Multiple CPUs can be displayed
-at once using the checkboxes at the top of the screen. The input box on the top
-left allows users to choose their own cycle length.}
-\end{center}
-\end{figure}
-
-\chapter{Challenges}
-\section{trace-cmd versioning} % Rachel
-  As already described, we collect data using a command-line utility called
-  trace-cmd. trace-cmd records various events in the Linux kernel while it runs
-  and then outputs this information into a data file with a particular binary
-  format. trace-cmd also has a ``report'' option, which takes an existing trace
-  file and generates a human readable report of this record. Using this format
-  as a starting point instead of the raw binary format simplifies parsing.
-  We decided to leverage trace-cmd report instead of wrestling with the binary
-  data ourselves. This allowed us to make progress faster and to avoid working
-  on an already solved problem.
-
-  Unfortunately, the format of the file generated by trace-cmd report is
-  dependent on the version of trace-cmd used. For example, the formatting of the
-  ``extra info'' field of a switch event is liable to change. We use this
-  field to identify preemptions. To be able to reliably parse data and add
-  additional information about preemptions, we need our input data to have
-  a consistent format. This creates a dependency on a particular version
-  of trace-cmd. Our liaisons have been using trace-cmd version 2.2.1, so
-  our parser expects input data to be in the format of 2.2.1.
-\section{Selection of charting tool} % Rachel
-  We chose to use web technologies because we felt there was a wealth of
-  charting and UI/UX tools that we could use. We spent several weeks
-  experimenting with different charts for the main page. The main page renders a
-  timeline of running tasks, which is essentially a large number of colored
-  bars. This chart needed to be responsive to zooming and dragging, and to
-  dealing with click events to move to a particular time in the table of events
-  displayed below it.
-\section{Speed} %Wendy
-The data SpaceX will be using with our tool is very large, and becomes even
-larger once we have parsed it. As a result, some parts of the tool load slowly,
-and this is something we are still working on fixing. One main fix we have
-implemented is batch loading the list of events on the main page so that the
-user can start interacting with the tool without waiting to load the entire
-table, especially since all of the table is typically not needed.
-
-Having done some profiling, we know that pulling data from IndexedDB is the
-slowest part of our application, but at this point in time we do not have a way
-to fix this.
 
 \chapter{Future Work}
 \section{Known bugs}
@@ -1000,7 +962,7 @@ to fix this.
 \end{itemize}
 
 
-  \section{Possible refactoring}
+  \section{Refactoring}
 
   We were considering refactoring the parser to be cleaner. Currently, when we
   extract each field from an event, we immediately format it as a JSON object.
@@ -1087,12 +1049,22 @@ Events
 }
 \end{verbatim}
 
-%\section{Glossary}
-%\begin{itemize}
-%\item[cycles]
-%\item[CPU]
-%\item[task]
-%\end{itemize}
+\section{Glossary}
+\begin{itemize}[ ]
+\item {\bf Blocked:} When a task is runnable but another task is running on the same CPU, thereby blocking it from being able to run.
+\item {\bf Cycle:} The interval between the regular deadlines that tasks running on a SpaceX rocket need to meet.
+\item {\bf CPU:} The Central Processing Unit; the part of the computer that carries out instructions.
+\item{\bf Event:} A specific activity of a task taking place at a single point in time that can denote a change in its state or some other action.
+\item {\bf PID:} A process identifier; a number attatched to a process that is unique to that process.
+\item {\bf Preemption:} When a running task is blocked by another program starting to run on the same CPU. 
+\item {\bf Priority Inversion:} When a high-priority task is indirectly blocked by something of
+lower priority using a shared resource that the higher priority task needs in
+order to run. 
+\item{\bf Process:} A program that can have many threads.
+\item {\bf Running:} The state of a task when it is being executed on the CPU.
+\item {\bf Task:} A single thread of a process; a series of events.
+\item {\bf Waiting:} The state of a task when it cannot run, due to being blocked or waiting on some piece of information.
+\end{itemize}
 \end{document}
 
 
