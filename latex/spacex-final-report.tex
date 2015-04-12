@@ -163,7 +163,7 @@ Rachel Macfarlane}
 \chapter{Background} % May Lynn
 \section{Introduction}
 SpaceX is an American space transport company that designs and manufactures
-advanced rockets and spacecrafts. SpaceX rockets depend on a variety of software
+advanced rockets and spacecraft. SpaceX rockets depend on a variety of software
 to be successful, including simulations, flight software, and data analysis.
 Almost all of this software is written in-house and is complex enough that subtle
 problems are often hard to catch and very time consuming to debug.
@@ -191,12 +191,12 @@ order to run.
 \end{itemize}
 The software running on SpaceX rockets has deadlines for tasks at regular intervals because timing is very important in rocket flight, so when there is a break in this cyclical pattern of processes this means that there is likely a bug in the software. These cyclical patterns of processes are called ``cycles''.
 \section{Existing Tool}
-SpaceX currently uses a tool called Kernelshark to visualize this trace data and help find any bugs or anomalies. We were informed by our liaisons that this debugging process can take up to several days, so searching for bugs using this tool uses up a lot of valuable time. Kernelshark is a single page tool, as seen in Figure 1.1.
+SpaceX currently uses a tool called KernelShark to visualize this trace data and help find any bugs or anomalies. We were informed by our liaisons that this debugging process can take up to several days, so searching for bugs using this tool uses up a lot of valuable time. KernelShark is a single page tool, as seen in Figure 1.1.
 
 \begin{figure}[h!]
   \centering
       \includegraphics[width=5in]{kshark-open.png}
-  \caption{Kernelshark consists of a graphical display of the programs running on a computer over time, as well as a tabular view of the same information, in the form of CPU events such as processes switching, waking, or sleeping.}
+  \caption{KernelShark consists of a graphical display of the programs running on a computer over time, as well as a tabular view of the same information, in the form of CPU events such as processes switching, waking, or sleeping.}
 \end{figure}
 
 Using only this visualization, it can be difficult to see where the cyclical
@@ -205,7 +205,7 @@ misses a deadline. In addition, the tabular display of the CPU events in the
 bottom part of the screen has minimal search functionality and the different
 columns of the table are not sortable. Individual timelines for tasks can be
 displayed below this main chart, but the menu to select a task does not have
-any searching capability and does not order the tasks in any discernable way.
+any searching capability and does not order the tasks in any discernible way.
 
 \section{Project Goals} % May Lynn
 Our goals for this project were to make it easier and faster for SpaceX engineers to find software problems by creating a tool that visualizes rocket data and highlights problem areas. We have created an improved user experience and provided more visualizations of the data than the old tool. We have called the tool that we created SpaceShark.
@@ -223,17 +223,17 @@ Our goals for this project were to make it easier and faster for SpaceX engineer
   \subsection{Nodewebkit and HTML} %Rachel
     At the beginning of the project, the team researched possible tools and
     technologies for creating our application. One possibility was simply
-    extending kernelshark, the existing tool. After looking at the code for
+    extending KernelShark, the existing tool. After looking at the code for
     this, a large number of C files, we decided it would be easier to
     reimplement and extend it in something else; understanding the code base
     would take a very long time, and we felt other languages had better
     UI and charting libraries. We looked into Java UI libraries for
     desktop applications, as well as web-technology based charting libraries.
     During this research, we found node-webkit, which allows for
-    HTML/CSS/Javascript applications to be packaged and run as desktop
+    HTML/CSS/JavaScript applications to be packaged and run as desktop
     applications with no reliance on the internet. As this allowed us to take
     advantage of many existing UI widgit and charting libraries that many team
-    members were familar with, we decided to take this route.
+    members were familiar with, we decided to take this route.
 
 \subsection{Load File Page}
 
@@ -326,8 +326,8 @@ The code for this page is within assets/js/preemptionChart.js and assets/js/runt
 
     The code for this page is within assets/js/process.js. This page uses
     gantt-chart-d3.js for the chart and dataScroller.js to create the table of
-    preemptions. The search box autocompletes task names using twitter
-    typeahead.
+    preemptions. The search box autocompletes task names using Twitter
+    Typeahead.
   
   \subsection{Compare Tasks} %Wendy
 
@@ -405,7 +405,7 @@ The code for this page is within assets/js/process.js. This page uses
   \includegraphics[scale=0.4]{parserExample.png}
 
   These five fields appear for every event, but the content of extra information
-  varies based on the type of event. The units on the timestamp of the event,
+  varies based on the type of event. The units on the time stamp of the event,
   start time, are milliseconds since kernel boot.
 
   To parse these event lines, we read our file line by line and break on
@@ -566,15 +566,15 @@ Here is a list of the Local Storage variables that we are using, and what they a
 \end{itemize}
 DataTables also makes use of Local Storage in order to save the scroll position of the table.
 
-  \subsubsection{Overal Application Structure}
+  \subsubsection{Overall Application Structure}
 
   The general structure of our code is similar to
   most web applications. In the root we have HTML files, which call to
-  Javascript and CSS files, located in assets/js and assets/css respectively.
-  HTML files do not have any Javascript or CSS inside them, but exclusively call
-  to other functions for this. Each page has its own specific Javascript file,
+  JavaScript and CSS files, located in assets/js and assets/css respectively.
+  HTML files do not have any JavaScript or CSS inside them, but exclusively call
+  to other functions for this. Each page has its own specific JavaScript file,
   and then there are a number of shared files that multiple or all pages use. We
-  have used a number of Javascript libraries.
+  have used a number of JavaScript libraries.
   \subsubsection{Creating a Timeline}
   On the overview, cycles, task state, and task compare page, the same type of
   chart is used. The chart shows either which task is running at a given time,
@@ -621,15 +621,15 @@ DataTables also makes use of Local Storage in order to save the scroll position 
    \item The gantt chart is passed the events and drawn, and the colors are set.
      The chart assigns a class to each task based on its PID, and we randomly
      select a color for this class and add a style tag to the page. Our random
-     color selecton is seeded so that the same colors will be assigned every
+     color selection is seeded so that the same colors will be assigned every
      time. We considered producing a stylesheet after parsing so we did not have
      to generate this each time, but in profiling the application we saw that
      this process was actually quick, and decided this change was very low
      priority.
 
   \end{enumerate}
-  \subsubsection{Primary Javascript/CSS files}
-  One of the primary Javascript files we've worked
+  \subsubsection{Primary JavaScript/CSS files}
+  One of the primary JavaScript files we've worked
   with and changed is gantt-chart-d3.js. This file is the logic for all of the
   graphs. This file was originally written by Dimitry Kudrayvtsev, but we have
   significantly modified it to produce the behavior we want.
@@ -641,7 +641,7 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   CPU or cycle.
 
   The chart assigns classes to each rectangle so that they can easily be
-  colored (lines 259-279), and sets up a mouseover handler to display hovertext
+  colored (lines 259-279), and sets up a mouseover handler to display hover text
   over an individual event (lines 296-306). On the overview page, clicking
   on an event will scroll to it in the data table - this handler is set up on
   lines 291-295. Lastly, we added zooming behavior to the chart that is
@@ -658,11 +658,11 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   semester.
 
   Sidebar.js is a fairly simple script that creates the sidebar for all of the
-  pages, excluding the first page of the app, where the user chooses a file.
+  pages, excluding the first page of the application, where the user chooses a file.
   It controls navigation and sets highlighting of the current tab.
 
   The other non-page specific files are mostly borrowed and unedited from
-  Javascript libraries, so for documentation on those you can visit their
+  JavaScript libraries, so for documentation on those you can visit their
   respective pages online.
 \begin{itemize}
 \item d3.js (d3js.org)
