@@ -27,6 +27,7 @@
 %%% the ``proposal'' document-class option to the hmcclinic class.
 \documentclass{hmcclinic}
 \usepackage{graphicx}
+%\usepackage{glossaries}
 
 %%% The major difference between the statement of work and a midyear
 %%% or final report is that the statement of work is typeset as an
@@ -143,7 +144,8 @@ Rachel Macfarlane}
 %%% \maketitle command in your document (and filling in the necessary
 %%% information for the identification commands above) is enough.
 \maketitle
-
+ 
+\tableofcontents
 %%% In a longer document or an article being submitted to a journal
 %%% or conference, you would probably have an abstract that
 %%% summarized the purpose of the document.  We don't need that for
@@ -159,8 +161,7 @@ Rachel Macfarlane}
 \chapter{Background} % May Lynn
 \section{Introduction}
 SpaceX is an American space transport company that designs and manufactures
-advanced rockets and spacecrafts. The eventual goal of the company is to allow
-people to live on other planets. SpaceX rockets depend on a variety of software
+advanced rockets and spacecrafts. SpaceX rockets depend on a variety of software
 to be successful, including simulations, flight software, and data analysis.
 Almost all of this software is written in-house and is complex enough that subtle
 problems are often hard to catch and very time consuming to debug.
@@ -177,13 +178,18 @@ certain span of time, keeping track of when each task was running on each proces
 % for the rocket.
 In order to find potential bugs in their software, SpaceX developers look for
 problems like unexpected preemptions, priority inversions, and breaks in the
-pattern of tasks being run. A preemption occurs when one program is running, and
-is then blocked by another program starting to run on the same CPU. A priority
+pattern of tasks being run. These terms are defined below:
+\begin{itemize}
+\item A preemption occurs when one program is running, and
+is then blocked by another program starting to run on the same CPU. 
+\item A priority
 inversion occurs when a high-priority task is indirectly blocked by something of
 lower priority using a shared resource that the higher priority task needs in
-order to run. The software running on SpaceX rockets has deadlines for tasks at regular intervals because timing is very important in rocket flight, so when there is a break in this cyclical pattern of processes this means that there is likely a bug in the software.
+order to run. 
+\end{itemize}
+The software running on SpaceX rockets has deadlines for tasks at regular intervals because timing is very important in rocket flight, so when there is a break in this cyclical pattern of processes this means that there is likely a bug in the software. These cyclical patterns of processes are called ``cycles''.
 \section{Existing Tool}
-SpaceX currently uses a tool called Kernelshark to visualize this trace data and help find any bugs or anomalies. We were informed by our liaisons that this debugging process can take up to several days, so searching for bugs using this tool uses up a lot of valuable time. Much of the user experience of Kernelshark is outdated or could use improvements. Kernelshark is a single page tool, as seen in Figure 1.1.
+SpaceX currently uses a tool called Kernelshark to visualize this trace data and help find any bugs or anomalies. We were informed by our liaisons that this debugging process can take up to several days, so searching for bugs using this tool uses up a lot of valuable time. Kernelshark is a single page tool, as seen in Figure 1.1.
 
 \begin{figure}[h!]
   \centering
@@ -334,6 +340,15 @@ two or more tasks.
 
 The code for this page is within assets/js/process.js. This page uses
     gantt-chart-d3.js for the chart, and draggabilly.js and packery.js to make the rows of graphs rearrangable.
+
+\subsection{Selection of charting tool} % Rachel
+  We chose to use web technologies because we felt there was a wealth of
+  charting and UI/UX tools that we could use. We spent several weeks
+  experimenting with different charts for the main page. The main page renders a
+  timeline of running tasks, which is essentially a large number of colored
+  bars. This chart needed to be responsive to zooming and dragging, and to
+  dealing with click events to move to a particular time in the table of events
+  displayed below it.
 
 \section{Architecture} % Wendy
 
@@ -856,45 +871,45 @@ suggested that we add the ability to enter in cycle length and have it display
 cycles based on that. We chose to implement this, taking this page from having
 very specific requirements to being usable with any data.
 
-\chapter{Challenges}
-\section{trace-cmd versioning} % Rachel
-  As already described, we collect data using a command-line utility called
-  trace-cmd. trace-cmd records various events in the Linux kernel while it runs
-  and then outputs this information into a data file with a particular binary
-  format. trace-cmd also has a ``report'' option, which takes an existing trace
-  file and generates a human readable report of this record. Using this format
-  as a starting point instead of the raw binary format simplifies parsing.
-  We decided to leverage trace-cmd report instead of wrestling with the binary
-  data ourselves. This allowed us to make progress faster and to avoid working
-  on an already solved problem.
-
-  Unfortunately, the format of the file generated by trace-cmd report is
-  dependent on the version of trace-cmd used. For example, the formatting of the
-  ``extra info'' field of a switch event is liable to change. We use this
-  field to identify preemptions. To be able to reliably parse data and add
-  additional information about preemptions, we need our input data to have
-  a consistent format. This creates a dependency on a particular version
-  of trace-cmd. Our liaisons have been using trace-cmd version 2.2.1, so
-  our parser expects input data to be in the format of 2.2.1.
-\section{Selection of charting tool} % Rachel
-  We chose to use web technologies because we felt there was a wealth of
-  charting and UI/UX tools that we could use. We spent several weeks
-  experimenting with different charts for the main page. The main page renders a
-  timeline of running tasks, which is essentially a large number of colored
-  bars. This chart needed to be responsive to zooming and dragging, and to
-  dealing with click events to move to a particular time in the table of events
-  displayed below it.
-\section{Speed} %Wendy
-The data SpaceX will be using with our tool is very large, and becomes even
-larger once we have parsed it. As a result, some parts of the tool load slowly,
-and this is something we are still working on fixing. One main fix we have
-implemented is batch loading the list of events on the main page so that the
-user can start interacting with the tool without waiting to load the entire
-table, especially since all of the table is typically not needed.
-
-Having done some profiling, we know that pulling data from IndexedDB is the
-slowest part of our application, but at this point in time we do not have a way
-to fix this.
+%\chapter{Challenges}
+%\section{trace-cmd versioning} % Rachel
+%  As already described, we collect data using a command-line utility called
+%  trace-cmd. trace-cmd records various events in the Linux kernel while it runs
+%  and then outputs this information into a data file with a particular binary
+%  format. trace-cmd also has a ``report'' option, which takes an existing trace
+%  file and generates a human readable report of this record. Using this format
+%  as a starting point instead of the raw binary format simplifies parsing.
+%  We decided to leverage trace-cmd report instead of wrestling with the binary
+%  data ourselves. This allowed us to make progress faster and to avoid working
+%  on an already solved problem.
+%
+%  Unfortunately, the format of the file generated by trace-cmd report is
+%  dependent on the version of trace-cmd used. For example, the formatting of the
+%  ``extra info'' field of a switch event is liable to change. We use this
+%  field to identify preemptions. To be able to reliably parse data and add
+%  additional information about preemptions, we need our input data to have
+%  a consistent format. This creates a dependency on a particular version
+%  of trace-cmd. Our liaisons have been using trace-cmd version 2.2.1, so
+%  our parser expects input data to be in the format of 2.2.1.
+%\section{Selection of charting tool} % Rachel
+%  We chose to use web technologies because we felt there was a wealth of
+%  charting and UI/UX tools that we could use. We spent several weeks
+%  experimenting with different charts for the main page. The main page renders a
+%  timeline of running tasks, which is essentially a large number of colored
+%  bars. This chart needed to be responsive to zooming and dragging, and to
+%  dealing with click events to move to a particular time in the table of events
+%  displayed below it.
+%\section{Speed} %Wendy
+%The data SpaceX will be using with our tool is very large, and becomes even
+%larger once we have parsed it. As a result, some parts of the tool load slowly,
+%and this is something we are still working on fixing. One main fix we have
+%implemented is batch loading the list of events on the main page so that the
+%user can start interacting with the tool without waiting to load the entire
+%table, especially since all of the table is typically not needed.
+%
+%Having done some profiling, we know that pulling data from IndexedDB is the
+%slowest part of our application, but at this point in time we do not have a way
+%to fix this.
 
 \chapter{Future Work}
 \section{Known bugs}
@@ -904,7 +919,7 @@ to fix this.
 
   \begin{itemize}
   
-  \item All graphs can be dragged until they become no longer visible. While
+  \item All graphs can be scrolled on the $x$-axis through clicking and dragging until they become no longer visible. While
     they can be dragged back using the white space, this is not good for a user
     experience.
 
@@ -934,6 +949,19 @@ to fix this.
 
 It is also possible that the loaded files will contain more than two CPU's. For clear visual purposes, we only want to be displaying two CPU's graphs on the Cycles page. In the case that we have more than two CPU's, we would hope to be able to paginate the graphs. This does not seem to be a crucial extension of our work, since our liaisons have specifically told us that they generally expect to only have two CPU's in their trace files.
 
+
+\section{Speed} %Wendy
+The data SpaceX will be using with our tool is very large, and becomes even
+larger once we have parsed it. As a result, some parts of the tool load slowly,
+and this is something we are still working on fixing. One main fix we have
+implemented is batch loading the list of events on the main page so that the
+user can start interacting with the tool without waiting to load the entire
+table, especially since all of the table is typically not needed.
+
+Having done some profiling, we know that pulling data from IndexedDB is the
+slowest part of our application, but at this point in time we do not have a way
+to fix this.
+
 \section{Scalability}
   Overall, the application should be made faster. We are not entirely sure how
   to improve this at the moment. IndexedDB is the slowest part of the
@@ -946,14 +974,12 @@ sometimes too large for the parser to handle as well.
 There are two possibilities for fixing this. One is to prune the JSON or
 finder a more compressed method of storing the data. The other is to find a
 substitute for IndexedDB that is faster.
-\section{more user testing - results}
- We will be conducting more user testing next week and add this to our report
- after that.
 
 
-\chapter{Appendix}
+\chapter{Appendices}
 \newpage
 \appendix
+\renewcommand{\thesection}{\Alph{section}}
 \section{Example JSON} \label{App:AppendixA}
 
 \begin{verbatim}
@@ -971,9 +997,14 @@ Events
     ==> next_comm=swapper/2 next_pid=300 next_prio=120 kworker-2418 [001]
   1681.955177, activeName: kworker, activePID=300], [name:...], ...
 }
-
 \end{verbatim}
 
+%\section{Glossary}
+%\begin{itemize}
+%\item[cycles]
+%\item[CPU]
+%\item[task]
+%\end{itemize}
 \end{document}
 
 
