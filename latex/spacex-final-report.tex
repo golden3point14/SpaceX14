@@ -83,7 +83,7 @@ Rachel Macfarlane}
 \advisor{Ben Wiedermann}
 
 %% Liaison's name or names?
-\liaison{Jesse Keller \and Jessica Hester '13 \and Jim Gruen}
+\liaison{Jim Gruen \and Jessica Hester '13 \and Jesse Keller }
 
 %%% End of information section.
 
@@ -162,6 +162,7 @@ Rachel Macfarlane}
 %%% Content.
 \chapter{Background} % May Lynn
 \section{Introduction}
+
 SpaceX is an American space transport company that designs and manufactures
 advanced rockets and spacecraft. SpaceX rockets depend on a variety of software
 to be successful, including simulations, flight software, and data analysis.
@@ -170,6 +171,7 @@ problems are often hard to catch and very time consuming to debug.
 
 %\section{Background} % May Lynn
 \section{Tracing and Debugging}
+
 The data that SpaceX developers examine in order to find software bugs is called
 a kernel trace, which documents the different tasks running on a computer over a
 certain span of time, keeping track of when each task was running on each processor. 
@@ -182,21 +184,21 @@ In order to find potential bugs in their software, SpaceX developers look for
 problems like unexpected preemptions, priority inversions, and breaks in the
 pattern of tasks being run. These terms are defined below:
 \begin{itemize}
-\item A preemption occurs when one program is running, and
+\item A {\bf preemption} occurs when one program is running, and
 is then blocked by another program starting to run on the same CPU. 
-\item A priority
-inversion occurs when a high-priority task is indirectly blocked by something of
+\item A {\bf priority
+inversion} occurs when a high-priority task is indirectly blocked by something of
 lower priority using a shared resource that the higher priority task needs in
 order to run. 
 \end{itemize}
 The software running on SpaceX rockets has deadlines for tasks at regular intervals because timing is very important in rocket flight, so when there is a break in this cyclical pattern of processes this means that there is likely a bug in the software. These cyclical patterns of processes are called ``cycles''.
 \section{Existing Tool}
-SpaceX currently uses a tool called KernelShark to visualize this trace data and help find any bugs or anomalies. We were informed by our liaisons that this debugging process can take up to several days, so searching for bugs using this tool uses up a lot of valuable time. KernelShark is a single page tool, as seen in Figure 1.1.
+SpaceX currently uses a tool called KernelShark to visualize this trace data and help find any bugs or anomalies. We were informed by our liaisons that this debugging process can take up to several days, so searching for bugs using this tool uses up a lot of valuable time. KernelShark is a single page tool, as seen in Figure 1.1.\\
 
 \begin{figure}[h!]
   \centering
       \includegraphics[width=5in]{kshark-open.png}
-  \caption{KernelShark consists of a graphical display of the programs running on a computer over time, as well as a tabular view of the same information, in the form of CPU events such as processes switching, waking, or sleeping.}
+  \caption{KernelShark consists of a graphical display of the programs running on a computer over time (top half of screen), as well as a tabular view of the same information, in the form of CPU events such as processes switching, waking, or sleeping (bottom half of screen).}
 \end{figure}
 
 Using only this visualization, it can be difficult to see where the cyclical
@@ -213,14 +215,14 @@ Our goals for this project were to make it easier and faster for SpaceX engineer
 \chapter{SpaceShark}
 \section{Design} %Everyone gets a part
 
-  SpaceShark is meant to make it easier for SpaceX engineers to find bugs. We
+  The SpaceShark tool is meant to make it easier for SpaceX engineers to find bugs. We
   accomplish this through a variety of pages that serve unique purposes, giving
-  engineers many options in how they want to approach finding a problem. First
+  engineers many options in how they want to approach finding a problem. An overview of the trace data is given on the first page that is displayed to a user, and more detailed information on each task can be found by going to the other pages. First
   we describe briefly the method we used to make the pages, and then describe
   the purpose of each page in the tool and how they accomplish their
   respective goals.
 
-  \subsection{Nodewebkit and HTML} %Rachel
+  \subsection{Node-Webkit and HTML} %Rachel
     At the beginning of the project, the team researched possible tools and
     technologies for creating our application. One possibility was simply
     extending KernelShark, the existing tool. After looking at the code for
@@ -280,7 +282,7 @@ The goal of the Overview Page is to be able to initially look at an overall view
     
   \subsection{Cycles Page} %Alix
 
-  \begin{figure}[h!]
+  \begin{figure}[!htbp]
   \centering
       \includegraphics[width=5in]{cycles-page.png}
   \caption{The Cycles page displays graphs of each CPU. The user is allowed to input their own cycle intervals.}
@@ -304,6 +306,7 @@ The goal of the Overview Page is to be able to initially look at an overall view
     to all currently displayed charts.
   
   \subsection{Task Statistics Page} %May Lynn
+
 
   \includegraphics[width=5in]{task-statistics-page.png}
 
@@ -794,7 +797,7 @@ tool.
 
 With KernelShark, the user could pull out a graphical display of a single
 task and put it on its own line. However, that was the extent of what
-Kernelshark did with regards to individual tasks.
+KernelShark did with regards to individual tasks.
 
 We wanted to take this idea further by providing detailed information and
 statistics about individual tasks. This would give users a different way to view
@@ -819,7 +822,7 @@ not have found useful. Since preemptions are generally
 indicative of problems, we really wanted to focus on this on the Task State
 page.
 
-\begin{figure}
+\begin{figure}[h!]
 \begin{center}
 \includegraphics[width=4in]{task-state-page.png}
 \caption{A screenshot of the current version of the Task State page. The three
@@ -852,7 +855,7 @@ manually determine where cycles were.
 The Cycles page in our tool lets the user easily find anomalies by splitting up
 the Overview page graph visualization into cycles.
 
-\begin{figure}
+\begin{figure}[h!]
 \begin{center}
 \includegraphics[width=4in]{oldcycles.png}
 \caption{A mock-up of the Cycles page. Initially only one CPU at a time could be
@@ -872,7 +875,15 @@ suggested that we add the ability to enter in cycle length and have it display
 cycles based on that. We chose to implement this, taking this page from having
 very specific requirements to being usable with any data.
 
-<<<<<<< HEAD
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=4in]{cycles-page.png}
+\caption{A screenshot of the current Cycles page. Multiple CPUs can be displayed
+at once using the checkboxes at the top of the screen. The input box on the top
+left allows users to choose their own cycle length.}
+\end{center}
+\end{figure}
+
 %\chapter{Challenges}
 %\section{trace-cmd versioning} % Rachel
 %  As already described, we collect data using a command-line utility called
@@ -912,55 +923,6 @@ very specific requirements to being usable with any data.
 %Having done some profiling, we know that pulling data from IndexedDB is the
 %slowest part of our application, but at this point in time we do not have a way
 %to fix this.
-=======
-\begin{figure}
-\begin{center}
-\includegraphics[width=4in]{cycles-page.png}
-\caption{A screenshot of the current Cycles page. Multiple CPUs can be displayed
-at once using the checkboxes at the top of the screen. The input box on the top
-left allows users to choose their own cycle length.}
-\end{center}
-\end{figure}
-
-\chapter{Challenges}
-\section{trace-cmd versioning} % Rachel
-  As already described, we collect data using a command-line utility called
-  trace-cmd. trace-cmd records various events in the Linux kernel while it runs
-  and then outputs this information into a data file with a particular binary
-  format. trace-cmd also has a ``report'' option, which takes an existing trace
-  file and generates a human readable report of this record. Using this format
-  as a starting point instead of the raw binary format simplifies parsing.
-  We decided to leverage trace-cmd report instead of wrestling with the binary
-  data ourselves. This allowed us to make progress faster and to avoid working
-  on an already solved problem.
-
-  Unfortunately, the format of the file generated by trace-cmd report is
-  dependent on the version of trace-cmd used. For example, the formatting of the
-  ``extra info'' field of a switch event is liable to change. We use this
-  field to identify preemptions. To be able to reliably parse data and add
-  additional information about preemptions, we need our input data to have
-  a consistent format. This creates a dependency on a particular version
-  of trace-cmd. Our liaisons have been using trace-cmd version 2.2.1, so
-  our parser expects input data to be in the format of 2.2.1.
-\section{Selection of charting tool} % Rachel
-  We chose to use web technologies because we felt there was a wealth of
-  charting and UI/UX tools that we could use. We spent several weeks
-  experimenting with different charts for the main page. The main page renders a
-  timeline of running tasks, which is essentially a large number of colored
-  bars. This chart needed to be responsive to zooming and dragging, and to
-  dealing with click events to move to a particular time in the table of events
-  displayed below it.
-\section{Speed} %Wendy
-The data SpaceX will be using with our tool is very large, and becomes even
-larger once we have parsed it. As a result, some parts of the tool load slowly,
-and this is something we are still working on fixing. One main fix we have
-implemented is batch loading the list of events on the main page so that the
-user can start interacting with the tool without waiting to load the entire
-table, especially since all of the table is typically not needed.
-
-Having done some profiling, we know that pulling data from IndexedDB is the
-slowest part of our application, but at this point in time we do not have a way
-to fix this.
 
 \chapter{Future Work}
 \section{Known bugs}
@@ -980,7 +942,7 @@ to fix this.
 \end{itemize}
 
 
-  \section{Possible refactoring}
+  \section{Refactoring}
 
   We were considering refactoring the parser to be cleaner. Currently, when we
   extract each field from an event, we immediately format it as a JSON object.
