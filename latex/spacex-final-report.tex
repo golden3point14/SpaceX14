@@ -98,6 +98,7 @@ Rachel Macfarlane}
                                 % as the argument to the command is
                                 % cool.
 
+\newcommand{\tracecmd}{\fontfamily{pcr}\selectfont trace-cmd}
 
 %%% Some theorem-like command definitions.
 
@@ -363,7 +364,7 @@ The code for this page is within assets/js/process.js. This page uses
 
   \subsection{Trace-cmd}
 
-  Data is collected by using a command-line utility called trace-cmd.
+  Data is collected using a command-line utility called trace-cmd.
   trace-cmd records various events in the Linux kernel while it runs and then
   outputs this information into a data file with a particular binary format.
   trace-cmd is a powerful tool and can be used to trace many different types of
@@ -375,7 +376,12 @@ The code for this page is within assets/js/process.js. This page uses
 
   Besides outputting data in binary format, trace-cmd also has a ``report``
   option, which takes an existing trace file and generates a human readable
-  report of this record. Using this format as a starting point instead of the
+  report of this record. An example line from a report is shown below.
+  
+\footnotesize\begin{verbatim}<idle>-0   [002]  2296.990243: sched_wakeup: comm=nautilus pid=2390 prio=120\end{verbatim}
+
+\normalsize
+  Using this format as a starting point instead of the
   raw binary format simplifies parsing.  We decided to leverage trace-cmd report
   instead of wrestling with the binary data ourselves. This allowed us to make
   progress faster and to avoid working on an already solved problem.
@@ -384,26 +390,22 @@ The code for this page is within assets/js/process.js. This page uses
   report is dependent on the version of trace-cmd used. To be able to reliably
   parse data and add additional information about preemptions, we need our input
   data to have a consistent format. This creates a dependency on a particular
-  version of trace-cmd. Our liaisons have been using trace-cmd version 2.2.1, so
-  our parser expects input data to be in the format of 2.2.1.
+  version of trace-cmd. The team has chosen to use trace-cmd version 2.2.1, 
+  the same version that our liaisons currently use.
 
   \subsection{Parser}
   Next the parser takes in this raw data, and ultimately outputs the data
-  reformatted into JSON with additional information. As a result of the
-  particular version of trace-cmd, we know exactly how the file will be
-  formatted. Each line in the input file is a single recorded event with a
-  number of fields separated by whitespace. An example is shown below.
+  reformatted into JSON with additional information. The file format of
+  trace-cmd report is simple and consistent. The first line in the file
+  gives a version number of trace-cmd report, and the second the number of
+  CPUs in the captured trace. Each line in the remainder of the file is a
+  single recorded event with a number of fields separated by whitespace.
    
-\footnotesize\begin{verbatim}<idle>-0   [002]  2296.990243: sched_wakeup: comm=nautilus pid=2390 prio=120\end{verbatim}
-  
-\normalsize
-  Here, the task associated with the event is named ``idle'' and has a PID of
-  0. The second field gives the CPU number, and the third the the start time,
-  which is measured in milliseconds since kernel boot. The event type, which is
-  wakeup, migrate, or switch for schedule events, is given after this. The last
-  field is extra information and varies in formatting based on the type of
-  event. For the wakeup event, the name, PID, and priority of the task being
-  woken up are displayed.
+  \includegraphics[scale=0.4]{parserExample.png}
+
+  These five fields appear for every event, but the content of extra information
+  varies based on the type of event. The units on the timestamp of the event,
+  start time, are milliseconds since kernel boot.
 
   To parse these event lines, we read our file line by line and break on
   whitespace. Then it is easy to extract fields one by one. To deal with the
@@ -428,9 +430,9 @@ The code for this page is within assets/js/process.js. This page uses
     name (string)
     pid (int)
     events (array of ints)
-      These ints index into the Events array to find events beloning to that task
+      Indicies into the Events array to find events belonging to that task
     preemptedBy (array of strings)
-      Each entry is a function name. Names are not unique.
+      Each entry is a task name. Names are not unique.
     preemptionCount (int)
       A running total of times preempted.
     totalRuntime (long)
@@ -484,21 +486,6 @@ The code for this page is within assets/js/process.js. This page uses
   parser will not affect the application itself. Additionally, this will allow
   someone with a different output to write their own parser to create the same
   type of output so that they can view their data in our tool.
-
-  We were considering refactoring the parser to be cleaner. Currently, when we
-  extract each field from an event, we immediately format it as a JSON object.
-  This adds some additional complexity in later calculations and analysis, as
-  the JSON object is a key-value pair, and is generally not very space or time
-  efficient. Instead of this, it would be better to create an intermediate
-  format for the data. We imagine this would look like a separate Java class for
-  tasks and events. Events would be subclassed by their type. All events have
-  the same basic information, like the start time, PID of the task involved, and
-  CPU, but their extra information field varies based on type. We imagine that
-  creating event and task classes would make the parser code much more readable,
-  as after grabbing each field from a line, this information would be passed off
-  and dealt with elsewhere. Given enough time, we would refactor the parser in
-  this way, but as it is currently functional, these changes have not been high
-  priority.
 
   \subsection{Web Application}
 
@@ -727,15 +714,15 @@ for engineers and what engineers actually found useful. Additionally, we were
 able to see which aspects of the tool had been done well and gain a better
 understand of how these features helped SpaceX engineers. Overall, user testing
 provided a good way to ground our project, by showing us what worked and what
-didn't, so that we could really be sure our tool was useful and make decisions
+did not, so that we could be sure our tool was useful and make decisions
 accordingly. We will focus mostly on the negative feedback, as critical feedback
 was the most useful in moving forward to improve the tool.
 
 A common theme was that our tool was not cohesive. There wasn't enough
-connection between the different sets of data our tool used. Context is really
-important to SpaceX engineers. The way a task behaves by itself isn't really
+connection between the different sets of data our tool used. Context is
+important to SpaceX engineers. The way a task behaves by itself isn't
 enough to understand what is going on with the computer as a whole. Seeing the
-interactions of the entire system is more useful than individual pieces.
+interactions of the entire system is more useful than seeing the behavior of individual pieces.
 
 \section{Methodology} % Wendy
 In order to test our tool, two members of our team would watch an individual
@@ -754,7 +741,7 @@ a page was helpful or unhelpful for their specific workflow.
 
 \section{Feedback on Specific Pages} % Alix
 
-\subsubsection{Main Page}
+\subsubsection{Overview Page}
 
 The main page of KernelShark featured a graphical display of the processes
 running over time and a tabular version of the same information. KernelShark had
@@ -784,12 +771,15 @@ This gives our Overview page the context that SpaceX engineers are looking for.
 It is easy to find something interesting on the graph, and then get the details
 on it via the tabular display.
 
-This figure shows what our Overview page currently looks like:
+\begin{figure}
 \begin{center}
 \includegraphics[width=4in]{overview-page.png}
+\caption{A current screenshot of our Overview page. At the top is a graphical
+representation of the tasks, and the bottom is a tabular view.}
 \end{center}
+\end{figure}
 
-Our Overview page mimics a lot of the good
+Our Overview page mimics the good
 functionality that KernelShark had. Additionally, it allows users to filter the
 tabular list of events on a variety of properties, and jump directly from a
 specific point in the graph to the same point represented in the table. Double
@@ -802,16 +792,20 @@ tool.
 \subsubsection{Task State Page}
 
 With KernelShark, the user could pull out a graphical display of a single
-task and put it on it's own line. However, that was the extent of what
+task and put it on its own line. However, that was the extent of what
 Kernelshark did with regards to individual tasks.
 
 We wanted to take this idea further by providing detailed information and
 statistics about individual tasks. This would give users a different way to view
-their data, hopefully expediting the debugging process.
+their data, which our liaisons thought would be helpful
+in the debugging process.
 
+\begin{figure}
 \begin{center}
 \includegraphics[width=4in]{perProcess-49.png}
+\caption{The first mock-up we created for the Task State page.}
 \end{center}
+\end{figure}
 
 Since there was no existing Task State page, we designed a mockup of it at the
 beginning of the project. It features many different kinds of visualizations,
@@ -820,15 +814,19 @@ what preempted it, a table of what preempted it, pie charts representing the
 data in cycles, and a graphical display of the time series data highlighting 
 the process in the graph. Through user feedback with the liaisons, we found 
 that our mockup included way too much information that SpaceX engineers would 
-not have found useful. Since preemptions are of most interest and are generally
-the indicative of problems, we really wanted to focus on this on the Task State
+not have found useful. Since preemptions are generally
+indicative of problems, we really wanted to focus on this on the Task State
 page.
 
+\begin{figure}
 \begin{center}
 \includegraphics[width=4in]{task-state-page.png}
+\caption{A screenshot of the current version of the Task State page. The three
+colors indicate the three states a task can be in: running, waiting, or blocked.}
 \end{center}
+\end{figure}
 
-On the Task State page, the user is able to type in a particular process, see
+On the Task State page, the user is able to type in a particular task, see
 how many times it was preempted and which processes preempted it, as well as
 view a graph showing how long it was in one of three states: running, waiting,
 or preempted. This design has a minimalistic page view compared to the mockup,
@@ -853,11 +851,13 @@ manually determine where cycles were.
 The Cycles page in our tool lets the user easily find anomalies by splitting up
 the Overview page graph visualization into cycles.
 
-The following image shows our initial mockup of the Cycles page:
-
+\begin{figure}
 \begin{center}
 \includegraphics[width=4in]{oldcycles.png}
+\caption{A mock-up of the Cycles page. Initially only one CPU at a time could be
+displayed, as shown here.}
 \end{center}
+\end{figure}
 
 We received nearly all positive feedback on the Cycles page, and this seems to
 be the most useful aspect of our tool.
@@ -871,6 +871,7 @@ suggested that we add the ability to enter in cycle length and have it display
 cycles based on that. We chose to implement this, taking this page from having
 very specific requirements to being usable with any data.
 
+<<<<<<< HEAD
 %\chapter{Challenges}
 %\section{trace-cmd versioning} % Rachel
 %  As already described, we collect data using a command-line utility called
@@ -910,6 +911,55 @@ very specific requirements to being usable with any data.
 %Having done some profiling, we know that pulling data from IndexedDB is the
 %slowest part of our application, but at this point in time we do not have a way
 %to fix this.
+=======
+\begin{figure}
+\begin{center}
+\includegraphics[width=4in]{cycles-page.png}
+\caption{A screenshot of the current Cycles page. Multiple CPUs can be displayed
+at once using the checkboxes at the top of the screen. The input box on the top
+left allows users to choose their own cycle length.}
+\end{center}
+\end{figure}
+
+\chapter{Challenges}
+\section{trace-cmd versioning} % Rachel
+  As already described, we collect data using a command-line utility called
+  trace-cmd. trace-cmd records various events in the Linux kernel while it runs
+  and then outputs this information into a data file with a particular binary
+  format. trace-cmd also has a ``report'' option, which takes an existing trace
+  file and generates a human readable report of this record. Using this format
+  as a starting point instead of the raw binary format simplifies parsing.
+  We decided to leverage trace-cmd report instead of wrestling with the binary
+  data ourselves. This allowed us to make progress faster and to avoid working
+  on an already solved problem.
+
+  Unfortunately, the format of the file generated by trace-cmd report is
+  dependent on the version of trace-cmd used. For example, the formatting of the
+  ``extra info'' field of a switch event is liable to change. We use this
+  field to identify preemptions. To be able to reliably parse data and add
+  additional information about preemptions, we need our input data to have
+  a consistent format. This creates a dependency on a particular version
+  of trace-cmd. Our liaisons have been using trace-cmd version 2.2.1, so
+  our parser expects input data to be in the format of 2.2.1.
+\section{Selection of charting tool} % Rachel
+  We chose to use web technologies because we felt there was a wealth of
+  charting and UI/UX tools that we could use. We spent several weeks
+  experimenting with different charts for the main page. The main page renders a
+  timeline of running tasks, which is essentially a large number of colored
+  bars. This chart needed to be responsive to zooming and dragging, and to
+  dealing with click events to move to a particular time in the table of events
+  displayed below it.
+\section{Speed} %Wendy
+The data SpaceX will be using with our tool is very large, and becomes even
+larger once we have parsed it. As a result, some parts of the tool load slowly,
+and this is something we are still working on fixing. One main fix we have
+implemented is batch loading the list of events on the main page so that the
+user can start interacting with the tool without waiting to load the entire
+table, especially since all of the table is typically not needed.
+
+Having done some profiling, we know that pulling data from IndexedDB is the
+slowest part of our application, but at this point in time we do not have a way
+to fix this.
 
 \chapter{Future Work}
 \section{Known bugs}
@@ -928,12 +978,27 @@ very specific requirements to being usable with any data.
 
 \end{itemize}
 
-  Additionally, there is some refactoring that could be done to make the code
-  clearer. For most of the semester, we referred to the overview page as the
+
+  \section{Possible refactoring}
+
+  We were considering refactoring the parser to be cleaner. Currently, when we
+  extract each field from an event, we immediately format it as a JSON object.
+  This adds some additional complexity in later calculations and analysis, as
+  the JSON object is a key-value pair, and is generally not very space or time
+  efficient. Instead of this, it would be better to create an intermediate
+  format for the data. We imagine this would look like a separate Java class for
+  tasks and events. Events would be subclassed by their type. All events have
+  the same basic information, like the start time, PID of the task involved, and
+  CPU, but their extra information field varies based on type. We imagine that
+  creating event and task classes would make the parser code much more readable,
+  as after grabbing each field from a line, this information would be passed off
+  and dealt with elsewhere. Given enough time, we would refactor the parser in
+  this way, but as it is currently functional, these changes have not been high
+  priority.
+
+  Additionally, for most of the semester, we referred to the overview page as the
   ``main'' page and the task state page as the ``process'' page before adopting
-  new labels. These old page titles are still used in our code. As described in
-  the parser section of this report, improvements could also be made to its
-  structure.
+  new labels. These old page titles are still used in our code.
 
 \section{Extensions}
   SpaceX developers indicated an interest in interleaving the graphs of multiple
