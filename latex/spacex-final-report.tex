@@ -201,13 +201,28 @@ SpaceX currently uses a tool called KernelShark to visualize this trace data and
   \caption{KernelShark consists of a graphical display of the programs running on a computer over time (top half of screen), as well as a tabular view of the same information, in the form of CPU events such as processes switching, waking, or sleeping (bottom half of screen).}
 \end{figure}
 
-Using only this visualization, it can be difficult to see where the cyclical
-deadlines for the programs begin and end, making it hard to find when something
-misses a deadline. In addition, the tabular display of the CPU events in the
-bottom part of the screen has minimal search functionality and the different
-columns of the table are not sortable. Individual timelines for tasks can be
-displayed below this main chart, but the menu to select a task does not have
-any searching capability and does not order the tasks in any discernible way.
+KernelShark's major failing is that it doesn't provide any tools or methods to
+make it easier to find anomalies, but simple displays the information in one
+kind of view. For example, in order to utilize information about cycles, the
+user must manually recognize where cycles start and end. Then they must manually
+compare all cycles to each other to see if anything is different, by going back
+and forth on the timeline KernelShark provides.
+
+Additionally, KernelShark has a poorly designed UI that does not function as
+expected. The tabular view on the bottom of KernelShark is not searchable, nor
+can the columns be sorted. All lists in KernelShark cannot be sorted, meaning
+that if the user has hundreds of tasks running, they must look through a list
+with hundreds of tasks to find the specific task they want. Additonally, zooming out on
+KernelShark's visual timeline is uninituitive and confusing, even for veteran
+users of the tool.
+
+%Using only this visualization, it can be difficult to see where the cyclical
+%deadlines for the programs begin and end, making it hard to find when something
+%misses a deadline. In addition, the tabular display of the CPU events in the
+%bottom part of the screen has minimal search functionality and the different
+%columns of the table are not sortable. Individual timelines for tasks can be
+%displayed below this main chart, but the menu to select a task does not have
+%any searching capability and does not order the tasks in any discernible way.
 
 \section{Project Goals} % May Lynn
 Our goals for this project were to make it easier and faster for SpaceX engineers to find software problems by creating a tool that visualizes rocket data and highlights problem areas. We have created an improved user experience and provided more visualizations of the data than the old tool. We have called the tool that we created SpaceShark.
