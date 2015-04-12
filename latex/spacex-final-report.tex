@@ -257,7 +257,7 @@ The code for the Load File page can be found in assets/js/loadFile.js.
   \caption{The top chart shows a graphical display of the programs running on the computer over time, and the bottom table shows a tabular version of this same information.}
   \end{figure}
   
-The goal of the Overview Page is to be able to initially look at an overall view of the data, and then later be able to delve deeper into more specific details of the same data that are of particular interest to the user. More specifically the both the graph and the table display the events list and through zooming, dragging, and clicking, we are able to find out more information about a specific event.
+The goal of the Overview page is to be able to initially look at an overall view of the data, and then later be able to delve deeper into more specific details of the same data that are of particular interest to the user. More specifically the both the graph and the table display the events list and through zooming, dragging, and clicking, we are able to find out more information about a specific event.
 
     The code for the Overview Page is found within assets/js/main.js. This file is
     responsible for fetching and loading the data, creating a timeline
@@ -291,7 +291,7 @@ at the top allow the user to toggle which CPUs display.}
   \end{figure}
   
   As tasks run in cyclical patterns on SpaceX rockets, being able to compare
-  across cycles is very important to find strange behavior. The cycles page
+  across cycles is very important to find strange behavior. The Cycles page
   breaks the data into cycles and stacks them, allowing a user to easily scan
   down this chart.
 
@@ -330,7 +330,7 @@ state of the current task over time. The three possible states are preempted,
 waiting, and running.}
 \end{figure}
 
-    The Task State Page display information about a single task. The user is
+    The Task State page display information about a single task. The user is
     able to see interactions between other tasks and this task with a table of
     preemptions. Users can jump to tasks that preempted the current one by
     clicking on a row in this table. Additionally, the task's state over time
@@ -362,7 +362,7 @@ two or more tasks.
 The code for this page is within assets/js/process.js. This page uses
     gantt-chart-d3.js for the chart, and draggabilly.js and packery.js to make the rows of graphs rearrangable.
 
-\subsection{Selection of charting tool} % Rachel
+\subsection{Selection of Graphing Tool} % Rachel
   We chose to use web technologies because we felt there was a wealth of
   charting and UI/UX tools that we could use. We spent several weeks
   experimenting with different charts for the main page. The main page renders a
@@ -377,6 +377,8 @@ The code for this page is within assets/js/process.js. This page uses
   \begin{figure}[H]
     \begin{center}
   \includegraphics[scale=0.18]{architecture_diagram.png}
+  \caption{A visual representation of three portions of our application. Each
+  piece flows into the others, coming together to make our final tool.}
 \end{center}
 \end{figure}
   Our application has three main portions: the raw input, the parser and its
@@ -425,6 +427,7 @@ The code for this page is within assets/js/process.js. This page uses
    
   \begin{figure}
   \includegraphics[scale=0.4]{parserExample.png}
+  \caption{An example line of raw input, with the specific pieces labeled.}
   \end{figure}
 
   These five fields appear for every event, but the content of extra information
@@ -1023,11 +1026,13 @@ left allows users to choose their own cycle length.}
   anomalies across CPUs, as this would cause the timestamps to align. Making
   this possible would require tweaking the graph infrastructure, and creating an
   interface for users to choose if they want the graphs interleaved or not, and
-  which cycle numbers to display. Here is a mockup:
+  which cycle numbers to display.
 
   \begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{futureCycles.png}
+\caption{A mockup of how we envision the new Cycles page could look with
+interleaved graphs.}
 \end{center}
 \end{figure}
 
