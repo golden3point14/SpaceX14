@@ -59,7 +59,6 @@ function openDB()
     var objectStore = xact.objectStore("Tasks");
     var ob = objectStore.get(1); //temporary hard-coded
     ob.onsuccess = function(e) { console.log("e is the JSONtasks");
-                                 // console.log(e.target.result);
                                  JSONtasks = e.target.result;
                                  useDatabaseData();
                                }
