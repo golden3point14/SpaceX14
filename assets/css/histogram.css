@@ -6,22 +6,15 @@
 }
 
 #dc-bar-chart {
-  /*max-height:500px;*/
   overflow-y: auto;
   overflow-x:hidden;
   display: inline-block;
-  /*max-width: 90%;*/
   padding-top: 90px;
 }
 
 .graphtitle {
   font-size: 14px;
   font-weight: bold;
-}
-
-.dc-chart .brush rect.extent {
-  fill: steelblue;
-  fill-opacity: .2;
 }
 
 .dc-row-graph .axis path, .axis line {

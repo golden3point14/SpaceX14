@@ -31,8 +31,6 @@ function openDB() {
                          .objectStore("Events").get(1);
     var tasksRequest = db.transaction(["Tasks"], "readonly")
                          .objectStore("Tasks").get(1);
-    var namesRequest = db.transaction(["AutocompleteNames"], "readonly")
-                         .objectStore("AutocompleteNames").get(1);
 
     eventsRequest.onerror = function(e) {
       console.log("error", e.target.error);
@@ -64,16 +62,6 @@ function openDB() {
       makeAutocompleteList();
       autoCompleteNames();
     }
-
-    namesRequest.onerror = function(e) {
-      console.log("error", e.target.error);
-    }
-
-    namesRequest.onsuccess = function(e) {
-      // autocompleteNames = e.target.result;
-      // autoCompleteNames();
-      // autoSearch();
-    }
   }
 }
 
@@ -81,7 +69,6 @@ function makeAutocompleteList()
 {
   autocompleteNames = [];
   for (var i = 0; i < tasks.length; i++) {
-    //console.log(tasks[i].name);
     autocompleteNames.push(tasks[i].name + ", PID: " + tasks[i].pid);
   }
 }
@@ -172,7 +159,6 @@ function makeGantt(filterString) {
   var currentTaskSwitches = getRelevantSwitches(filterString);
 
   //originally the graphs endpoint (ie timeDomain(totalTime))
-  //totalTime = _.reduce(labeledTaskSwitches, function(sum, next) { return sum += next.processTime }, 0);
   margin = {
     top: 0,
     bottom: 10,
