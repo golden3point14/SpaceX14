@@ -94,15 +94,11 @@ function useDatabaseData()
     pidDimension = value.dimension(function(d) {return d.pid;}),
     typeDimensionPreemp = value.dimension(function(d) {return d.preemptionCount;}),
     typeGroupPreemp = pidDimension.group().reduceSum(function(d) {return d.preemptionCount;}),
-    typeDimensionSleep = value.dimension(function(d) {return d.totalSleeptime;}),
-    typeGroupSleep = pidDimension.group().reduceSum(function(d) {return d.totalSleeptime;}),
     typeDimensionRun = value.dimension(function(d) {return d.totalRuntime;}),
-    typeGroupRun = pidDimension.group().reduceSum(function(d) {return d.totalRuntime;}),
-    typeDimensionWait = value.dimension(function(d) {return d.totalWaittime;}),
-    typeGroupWait = pidDimension.group().reduceSum(function(d) {return d.totalWaittime});
+    typeGroupRun = pidDimension.group().reduceSum(function(d) {return d.totalRuntime;});
 
   var dataTable = dc.dataTable("#process-list");  // the table of processes
-  var histogram = dc.rowChart("#dc-bar-chart");   // the histogram
+  var histogram = dc.rowChart("#dc-bar-chart");   // the bar chart
 
 
   dataTable
