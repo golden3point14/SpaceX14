@@ -447,61 +447,95 @@ The code for this page is within assets/js/process.js. This page uses
   each event, we are able to add a field to a task giving total runtime.
 
   The output is formatted as a JSON file, so that we can easily transfer it to
-  the web application. The JSON formatting has these elements:
+  the web application. The output JSON has the following elements:
 
-  \begin{verbatim}
-  Tasks
-    name (string)
-    pid (int)
-    events (array of ints)
-      Indicies into the Events array to find events belonging to that task
-    preemptedBy (array of strings)
-      Each entry is a task name. Names are not unique.
-    preemptionCount (int)
-      A running total of times preempted.
-    totalRuntime (long)
-    totalWaittime (long)
-    totalSleeptime (long)
+  \begin{center}
+    \begin{tabular}{|l|l|}
+      \hline
+      Tasks      & An array of all tasks seen in the trace\\
+      \hline
+      Events     & An array of all events seen in the trace\\
+      \hline
+      cycleEvents & An array of cycle events generated from user markers\\
+      \hline
+      numCPUs     & Integer, how many CPUs were in the trace\\
+      \hline
+      AutocompleteNames & An array of strings, listing all tasks names\\
+      \hline
+      AutocompleteEventTypes & An array of strings, listing all event types in
+      the trace\\
+      \hline
+    \end{tabular}
+  \end{center}
 
-  Events
-    name (string)
-    pid (int)
-    cpu (int)
-    startTime (double)
-    eventType (string)
-    extraInfo (string)
+  As noted, several of these JSON objects contain other JSON objects: tasks,
+  events, and cycleEvents. A task has the following data.
 
-    FOR SWITCH EVENTS
-      activeName (string)
-      activePID (string)
-      Switch events ``belong'' to the task switching out.
-      Active refers to the task switching in.
+  \begin{center}
+    \begin{tabular}{lll}
+      Task      &        &                                        \\
+      \hline
+      Field           & Type         & Additional description \\
+      \hline
+      name            & string       & \\
+      pid             & int          & \\
+      events          & int array    & Indices into the Events array to find associated events\\
+      preemptedBy     & string array & Names of tasks that preempted this task \\
+      preemptionCount & int          & A running total of times this task was preempted                    \\
+      totalRuntime    & long         & Time this task ran in milliseconds during the trace        \\
+      totalWaittime   & long         & Time this task waited in milliseconds during the trace     \\
+      totalSleeptime  & long         & Time this task slept in milliseconds during the trace     
+    \end{tabular}
+  \end{center}
 
-    FOR PRINT EVENTS
-      userMark (string)
-        this is not currently being used
-      Print events with extraInfo beginning with ``CYCLE_START:''
-        are used in auto generating cycleEvents.
+  An event contains the data in the table below. Switch events contain some additional
+  information. The switch event itself belongs to the task that is being
+  switched out, but from the extra information field we also note which task
+  was being switched in.
 
-  cycleEvents (array of events)
-    startTime (double)
-    extraInfo (string)
-    extraInfo is in the form
-      c0095a18 CYCLE_START: sync_time=728.3360000
-    cycleEvents is left empty if no cycle markers exist.
+  \begin{center}
+    \begin{tabular}{lll}
+      Event      &        &                                        \\
+      \hline
+      Field     & Type   & Additional description                 \\
+      \hline
+      name      & string &                                        \\
+      pid       & int    &                                        \\
+      cpu       & int    &                                        \\
+      startTime & double & Time in milliseconds since kernel boot \\
+      eventType & string &                                        \\
+      extraInfo & string &                                        \\
+      \hline
+      Switch event specific data & & \\
+      \hline
+      activeName & string & The name of the task switching in      \\
+      activePID  & string &                                        \\
+      \hline
+      Print event specific data & & \\
+      \hline
+      userMark   & string & Currently unused
+    \end{tabular}
+  \end{center}
 
-  numCPUs (int)
-    the number of CPUs in the trace.
+  trace-cmd can also pick up ``print'' events. Print events allow users to add
+  their own markers as a task runs. A user can generate a print event by making
+  an addition to the code of a task. We rely on these user-generated markers to
+  identify cycles; print events occur periodically in some of the tasks we are
+  tracing. Print events can also be used for other purposes, so we check to see
+  that the user has annotated them with ``CYCLE\_START'' by looking at the extra
+  information field of a print event. If the extra information field starts with
+  ``CYCLE\_START'', then we create a cycleEvent that contains the following data.
 
-  AutocompleteNames (array of strings)
-    A list of all task names to autocomplete on the Task State page
-    No names are repeated.
-
-  AutocompleteEventTypes (array of strings)
-    A list of all event types to autocomplete on the search bar.
-    No event type names are repeated.
-
-  \end{verbatim}
+  \begin{center}
+    \begin{tabular}{lll}
+      cycleEvent      &        &                                        \\
+      \hline
+      Field     & Type   & Additional description                 \\
+      \hline
+      startTime      & double &                                        \\
+      extraInfo       & string    &                                        \\
+    \end{tabular}
+  \end{center}
 
   To see an example, view Appendix A at the end of the report.
   \newline
