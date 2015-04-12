@@ -27,7 +27,8 @@
 %%% the ``proposal'' document-class option to the hmcclinic class.
 \documentclass{hmcclinic}
 \usepackage{graphicx}
-%\usepackage{glossaries}
+\usepackage{enumerate}
+\usepackage{paralist}
 
 %%% The major difference between the statement of work and a midyear
 %%% or final report is that the statement of work is typeset as an
@@ -1064,12 +1065,16 @@ Events
 }
 \end{verbatim}
 
-%\section{Glossary}
-%\begin{itemize}
-%\item[cycles]
-%\item[CPU]
-%\item[task]
-%\end{itemize}
+\section{Glossary}
+\begin{itemize}[ ]
+\item {\bf Cycle:} The interval between the regular deadlines that tasks running on a SpaceX rocket need to meet.
+\item {\bf CPU:} The Central Processing Unit; the part of the computer that carries out instructions.
+\item {\bf Preemption:} When a running task is blocked by another program starting to run on the same CPU. 
+\item {\bf Priority Inversion:} When a high-priority task is indirectly blocked by something of
+lower priority using a shared resource that the higher priority task needs in
+order to run. 
+\item {\bf Task:} A program running on a computer.
+\end{itemize}
 \end{document}
 
 
