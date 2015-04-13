@@ -247,6 +247,8 @@ Our goals for this project were to make it easier and faster for SpaceX engineer
 
 When the user first loads our tool, they will see the above screen in Figure 2.1. The purpose of the Load file page is to allow the user to choose which JSON file to load as their data, or choose to use the data that was previously used if this is not the user's first time using the tool. This allows the user to easily resume their work if they were previously examining a specific file.
 
+KernelShark did not allow the user to use previously loaded data. SpaceX engineers often want to be able to save and revisit their work at a later time, so this served as an inconvenience to them. 
+
 The code for the Load File page can be found in assets/js/loadFile.js.
 
   \subsection{Overview Page} 
@@ -257,7 +259,7 @@ The code for the Load File page can be found in assets/js/loadFile.js.
   \caption{The top chart shows a graphical display of the programs running on the computer over time, and the bottom table shows a tabular version of this same information.}
   \end{figure}
   
-The goal of the Overview Page is to be able to initially look at an overall view of the data, and then later be able to delve deeper into more specific details of the same data that are of particular interest to the user. More specifically the both the graph and the table display the events list and through zooming, dragging, and clicking, we are able to find out more information about a specific event.
+The goal of the Overview Page is to be able to initially look at an overall view of the data, and then later be able to delve deeper into more specific details of the same data that are of particular interest to the user. More specifically both the graph and the table display the events list and through zooming, dragging, and clicking, we are able to find out more information about a specific event.
 
     The code for the Overview Page is found within assets/js/main.js. This file is
     responsible for fetching and loading the data, creating a timeline
@@ -265,20 +267,13 @@ The goal of the Overview Page is to be able to initially look at an overall view
     lists all events in the trace. The code for the chart and table is found in
     gantt-chart-d3.js and dataTables.scroller.js, respectively.
 
-    The gantt chart plots all the CPU's grabbed from the loaded file on the same graph. It features both double click zooming and mouse scroll zooming and panning. Users can click on a specific point in the graph and the table will update its position and jump to that event. 
+    The gantt chart plots all the CPU's grabbed from the loaded file on the same graph. It features both double click zooming and mouse scroll zooming and panning. Users can click on a specific point in the graph and the table will update its position and jump to that event. KernelShark also had graph plots of the CPU's and included similar features as our tool though implemented in different ways. A user could zoom by clicking and dragging a rectangular box, from left to right, over the graph. This allowed the user to precisely view a specific area of the graph that they wanted. Although this zoom functionality seems helpful, it didn't really follow common zoom functionalities of a modern day desktop application. Zooming out of the graph in KernelShark is also unintuitive; the user can click and drag a rectangular box, from right to left, over the graph. This zooming out technique does not give the user any kind of information about how much the graph is zooming out and can therefore be very confusing to users. Despite this, KernelShark has the functionality of being able to click on a spot in the graph and have the table display that event.
 
 %% Use single click in this section, but need to eventually change our tool to use double click instead!!
-    The columns of the table consist of the CPU, start time, name, PID, event type, and extra info about a particular event. By default, the table is displayed in ascending order from the first events start time to the last events start time. Hovering over any of the table cells highlights that entire row. Users can also click on a event to be redirected to that task on the Task State page. The search feature does multi-column filtering based on the search input. All columns headers are clickable to be ordered in ascending or descending order. Below the table, it shows the total number of entries and the range of entries that the user is currently viewing.
+%% Need to include more information about what specific search functionalities didn't exist in KernelShark?
+    The columns of the table consist of the CPU, start time, name, PID, event type, and extra info about a particular event. By default, the table is displayed in ascending order from the first events start time to the last events start time. Hovering over any of the table cells highlights that entire row. Users can also click on a event to be redirected to that task on the Task State page. The search feature does multi-column filtering based on the search input. All columns headers are clickable to be ordered in ascending or descending order. Below the table, it shows the total number of entries and the range of entries that the user is currently viewing. KernelShark did not yield correct search results. In KernelShark, the user is able to look at a list of tasks and be able to individually plot them on the same graph as the CPU's. To maximize space on the Overview page, we decided to move this feature to its own page (Compare Task Page). 
     
-    The columns of the table consist of the CPU, start time, name, PID, event
-    type, and extra info about a particular event. By default, the table is
-    displayed in ascending order from the first events start time to the last
-    events start time. Hovering over any of the table cells highlights that
-    entire row. Users can also double-click on a event to be redirected to that
-    task on the Task State page. The search feature does multi-column filtering
-    based on the search input. All columns headers are clickable to be ordered
-    in ascending or descending order. Below the table, it shows the total number
-    of entries and the range of entries that the user is currently viewing.
+    KernelShark's main interface looks very similar to the Overview Page, but did not perform the same functionality that our tool does, such as correctly filtering and searching for events.
     
   \subsection{Cycles Page} %Alix
 
