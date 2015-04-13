@@ -195,19 +195,34 @@ The software running on SpaceX rockets has deadlines for tasks at regular interv
 \section{Existing Tool}
 SpaceX currently uses a tool called KernelShark to visualize this trace data and help find any bugs or anomalies. We were informed by our liaisons that this debugging process can take up to several days, so searching for bugs using this tool uses up a lot of valuable time. KernelShark is a single page tool, as seen in Figure 1.1.\\
 
-\begin{figure}[h!]
+\begin{figure}[H]
   \centering
       \includegraphics[width=5in]{kshark-open.png}
   \caption{KernelShark consists of a graphical display of the programs running on a computer over time (top half of screen), as well as a tabular view of the same information, in the form of CPU events such as processes switching, waking, or sleeping (bottom half of screen).}
 \end{figure}
 
-Using only this visualization, it can be difficult to see where the cyclical
-deadlines for the programs begin and end, making it hard to find when something
-misses a deadline. In addition, the tabular display of the CPU events in the
-bottom part of the screen has minimal search functionality and the different
-columns of the table are not sortable. Individual timelines for tasks can be
-displayed below this main chart, but the menu to select a task does not have
-any searching capability and does not order the tasks in any discernible way.
+KernelShark's major failing is that it doesn't provide any tools or methods to
+make it easier to find anomalies, but simple displays the information in one
+kind of view. For example, in order to utilize information about cycles, the
+user must manually recognize where cycles start and end. Then they must manually
+compare all cycles to each other to see if anything is different, by going back
+and forth on the timeline KernelShark provides.
+
+KernelShark has a poorly designed UI that does not function as
+expected. The tabular view on the bottom of KernelShark is not searchable, nor
+can the columns be sorted. All lists in KernelShark cannot be sorted, meaning
+that if the user has hundreds of tasks running, they must look through a list
+with hundreds of tasks to find the specific task they want. Additionally, zooming out on
+KernelShark's visual timeline is uninituitive and confusing, even for veteran
+users of the tool.
+
+%Using only this visualization, it can be difficult to see where the cyclical
+%deadlines for the programs begin and end, making it hard to find when something
+%misses a deadline. In addition, the tabular display of the CPU events in the
+%bottom part of the screen has minimal search functionality and the different
+%columns of the table are not sortable. Individual timelines for tasks can be
+%displayed below this main chart, but the menu to select a task does not have
+%any searching capability and does not order the tasks in any discernible way.
 
 \section{Project Goals} % May Lynn
 Our goals for this project were to make it easier and faster for SpaceX engineers to find software problems by creating a tool that visualizes rocket data and highlights problem areas. We have created an improved user experience and provided more visualizations of the data than the old tool. We have called the tool that we created SpaceShark.
@@ -217,10 +232,18 @@ Our goals for this project were to make it easier and faster for SpaceX engineer
 
   The SpaceShark tool is meant to make it easier for SpaceX engineers to find bugs. We
   accomplish this through a variety of pages that serve unique purposes, giving
-  engineers many options in how they want to approach finding a problem. An overview of the trace data is given on the first page that is displayed to a user, and more detailed information on each task can be found by going to the other pages. First
-  we describe briefly the method we used to make the pages, and then describe
-  the purpose of each page in the tool and how they accomplish their
-  respective goals.
+  engineers many options in how they want to approach finding a problem. 
+  An overview of the trace data is given on the first page that is displayed to a user, 
+  and more detailed information can be found by going to the other
+  pages, including overall statistics, a cyclical breakdown of tasks, task-specific information, and
+  task-to-task comparisons. Through these pages we provide engineers the ability
+  to easily go from viewing their data in it's entirety to viewing specific
+  details of one or two tasks, and vice versa, while providing intuitive visual
+  guidance on where anomalies might exist.
+  
+  Below we will describe the pages in more detail, including the purpose
+  of each page and how they accomplish their respective goals. This will be
+  followed by an example user work flow.
 
   \subsection{Node-Webkit and HTML} %Rachel
     At the beginning of the project, the team researched possible tools and
@@ -239,7 +262,7 @@ Our goals for this project were to make it easier and faster for SpaceX engineer
 
 \subsection{Load File Page}
 
-\begin{figure}[h!]
+\begin{figure}[H]
   \centering
       \includegraphics[scale=0.75]{loadFile-buttons.png}
   \caption{Choose File selects a new file and Use Last Data selects a file that has been previously been loaded into the tool.}
@@ -253,13 +276,15 @@ The code for the Load File page can be found in assets/js/loadFile.js.
 
   \subsection{Overview Page} 
   
-  \begin{figure}[h!]
+  \begin{figure}[H]
   \centering
       \includegraphics[width=5in]{overview-page.png}
   \caption{The top chart shows a graphical display of the programs running on the computer over time, and the bottom table shows a tabular version of this same information.}
   \end{figure}
   
 The goal of the Overview Page is to be able to initially look at an overall view of the data, and then later be able to delve deeper into more specific details of the same data that are of particular interest to the user. More specifically both the graph and the table display the events list and through zooming, dragging, and clicking, we are able to find out more information about a specific event.
+
+The goal of the Overview page is to be able to initially look at an overall view of the data, and then later be able to delve deeper into more specific details of the same data that are of particular interest to the user. More specifically the both the graph and the table display the events list and through zooming, dragging, and clicking, we are able to find out more information about a specific event.
 
     The code for the Overview Page is found within assets/js/main.js. This file is
     responsible for fetching and loading the data, creating a timeline
@@ -277,14 +302,16 @@ The goal of the Overview Page is to be able to initially look at an overall view
     
   \subsection{Cycles Page} %Alix
 
-  \begin{figure}[!htbp]
+  \begin{figure}[H]
   \centering
       \includegraphics[width=5in]{cycles-page.png}
-  \caption{The Cycles page displays graphs of each CPU. The user is allowed to input their own cycle intervals.}
+  \caption{The Cycles page displays graphs of each CPU. The user is allowed to
+  input their own cycle intervals using the box in the top left. The checkboxes
+at the top allow the user to toggle which CPUs display.}
   \end{figure}
   
   As tasks run in cyclical patterns on SpaceX rockets, being able to compare
-  across cycles is very important to find strange behavior. The cycles page
+  across cycles is very important to find strange behavior. The Cycles page
   breaks the data into cycles and stacks them, allowing a user to easily scan
   down this chart.
 
@@ -302,8 +329,12 @@ The goal of the Overview Page is to be able to initially look at an overall view
   
   \subsection{Task Statistics Page} %May Lynn
 
-
+  \begin{figure}[H]
   \includegraphics[width=5in]{task-statistics-page.png}
+  \caption{The left column allows the user to navigate the bar charts, while
+    also serving as a quick thumbnail view of each one. The right side displays
+  the bar chart in a larger, more detailed view.}
+  \end{figure}
 
 The purpose of the Task Statistics page is to give an overview of the preemption count and runtime of each task. The page displays bar charts of the preemption count and runtime for each task, sorted from highest to lowest, as well as the averages and standard deviations of each. This makes it very easy to see if there are any outliers with a large number of preemptions or a long runtime, or to check if a task is behaving as expected.
 
@@ -311,9 +342,15 @@ The code for this page is within assets/js/preemptionChart.js and assets/js/runt
 
   \subsection{Task State}
 
+  \begin{figure}[H]
   \includegraphics[scale=0.25]{task-state-page.png}
-  
-    The Task State Page display information about a single task. The user is
+  \caption{The top of the Task State page displays a navigable table of tasks
+  the preempted the current task. The bottom half is a graph represented the
+state of the current task over time. The three possible states are preempted,
+waiting, and running.}
+\end{figure}
+
+    The Task State page display information about a single task. The user is
     able to see interactions between other tasks and this task with a table of
     preemptions. Users can jump to tasks that preempted the current one by
     clicking on a row in this table. Additionally, the task's state over time
@@ -328,9 +365,13 @@ The code for this page is within assets/js/preemptionChart.js and assets/js/runt
     Typeahead.
   
   \subsection{Compare Tasks} %Wendy
-
+  
+  \begin{figure}[H]
   \includegraphics[scale=0.25]{compare-page.png}
- 
+  \caption{The Compare page vertically displays the Task State graphs for
+  multiple tasks. They can be added, reordered, or removed all from this page.}
+  \end{figure}
+
 The Compare Tasks page allows users to view the same graph as the Task State
 page, but for multiple tasks. Tasks can be reordered so that specific tasks can
 be compared side by side for the same time period. This provides similar
@@ -341,7 +382,7 @@ two or more tasks.
 The code for this page is within assets/js/process.js. This page uses
     gantt-chart-d3.js for the chart, and draggabilly.js and packery.js to make the rows of graphs rearrangable.
 
-\subsection{Selection of charting tool} % Rachel
+\subsection{Selection of Graphing Tool} % Rachel
   We chose to use web technologies because we felt there was a wealth of
   charting and UI/UX tools that we could use. We spent several weeks
   experimenting with different charts for the main page. The main page renders a
@@ -353,13 +394,22 @@ The code for this page is within assets/js/process.js. This page uses
 \section{Architecture} % Wendy
 
   \subsection{Overview}
-\begin{center}
-  \includegraphics[scale=0.18]{architecture_diagram.png}
-\end{center}
-  Our application has three main portions: the raw input, the parser and its
-  output, and the web-based desktop application. The sections are modular, and
+
+  Our application has three main portions: the raw input, the parser,
+  and the web-based desktop application. The sections are modular, and
   as long as output/inputs remain the same, internal changes to one section will
-  not affect the other at all.
+  not affect the other at all. Below we will discuss in more detail how each
+  section works and how they relate to come together as our final application.
+  Figure 2.7 provides a visual representation of the flow of our application
+  while also displaying its modular parts.
+  
+  \begin{figure}[H]
+    \begin{center}
+  \includegraphics[scale=0.18]{architecture_diagram.png}
+  \caption{A visual representation of three portions of our application. Each
+  piece flows into the others while remaining modular, coming together to make our final tool.}
+\end{center}
+\end{figure}
 
   \subsection{Trace-cmd}
 
@@ -400,7 +450,10 @@ The code for this page is within assets/js/process.js. This page uses
   CPUs in the captured trace. Each line in the remainder of the file is a
   single recorded event with a number of fields separated by whitespace.
    
+  \begin{figure}
   \includegraphics[scale=0.4]{parserExample.png}
+  \caption{An example line of raw input, with the specific pieces labeled.}
+  \end{figure}
 
   These five fields appear for every event, but the content of extra information
   varies based on the type of event. The units on the time stamp of the event,
@@ -526,8 +579,10 @@ The code for this page is within assets/js/process.js. This page uses
 
   The application takes the JSON file and loads it into IndexedDB, a
   browser-based database. IndexedDB is built into most browsers, including
-  node-webkit, which actually runs Chromium. More information on the details of IndexedDB can be found here
-  (https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB\_API).
+  node-webkit, which actually runs Chromium. More information on the details of IndexedDB can be found here:
+\begin{center}
+  https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB\_API
+\end{center}
   We use IndexedDB to store data between pages. It also
   maintains storage between application sessions. Therefore, we are able to have
   the choice to load the same file again, without reselecting it. If the user
@@ -715,13 +770,17 @@ DataTables also makes use of Local Storage in order to save the scroll position 
 
 \section{Packaging and Distribution}
   Our code is publicly available on Github at
-  github.com/golden3point14/SpaceX14. The README of this repository provides a link to download a
+\begin{center}
+  github.com/golden3point14/SpaceX14
+\end{center}
+The README of this repository provides a link to download a
   64 bit Linux version of the application. This release is a zip file that
   contains an executable, the parser, a short wrapper script, and two additional
   files that are necessary to get the executable to run: nw.pak and icudlt.dat.
   The short wrapper script is called spaceshark and has the following usage:
 
-\begin{verbatim}spaceshark [-p | --parse filename] [-o | --open filename] [ -h | --help]\end{verbatim}
+\begin{verbatim}spaceshark [-p | --parse filename] [-o | --open filename] 
+           [ -h | --help]\end{verbatim}
 
   The first option allows the user to pass an unparsed trace file to the
   application. The parser will be run and output a JSON file, which will be
@@ -756,6 +815,10 @@ connection between the different sets of data our tool used. Context is
 important to SpaceX engineers. The way a task behaves by itself isn't
 enough to understand what is going on with the computer as a whole. Seeing the
 interactions of the entire system is more useful than seeing the behavior of individual pieces.
+
+Below we will cover our methodology, feedback for specific pages, and how that
+feedback shaped
+the changes we made, leading to the current version of SpaceShark.
 
 \section{Methodology} % Wendy
 In order to test our tool, two members of our team would watch an individual
@@ -804,7 +867,7 @@ This gives our Overview page the context that SpaceX engineers are looking for.
 It is easy to find something interesting on the graph, and then get the details
 on it via the tabular display.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{overview-page.png}
 \caption{A current screenshot of our Overview page. At the top is a graphical
@@ -833,7 +896,7 @@ statistics about individual tasks. This would give users a different way to view
 their data, which our liaisons thought would be helpful
 in the debugging process.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{perProcess-49.png}
 \caption{The first mock-up we created for the Task State page.}
@@ -851,7 +914,7 @@ not have found useful. Since preemptions are generally
 indicative of problems, we really wanted to focus on this on the Task State
 page.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{task-state-page.png}
 \caption{A screenshot of the current version of the Task State page. The three
@@ -884,7 +947,7 @@ manually determine where cycles were.
 The Cycles page in our tool lets the user easily find anomalies by splitting up
 the Overview page graph visualization into cycles.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{oldcycles.png}
 \caption{A mock-up of the Cycles page. Initially only one CPU at a time could be
@@ -904,7 +967,7 @@ suggested that we add the ability to enter in cycle length and have it display
 cycles based on that. We chose to implement this, taking this page from having
 very specific requirements to being usable with any data.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{cycles-page.png}
 \caption{A screenshot of the current Cycles page. Multiple CPUs can be displayed
@@ -998,11 +1061,15 @@ left allows users to choose their own cycle length.}
   anomalies across CPUs, as this would cause the timestamps to align. Making
   this possible would require tweaking the graph infrastructure, and creating an
   interface for users to choose if they want the graphs interleaved or not, and
-  which cycle numbers to display. Here is a mockup:
+  which cycle numbers to display.
 
+  \begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{futureCycles.png}
+\caption{A mockup of how we envision the new Cycles page could look with
+interleaved graphs.}
 \end{center}
+\end{figure}
 
 It is also possible that the loaded files will contain more than two CPU's. For clear visual purposes, we only want to be displaying two CPU's graphs on the Cycles page. In the case that we have more than two CPU's, we would hope to be able to paginate the graphs. This does not seem to be a crucial extension of our work, since our liaisons have specifically told us that they generally expect to only have two CPU's in their trace files.
 
@@ -1042,17 +1109,29 @@ substitute for IndexedDB that is faster.
 \begin{verbatim}
 Tasks
 {
-  [name: python, pid: 34602, events: [1,5,8,23,52...], preemptedBy: [kworker,
-  systemhousekeeper,...], preemptionCount: 564, totalRuntime: 10000,
-  totalWaittime: 20386, totalSleeptime: 52], [name:...],...   
+  [name: python, pid: 34602, events: [1,5,8,23,52...], 
+   preemptedBy: [kworker, systemhousekeeper,...], 
+   preemptionCount: 564, totalRuntime: 10000,
+   totalWaittime: 20386, totalSleeptime: 52], [name:...],
+
+   ...   
 }
 
 Events
 {
-  [name: python, pid: 34602, cpu: 2, startTime: 12500, eventType: sched_switch,
-    extraInfo: prev_comm=trace-cmd prev_pid=34602 prev prio = 120 prev_state=S
-    ==> next_comm=swapper/2 next_pid=300 next_prio=120 kworker-2418 [001]
-  1681.955177, activeName: kworker, activePID=300], [name:...], ...
+  [name: python, 
+   pid: 34602, 
+   cpu: 2, startTime: 12500, 
+   eventType: sched_switch,
+   extraInfo: prev_comm=trace-cmd prev_pid=34602 
+       prev prio = 120 prev_state=S ==> next_comm=swapper/2 
+       next_pid=300 next_prio=120 kworker-2418 [001]
+       1681.955177, 
+   activeName: kworker, 
+   activePID=300], 
+   [name:...], 
+
+   ...
 }
 \end{verbatim}
 
