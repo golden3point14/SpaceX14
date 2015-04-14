@@ -427,25 +427,6 @@ two or more tasks. Users can plot graphs by either typing in a task name at the 
   application, but the team believes the Cycles page and Task State page will
   prove especially useful.
 
-\subsection{Selection of Graphing Tool} % Rachel
-  Many pages render a timeline of running tasks which users can interact
-  with by panning and zooming. This chart is critical, as a bug manifests
-  itself as a task running at an unexpected time, or failing to run at a
-  particular time. We spent several weeks experimenting with different
-  javascript charts, including timeline.js, vis.js and gantt-chart-d3.js,
-  to find one that would be suitably fast and easy for us to add new
-  features to. Our main selection criteria were speed, zooming and dragging
-  capabilities, and either built-in or easy to add handlers for user clicks
-  on portions of the chart. We decided to use gantt-chart-d3.js because it
-  rendered more quickly and was more responsive than the other charts. It
-  also came with dragging capabilities, and the team saw that hovertext and
-  click handling could easily be added. Zooming on d3 charts should be
-  available out of the box, but did not function as expected because our y scale
-  is ordinal rather than numeric and should not be rescaled. The team
-  ended up writing a custom zoom function to handle this and other issues
-  associated with syncing the zoom level of  multiple charts on the same page.
-
-
 \section{Architecture} % Wendy
 
   \subsection{Overview}
@@ -733,6 +714,25 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   to other functions for this. Each page has its own specific JavaScript file,
   and then there are a number of shared files that multiple or all pages use. We
   have used a number of JavaScript libraries.
+  
+  \subsubsection{Selection of Graphing Tool} % Rachel
+  Many pages render a timeline of running tasks which users can interact
+  with by panning and zooming. This chart is critical, as a bug manifests
+  itself as a task running at an unexpected time, or failing to run at a
+  particular time. We spent several weeks experimenting with different
+  javascript charts, including timeline.js, vis.js and gantt-chart-d3.js,
+  to find one that would be suitably fast and easy for us to add new
+  features to. Our main selection criteria were speed, zooming and dragging
+  capabilities, and either built-in or easy to add handlers for user clicks
+  on portions of the chart. We decided to use gantt-chart-d3.js because it
+  rendered more quickly and was more responsive than the other charts. It
+  also came with dragging capabilities, and the team saw that hovertext and
+  click handling could easily be added. Zooming on d3 charts should be
+  available out of the box, but did not function as expected because our y scale
+  is ordinal rather than numeric and should not be rescaled. The team
+  ended up writing a custom zoom function to handle this and other issues
+  associated with syncing the zoom level of  multiple charts on the same page.
+  
   \subsubsection{Creating a Timeline}
   On the overview, cycles, task state, and task compare page, the same type of
   chart is used. The chart shows either which task is running at a given time,
