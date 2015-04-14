@@ -191,9 +191,14 @@ inversion} occurs when a high-priority task is indirectly blocked by something o
 lower priority using a shared resource that the higher priority task needs in
 order to run. 
 \end{itemize}
+
+There is a glossary of terms in the Appendix.
+
 The software running on SpaceX rockets has deadlines for tasks at regular intervals because timing is very important in rocket flight, so when there is a break in this cyclical pattern of processes this means that there is likely a bug in the software. These cyclical patterns of processes are called ``cycles''.
 \section{Existing Tool}
-SpaceX currently uses a tool called KernelShark to visualize this trace data and help find any bugs or anomalies. We were informed by our liaisons that this debugging process can take up to several days, so searching for bugs using this tool uses up a lot of valuable time. KernelShark is a single page tool, as seen in Figure 1.1.\\
+SpaceX currently uses a tool called KernelShark to visualize trace data and help find any bugs or anomalies. 
+We were informed by our liaisons that this debugging process can take up to several days, 
+which is an inefficient use of engineer's time. KernelShark is a single page tool, as seen in Figure 1.1.\\
 
 \begin{figure}[H]
   \centering
@@ -202,8 +207,10 @@ SpaceX currently uses a tool called KernelShark to visualize this trace data and
 \end{figure}
 
 KernelShark's major failing is that it doesn't provide any tools or methods to
-make it easier to find anomalies, but simple displays the information in one
-kind of view. For example, in order to utilize information about cycles, the
+make it easier to find anomalies, but simply displays the information in a
+single
+kind of view. For example, KernelShark does not provide any data on cycles. 
+In order to utilize information about cycles, the
 user must manually recognize where cycles start and end. Then they must manually
 compare all cycles to each other to see if anything is different, by going back
 and forth on the timeline KernelShark provides.
@@ -235,7 +242,7 @@ Our goals for this project were to make it easier and faster for SpaceX engineer
   engineers many options in how they want to approach finding a problem. 
   An overview of the trace data is given on the first page that is displayed to a user, 
   and more detailed information can be found by going to the other
-  pages, including overall statistics, a cyclical breakdown of tasks, task-specific information, and
+  pages, including overall statistics, a cyclical breakdown of events, task-specific information, and
   task-to-task comparisons. Through these pages we provide engineers the ability
   to easily go from viewing their data in it's entirety to viewing specific
   details of one or two tasks, and vice versa, while providing intuitive visual
@@ -245,30 +252,21 @@ Our goals for this project were to make it easier and faster for SpaceX engineer
   of each page and how they accomplish their respective goals. This will be
   followed by an example user work flow.
 
-  \subsection{Node-Webkit and HTML} %Rachel
-    At the beginning of the project, the team researched possible tools and
-    technologies for creating our application. One possibility was simply
-    extending KernelShark, the existing tool. After looking at the code for
-    this, a large number of C files, we decided it would be easier to
-    reimplement and extend it in something else; understanding the code base
-    would take a very long time, and we felt other languages had better
-    UI and charting libraries. We looked into Java UI libraries for
-    desktop applications, as well as web-technology based charting libraries.
-    During this research, we found node-webkit, which allows for
-    HTML/CSS/JavaScript applications to be packaged and run as desktop
-    applications with no reliance on the internet. As this allowed us to take
-    advantage of many existing UI widgit and charting libraries that many team
-    members were familiar with, we decided to take this route.
-
 \subsection{Load File Page}
 
 \begin{figure}[H]
   \centering
       \includegraphics[scale=0.75]{loadFile-buttons.png}
-  \caption{Choose File selects a new file and Use Last Data selects a file that has been previously been loaded into the tool.}
+  \caption{Choose File selects a new file and Use Last Data selects the file
+  that was most recently loaded into the tool. The Use Last Data option will not
+display if no data has ever been loaded.}
   \end{figure}
 
-When the user first loads our tool, they will see the above screen in Figure 2.1. The purpose of the Load file page is to allow the user to choose which JSON file to load as their data, or choose to use the data that was previously used if this is not the user's first time using the tool. This allows the user to easily resume their work if they were previously examining a specific file.
+When the user first loads SpaceShark, they will see the above screen in Figure
+2.1. The purpose of the Load File page is to allow the user to choose which JSON file to load as their data, 
+or choose to use the data that was most recently used if this is not the user's first time using 
+the tool. In addition, it also reloads the same state each page was in during
+the user's previous session. This allows the user to easily resume their work if they were previously examining a specific file.
 
 KernelShark did not allow the user to use previously loaded data. SpaceX engineers often want to be able to save and revisit their work at a later time, so this served as an inconvenience to them. 
 
@@ -282,23 +280,46 @@ The code for the Load File page can be found in assets/js/loadFile.js.
   \caption{The top chart shows a graphical display of the programs running on the computer over time, and the bottom table shows a tabular version of this same information.}
   \end{figure}
   
-The goal of the Overview Page is to be able to initially look at an overall view of the data, and then later be able to delve deeper into more specific details of the same data that are of particular interest to the user. More specifically both the graph and the table display the events list and through zooming, dragging, and clicking, we are able to find out more information about a specific event.
+The goal of the Overview page is to be able to initially look at an overall view
+of the data, and then be able to delve deeper into more specific details of the
+same data that are of particular interest to the user. Both
+the graph and the table display the events list and through zooming, dragging,
+and clicking, we are able to find out more information about a specific event.
 
-The goal of the Overview page is to be able to initially look at an overall view of the data, and then later be able to delve deeper into more specific details of the same data that are of particular interest to the user. More specifically the both the graph and the table display the events list and through zooming, dragging, and clicking, we are able to find out more information about a specific event.
+    The gantt chart plots all the CPUs from the loaded file onto the same graph.
+    It features both double click zooming and mouse scroll zooming. The graph
+    can also be horizontally dragged in order to pan.
+    Users can click on a specific point in the graph and the table will update its position and jump to that event. 
+    
+    KernelShark also had graph plots of the CPU's and included similar features as our tool though implemented in different ways. A user could zoom by clicking and dragging a rectangular box, from left to right, over the graph. This allowed the user to precisely view a specific area of the graph that they wanted. Although this zoom functionality seems helpful, it didn't really follow common zoom functionalities of a modern day desktop application. Zooming out of the graph in KernelShark is also unintuitive; the user can click and drag a rectangular box, from right to left, over the graph. This zooming out technique does not give the user any kind of information about how much the graph is zooming out and can therefore be very confusing to users. Despite this, KernelShark has the functionality of being able to click on a spot in the graph and have the table display that event.
 
-    The code for the Overview Page is found within assets/js/main.js. This file is
+%% Use single click in this section, but need to eventually change our tool to use double click instead!!
+%% Need to include more information about what specific search functionalities didn't exist in KernelShark?
+    The columns of the table consist of the CPU, start time, name, PID, event type, and extra info about a particular event. 
+    By default, the table is displayed in ascending order from the first events start time
+    to the last events start time. Hovering over any of the table cells highlights that entire row.
+    Users can also click on an event to be redirected to that task on the Task State page. 
+    The search feature does multi-column filtering based on the search input. 
+    The data can be sorted on any column in ascending or descending order by
+  clicking the respective column header.
+  Below the table, it shows the total number of entries and the range of entries that the user is currently viewing.
+  Additionally, the search bar allows for users to search for specific event
+  types or task names to minimize what is displayed in the table.
+
+  While KernelShark had a search feature, it did not yield correct search
+  results. KernelShark allowed the user to look at a list of tasks and individually plot them on the same graph as the CPUs. To maximize space on the Overview page, we decided to move this feature to its own page (Compare Task Page). 
+
+    KernelShark's main interface looks very similar to the Overview Page, but
+    did not perform the same functionality that our tool does, such as correctly
+    filtering and searching for events, and allowing users to reorder their
+    data.
+
+
+    The code for the Overview page is found within assets/js/main.js. This file is
     responsible for fetching and loading the data, creating a timeline
     visualization that the user can pan and zoom into, and creating a table that
     lists all events in the trace. The code for the chart and table is found in
     gantt-chart-d3.js and dataTables.scroller.js, respectively.
-
-    The gantt chart plots all the CPU's grabbed from the loaded file on the same graph. It features both double click zooming and mouse scroll zooming and panning. Users can click on a specific point in the graph and the table will update its position and jump to that event. KernelShark also had graph plots of the CPU's and included similar features as our tool though implemented in different ways. A user could zoom by clicking and dragging a rectangular box, from left to right, over the graph. This allowed the user to precisely view a specific area of the graph that they wanted. Although this zoom functionality seems helpful, it didn't really follow common zoom functionalities of a modern day desktop application. Zooming out of the graph in KernelShark is also unintuitive; the user can click and drag a rectangular box, from right to left, over the graph. This zooming out technique does not give the user any kind of information about how much the graph is zooming out and can therefore be very confusing to users. Despite this, KernelShark has the functionality of being able to click on a spot in the graph and have the table display that event.
-
-%% Use single click in this section, but need to eventually change our tool to use double click instead!!
-%% Need to include more information about what specific search functionalities didn't exist in KernelShark?
-    The columns of the table consist of the CPU, start time, name, PID, event type, and extra info about a particular event. By default, the table is displayed in ascending order from the first events start time to the last events start time. Hovering over any of the table cells highlights that entire row. Users can also click on a event to be redirected to that task on the Task State page. The search feature does multi-column filtering based on the search input. All columns headers are clickable to be ordered in ascending or descending order. Below the table, it shows the total number of entries and the range of entries that the user is currently viewing. KernelShark did not yield correct search results. In KernelShark, the user is able to look at a list of tasks and be able to individually plot them on the same graph as the CPU's. To maximize space on the Overview page, we decided to move this feature to its own page (Compare Task Page). 
-    
-    KernelShark's main interface looks very similar to the Overview Page, but did not perform the same functionality that our tool does, such as correctly filtering and searching for events.
     
   \subsection{Cycles Page} %Alix
 
@@ -350,7 +371,7 @@ state of the current task over time. The three possible states are preempted,
 waiting, and running.}
 \end{figure}
 
-    The Task State page display information about a single task. The user is
+    The Task State page displays information about a single task. The user is
     able to see interactions between other tasks and this task with a table of
     preemptions. Users can jump to tasks that preempted the current one by
     clicking on a row in this table. Additionally, the task's state over time
@@ -574,6 +595,22 @@ The code for this page is within assets/js/process.js. This page uses
   type of output so that they can view their data in our tool.
 
   \subsection{Web Application}
+
+  
+  \subsubsection{Node-Webkit and HTML} %Rachel
+    At the beginning of the project, the team researched possible tools and
+    technologies for creating our application. One possibility was simply
+    extending KernelShark, the existing tool. After looking at the code for
+    this, a large number of C files, we decided it would be easier to
+    reimplement and extend it in something else; understanding the code base
+    would take a very long time, and we felt other languages had better
+    UI and charting libraries. We looked into Java UI libraries for
+    desktop applications, as well as web-technology based charting libraries.
+    During this research, we found node-webkit, which allows for
+    HTML/CSS/JavaScript applications to be packaged and run as desktop
+    applications with no reliance on the internet. As this allowed us to take
+    advantage of many existing UI widgit and charting libraries that many team
+    members were familiar with, we decided to take this route.
 
   \subsubsection{IndexedDB}
 
