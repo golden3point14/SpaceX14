@@ -324,9 +324,7 @@ at the top allow the user to toggle which CPUs display.}
   across cycles is very important to find strange behavior. The Cycles page
   breaks the data into cycles and stacks them, allowing a user to easily scan
   down this chart.
-
-    The code for the cycles page is within assets/js/cyclesPage.js. This once again
-    uses gantt-chart-d3.js to create the visualization after fetching the data.
+    
     The page also has buttons to toggle on and off different CPUs, which removes
     or adds charts for these CPUs, rescaling other charts to use the full window
     space. Cycles are precomputed if print events exist within the trace. If
@@ -340,6 +338,9 @@ at the top allow the user to toggle which CPUs display.}
     Zooming in and out works exactly like as on the Overview page. All CPU graphs are contained in one single .svg file, which is why the zooming works simultaneously over both graphs.
     
     The Cycles page did not exist in KernelShark. In addition, KernelShark did not give users the option of breaking the main graph into cycles.
+    
+        The code for the cycles page is within assets/js/cyclesPage.js. This once again
+    uses gantt-chart-d3.js to create the visualization after fetching the data.
   
   \subsection{Task Statistics Page} %May Lynn
 
@@ -352,9 +353,9 @@ at the top allow the user to toggle which CPUs display.}
 
 The purpose of the Task Statistics page is to give an overview of the preemption count and runtime of each task. The page displays bar charts of the preemption count and runtime for each task, sorted from highest to lowest, as well as the averages and standard deviations of each. This makes it very easy to see if there are any outliers with a large number of preemptions or a long runtime, or to check if a task is behaving as expected.
 
-The code for this page is within assets/js/preemptionChart.js and assets/js/runtimeChart.js. The bar graphs use the dc.js dimensional charting library.
-
 All bars in the bar graph have distinct colors to differentiate tasks. The user can click on any task within the bar graph and will be redirected to the Task State page displaying more information about that task. KernelShark did not do analyze and manipulate trace data, so it did not include any task statistics. 
+
+The code for this page is within assets/js/preemptionChart.js and assets/js/runtimeChart.js. The bar graphs use the dc.js dimensional charting library.
 
   \subsection{Task State}
 
@@ -374,13 +375,13 @@ waiting, and running.}
     running and labeled with the colors red, beige, and green respectively. 
     The graph on the bottom half of the page functions the same as the graphs on the Overview (Section 2.1.3), Cycles (Section 2.1.4), and Compare Tasks page (Section 2.1.7). The user can click the ``+ Compare'' button at the bottom to add this task graph to a series of side-by-side graphs for comparison, which
     is described in Section 2.1.7 Compare Tasks.
-
-    The code for this page is within assets/js/process.js. This page uses
+    
+    One of the main downsides of KernelShark is that it did not give the user the option to look at the data on a task level. Being able to look at specific tasks and see how many times a given task preempted other tasks is a very important feature to SpaceX.
+    
+        The code for this page is within assets/js/process.js. This page uses
     gantt-chart-d3.js for the chart and dataScroller.js to create the table of
     preemptions. The search box autocompletes task names using Twitter
     Typeahead.
-    
-    One of the main downsides of KernelShark is that it did not give the user the option to look at the data on a task level. Being able to look at specific tasks and see how many times a given task preempted other tasks is a very important feature to SpaceX.
   
   \subsection{Compare Tasks} %Wendy
   
@@ -396,11 +397,11 @@ be compared side by side for the same time period. This provides similar
 functionality as the Task State page but with the additional benefit of
 comparisons between tasks. This makes it simple to examine interactions between
 two or more tasks. Users can plot graphs by either typing in a task name at the top of the page, or first viewing that task on the Task State page and clicking the "+ Compare" button. In both cases, the user can start typing in the text box and then will be given a list of possible task names that they might be interested in.
-
-The code for this page is within assets/js/process.js. This page uses
-    gantt-chart-d3.js for the chart, and draggabilly.js and packery.js to make the rows of graphs rearrangable.
     
     In KernelShark, the user is able to view a list of tasks and select which ones they want to graph. These selected graphs were plotted on the same graph as the CPU's, as stated before in Section 2.1.3. CPU graphs are too general to be compared with specific task graphs, so plotting these graphs on different pages seemed like a logical idea. Our tool has the added functionality of being able to easily remove task graphs by clicking the "Remove Task" button. The user can start typing in a name of a task, and then see a list of possible tasks based on user input. This is much faster and easier than going through a long list of tasks.
+    
+    The code for this page is within assets/js/process.js. This page uses
+    gantt-chart-d3.js for the chart, and draggabilly.js and packery.js to make the rows of graphs rearrangable.
     
 \subsection{Example User Flow}
   It should be noted that the SpaceX debugging process involves several steps,
