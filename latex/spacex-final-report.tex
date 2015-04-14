@@ -400,14 +400,48 @@ The code for this page is within assets/js/process.js. This page uses
     
     In KernelShark, the user is able to view a list of tasks and select which ones they want to graph. These selected graphs were plotted on the same graph as the CPU's, as stated before in Section 2.1.3. CPU graphs are too general to be compared with specific task graphs, so plotting these graphs on different pages seemed like a logical idea. Our tool has the added functionality of being able to easily remove task graphs by clicking the "Remove Task" button. The user can start typing in a name of a task, and then see a list of possible tasks based on user input. This is much faster and easier than going through a long list of tasks.
     
+\subsection{Example User Flow}
+  It should be noted that the SpaceX debugging process involves several steps,
+  and an engineer likely has an inkling that tasks are not running in the
+  pattern expected before taking a trace. Users will navigate through the tool
+  differently depending on what level of information they already have.
+
+  For example, if a user already has a hunch that a particular task is involved
+  in the problem, they could immediately navigate to the Task State page. From
+  this, they are able to see if the task preempted or was preempted by anything
+  at an unexpected time. These related tasks are displayed in the table of
+  preemptions, or on hovering over a preemption event on the graph below it.
+
+  If a user does not have any suspicions about what happened, they could instead
+  navigate to the Cycles page. By comparing the patterns of tasks run during
+  different cycles, it should be easy to see an abnormal sequence of tasks. The
+  user can then hover over this sequence on the chart and read which tasks are
+  running. A user might also navigate to the Task Statistics page to quickly see
+  if any task is being preempted far more than expected. This task could then be
+  searched on the Task State page, as described above.
+
+  There are many other possible ways users might navigate through the
+  application, but the team believes the Cycles page and Task State page will
+  prove especially useful.
+
 \subsection{Selection of Graphing Tool} % Rachel
-  We chose to use web technologies because we felt there was a wealth of
-  charting and UI/UX tools that we could use. We spent several weeks
-  experimenting with different charts for the main page. The main page renders a
-  timeline of running tasks, which is essentially a large number of colored
-  bars. This chart needed to be responsive to zooming and dragging, and to
-  dealing with click events to move to a particular time in the table of events
-  displayed below it.
+  Many pages render a timeline of running tasks which users can interact
+  with by panning and zooming. This chart is critical, as a bug manifests
+  itself as a task running at an unexpected time, or failing to run at a
+  particular time. We spent several weeks experimenting with different
+  javascript charts, including timeline.js, vis.js and gantt-chart-d3.js,
+  to find one that would be suitably fast and easy for us to add new
+  features to. Our main selection criteria were speed, zooming and dragging
+  capabilities, and either built-in or easy to add handlers for user clicks
+  on portions of the chart. We decided to use gantt-chart-d3.js because it
+  rendered more quickly and was more responsive than the other charts. It
+  also came with dragging capabilities, and the team saw that hovertext and
+  click handling could easily be added. Zooming on d3 charts should be
+  available out of the box, but did not function as expected because our y scale
+  is ordinal rather than numeric and should not be rescaled. The team
+  ended up writing a custom zoom function to handle this and other issues
+  associated with syncing the zoom level of  multiple charts on the same page.
+
 
 \section{Architecture} % Wendy
 
