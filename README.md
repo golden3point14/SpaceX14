@@ -12,16 +12,25 @@ The parser relies on trace-cmd version 2.2.1.2.1
 
 ## Instructions
 
-The 64 bit Linux release contains several files: the parser, the application executable,
-two auxillary files necessary for the application to run, and a wrapper script.
+The 64-bit Linux release contains several files: the parser, the application
+executable, two auxillary files necessary for the application to run, and a
+wrapper script.
 
-The parser can be run without the application with `java -jar spaceshark.jar <filename>`.
-To run the application, type `./spaceshark` within the unzipped directory. The application
-can also be run with an unparsed .dat file using `./spaceshark -p <filename>`, or with
-a parsed JSON file using `./spaceshark -o <filename>`. 
+To collect trace data, use `trace-cmd record` to generate a .dat file.
+The application assumes that you have included scheduling events with the flag
+`-e sched`. More information on using `trace-cmd` is available
+[here](https://lwn.net/Articles/410200/).
 
-If instead you have cloned the repository, you can run the parser and application with the
-following steps.
+SpaceShark takes a JSON file as input, not a .dat file. To parse a .dat file
+into a JSON file, run `java -jar spaceshark.jar <filename>` within the unzipped
+directory. Alternately, SpaceShark can be opened with a .dat file using
+`./spaceshark -p <filename>`.
+
+Spaceshark can also be run simply with `./spaceshark` or `./spaceshark -o
+<filename>`, which opens the application with an already parsed JSON file.
+
+If instead you have cloned the repository, you can run the parser and
+application with the following steps.
 
 ### Parser
 The code for the parser is located in parser.java. A filename to a .dat can be optionally
