@@ -140,25 +140,13 @@ function setColoringOfTasks() {
   for (var i = 0; i < JSONtasks.length; i++) {
     
     if (JSONtasks[i].name !== '<idle>') {
-
-      // trying to mark cycles
-      if (JSONevents[JSONtasks[i].events[0]].eventType == "print") {
-
-        var style = document.createElement('style');
-        style.type = 'text/css';
-        style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: red; }';
-        document.getElementsByTagName('head')[0].appendChild(style);
-      } 
-
       // generating colors for non-cycle, non idle events
-      else {
-        var style = document.createElement('style');
-        style.type = 'text/css';
-        var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
-        style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: #' + color + '; }';
-      
-        document.getElementsByTagName('head')[0].appendChild(style);
-      }
+      var style = document.createElement('style');
+      style.type = 'text/css';
+      var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
+      style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: #' + color + '; }';
+    
+      document.getElementsByTagName('head')[0].appendChild(style);
     } 
   }
 }
