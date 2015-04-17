@@ -190,9 +190,12 @@ function makeGantt(filterString) {
   });
 
   $container.append(div).packery( 'appended', div);
+  //div.style.transition = "-webkit-transform 0.4s, opacity 1s";
+  //div.style["-webkit-transition"] = "-webkit-transform 0.4s, opacity 1s";
+  //div.style.transition = "none";
   $container.packery('bindDraggabillyEvents', draggie);
   $container.fadeIn();
-    
+
   gantt = d3.gantt("COMPARE").taskTypes(["sched_switch"]).timeDomain(maxDuration).yAttribute("eventType").yLabel(filterString).id(safeTaskName).height(100).margin(margin);
   gantt(currentTaskSwitches, "#" + safeTaskName + "Div");
 }
@@ -260,6 +263,12 @@ function addAnotherTask(chosenTask) {
     makeGantt(filterString);
     makeRemoveButton(filterString);
   }
+
+    if (comparingTasks.length == 1)
+    {
+	location.reload();
+    }
+
 }
 
 // Makes remove button for every task
