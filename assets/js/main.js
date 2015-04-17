@@ -1,6 +1,8 @@
 var JSONevents;
 var JSONtasks;
 var numCPUs;
+var autocompleteNames;
+var autocompleteEventTypes;
 var currentResults;
 
 var chartType = "MAIN"; //for gantt
@@ -32,6 +34,12 @@ function openDB()
 
     var numCPUsRequest = db.transaction(["numCPUs"], "readonly")
               .objectStore("numCPUs").get(1);
+
+    var eventTypesRequest = db.transaction(["AutocompleteEventTypes"], "readonly")
+                              .objectStore("AutocompleteEventTypes").get(1);
+
+    var namesRequest = db.transaction(["AutocompleteNames"], "readonly")
+                          .objectStore("AutocompleteNames").get(1);
 
     // some kind of error handling
     eventsRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
@@ -85,8 +93,73 @@ function openDB()
                   }
         }
     }
+
+    eventTypesRequest.onerror = function(e) {console.log("error", e.target.error);}
+
+    eventTypesRequest.onsuccess = function(e) {
+                                autocompleteEventTypes = e.target.result;
+                                autoCompleteEventTypes();
+                                clickSearch();
+                              }
+
+    namesRequest.onerror = function(e) {console.log("error", e.target.error);}
+
+    namesRequest.onsuccess = function(e) {
+                                autocompleteNames = e.target.result;
+                                autoCompleteNames();
+                                clickSearch();
+                              }
   }
 }
+
+function makeAutocompleteList()
+{
+  autocompleteNames = [];
+  for (var i = 0; i < JSONtasks.length; i++) {
+    autocompleteNames.push(JSONtasks[i].name + ", PID: " + JSONtasks[i].pid);
+  }
+}
+
+function autoCompleteNames() {
+  // Setup typeahead to search task names
+  $('#process_filter').typeahead({
+      hint: true,
+      highlight: true,
+      minLength: 1
+    },
+    {
+      name: 'autocompleteNames',
+      displayKey: 'value',
+      source: substringMatcher(autocompleteNames)
+  })
+  .on('typeahead:autocompleted', function($e, chosenTask) {
+    changeToNewTask(chosenTask);
+  })
+  .on('typeahead:selected', function($e, chosenTask) {
+    changeToNewTask(chosenTask);
+  });
+}
+
+function autoCompleteEventTypes() {
+$('input').typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 1
+},
+{
+  name: 'autocompleteEventTypes',
+  displayKey: 'value',
+  source: substringMatcher(autocompleteEventTypes)
+});
+}
+
+function clickSearch() {
+  $('.tt-dropdown-menu').click(function() {
+             var filterString = $('.tt-input').val();
+             $('#table_id').dataTable().fnFilter(filterString);
+      });
+}
+
 
 function setColoringOfTasks() {
   // For each task, create a CSS class with a random color
