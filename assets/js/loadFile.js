@@ -17,8 +17,6 @@ var JSONcycleEvents;
 
 function handleFileSelect(evt) {
     document.getElementsByClassName("loader")[0].style.display = "block";
-    window.localStorage.setItem("cellData", "");
-    window.localStorage.setItem("compareData", JSON.stringify([]));
 
     // Reset saved state of graphs on all pages
     var ganttPages = ["compare", "main", "process", "cycles"];
@@ -131,7 +129,10 @@ function openDB()
     					tasksRequest.onerror = function(e) {console.error("Error", e.target.error.name);}
 
     					tasksRequest.onsuccess = function(e) {
-
+                window.localStorage.clear();
+                window.localStorage.setItem("hasEverExisted", 1);
+                window.localStorage.setItem("cellData", "");
+                window.localStorage.setItem("compareData", JSON.stringify([]));
     						document.location.href='main.html';
     					}
     				}
@@ -216,6 +217,7 @@ function handleUseOld(evt)
 	    						console.log("added tasks");
 	    						// Check that tasks aren't null, e.g. that a previous file was loaded
 	    						if (e.target.result) {
+                    window.localStorage.setItem("hasEverExisted", 1);
 	    							document.location.href='main.html';
 	    						} else {
 	    							window.alert("No old data.");
@@ -285,4 +287,4 @@ var hasEverExisted = window.localStorage.getItem("hasEverExisted");
 if (!hasEverExisted) {
   document.getElementById('old').style.display = "none";
 }
-window.localStorage.setItem("hasEverExisted", 1);
+

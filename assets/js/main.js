@@ -1,6 +1,8 @@
 var JSONevents;
 var JSONtasks;
 var numCPUs;
+var autocompleteNames;
+var autocompleteEventTypes;
 var currentResults;
 
 var chartType = "MAIN"; //for gantt
@@ -21,7 +23,6 @@ function openDB()
 
   openRequest.onsuccess = function(e)
   {
-    console.log("openRequest success from main!");
     var db = e.target.result;
 
     var eventsRequest = db.transaction(["Events"],"readonly")
@@ -32,6 +33,12 @@ function openDB()
 
     var numCPUsRequest = db.transaction(["numCPUs"], "readonly")
               .objectStore("numCPUs").get(1);
+
+    var eventTypesRequest = db.transaction(["AutocompleteEventTypes"], "readonly")
+                              .objectStore("AutocompleteEventTypes").get(1);
+
+    var namesRequest = db.transaction(["AutocompleteNames"], "readonly")
+                          .objectStore("AutocompleteNames").get(1);
 
     // some kind of error handling
     eventsRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
@@ -85,8 +92,45 @@ function openDB()
                   }
         }
     }
+
+    eventTypesRequest.onerror = function(e) {console.log("error", e.target.error);}
+
+    eventTypesRequest.onsuccess = function(e) {
+                                autocompleteEventTypes = e.target.result;
+                                // autoCompleteEventTypes();
+                                clickSearch();
+                              }
+
+    namesRequest.onerror = function(e) {console.log("error", e.target.error);}
+
+    namesRequest.onsuccess = function(e) {
+                                autocompleteNames = e.target.result;
+                                autoCompleteEventTypes();
+                                clickSearch();
+                              }
   }
 }
+
+function autoCompleteEventTypes() {
+$('input').typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 1
+},
+{
+  name: 'autocompleteEventTypes',
+  displayKey: 'value',
+  source: substringMatcher(autocompleteEventTypes.concat(autocompleteNames))
+});
+}
+
+function clickSearch() {
+  $('.tt-dropdown-menu').click(function() {
+             var filterString = $('.tt-input').val();
+             $('#table_id').dataTable().fnFilter(filterString);
+      });
+}
+
 
 function setColoringOfTasks() {
   // For each task, create a CSS class with a random color
@@ -95,25 +139,13 @@ function setColoringOfTasks() {
   for (var i = 0; i < JSONtasks.length; i++) {
     
     if (JSONtasks[i].name !== '<idle>') {
-
-      // trying to mark cycles
-      if (JSONevents[JSONtasks[i].events[0]].eventType == "print") {
-
-        var style = document.createElement('style');
-        style.type = 'text/css';
-        style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: red; }';
-        document.getElementsByTagName('head')[0].appendChild(style);
-      } 
-
       // generating colors for non-cycle, non idle events
-      else {
-        var style = document.createElement('style');
-        style.type = 'text/css';
-        var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
-        style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: #' + color + '; }';
-      
-        document.getElementsByTagName('head')[0].appendChild(style);
-      }
+      var style = document.createElement('style');
+      style.type = 'text/css';
+      var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
+      style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: #' + color + '; }';
+    
+      document.getElementsByTagName('head')[0].appendChild(style);
     } 
   }
 }
@@ -225,9 +257,8 @@ function displayTable() {
 
     // Click in the body of the table and get taken to that 
     // particular task on the process page
-    $('#table_id tbody').on( 'click', 'tr', function () {
+    $('#table_id tbody').on( 'dblclick', 'tr', function () {
       var cellData = oTable.fnGetData(this);
-      // console.log( 'Clicked on: '+ cellData[2]);
       clickCell(cellData[2], cellData[3]);
     } );
 	} );

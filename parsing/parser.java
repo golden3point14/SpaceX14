@@ -116,10 +116,7 @@ class parser {
 					task = new JSONObject();
 					task.put("name", name);
 					task.put("pid", pid);
-					JSONArray taskEvents = new JSONArray();
 					JSONArray preemptedByTasks = new JSONArray();
-					taskEvents.add(currentLine);
-					task.put("events", taskEvents);
 					task.put("preemptedBy", preemptedByTasks);
 					task.put("preemptionCount", 0);
 					task.put("totalRuntime", 0l);
@@ -141,7 +138,6 @@ class parser {
 				else
 				{
 					task = (JSONObject)seenTasks.get(pid);
-					((JSONArray)task.get("events")).add(currentLine);
 				}
 
 				JSONObject autocompleteEventType;
@@ -197,9 +193,6 @@ class parser {
 					
 					if (info[1].equals("CYCLE_START:"))
 					{
-					
-						event.put("userMark", "START");
-						
 						JSONObject startCycles = new JSONObject();
 						startCycles.put("startTime", startTime);
 						startCycles.put("extraInfo", extraInfo);
@@ -214,8 +207,11 @@ class parser {
 			}
 		}
 		calculateTotalRunTimeOfEachTask(events, tasks);
-		calculateTotalWaitTimeOfEachTask(events, tasks);
-		calculateTotalSleepTimeOfEachTask(events, tasks);
+
+    // Currently not displayed in the application
+		//calculateTotalWaitTimeOfEachTask(events, tasks);
+		//calculateTotalSleepTimeOfEachTask(events, tasks);
+
 		calculateDurationOfEvent(events);
 		
 		mainObj.put("events", events);
@@ -226,8 +222,6 @@ class parser {
 		mainObj.put("cycleEvents", cycleEvents);
 
 
-		// System.out.println(autocompleteNames);
-		
 		writeJSON(mainObj, filename);
 	}
 	
