@@ -28,37 +28,15 @@ function openDB()
 {
   var openRequest = indexedDB.open("events", 8);
 
-  openRequest.onupgradeneeded =  function(e)
-  {
-    console.log("upgrading...");
-
-    var thisDB = e.target.result;
-
-    if (!thisDB.objectStoreNames.contains("Events"))
-      {
-        thisDB.createObjectStore("Events");
-        console.log("created events");
-      }
-
-    if (!thisDB.objectStoreNames.contains("Tasks"))
-    {
-      thisDB.createObjectStore("Tasks");
-      console.log("created tasks");
-    }
-    
-
-  }
-
   openRequest.onsuccess = function(e)
   {
-    console.log("openRequest success!");
     db = e.target.result;
 
     //get data
     var xact = db.transaction(["Tasks"], "readonly");
     var objectStore = xact.objectStore("Tasks");
     var ob = objectStore.get(1); //temporary hard-coded
-    ob.onsuccess = function(e) { console.log("e is the JSONtasks");
+    ob.onsuccess = function(e) {
                                  JSONtasks = e.target.result;
                                  useDatabaseData();
                                }

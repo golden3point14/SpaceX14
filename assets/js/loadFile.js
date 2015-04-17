@@ -189,32 +189,26 @@ function handleUseOld(evt)
 
 	    cyclesRequest.onsuccess = function(e) {
 
-	    	console.log("cycleEvents added");
 	    	
 	    	eventsRequest.onerror = function(f) {console.log("Error", f.target.error.name);}
 
 	    	eventsRequest.onsuccess = function(f) {
-	    		console.log("added events");
 
 	    		numCPUsRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
 
 	    		numCPUsRequest.onsuccess = function(e) {
-	    			console.log("added numCPUs");
 	    			
 	    			eventTypesRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
 
 	    			eventTypesRequest.onsuccess = function(e) {
-	    				console.log("added autocompleteEventTypes");
 	    				
 	    				namesRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
 
 	    				namesRequest.onsuccess = function(e) {
-	    					console.log("added autocompleteNames");
 
 	    					tasksRequest.onerror = function(e) {console.log("Error", e.target.error.name);}
 
 	    					tasksRequest.onsuccess = function(e) {
-	    						console.log("added tasks");
 	    						// Check that tasks aren't null, e.g. that a previous file was loaded
 	    						if (e.target.result) {
                     window.localStorage.setItem("hasEverExisted", 1);
@@ -232,7 +226,6 @@ function handleUseOld(evt)
 	}
 }
 
-// NOT TESTED??? 
 function checkStoresExist(thisDB) {
   var stores = ["Events", "Tasks", "numCPUs", "AutocompleteEventTypes", "AutocompleteNames", "cycleEvents"];
 
@@ -287,4 +280,3 @@ var hasEverExisted = window.localStorage.getItem("hasEverExisted");
 if (!hasEverExisted) {
   document.getElementById('old').style.display = "none";
 }
-
