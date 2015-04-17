@@ -23,7 +23,6 @@ function openDB()
 
   openRequest.onsuccess = function(e)
   {
-    console.log("openRequest success from main!");
     var db = e.target.result;
 
     var eventsRequest = db.transaction(["Events"],"readonly")

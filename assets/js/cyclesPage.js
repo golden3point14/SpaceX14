@@ -16,7 +16,6 @@ function openDB()
 
 	openRequest.onsuccess = function(e)
 	{
-		console.log("openRequest success!");
 		db = e.target.result;
 
 		//get data
