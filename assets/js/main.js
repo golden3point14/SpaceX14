@@ -98,7 +98,7 @@ function openDB()
 
     eventTypesRequest.onsuccess = function(e) {
                                 autocompleteEventTypes = e.target.result;
-                                autoCompleteEventTypes();
+                                // autoCompleteEventTypes();
                                 clickSearch();
                               }
 
@@ -106,38 +106,10 @@ function openDB()
 
     namesRequest.onsuccess = function(e) {
                                 autocompleteNames = e.target.result;
-                                autoCompleteNames();
+                                autoCompleteEventTypes();
                                 clickSearch();
                               }
   }
-}
-
-function makeAutocompleteList()
-{
-  autocompleteNames = [];
-  for (var i = 0; i < JSONtasks.length; i++) {
-    autocompleteNames.push(JSONtasks[i].name + ", PID: " + JSONtasks[i].pid);
-  }
-}
-
-function autoCompleteNames() {
-  // Setup typeahead to search task names
-  $('#process_filter').typeahead({
-      hint: true,
-      highlight: true,
-      minLength: 1
-    },
-    {
-      name: 'autocompleteNames',
-      displayKey: 'value',
-      source: substringMatcher(autocompleteNames)
-  })
-  .on('typeahead:autocompleted', function($e, chosenTask) {
-    changeToNewTask(chosenTask);
-  })
-  .on('typeahead:selected', function($e, chosenTask) {
-    changeToNewTask(chosenTask);
-  });
 }
 
 function autoCompleteEventTypes() {
@@ -149,7 +121,7 @@ $('input').typeahead({
 {
   name: 'autocompleteEventTypes',
   displayKey: 'value',
-  source: substringMatcher(autocompleteEventTypes)
+  source: substringMatcher(autocompleteEventTypes.concat(autocompleteNames))
 });
 }
 
