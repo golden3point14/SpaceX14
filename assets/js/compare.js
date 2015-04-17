@@ -69,7 +69,9 @@ function makeAutocompleteList()
 {
   autocompleteNames = [];
   for (var i = 0; i < tasks.length; i++) {
-    autocompleteNames.push(tasks[i].name + ", PID: " + tasks[i].pid);
+    if (tasks[i].name.indexOf("idle") == -1) {
+      autocompleteNames.push(tasks[i].name + ", PID: " + tasks[i].pid);
+    }
   }
 }
 
