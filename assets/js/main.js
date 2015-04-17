@@ -298,9 +298,8 @@ function displayTable() {
 
     // Click in the body of the table and get taken to that 
     // particular task on the process page
-    $('#table_id tbody').on( 'click', 'tr', function () {
+    $('#table_id tbody').on( 'dblclick', 'tr', function () {
       var cellData = oTable.fnGetData(this);
-      // console.log( 'Clicked on: '+ cellData[2]);
       clickCell(cellData[2], cellData[3]);
     } );
 	} );
