@@ -131,6 +131,8 @@ function openDB()
     					tasksRequest.onsuccess = function(e) {
                 window.localStorage.clear();
                 window.localStorage.setItem("hasEverExisted", 1);
+                window.localStorage.setItem("cellData", "");
+                window.localStorage.setItem("compareData", JSON.stringify([]));
     						document.location.href='main.html';
     					}
     				}
