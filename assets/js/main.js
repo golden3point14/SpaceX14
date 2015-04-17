@@ -23,7 +23,6 @@ function openDB()
 
   openRequest.onsuccess = function(e)
   {
-    console.log("openRequest success from main!");
     var db = e.target.result;
 
     var eventsRequest = db.transaction(["Events"],"readonly")
@@ -98,7 +97,7 @@ function openDB()
 
     eventTypesRequest.onsuccess = function(e) {
                                 autocompleteEventTypes = e.target.result;
-                                autoCompleteEventTypes();
+                                // autoCompleteEventTypes();
                                 clickSearch();
                               }
 
@@ -106,38 +105,10 @@ function openDB()
 
     namesRequest.onsuccess = function(e) {
                                 autocompleteNames = e.target.result;
-                                autoCompleteNames();
+                                autoCompleteEventTypes();
                                 clickSearch();
                               }
   }
-}
-
-function makeAutocompleteList()
-{
-  autocompleteNames = [];
-  for (var i = 0; i < JSONtasks.length; i++) {
-    autocompleteNames.push(JSONtasks[i].name + ", PID: " + JSONtasks[i].pid);
-  }
-}
-
-function autoCompleteNames() {
-  // Setup typeahead to search task names
-  $('#process_filter').typeahead({
-      hint: true,
-      highlight: true,
-      minLength: 1
-    },
-    {
-      name: 'autocompleteNames',
-      displayKey: 'value',
-      source: substringMatcher(autocompleteNames)
-  })
-  .on('typeahead:autocompleted', function($e, chosenTask) {
-    changeToNewTask(chosenTask);
-  })
-  .on('typeahead:selected', function($e, chosenTask) {
-    changeToNewTask(chosenTask);
-  });
 }
 
 function autoCompleteEventTypes() {
@@ -149,7 +120,7 @@ $('input').typeahead({
 {
   name: 'autocompleteEventTypes',
   displayKey: 'value',
-  source: substringMatcher(autocompleteEventTypes)
+  source: substringMatcher(autocompleteEventTypes.concat(autocompleteNames))
 });
 }
 
@@ -168,25 +139,13 @@ function setColoringOfTasks() {
   for (var i = 0; i < JSONtasks.length; i++) {
     
     if (JSONtasks[i].name !== '<idle>') {
-
-      // trying to mark cycles
-      if (JSONevents[JSONtasks[i].events[0]].eventType == "print") {
-
-        var style = document.createElement('style');
-        style.type = 'text/css';
-        style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: red; }';
-        document.getElementsByTagName('head')[0].appendChild(style);
-      } 
-
       // generating colors for non-cycle, non idle events
-      else {
-        var style = document.createElement('style');
-        style.type = 'text/css';
-        var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
-        style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: #' + color + '; }';
-      
-        document.getElementsByTagName('head')[0].appendChild(style);
-      }
+      var style = document.createElement('style');
+      style.type = 'text/css';
+      var color = ('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6)
+      style.innerHTML = '.' + JSONtasks[i].name + JSONtasks[i].pid + ' { fill: #' + color + '; }';
+    
+      document.getElementsByTagName('head')[0].appendChild(style);
     } 
   }
 }

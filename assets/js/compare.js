@@ -23,7 +23,6 @@ function openDB() {
   }
 
   openRequest.onsuccess = function(e) {
-    console.log("openRequest success!");
     db = e.target.result;
 
     //get data
@@ -241,10 +240,8 @@ function addAnotherTask(chosenTask) {
 
   var filterString = chosenTask["value"];
   var display = true;
-  console.log(filterString);
   // check if we are already displaying this task
   for (var i = 0; i < comparingTasks.length; i++) {
-    console.log(comparingTasks[i]);
     if (comparingTasks[i] == filterString) {
       display = false;
       break;

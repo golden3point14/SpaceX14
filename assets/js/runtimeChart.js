@@ -37,7 +37,6 @@ function openDB()
 
   openRequest.onsuccess = function(e)
   {
-    console.log("openRequest success!");
     db = e.target.result;
 
     //get data
@@ -59,7 +58,6 @@ function openDB()
 function useDatabaseData()
 {
   setColoringOfTasks();
-  console.log("using the runtime data");
   for (var i=0; i<JSONtasks.length; i++)
   {
       if (JSONtasks[i].name !== "<idle>") {
