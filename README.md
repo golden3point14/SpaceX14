@@ -43,4 +43,5 @@ If new libraries are ever added, update the Class-path in manifest.txt.
 - Get the code for our project from this repository
 - Paste all of the Node-webkit files into the SpaceX14 directory
 - Run the `nw` executable
-- Choose the .json file that you created using our parser by clicking Browse... and opening it
+- Choose the .json file that you created using our parser by clicking "Choose File".
+- If you have previously used our tool, a second button will appear labeled "Use Last Data". This will return you to your previous session.
