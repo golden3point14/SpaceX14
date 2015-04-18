@@ -220,8 +220,10 @@ function handleUseOld(evt)
                     window.localStorage.setItem("hasEverExisted", 1);
 	    							document.location.href='main.html';
 	    						} else {
+                    document.getElementsByClassName("loader")[0].style.display = "none";
 	    							window.alert("No old data.");
 	    						}
+
 	    						
 	    					}
 	    				}
