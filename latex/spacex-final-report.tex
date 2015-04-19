@@ -202,7 +202,7 @@ which is an inefficient use of engineer's time. KernelShark is a single page too
 
 \begin{figure}[H]
   \centering
-      \includegraphics[width=5in]{kshark-open.png}
+      \includegraphics[width=4.95in]{kshark-open.png}
   \caption{KernelShark consists of a graphical display of the programs running on a computer over time (top half of screen), as well as a tabular view of the same information, in the form of CPU events such as processes switching, waking, or sleeping (bottom half of screen).}
 \end{figure}
 
@@ -1203,6 +1203,7 @@ Events
 \end{verbatim}
 \newpage
 
+\newpage
 \section{Glossary}
 \begin{itemize}[ ]
 \item {\bf Blocked:} When a task is runnable but another task is running on the same CPU, thereby blocking it from being able to run.
@@ -1219,26 +1220,30 @@ order to run.
 \item {\bf Task:} A single thread of a process; a series of events.
 \item {\bf Waiting:} The state of a task when it cannot run, due to being blocked or waiting on some piece of information.
 \end{itemize}
+
 \newpage
 \section{How to Package the Application}
 If changes have been made to any files within a cloned copy of the repository,
-the application can be repackaged with following these steps.
+the application can be repackaged with these steps.
 
 \begin{enumerate}
   \item Navigate into the top level of the directory, which contains
     package.json
   \item Move the spaceshark script, README, and parser jar files to the parent directory
     and delete the rest of the parser files
-  \item run \texttt{zip -r ../\${PWD\#\#*/}.nw *} here, which will create a file
+  \item run
+    \begin{center}\texttt{zip -r ../\${PWD\#\#*/}.nw *}\end{center} here, which will create a file
     called SpaceX14.nw in the parent directory
   \item Download a copy of node-webkit from
     \texttt{https://github.com/nwjs/nw.js} and
     place it in the directory above the Spaceshark repository
-  \item Move to this directory and run \texttt{cat nw SpaceX14.nw >
-    app \&\& chmod +x app}
+  \item Move to this directory and run 
+    \begin{center}\texttt{cat nw SpaceX14.nw >
+      app \&\& chmod +x app}\end{center}
   \item Zip together the app file, nw.pak, icudtl.dat, the spaceshark script,
     README, and parser jar files
 \end{enumerate}
+
 \newpage
 \section{Debugging}
 To display a web console for debugging, within package.json change the line
