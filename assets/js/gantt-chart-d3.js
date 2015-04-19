@@ -139,9 +139,6 @@ d3.gantt = function(chartType) {
       // gets the expected state from local storage
       getStorage(chartType.toLowerCase());
 
-      console.log("from storage" + currTranslateX);
-      console.log("graph state" + zoom.translate()[0]);
-
       // if there was a prior zoom state and it differs from what the graph thinks it was
       // set the graph's values to match the prior state.
       if (!isNaN(currScale) && currScale !== zoom.scale())
