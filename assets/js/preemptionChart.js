@@ -1,3 +1,11 @@
+/**
+ * @author Wendy Brooks
+ * @author May Lynn Forssen
+ * @author Alix Joe
+ * @author Rachel Macfarlane
+ * Created 2015
+ */
+
 var values = [];    // the list of tasks
 var maxPreemp = 0;  // the highest number of preemptions
 var files;

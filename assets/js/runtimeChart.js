@@ -1,3 +1,11 @@
+/**
+ * @author Wendy Brooks
+ * @author May Lynn Forssen
+ * @author Alix Joe
+ * @author Rachel Macfarlane
+ * Created 2015
+ */
+
 var values = [];    // the list of tasks
 var maxRuntime = 0.0;  // the longest runtime
 var minRuntime = Infinity;  // the shortest runtime
