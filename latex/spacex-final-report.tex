@@ -1107,24 +1107,24 @@ left allows users to choose their own cycle length.}
 
   \section{Refactoring}
 
-  We were considering refactoring the parser to be cleaner. Currently, when we
-  extract each field from an event, we immediately format it as a JSON object.
-  This adds some additional complexity in later calculations and analysis, as
-  the JSON object is a key-value pair, and is generally not very space or time
-  efficient. Instead of this, it would be better to create an intermediate
-  format for the data. We imagine this would look like a separate Java class for
-  tasks and events. Events would be subclassed by their type. All events have
-  the same basic information, like the start time, PID of the task involved, and
-  CPU, but their extra information field varies based on type. We imagine that
-  creating event and task classes would make the parser code much more readable,
-  as after grabbing each field from a line, this information would be passed off
-  and dealt with elsewhere. Given enough time, we would refactor the parser in
-  this way, but as it is currently functional, these changes have not been high
+  We have considered refactoring the parser to be cleaner. Currently, when a
+  field is extracted from an event, it is immediately formatted into a JSON
+  object.  This adds some additional complexity in later calculations and
+  analysis, as the JSON object is a key-value pair instead of just a value.
+  Instead of this, it would be better to create an intermediate format for the
+  data. We imagine this would look like a separate Java class for tasks and
+  events. Events would be subclassed by their type. All events have the same
+  basic information, like the start time, PID of the task involved, and CPU, but
+  their extra information field varies based on type. We imagine that creating
+  event and task classes would make the parser code much more readable, as after
+  grabbing each field from a line, this information would be passed off and
+  dealt with elsewhere. Given enough time, we would refactor the parser in this
+  way, but as it is currently functional, these changes have not been high
   priority.
 
-  Additionally, for most of the semester, we referred to the overview page as the
-  ``main'' page and the task state page as the ``process'' page before adopting
-  new labels. These old page titles are still used in our code.
+  Additionally, for most of the semester, we referred to the overview page as
+  the ``main'' page and the task state page as the ``process'' page before
+  adopting new labels. These old page titles are still used in our code.
 
 \section{Extensions}
   SpaceX developers indicated an interest in interleaving the graphs of multiple
@@ -1158,11 +1158,7 @@ slowest part of our application, but at this point in time we do not have a way
 to fix this.
 
 \section{Scalability}
-  Overall, the application should be made faster. We are not entirely sure how
-  to improve this at the moment. IndexedDB is the slowest part of the
-  application at current.
-
-Additionally, if given files above a certain size, typically using more than 4
+If given files above a certain size, typically using more than 4
 cores, the parsed version will be too large for IndexedDB to load, and
 sometimes too large for the parser to handle as well.
 
@@ -1222,8 +1218,32 @@ order to run.
 \item {\bf Task:} A single thread of a process; a series of events.
 \item {\bf Waiting:} The state of a task when it cannot run, due to being blocked or waiting on some piece of information.
 \end{itemize}
+
+\section{How to Package the Application}
+If changes have been made to any files within a cloned copy of the repository,
+the application can be repackaged with following these steps.
+
+\begin{enumerate}
+  \item Navigate into the top level of the directory, which contains
+    package.json
+  \item Move the spaceshark script, README, and parser jar files to the parent directory
+    and delete the rest of the parser files
+  \item run \texttt{zip -r ../\${PWD\#\#*/}.nw *} here, which will create a file
+    called SpaceX14.nw in the parent directory
+  \item Download a copy of node-webkit from
+    \texttt{https://github.com/nwjs/nw.js} and
+    place it in the directory above the Spaceshark repository
+  \item Move to this directory and run \texttt{cat nw SpaceX14.nw >
+    app \&\& chmod +x app}
+  \item Zip together the app file, nw.pak, icudtl.dat, the spaceshark script,
+    README, and parser jar files
+\end{enumerate}
+
+\section{Debugging}
+To display a web console for debugging, within package.json change the line
+``toolbar: false'' to ``toolbar: true.'' A gear icon should now appear in the
+top right corner of the application when it is launched. When clicked, this
+displays a web console that allows the user to view current css properties,
+set breakpoints in code, and view the resources within IndexedDb and local
+storage.
 \end{document}
-
-
-
-
