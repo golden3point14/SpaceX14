@@ -1256,7 +1256,8 @@ One user suggested that the graph respond when an event in the events list is cl
 \section{Known bugs}
 
   We have documented bugs and like-to-haves on our Computer Science hosted trac
-  site using the ticketing system. Outstanding issues at this time are
+  site using the ticketing system. Outstanding issues at this time are as
+  follows:
 
   \begin{itemize}
   
@@ -1274,7 +1275,8 @@ One user suggested that the graph respond when an event in the events list is cl
     \texttt{sched\_switch} events. If \texttt{sched\_stat\_runtime} events do
     not occur consistently, the Task Statistics page will display incorrect
     information. If this is not the issue, either the parser
-    or the visualization may be handling the data incorrectly.
+    or the visualization may be handling the data incorrectly.If the parser is
+    okay, the problem is likely in \texttt{runtimeChart.js}.
 
 \end{itemize}
 
@@ -1321,8 +1323,7 @@ It is also possible that the loaded files will contain more than two CPU's. For 
 
 \section{Speed} %Wendy
 The data SpaceX will be using with our tool is very large, and becomes even
-larger once we have parsed it. As a result, some parts of the tool load slowly,
-and this is something we are still working on fixing. One main fix we have
+larger once we have parsed it. As a result, some parts of the tool load slowly. One main fix we have
 implemented is batch loading the list of events on the main page so that the
 user can start interacting with the tool without waiting to load the entire
 table, especially since all of the table is typically not needed.
@@ -1332,13 +1333,13 @@ slowest part of our application, but at this point in time we do not have a way
 to fix this.
 
 \section{Scalability}
-If given files above a certain size, typically using more than 4
+Typically for trace files using more than 4
 cores, the parsed version will be too large for IndexedDB to load, and
 sometimes too large for the parser to handle as well.
 
 There are two possibilities for fixing this. One is to prune the JSON or
 find a more compressed method of storing the data. The other is to find a
-substitute for IndexedDB that is faster.
+substitute for IndexedDB that can store more data.
 
 \chapter{Appendices}
 \newpage
@@ -1401,26 +1402,26 @@ the application can be repackaged with these steps.
 
 \begin{enumerate}
   \item Navigate into the top level of the directory, which contains
-    package.json
+    \texttt{package.json}
   \item Move the spaceshark script, README, and parser jar files to the parent directory
     and delete the rest of the parser files
   \item run
     \begin{center}\texttt{zip -r ../\${PWD\#\#*/}.nw *}\end{center} here, which will create a file
-    called SpaceX14.nw in the parent directory
+    called \texttt{SpaceX14.nw} in the parent directory
   \item Download a copy of node-webkit from
     \texttt{https://github.com/nwjs/nw.js} and
     place it in the directory above the Spaceshark repository
   \item Move to this directory and run 
     \begin{center}\texttt{cat nw SpaceX14.nw >
       app \&\& chmod +x app}\end{center}
-  \item Zip together the app file, nw.pak, icudtl.dat, the spaceshark script,
+  \item Zip together the app file, \texttt{nw.pak}, \texttt{icudtl.dat}, the spaceshark script,
     README, and parser jar files
 \end{enumerate}
 
 \newpage
 \section{Debugging}
-To display a web console for debugging, within package.json change the line
-``toolbar: false'' to ``toolbar: true.'' A gear icon should now appear in the
+To display a web console for debugging, within \texttt{package.json} change the line
+\texttt{toolbar: false} to \texttt{toolbar: true}. A gear icon should now appear in the
 top right corner of the application when it is launched. When clicked, this
 displays a web console that allows the user to view current css properties,
 set breakpoints in code, and view the resources within IndexedDb and local
