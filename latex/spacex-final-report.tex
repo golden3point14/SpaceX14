@@ -244,12 +244,20 @@ The goals for this project were to make it easier and faster for SpaceX engineer
      \toprule
       Page Name       & Purpose & Code artifacts     \\
       \midrule
-      Load File       & Allow a user to choose the data to import into the application        & assets/js/loadFile.js\\
-      Overview        & Provide user overall view of the data        & assets/js/main.js, assets/js/gantt-chart-d3.js, dataTables.js\\
-      Cycles          & Break data into intervals so that a user can compare across them        & assets/js/cycles.js, assets/js/gantt-chart-d3.js\\
-      Task Statistics & Give user high-level statistics about the data, comparing task's total runtimes and preemptions        & assets/js/runtimeChart.js, assets/js/preemptionChart.js\\
-      Task State      & Display a single tasks actions and interactions         & assets/js/process.js\\
-      Task Compare    & Allow a user to compare several tasks changes in state over time     & assets/js/compare.js\\
+      Load File       & Allow a user to choose the data to import into the
+      application        & \texttt{assets/js/loadFile.js}\\
+      Overview        & Provide user overall view of the data        &
+      \texttt{assets/js/main.js, assets/js/gantt-chart-d3.js, dataTables.js}\\
+      Cycles          & Break data into intervals so that a user can compare
+      across them        & \texttt{assets/js/cycles.js,
+      assets/js/gantt-chart-d3.js}\\
+      Task Statistics & Give user high-level statistics about the data,
+      comparing task's total runtimes and preemptions        &
+      \texttt{assets/js/runtimeChart.js, assets/js/preemptionChart.js}\\
+      Task State      & Display a single tasks actions and interactions
+      & \texttt{assets/js/process.js}\\
+      Task Compare    & Allow a user to compare several tasks changes in state
+      over time     & \texttt{assets/js/compare.js}\\
     \bottomrule
     \end{tabular}
   \end{center}
@@ -291,7 +299,7 @@ display if no data has ever been loaded.}
   \end{figure}
 
 \paragraph{Purpose:}
-When the user first loads SpaceShark, they will see the screen in Figure
+When the user loads SpaceShark, they will see the above screen in Figure
 2.1. The purpose of the Load File page is to allow the user to choose which JSON file to load as their data, 
 or choose to use the data that was most recently used if this is not the user's first time using 
 the tool. It also reloads the same state each page was in during
@@ -1103,6 +1111,15 @@ left allows users to choose their own cycle length.}
   \item Graphs and other images do not resize when the window resizes unless the
     page is reloaded.
 
+  \item The information displayed by the Task Statistics page, specifically on
+    the Runtime section, is incorrect. This could be a problem due to
+    \texttt{trace-cmd} not outputting \texttt{sched\_stat\_runtime} events as often
+    as we expect them to. We expect these events to occur after each
+    \texttt{sched\_switch} events. If \texttt{sched\_stat\_runtime} events do
+    not occur consistently, the Task Statistics page will display incorrect
+    information. If this is not the issue, either the parser
+    or the visualization may be handling the data incorrectly.
+
 \end{itemize}
 
 
@@ -1166,7 +1183,6 @@ sometimes too large for the parser to handle as well.
 There are two possibilities for fixing this. One is to prune the JSON or
 find a more compressed method of storing the data. The other is to find a
 substitute for IndexedDB that is faster.
-
 
 \chapter{Appendices}
 \newpage
