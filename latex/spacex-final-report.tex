@@ -294,7 +294,7 @@ same data that are of particular interest to the user. The graph shows all of
 the programs that were running on each of the CPU's, and the table displays 
 the all of the CPU events.
 
-\paragraph{Interactivity:} The user can zoom in and out on the graph by using the mouse scroll wheel, and can pan left and right by clicking and dragging. Double clicking on the graph also zooms in on it. Hovering over an event in the graph displays a pop up with more information about that event. Clicking on an event displayed in the graph will cause the tabular events list below to scroll to that event. Double clicking on an event in the events list will navigate to the Task State page showing a more detailed view of that process.
+\paragraph{Interactivity:} The user can zoom in and out on the graph by using the mouse scroll wheel, and can pan left and right by clicking and dragging. Double clicking on the graph also zooms in on it. The user can also hover over any part of the gantt chart and be able to view a text box with more information about that particular event, such as the task name, the CPU it's running on, its PID, duration, and extra information. Clicking on an event displayed in the graph will cause the tabular events list below to scroll to that event. Double clicking on an event in the events list will navigate to the Task State page showing a more detailed view of that process.
 
 The columns of the table consist of the CPU, start time, name, PID, event type, and extra info about a particular event. By default, the table is displayed in ascending order from the first events start time to the last events start time. Hovering over any of the table cells highlights that entire row. Users can also click on a event to be redirected to that task on the Task State page. The search feature does multi-column filtering based on the search input. All columns headers are clickable to be ordered in ascending or descending order. Below the table, it shows the total number of entries and the range of entries that the user is currently viewing.
 
@@ -302,7 +302,7 @@ The columns of the table consist of the CPU, start time, name, PID, event type, 
     
     Users can click on a specific point in the graph and the table will update its position and jump to that event. KernelShark had this same functionality of being able to click on a spot in the graph and have the table display that event. %% IS THIS TRUE?!?!
     
-    The user can also hover over any part of the gantt chart and be able to view a text box with more information about that particular event, such as the task name, the CPU it's running on, its PID, duration, and extra info. This is a feature that also existed in KernelShark, and we felt that it would be useful to reimplement in our own tool.
+   The feature of hovering over the graph to get more information also existed in KernelShark, and we felt that it would be useful to reimplement in our own tool.
 
 %% Use single click in this section, but need to eventually change our tool to use double click instead!!
 %% Need to include more information about what specific search functionalities didn't exist in KernelShark?
