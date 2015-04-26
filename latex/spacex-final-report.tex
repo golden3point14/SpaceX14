@@ -530,13 +530,14 @@ Users can plot graphs by either typing in a task name at the top of the page, or
   \caption{An example line of raw input, with the specific pieces labeled.}
   \end{figure}
 
-  These five fields appear for every event, but the content of extra information
+  The fields that are recorded for each event are task name, PID, start time, 
+  event type, and extra information.These five fields appear for every event, but the content of extra information
   varies based on the type of event. The units on the time stamp of the event,
   start time, are milliseconds since kernel boot.
 
-  To parse these event lines, we read our file line by line and break on
+  To parse these event lines, the parser reads the file line by line and breaks on
   whitespace. Then it is easy to extract fields one by one. To deal with the
-  extra information field at the end, we case on event type. Switch events
+  extra information field at the end, the parser cases on event type. Switch events
   are the only types of events that contain extra information that we need.  The
   extra information field of switch events gives the name, PID, and priority of
   the task being switched in for the currently running task. Importantly, it
@@ -555,12 +556,12 @@ Users can plot graphs by either typing in a task name at the top of the page, or
   \begin{center}
     \begin{tabular}{ll}
       \toprule
-      Tasks      & An array of all tasks seen in the trace\\
-      Events     & An array of all events seen in the trace\\
-      cycleEvents & An array of cycle events generated from user markers\\
-      numCPUs     & Integer, how many CPUs were in the trace\\
-      AutocompleteNames & An array of strings, listing all tasks names\\
-      AutocompleteEventTypes & An array of strings, listing all event types in the trace\\
+      \texttt{Tasks}      & An array of all tasks seen in the trace\\
+       \texttt{Events}     & An array of all events seen in the trace\\
+       \texttt{cycleEvents} & An array of cycle events generated from user markers\\
+       \texttt{numCPUs}     & Integer, how many CPUs were in the trace\\
+       \texttt{AutocompleteNames} & An array of strings, listing all tasks names\\
+       \texttt{AutocompleteEventTypes} & An array of strings, listing all event types in the trace\\
       \bottomrule
     \end{tabular}
   \end{center}
@@ -569,20 +570,20 @@ Users can plot graphs by either typing in a task name at the top of the page, or
   events, and cycleEvents. A task has the following data.
 
   \begin{center}
-    \begin{tabular}{p{0.2\linewidth}p{0.2\linewidth}p{0.6\linewidth}}
+    \begin{tabular}{p{0.3\linewidth}p{0.2\linewidth}p{0.4\linewidth}}
       \toprule
       Task      &        &                                        \\
       \midrule
       Field           & Type         & Additional description \\
       \midrule
-      name            & string       & \\
-      pid             & int          & \\
-      events          & int array    & Indices into the Events array to find associated events\\
-      preemptedBy     & string array & Names of tasks that preempted this task \\
-      preemptionCount & int          & A running total of times this task was preempted                    \\
-      totalRuntime    & long         & Time this task ran in milliseconds during the trace        \\
-      totalWaittime   & long         & Time this task waited in milliseconds during the trace     \\
-      totalSleeptime  & long         & Time this task slept in milliseconds during the trace\\
+       \texttt{name}            & string       & \\
+       \texttt{pid}             & int          & \\
+       \texttt{events}          & int array    & Indices into the Events array to find associated events\\
+       \texttt{preemptedBy}     & string array & Names of tasks that preempted this task \\
+      \texttt{preemptionCount} & int          & A running total of times this task was preempted                    \\
+       \texttt{totalRuntime}    & long         & Time this task ran in milliseconds during the trace        \\
+       \texttt{totalWaittime}   & long         & Time this task waited in milliseconds during the trace     \\
+       \texttt{totalSleeptime}  & long         & Time this task slept in milliseconds during the trace\\
       \bottomrule
     \end{tabular}
   \end{center}
@@ -599,14 +600,14 @@ Users can plot graphs by either typing in a task name at the top of the page, or
       \midrule
       Field     & Type   & Additional description                 \\
       \midrule
-      name      & string &                                        \\
-      pid       & int    &                                        \\
-      cpu       & int    &                                        \\
-      startTime & double & Time in milliseconds since kernel boot \\
-      eventType & string &                                        \\
-      extraInfo & string &                                        \\
-      activeName* & string & The name of the task switching in      \\
-      activePID*  & string &                                        \\
+       \texttt{name}      & string &                                        \\
+       \texttt{pid}       & int    &                                        \\
+       \texttt{cpu}       & int    &                                        \\
+       \texttt{startTime} & double & Time in milliseconds since kernel boot \\
+       \texttt{eventType} & string &                                        \\
+      \texttt{extraInfo} & string &                                        \\
+       \texttt{activeName}* & string & The name of the task switching in      \\
+       \texttt{activePID}*  & string &                                        \\
       \bottomrule
     \end{tabular}
   \end{center}
@@ -629,8 +630,8 @@ Users can plot graphs by either typing in a task name at the top of the page, or
       \midrule
       Field     & Type   & Additional description                 \\
       \midrule
-      startTime      & double &                                        \\
-      extraInfo       & string    &                                        \\
+       \texttt{startTime}      & double &                                        \\
+       \texttt{extraInfo}       & string    &                                        \\
       \bottomrule
     \end{tabular}
   \end{center}
