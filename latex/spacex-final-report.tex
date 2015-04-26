@@ -275,16 +275,19 @@ The code for the Load File page can be found in assets/js/loadFile.js.
       \includegraphics[width=5in]{overview-page.png}
   \caption{The top chart shows a graphical display of the programs running on the computer over time, and the bottom table shows a tabular version of this same information.}
   \end{figure}
-  
+
+\paragraph{Purpose:} 
 The goal of the Overview page is to be able to initially look at an overall view
 of the data, and then be able to delve deeper into more specific details of the
-same data that are of particular interest to the user. Both
-the graph and the table display the events list and through zooming, dragging,
-and clicking, we are able to find out more information about a specific event.
+same data that are of particular interest to the user. The graph shows all of 
+the programs that were running on each of the CPU's, and the table displays 
+the all of the CPU events.
 
-    The gantt chart plots all the CPU's grabbed from the loaded file on the same
-    graph. It features both double click zooming and mouse scroll zooming. The
-    graph can also be horizontally dragged with the mouse in order to pan.  KernelShark also had graph plots of the CPU's and included similar features as our tool though implemented in different ways. A user could zoom by clicking and dragging a rectangular box, from left to right, over the graph. This allowed the user to precisely view a specific area of the graph that they wanted. Although this zoom functionality seems helpful, it didn't really follow common zoom functionalities of a modern day desktop application. Zooming out of the graph in KernelShark is also unintuitive; the user can click and drag a rectangular box, from right to left, over the graph. This zooming out technique does not give the user any kind of information about how much the graph is zooming out and can therefore be very confusing to users. KernelShark is a responsive tool, partly because it doesn't load all the data while zooming. When zooming on KernelShark, a horizontal bar appears at the bottom of the graph to be able to easily pan. To save on resources, KernelShark doesn't load all the data from the beginning and the end of the trace file when zooming. 
+\paragraph{Interactivity:} The user can zoom in and out on the graph by using the mouse scroll wheel, and can pan left and right by clicking and dragging. Double clicking on the graph also zooms in on it. Hovering over an event in the graph displays a pop up with more information about that event. Clicking on an event displayed in the graph will cause the tabular events list below to scroll to that event. Double clicking on an event in the events list will navigate to the Task State page showing a more detailed view of that process.
+
+The columns of the table consist of the CPU, start time, name, PID, event type, and extra info about a particular event. By default, the table is displayed in ascending order from the first events start time to the last events start time. Hovering over any of the table cells highlights that entire row. Users can also click on a event to be redirected to that task on the Task State page. The search feature does multi-column filtering based on the search input. All columns headers are clickable to be ordered in ascending or descending order. Below the table, it shows the total number of entries and the range of entries that the user is currently viewing.
+
+\paragraph{Comparison to KernelShark:} KernelShark also had graph plots of the CPU's and included similar features as our tool though implemented in different ways. A user could zoom by clicking and dragging a rectangular box, from left to right, over the graph. This allowed the user to precisely view a specific area of the graph that they wanted. Although this zoom functionality seems helpful, it didn't really follow common zoom functionalities of a modern day desktop application. Zooming out of the graph in KernelShark is also unintuitive; the user can click and drag a rectangular box, from right to left, over the graph. This zooming out technique does not give the user any kind of information about how much the graph is zooming out and can therefore be very confusing to users. KernelShark is a responsive tool, partly because it doesn't load all the data while zooming. When zooming on KernelShark, a horizontal bar appears at the bottom of the graph to be able to easily pan. To save on resources, KernelShark doesn't load all the data from the beginning and the end of the trace file when zooming. 
     
     Users can click on a specific point in the graph and the table will update its position and jump to that event. KernelShark had this same functionality of being able to click on a spot in the graph and have the table display that event. %% IS THIS TRUE?!?!
     
@@ -292,7 +295,7 @@ and clicking, we are able to find out more information about a specific event.
 
 %% Use single click in this section, but need to eventually change our tool to use double click instead!!
 %% Need to include more information about what specific search functionalities didn't exist in KernelShark?
-    The columns of the table consist of the CPU, start time, name, PID, event type, and extra info about a particular event. By default, the table is displayed in ascending order from the first events start time to the last events start time. Hovering over any of the table cells highlights that entire row. Users can also click on a event to be redirected to that task on the Task State page. The search feature does multi-column filtering based on the search input. All columns headers are clickable to be ordered in ascending or descending order. Below the table, it shows the total number of entries and the range of entries that the user is currently viewing. KernelShark also had a list of events on the bottom half of their tool. It included more columns, such as latency and the event number it was from the trace file, but we felt that these columns were not helpful in including in our own tool. KernelShark gave users the option to search and filter our events in the table view, but it did not always yield correct search results. 
+     Like our tool, KernelShark also had a list of events on the bottom half of their tool. It included more columns, such as latency and the event number it was from the trace file, but we felt that these columns were not helpful in including in our own tool. KernelShark gave users the option to search and filter our events in the table view, but it did not always yield correct search results. 
     
     In KernelShark, the user is able to look at a list of tasks with checkboxes and be able to individually plot them on the same graph as the CPU's. To maximize space on the Overview page, we decided to move this feature to its own page, which will be talked about in Section 2.1.7 Compare Tasks. 
     
@@ -300,11 +303,11 @@ and clicking, we are able to find out more information about a specific event.
     
     KernelShark's main interface looks very similar to the Overview Page, but did not perform the same functionality that our tool does, such as correctly filtering and searching for events.
 
-    The code for the Overview page is found within assets/js/main.js. This file is
-    responsible for fetching and loading the data, creating a timeline
-    visualization that the user can pan and zoom into, and creating a table that
-    lists all events in the trace. The code for the chart and table is found in
-    gantt-chart-d3.js and dataTables.scroller.js, respectively.
+%    The code for the Overview page is found within assets/js/main.js. This file is
+%    responsible for fetching and loading the data, creating a timeline
+%    visualization that the user can pan and zoom into, and creating a table that
+%    lists all events in the trace. The code for the chart and table is found in
+%    gantt-chart-d3.js and dataTables.scroller.js, respectively.
     
   \subsection{Cycles Page} %Alix
 
@@ -316,12 +319,15 @@ and clicking, we are able to find out more information about a specific event.
 at the top allow the user to toggle which CPUs display.}
   \end{figure}
   
-  As tasks run in cyclical patterns on SpaceX rockets, being able to compare
+  \paragraph{Purpose:}As tasks run in cyclical patterns on SpaceX rockets, being able to compare
   across cycles is very important to find strange behavior. The Cycles page
   breaks the data into cycles and stacks them, allowing a user to easily scan
   down this chart.
-    
-    The page also has buttons to toggle on and off different CPUs, which removes
+
+\paragraph{Interactivity:}    
+    Like the graph on the Overview page, the graphs on the cycles page can be zoomed in and out with the mouse scroll wheel and clicked and dragged to pan left and right. All CPU graphs are contained in one single .svg file, which is why the zooming works simultaneously over both graphs.
+
+The page also has buttons to toggle on and off different CPUs, which removes
     or adds charts for these CPUs, rescaling other charts to use the full window
     space. Cycles are precomputed if print events exist within the trace. If
     not, the page will be blank when it first renders. The user can enter a
@@ -330,13 +336,12 @@ at the top allow the user to toggle which CPUs display.}
     print events are present in the data. On SpaceX rockets, the period of a cycle 
     is the same across CPUs, so entering a number at the top applies the change
     to all currently displayed charts.
-    
-    Zooming in and out works exactly like as on the Overview page. All CPU graphs are contained in one single .svg file, which is why the zooming works simultaneously over both graphs.
-    
+        
+\paragraph{Comparison to KernelShark:}
     The Cycles page did not exist in KernelShark. In addition, KernelShark did not give users the option of breaking the main graph into cycles.
     
-        The code for the Cycles page is within assets/js/cyclesPage.js. This once again
-    uses gantt-chart-d3.js to create the visualization after fetching the data.
+%        The code for the Cycles page is within assets/js/cyclesPage.js. This once again
+%    uses gantt-chart-d3.js to create the visualization after fetching the data.
   
   \subsection{Task Statistics Page} %May Lynn
 
@@ -347,11 +352,15 @@ at the top allow the user to toggle which CPUs display.}
   the bar chart in a larger, more detailed view.}
   \end{figure}
 
+\paragraph{Purpose:}
 The purpose of the Task Statistics page is to give an overview of the preemption count and runtime of each task. The page displays bar charts of the preemption count and runtime for each task, sorted from highest to lowest, as well as the averages and standard deviations of each. This makes it very easy to see if there are any outliers with a large number of preemptions or a long runtime, or to check if a task is behaving as expected.
 
-All bars in the bar graph have distinct colors to differentiate tasks. The user can click on any task within the bar graph and will be redirected to the Task State page displaying more information about that task. KernelShark did not do analyze and manipulate trace data, so it did not include any task statistics. 
+\paragraph{Interactivity:}
+All bars in the bar graph have distinct colors to differentiate tasks. The user can click on any task within the bar graph and will be redirected to the Task State page displaying more information about that task. The user can toggle between viewing the preemption count graph and the runtime graph by clicking the small graph thumbnails in the sidebar.
 
-The code for this page is within assets/js/preemptionChart.js and assets/js/runtimeChart.js. The bar graphs use the dc.js dimensional charting library.
+\paragraph{Comparison to KernelShark:} KernelShark did not do analyze and manipulate trace data, so it did not include any task statistics. 
+
+%The code for this page is within assets/js/preemptionChart.js and assets/js/runtimeChart.js. The bar graphs use the dc.js dimensional charting library.
 
   \subsection{Task State}
 
@@ -363,21 +372,26 @@ state of the current task over time. The three possible states are preempted,
 waiting, and running.}
 \end{figure}
 
+\paragraph{Purpose:}
     The Task State page displays information about a single task. The user is
     able to see interactions between other tasks and this task with a table of
     preemptions. Users can jump to tasks that preempted the current one by
     clicking on a row in this table. Additionally, the task's state over time
     is displayed at the bottom. Possible task states are preempted, waiting, or
     running and labeled with the colors red, beige, and green respectively. 
+
+\paragraph{Interactivity:}
+%% FIXME these section number are probably wrong after we rearranged
     The graph on the bottom half of the page functions the same as the graphs on the Overview (Section 2.1.3), Cycles (Section 2.1.4), and Compare Tasks page (Section 2.1.7). The user can click the ``+ Compare'' button at the bottom to add this task graph to a series of side-by-side graphs for comparison, which
     is described in Section 2.1.7 Compare Tasks.
     
+\paragraph{Comparison to KernelShark:}
     One of the main downsides of KernelShark is that it did not give the user the option to look at the data on a task level. Being able to look at specific tasks and see how many times a given task preempted other tasks is a very important feature to SpaceX.
     
-        The code for this page is within assets/js/process.js. This page uses
-    gantt-chart-d3.js for the chart and dataScroller.js to create the table of
-    preemptions. The search box autocompletes task names using Twitter
-    Typeahead.
+%        The code for this page is within assets/js/process.js. This page uses
+%    gantt-chart-d3.js for the chart and dataScroller.js to create the table of
+%    preemptions. The search box autocompletes task names using Twitter
+%    Typeahead.
   
   \subsection{Compare Tasks} %Wendy
   
@@ -387,17 +401,22 @@ waiting, and running.}
   multiple tasks. They can be added, reordered, or removed all from this page.}
   \end{figure}
 
+\paragraph{Purpose:}
 The Compare Tasks page allows users to view the same graph as the Task State
 page, but for multiple tasks. Tasks can be reordered so that specific tasks can
 be compared side by side for the same time period. This provides similar
 functionality as the Task State page but with the additional benefit of
 comparisons between tasks. This makes it simple to examine interactions between
-two or more tasks. Users can plot graphs by either typing in a task name at the top of the page, or first viewing that task on the Task State page and clicking the "+ Compare" button. In both cases, the user can start typing in the text box and then will be given a list of possible task names that they might be interested in.
+two or more tasks. 
+
+\paragraph{Interactivity:}
+Users can plot graphs by either typing in a task name at the top of the page, or first viewing that task on the Task State page and clicking the "+ Compare" button. In both cases, the user can start typing in the text box and then will be given a list of possible task names that they might be interested in.
     
+\paragraph{Comparison to KernelShark:}
     In KernelShark, the user is able to view a list of tasks and select which ones they want to graph. These selected graphs were plotted on the same graph as the CPU's, as stated before in Section 2.1.3. CPU graphs are too general to be compared with specific task graphs, so plotting these graphs on different pages seemed like a logical idea. Our tool has the added functionality of being able to easily remove task graphs by clicking the "Remove Task" button. The user can start typing in a name of a task, and then see a list of possible tasks based on user input. This is much faster and easier than going through a long list of tasks.
     
-    The code for this page is within assets/js/process.js. This page uses
-    gantt-chart-d3.js for the chart, and draggabilly.js and packery.js to make the rows of graphs rearrangable.
+%    The code for this page is within assets/js/process.js. This page uses
+%    gantt-chart-d3.js for the chart, and draggabilly.js and packery.js to make the rows of graphs rearrangable.
     
 \subsection{Example User Flow}
   It should be noted that the SpaceX debugging process involves several steps,
