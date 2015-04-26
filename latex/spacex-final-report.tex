@@ -254,6 +254,32 @@ The goals for this project were to make it easier and faster for SpaceX engineer
     \end{tabular}
   \end{center}
 
+\subsection{Example User Flow}
+  It should be noted that the SpaceX debugging process involves several steps,
+  and an engineer knows that tasks are not running in the
+  pattern expected before taking a trace. Users will navigate through the tool
+  differently depending on what level of information they already have.
+
+  For example, if a user already suspects that a particular task is involved
+  in the problem, they could immediately navigate to the Task State page. From
+  this, they are able to see if the task preempted or was preempted by anything
+  at an unexpected time. These related tasks are displayed in the table of
+  preemptions, or when hovering over a preemption event on the graph below it.
+
+  If a user does not have any suspicions about what happened, they could instead
+  navigate to the Cycles page. By comparing the patterns of tasks run during
+  different cycles, it should be easy to see an abnormal sequence of tasks. The
+  user can then hover over this sequence on the chart and read which tasks are
+  running. A user might also navigate to the Task Statistics page to quickly see
+  if any task is being preempted far more than expected. This task could then be
+  searched on the Task State page, as described above.
+
+  There are many other possible ways users might navigate through the
+  application, but the team believes the Cycles page and Task State page will
+  prove especially useful.
+
+  Each page is described in more detail in the following sections.
+
 \subsection{Load File Page}
 
 \begin{figure}[H]
@@ -429,30 +455,6 @@ Users can plot graphs by either typing in a task name at the top of the page, or
 %    The code for this page is within assets/js/process.js. This page uses
 %    gantt-chart-d3.js for the chart, and draggabilly.js and packery.js to make the rows of graphs rearrangable.
     
-\subsection{Example User Flow}
-  It should be noted that the SpaceX debugging process involves several steps,
-  and an engineer knows that tasks are not running in the
-  pattern expected before taking a trace. Users will navigate through the tool
-  differently depending on what level of information they already have.
-
-  For example, if a user already suspects that a particular task is involved
-  in the problem, they could immediately navigate to the Task State page. From
-  this, they are able to see if the task preempted or was preempted by anything
-  at an unexpected time. These related tasks are displayed in the table of
-  preemptions, or when hovering over a preemption event on the graph below it.
-
-  If a user does not have any suspicions about what happened, they could instead
-  navigate to the Cycles page. By comparing the patterns of tasks run during
-  different cycles, it should be easy to see an abnormal sequence of tasks. The
-  user can then hover over this sequence on the chart and read which tasks are
-  running. A user might also navigate to the Task Statistics page to quickly see
-  if any task is being preempted far more than expected. This task could then be
-  searched on the Task State page, as described above.
-
-  There are many other possible ways users might navigate through the
-  application, but the team believes the Cycles page and Task State page will
-  prove especially useful.
-
 \section{Architecture} % Wendy
 
   \subsection{Overview}
