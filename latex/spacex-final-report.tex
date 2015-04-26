@@ -258,15 +258,20 @@ The goals for this project were to make it easier and faster for SpaceX engineer
 display if no data has ever been loaded.}
   \end{figure}
 
+\paragraph{Purpose:}
 When the user first loads SpaceShark, they will see the above screen in Figure
 2.1. The purpose of the Load File page is to allow the user to choose which JSON file to load as their data, 
 or choose to use the data that was most recently used if this is not the user's first time using 
 the tool. In addition, it also reloads the same state each page was in during
 the user's previous session. This allows the user to easily resume their work if they were previously examining a specific file.
 
+\paragraph{Interactivity:}
+The user can click either the ``Choose File'' button to choose a new file to view, or if they have viewed a file using our tool before, they can click the ``Use Last Data'' button to see the data that they were previously viewing.
+
+\paragraph{Comparison to KernelShark:}
 KernelShark did not allow the user to use previously loaded data. SpaceX engineers often want to be able to save and revisit their work at a later time, so this served as an inconvenience to them. 
 
-The code for the Load File page can be found in assets/js/loadFile.js.
+%The code for the Load File page can be found in assets/js/loadFile.js.
 
   \subsection{Overview Page} 
   
