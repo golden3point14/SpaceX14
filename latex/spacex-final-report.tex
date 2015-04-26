@@ -904,25 +904,23 @@ have people unfamiliar with our tool use it.  User testing helped the team
 identify what features were useful, what features should be modified, and what
 features needed to be added to make the tool as effective as possible.  We will
 focus mostly on the negative feedback, both from our liaisons and user testing,
-as critical feedback was the most useful in moving forward to improve the tool.
-
-A common pitfall of our designs was that they isolated data too much. The way a
-task behaves by itself isn't enough to understand what is going on with the
-computer as a whole. Seeing the interactions of the entire system is more useful
-than seeing the behavior of individual pieces.
+as critical feedback was the most useful in moving our tool forward.
 
 Below we will cover our methodology of user testing, feedback for specific
 pages, and how that feedback shaped the changes we made, leading to the current
 version of SpaceShark.
 
 \section{Methodology} % Wendy
-In order to test our tool, two members of our team would watch an individual
-work their way through it using our sample data, or in some cases the user's
-data if they had some prepared. We tried to provide as little
-input as possible, except for encouraging the team member to think out loud and
-talk about what they were thinking, expecting, or doing, and why. While the user
-did this, we would take notes on both what they were saying and what they were
-doing.
+User testing was conducted with four SpaceX engineers who all had some
+experience using KernelShark. Testing was conducted with one subject
+at a time over a half hour period.
+
+During testing, two members of our team watched the user work their way through
+our tool using our sample data, or in some cases the user's data if they had
+some prepared. We tried to provide as little input as possible, except for
+encouraging the team member to think out loud, describing what they were
+expecting or doing, and why. While the user did this, we took notes on what they
+were saying and doing.
 
 Once the user felt like they had explored the tool, we talked more in-depth
 about their experience, also elaborating on our intent with the tool,
@@ -935,32 +933,21 @@ a page was helpful or unhelpful for their specific workflow.
 \subsubsection{Overview Page}
 
 The main page of KernelShark featured a graphical display of the processes
-running over time and a tabular version of the same information. KernelShark had
-a number of problems, including poor user interface, unintuitive zooming,
-features that did not work as expected, and a limited way to view the data.
-Using KernelShark required the user to know the behavior they expected to see
-beforehand, as it did not provide any indication of cycles or features aimed
-specifically at detecting errors.
+running over time and a tabular version of the same information.
 
-Before winter break, our tool featured a graphical representation of tasks running over time,
-as well as three tables that displayed the top ten preempted, longest running, and
-longest waiting tasks. 
-Through user testing, we found that three out of four users mentioned that they
-did not find the statistics on the Overview page helpful. Because only one user found the statistics useful,
-we decided as a team that it would be best to omit them from the Overview page, and
-only display them on the Task Statistics page.
+Before winter break, our tool also featured a graphical representation of tasks
+running over time. The tool also displayed the top ten preempted, longest
+running, and longest waiting tasks in tables at the top of the page. 
 
-Additionally, the Overview page initially only showed the graphical
-representation. Two of the users mentioned that the typical workflow of the tool
-would be to visually find the problem in the graph, zoom in to that particular
-strange spot in the graph, be able to jump to that spot in the events list, and
-then scan a tabular version of the events list. In order to have this workflow,
-we would need to have the tabular version of the graph on the Overview page.
-As a result we decided that the Overview page of our tool would have both the
-graphical version of the time series data, as well as the tabular version of it.
-This gives our Overview page the context that SpaceX engineers are looking for.
-It is easy to find something interesting on the graph, and then get the details
-on it via the tabular display.
+During user testing, three out of four users said that they did not find the
+tables at the top of the page helpful. Two of the users described the typical
+workflow they used in KernelShark as visually finding the problem in the graph,
+jumping to that event in the events list, and then scanning the events list.
+They felt that being able to quickly scan the events list was a very valuable
+feature.
+
+Based on this feedback, we removed the tables at the top of our page and added
+an events list for users to interact with.
 
 \begin{figure}[H]
 \begin{center}
@@ -970,24 +957,14 @@ representation of the tasks, and the bottom is a tabular view.}
 \end{center}
 \end{figure}
 
-Our Overview page mimics the good
-functionality that KernelShark had. Additionally, it allows users to filter the
-tabular list of events on a variety of properties, and jump directly from a
-specific point in the graph to the same point represented in the table. Double
-clicking on a particular task in the table will also take the user to the
-Process page, where they can get more information on a specific task. Covering
-much of KernelShark's functionality on this page allowed us to use the rest of
-our tool to surpass KernelShark's functionality and create a more versatile
-tool.
-
 \subsubsection{Task State Page}
 
-With KernelShark, the user could pull out a graphical display of a single
-task and put it on its own line. However, that was the extent of what
-KernelShark did with regards to individual tasks.
+With KernelShark, a user could choose individual tasks to display under
+the main timeline of all events. However, that was teh extend of what
+Kernelshark did with regards to individual tasks.
 
-We wanted to take this idea further by providing detailed information and
-statistics about individual tasks. This would give users a different way to view
+The team was interested in providing more details and statistics about
+individual tasks. This would give users a different way to view
 their data, which our liaisons thought would be helpful
 in the debugging process.
 
