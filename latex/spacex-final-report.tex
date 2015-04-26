@@ -160,8 +160,8 @@ Rachel Macfarlane}
 
 
 %%% Content.
-\chapter{Background} % May Lynn
-\section{Introduction}
+\chapter{Background and Project Goals} % May Lynn
+%\section{Introduction}
 
 SpaceX is an American space transport company that designs and manufactures
 advanced rockets and spacecraft. SpaceX rockets depend on a variety of software
@@ -170,35 +170,35 @@ Almost all of this software is written in-house and is complex enough that subtl
 problems are often hard to catch and very time consuming to debug.
 
 %\section{Background} % May Lynn
-\section{Tracing and Debugging}
+%\section{Tracing and Debugging}
 
-The data that SpaceX developers examine in order to find software bugs is called
-a kernel trace, which documents the different tasks running on a computer over a
+The data that SpaceX developers use to find software bugs is called
+a {\bf kernel trace}, which documents the different tasks running on a computer over a
 certain span of time, keeping track of when each task was running on each processor. 
 
 % Several computers are on board each SpaceX rocket and rely on tasks running in
 % predictable, cyclical patterns to coordinate. An unexpected preemption, priority
 % inversion, or some break in the pattern of tasks being run can cause problems
 % for the rocket.
-In order to find potential bugs in their software, SpaceX developers look for
+To find potential bugs in their software, SpaceX developers look for
 problems like unexpected preemptions, priority inversions, and breaks in the
-pattern of tasks being run. These terms are defined below:
-\begin{itemize}
-\item A {\bf preemption} occurs when one program is running, and
+pattern of tasks being run.
+ A {\bf preemption} occurs when one program is running, and
 is then blocked by another program starting to run on the same CPU. 
-\item A {\bf priority
+A {\bf priority
 inversion} occurs when a high-priority task is indirectly blocked by something of
 lower priority using a shared resource that the higher priority task needs in
 order to run. 
-\end{itemize}
 
-There is a glossary of terms in the Appendix.
+The software running on SpaceX rockets has deadlines for tasks at regular intervals because timing is very important in rocket flight. When there is a break in this cyclical pattern of processes this means that there is likely a bug in the software. These cyclical patterns of processes are called ``cycles''.
 
-The software running on SpaceX rockets has deadlines for tasks at regular intervals because timing is very important in rocket flight, so when there is a break in this cyclical pattern of processes this means that there is likely a bug in the software. These cyclical patterns of processes are called ``cycles''.
-\section{Existing Tool}
-SpaceX currently uses a tool called KernelShark to visualize trace data and help find any bugs or anomalies. 
-We were informed by our liaisons that this debugging process can take up to several days, 
-which is an inefficient use of engineer's time. KernelShark is a single page tool, as seen in Figure 1.1.\\
+%\section{Existing Tool}
+SpaceX currently uses a tool called KernelShark %%TODO FIXME citation
+to visualize trace data and help find any bugs or anomalies (Figure 1.1). 
+SpaceX engineers look for anomalies in process timing, which often indicates 
+software problems on the rocket. We were informed by our liaisons that this
+ debugging process can take up to several days, 
+which is an inefficient use of engineer's time. \\
 
 \begin{figure}[H]
   \centering
@@ -207,18 +207,15 @@ which is an inefficient use of engineer's time. KernelShark is a single page too
 \end{figure}
 
 KernelShark's major failing is that it doesn't provide any tools or methods to
-make it easier to find anomalies, but simply displays the information in a
-single
-kind of view. For example, KernelShark does not provide any data on cycles. 
+make it easier to find anomalies, but simply displays the information and provides limited ways to interact with the data. For example, KernelShark does not provide any data on cycles. 
 In order to utilize information about cycles, the
 user must manually recognize where cycles start and end. Then they must manually
-compare all cycles to each other to see if anything is different, by going back
+compare all cycles to one another to see if anything is different, by going back
 and forth on the timeline KernelShark provides.
 
 KernelShark has a poorly designed UI that does not function as
 expected. The tabular view on the bottom of KernelShark is not searchable, nor
-can the columns be sorted. All lists in KernelShark cannot be sorted, meaning
-that if the user has hundreds of tasks running, they must look through a list
+can the columns be sorted. None of the lists in KernelShark can be sorted, so a user might need to look through a list
 with hundreds of tasks to find the specific task they want. Additionally, zooming out on
 KernelShark's visual timeline is uninituitive and confusing, even for veteran
 users of the tool.
@@ -231,9 +228,8 @@ users of the tool.
 %displayed below this main chart, but the menu to select a task does not have
 %any searching capability and does not order the tasks in any discernible way.
 
-\section{Project Goals} % May Lynn
-Our goals for this project were to make it easier and faster for SpaceX engineers to find software problems by creating a tool that visualizes rocket data and highlights problem areas. We have created an improved user experience and provided more visualizations of the data than the old tool. We have called the tool that we created SpaceShark.
-
+%\section{Project Goals} % May Lynn
+The goals for this project were to make it easier and faster for SpaceX engineers to find software problems by creating a tool that visualizes rocket data and highlights problem areas. We have created an improved user experience and provided more visualizations of the data than the old tool. 
 \chapter{SpaceShark}
 \section{Design} %Everyone gets a part
 
