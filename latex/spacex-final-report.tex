@@ -1400,26 +1400,26 @@ the application can be repackaged with these steps.
 
 \begin{enumerate}
   \item Navigate into the top level of the directory, which contains
-    package.json
+    \texttt{package.json}
   \item Move the spaceshark script, README, and parser jar files to the parent directory
     and delete the rest of the parser files
   \item run
     \begin{center}\texttt{zip -r ../\${PWD\#\#*/}.nw *}\end{center} here, which will create a file
-    called SpaceX14.nw in the parent directory
+    called \texttt{SpaceX14.nw} in the parent directory
   \item Download a copy of node-webkit from
     \texttt{https://github.com/nwjs/nw.js} and
     place it in the directory above the Spaceshark repository
   \item Move to this directory and run 
     \begin{center}\texttt{cat nw SpaceX14.nw >
       app \&\& chmod +x app}\end{center}
-  \item Zip together the app file, nw.pak, icudtl.dat, the spaceshark script,
+  \item Zip together the app file, \texttt{nw.pak}, \texttt{icudtl.dat}, the spaceshark script,
     README, and parser jar files
 \end{enumerate}
 
 \newpage
 \section{Debugging}
-To display a web console for debugging, within package.json change the line
-``toolbar: false'' to ``toolbar: true.'' A gear icon should now appear in the
+To display a web console for debugging, within \texttt{package.json} change the line
+\texttt{toolbar: false} to \texttt{toolbar: true}. A gear icon should now appear in the
 top right corner of the application when it is launched. When clicked, this
 displays a web console that allows the user to view current css properties,
 set breakpoints in code, and view the resources within IndexedDb and local
