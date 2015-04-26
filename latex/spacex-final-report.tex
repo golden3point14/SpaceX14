@@ -1255,7 +1255,8 @@ One user suggested that the graph respond when an event in the events list is cl
 \section{Known bugs}
 
   We have documented bugs and like-to-haves on our Computer Science hosted trac
-  site using the ticketing system. Outstanding issues at this time are
+  site using the ticketing system. Outstanding issues at this time are as
+  follows:
 
   \begin{itemize}
   
@@ -1273,7 +1274,8 @@ One user suggested that the graph respond when an event in the events list is cl
     \texttt{sched\_switch} events. If \texttt{sched\_stat\_runtime} events do
     not occur consistently, the Task Statistics page will display incorrect
     information. If this is not the issue, either the parser
-    or the visualization may be handling the data incorrectly.
+    or the visualization may be handling the data incorrectly.If the parser is
+    okay, the problem is likely in \texttt{runtimeChart.js}.
 
 \end{itemize}
 
@@ -1320,8 +1322,7 @@ It is also possible that the loaded files will contain more than two CPU's. For 
 
 \section{Speed} %Wendy
 The data SpaceX will be using with our tool is very large, and becomes even
-larger once we have parsed it. As a result, some parts of the tool load slowly,
-and this is something we are still working on fixing. One main fix we have
+larger once we have parsed it. As a result, some parts of the tool load slowly. One main fix we have
 implemented is batch loading the list of events on the main page so that the
 user can start interacting with the tool without waiting to load the entire
 table, especially since all of the table is typically not needed.
@@ -1331,13 +1332,13 @@ slowest part of our application, but at this point in time we do not have a way
 to fix this.
 
 \section{Scalability}
-If given files above a certain size, typically using more than 4
+Typically for trace files using more than 4
 cores, the parsed version will be too large for IndexedDB to load, and
 sometimes too large for the parser to handle as well.
 
 There are two possibilities for fixing this. One is to prune the JSON or
 find a more compressed method of storing the data. The other is to find a
-substitute for IndexedDB that is faster.
+substitute for IndexedDB that can store more data.
 
 \chapter{Appendices}
 \newpage
