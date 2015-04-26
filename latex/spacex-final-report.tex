@@ -233,20 +233,26 @@ The goals for this project were to make it easier and faster for SpaceX engineer
 \chapter{SpaceShark}
 \section{Design} %Everyone gets a part
 
-  The SpaceShark tool is meant to make it easier for SpaceX engineers to find bugs. We
-  accomplish this through a variety of pages that serve unique purposes, giving
-  engineers many options in how they want to approach finding a problem. 
-  An overview of the trace data is given on the first page that is displayed to a user, 
-  and more detailed information can be found by going to the other
-  pages, including overall statistics, a cyclical breakdown of events, task-specific information, and
-  task-to-task comparisons. Through these pages we provide engineers the ability
-  to easily go from viewing their data in it's entirety to viewing specific
-  details of one or two tasks, and vice versa, while providing intuitive visual
-  guidance on where anomalies might exist.
-  
-  Below we will describe the pages in more detail, including the purpose
-  of each page and how they accomplish their respective goals. This will be
-  followed by an example user work flow.
+  The SpaceShark tool is meant to make it easier for SpaceX engineers to find
+  scheduling related problems.  SpaceShark is composed of pages that each give a
+  different view of the data, from a complete overview down to the details of
+  of a single task. A brief summary of each page and its intended purpose is
+  given below.
+
+  \begin{center}
+    \begin{tabular}{p{0.2\linewidth}p{0.5\linewidth}p{0.3\linewidth}}
+     \toprule
+      Page Name       & Purpose & Code artifacts     \\
+      \midrule
+      Load File       & Allow a user to choose the data to import into the application        & assets/js/loadFile.js\\
+      Overview        & Provide user overall view of the data        & assets/js/main.js, assets/js/gantt-chart-d3.js, dataTables.js\\
+      Cycles          & Break data into intervals so that a user can compare across them        & assets/js/cycles.js, assets/js/gantt-chart-d3.js\\
+      Task Statistics & Give user high-level statistics about the data, comparing task's total runtimes and preemptions        & assets/js/runtimeChart.js, assets/js/preemptionChart.js\\
+      Task State      & Display a single tasks actions and interactions         & assets/js/process.js\\
+      Task Compare    & Allow a user to compare several tasks changes in state over time     & assets/js/compare.js\\
+    \bottomrule
+    \end{tabular}
+  \end{center}
 
 \subsection{Load File Page}
 
