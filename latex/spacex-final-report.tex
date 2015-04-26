@@ -738,7 +738,8 @@ DataTables also makes use of Local Storage in order to save the scroll position 
 
   The general structure of our code is similar to
   most web applications. In the root we have HTML files, which call to
-  JavaScript and CSS files, located in assets/js and assets/css respectively.
+  JavaScript and CSS files, located in \texttt{assets/js} and
+  \texttt{assets/css} respectively.
   HTML files do not have any JavaScript or CSS inside them, but exclusively call
   to other functions for this. Each page has its own specific JavaScript file,
   and then there are a number of shared files that multiple or all pages use. We
@@ -746,26 +747,27 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   
   \subsubsection{Selection of Graphing Tool} % Rachel
   Many pages render a timeline of running tasks which users can interact
-  with by panning and zooming. This chart is critical, as a bug manifests
+  with by panning and zooming. This graph is critical, as a bug manifests
   itself as a task running at an unexpected time, or failing to run at a
   particular time. We spent several weeks experimenting with different
-  javascript charts, including timeline.js, vis.js and gantt-chart-d3.js,
+  javascript charts, including \texttt{timeline.js}, \texttt{vis.js} and
+  \texttt{gantt-chart-d3.js},
   to find one that would be suitably fast and easy for us to add new
   features to. Our main selection criteria were speed, zooming and dragging
   capabilities, and either built-in or easy to add handlers for user clicks
-  on portions of the chart. We decided to use gantt-chart-d3.js because it
+  on portions of the chart. We decided to use \texttt{gantt-chart-d3.js} because it
   rendered more quickly and was more responsive than the other charts. It
   also came with dragging capabilities, and the team saw that hovertext and
   click handling could easily be added. Zooming on d3 charts should be
   available out of the box, but did not function as expected because our y scale
   is ordinal rather than numeric and should not be rescaled. The team
   ended up writing a custom zoom function to handle this and other issues
-  associated with syncing the zoom level of  multiple charts on the same page.
+  associated with syncing the zoom level of multiple charts on the same page.
   
   \subsubsection{Creating a Timeline}
   On the Overview, Cycles, Task State, and Task Compare page, the same type of
-  chart is used. The chart shows either which task is running at a given time,
-  or what state a process is in at a given time. The chart is fed a list of
+  graph is used. The graph shows either which task is running at a given time,
+  or what state a task is in at a given time. The graph is fed a list of
   events to display and a number of optional settings before being drawn. The
   array of all events needs to be passed through several helper functions
   before it is ready to be given to the graph.
@@ -817,7 +819,7 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   \end{enumerate}
   \subsubsection{Primary JavaScript/CSS files}
   One of the primary JavaScript files we've worked
-  with and changed is gantt-chart-d3.js. This file is the logic for all of the
+  with and changed is \texttt{gantt-chart-d3.js}. This file is the logic for all of the
   graphs. This file was originally written by Dimitry Kudrayvtsev, but we have
   significantly modified it to produce the behavior we want.
 
@@ -844,7 +846,7 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   State pages - these were the working titles we used through most of the
   semester.
 
-  Sidebar.js is a fairly simple script that creates the sidebar for all of the
+  \texttt{Sidebar.js} is a fairly simple script that creates the sidebar for all of the
   pages, excluding the first page of the application, where the user chooses a file.
   It controls navigation and sets highlighting of the current tab.
 
@@ -876,8 +878,9 @@ DataTables also makes use of Local Storage in order to save the scroll position 
 The README of this repository provides a link to download a
   64 bit Linux version of the application. This release is a zip file that
   contains an executable, the parser, a short wrapper script, and two additional
-  files that are necessary to get the executable to run: nw.pak and icudlt.dat.
-  The short wrapper script is called spaceshark and has the following usage:
+  files that are necessary to get the executable to run: \texttt{nw.pak} and
+  \texttt{icudlt.dat}.
+  The short wrapper script is called \texttt{spaceshark} and has the following usage:
 
 \begin{verbatim}spaceshark [-p | --parse filename] [-o | --open filename] 
            [ -h | --help]\end{verbatim}
@@ -886,7 +889,7 @@ The README of this repository provides a link to download a
   application. The parser will be run and output a JSON file, which will be
   passed to the application as it opens, skipping the load page that asks the
   user to choose a file. The second option allows the user to pass a parsed
-  JSON file to the application. Finally, using the -h flag or any option
+  JSON file to the application. Finally, using the \texttt{-h} flag or any option
   not recognized by the script will display the usage and a description of
   available options.
 
