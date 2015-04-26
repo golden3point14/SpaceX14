@@ -294,14 +294,14 @@ display if no data has ever been loaded.}
 When the user loads SpaceShark, they will see the above screen in Figure
 2.1. The purpose of the Load File page is to allow the user to choose which JSON file to load as their data, 
 or choose to use the data that was most recently used if this is not the user's first time using 
-the tool. In addition, it also reloads the same state each page was in during
-the user's previous session. This allows the user to easily resume their work if they were previously examining a specific file.
+the tool. It also reloads the same state each page was in during
+the user's previous session. The user can easily resume their work if they were previously examining data.
 
 \paragraph{Interactivity:}
 The user can click either the ``Choose File'' button to choose a new file to view, or if they have viewed a file using our tool before, they can click the ``Use Last Data'' button to see the data that they were previously viewing.
 
 \paragraph{Comparison to KernelShark:}
-KernelShark did not allow the user to use previously loaded data. SpaceX engineers often want to be able to save and revisit their work at a later time, so this served as an inconvenience to them. 
+KernelShark did not allow the user to use previously loaded data. SpaceX engineers often want to be able to save and revisit their work at a later time, so this was an inconvenience to them. 
 
 %The code for the Load File page can be found in assets/js/loadFile.js.
 
@@ -320,15 +320,15 @@ same data that are of particular interest to the user. The graph shows all of
 the programs that were running on each of the CPU's, and the table displays 
 the all of the CPU events.
 
-\paragraph{Interactivity:} The user can zoom in and out on the graph by using the mouse scroll wheel, and can pan left and right by clicking and dragging. Double clicking on the graph also zooms in on it. Hovering over an event in the graph displays a pop up with more information about that event. Clicking on an event displayed in the graph will cause the tabular events list below to scroll to that event. Double clicking on an event in the events list will navigate to the Task State page showing a more detailed view of that process.
+\paragraph{Interactivity:} The user can zoom in and out on the graph by using the mouse scroll wheel, and can pan left and right by clicking and dragging. Double clicking on the graph also zooms in on it. The user can also hover over any event on the graph to see a text box with more information about that particular event, such as the task name, the CPU it's running on, its PID, duration, and extra information. Clicking on an event displayed in the graph will cause the tabular events list below to scroll to that event. Double clicking on an event in the events list will navigate to the Task State page showing a more detailed view of that process.
 
 The columns of the table consist of the CPU, start time, name, PID, event type, and extra info about a particular event. By default, the table is displayed in ascending order from the first events start time to the last events start time. Hovering over any of the table cells highlights that entire row. Users can also click on a event to be redirected to that task on the Task State page. The search feature does multi-column filtering based on the search input. All columns headers are clickable to be ordered in ascending or descending order. Below the table, it shows the total number of entries and the range of entries that the user is currently viewing.
 
-\paragraph{Comparison to KernelShark:} KernelShark also had graph plots of the CPU's and included similar features as our tool though implemented in different ways. A user could zoom by clicking and dragging a rectangular box, from left to right, over the graph. This allowed the user to precisely view a specific area of the graph that they wanted. Although this zoom functionality seems helpful, it didn't really follow common zoom functionalities of a modern day desktop application. Zooming out of the graph in KernelShark is also unintuitive; the user can click and drag a rectangular box, from right to left, over the graph. This zooming out technique does not give the user any kind of information about how much the graph is zooming out and can therefore be very confusing to users. KernelShark is a responsive tool, partly because it doesn't load all the data while zooming. When zooming on KernelShark, a horizontal bar appears at the bottom of the graph to be able to easily pan. To save on resources, KernelShark doesn't load all the data from the beginning and the end of the trace file when zooming. 
+\paragraph{Comparison to KernelShark:} KernelShark also had graph plots of the CPU's and included similar features. A user could zoom by clicking and dragging a rectangular box, from left to right, over the graph. This allowed the user to precisely view a specific area of the graph that they wanted. Although this zoom functionality seems helpful, it didn't really follow common zoom functionalities of a modern day desktop application. Zooming out of the graph in KernelShark is also unintuitive; the user can click and drag a rectangular box, from right to left, over the graph. This zooming out technique does not give the user any kind of information about how much the graph is zooming out and can therefore be very confusing to users. KernelShark is a responsive tool, partly because it doesn't load all the data while zooming. When zooming on KernelShark, a horizontal bar appears at the bottom of the graph to be able to easily pan. To save on resources, KernelShark doesn't load all the data from the beginning and the end of the trace file when zooming. 
     
     Users can click on a specific point in the graph and the table will update its position and jump to that event. KernelShark had this same functionality of being able to click on a spot in the graph and have the table display that event. %% IS THIS TRUE?!?!
     
-    The user can also hover over any part of the gantt chart and be able to view a text box with more information about that particular event, such as the task name, the CPU it's running on, its PID, duration, and extra info. This is a feature that also existed in KernelShark, and we felt that it would be useful to reimplement in our own tool.
+   The feature of hovering over the graph to get more information also existed in KernelShark, and we felt that it would be useful to reimplement in our own tool.
 
 %% Use single click in this section, but need to eventually change our tool to use double click instead!!
 %% Need to include more information about what specific search functionalities didn't exist in KernelShark?
