@@ -543,21 +543,15 @@ Users can plot graphs by either typing in a task name at the top of the page, or
   the web application. The output JSON has the following elements:
 
   \begin{center}
-    \begin{tabular}{|l|l|}
-      \hline
+    \begin{tabular}{ll}
+      \toprule
       Tasks      & An array of all tasks seen in the trace\\
-      \hline
       Events     & An array of all events seen in the trace\\
-      \hline
       cycleEvents & An array of cycle events generated from user markers\\
-      \hline
       numCPUs     & Integer, how many CPUs were in the trace\\
-      \hline
       AutocompleteNames & An array of strings, listing all tasks names\\
-      \hline
-      AutocompleteEventTypes & An array of strings, listing all event types in
-      the trace\\
-      \hline
+      AutocompleteEventTypes & An array of strings, listing all event types in the trace\\
+      \bottomrule
     \end{tabular}
   \end{center}
 
@@ -565,11 +559,12 @@ Users can plot graphs by either typing in a task name at the top of the page, or
   events, and cycleEvents. A task has the following data.
 
   \begin{center}
-    \begin{tabular}{lll}
+    \begin{tabular}{p{0.2\linewidth}p{0.2\linewidth}p{0.6\linewidth}}
+      \toprule
       Task      &        &                                        \\
-      \hline
+      \midrule
       Field           & Type         & Additional description \\
-      \hline
+      \midrule
       name            & string       & \\
       pid             & int          & \\
       events          & int array    & Indices into the Events array to find associated events\\
@@ -577,7 +572,8 @@ Users can plot graphs by either typing in a task name at the top of the page, or
       preemptionCount & int          & A running total of times this task was preempted                    \\
       totalRuntime    & long         & Time this task ran in milliseconds during the trace        \\
       totalWaittime   & long         & Time this task waited in milliseconds during the trace     \\
-      totalSleeptime  & long         & Time this task slept in milliseconds during the trace     
+      totalSleeptime  & long         & Time this task slept in milliseconds during the trace\\
+      \bottomrule
     \end{tabular}
   \end{center}
 
@@ -588,27 +584,24 @@ Users can plot graphs by either typing in a task name at the top of the page, or
 
   \begin{center}
     \begin{tabular}{lll}
+      \toprule
       Event      &        &                                        \\
-      \hline
+      \midrule
       Field     & Type   & Additional description                 \\
-      \hline
+      \midrule
       name      & string &                                        \\
       pid       & int    &                                        \\
       cpu       & int    &                                        \\
       startTime & double & Time in milliseconds since kernel boot \\
       eventType & string &                                        \\
       extraInfo & string &                                        \\
-      \hline
-      Switch event specific data & & \\
-      \hline
-      activeName & string & The name of the task switching in      \\
-      activePID  & string &                                        \\
-      \hline
-      Print event specific data & & \\
-      \hline
-      userMark   & string & Currently unused
+      activeName* & string & The name of the task switching in      \\
+      activePID*  & string &                                        \\
+      \bottomrule
     \end{tabular}
   \end{center}
+
+  *This information is only present on switch events.\\\\
 
   \texttt{trace-cmd} can also pick up ``print'' events. Print events allow users to add
   their own markers as a task runs. A user can generate a print event by making
@@ -621,12 +614,14 @@ Users can plot graphs by either typing in a task name at the top of the page, or
 
   \begin{center}
     \begin{tabular}{lll}
+      \toprule
       cycleEvent      &        &                                        \\
-      \hline
+      \midrule
       Field     & Type   & Additional description                 \\
-      \hline
+      \midrule
       startTime      & double &                                        \\
       extraInfo       & string    &                                        \\
+      \bottomrule
     \end{tabular}
   \end{center}
 
