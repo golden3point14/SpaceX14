@@ -617,7 +617,7 @@ Users can plot graphs by either typing in a task name at the top of the page, or
   \texttt{trace-cmd} can also pick up ``print'' events. Print events allow users to add
   their own markers as a task runs. A user can generate a print event by making
   an addition to the code of a task. We rely on these user-generated markers to
-  identify cycles; print events occur periodically in some of the tasks we are
+  identify cycles. Print events occur periodically in some of the tasks we are
   tracing. Print events can also be used for other purposes, so we check to see
   that the user has annotated them with \texttt{CYCLE\_START} by looking at the extra
   information field of a print event. If the extra information field starts with
@@ -636,11 +636,11 @@ Users can plot graphs by either typing in a task name at the top of the page, or
     \end{tabular}
   \end{center}
 
-  To see an example, view Appendix A at the end of the report.
+  To see an example of the JSON file, view Appendix A at the end of the report.
   \newline
   \newline
-  As long as this file remains the same, any changes to the internals of the
-  parser will not affect the application itself. Additionally, this will allow
+  If the format of the JSON file remains the same, any changes to the internals of the
+  parser will not affect the application itself. This will allow
   someone with a different output to write their own parser to create the same
   type of output so that they can view their data in our tool.
 
@@ -652,25 +652,24 @@ Users can plot graphs by either typing in a task name at the top of the page, or
     technologies for creating our application. One possibility was simply
     extending KernelShark, the existing tool. After looking at the code for
     this, a large number of C files, we decided it would be easier to
-    reimplement and extend it in something else; understanding the code base
-    would take a very long time, and we felt other languages had better
-    UI and charting libraries. We looked into Java UI libraries for
+    reimplement and extend it in something else. Understanding the KernelShark code base
+    would take a very long time, and there was very little documentation. We looked into Java UI libraries for
     desktop applications, as well as web-technology based charting libraries.
-    During this research, we found node-webkit, which allows for
+    We found node-webkit, which allows for
     HTML/CSS/JavaScript applications to be packaged and run as desktop
-    applications with no reliance on the internet. As this allowed us to take
+    applications with no reliance on the internet. As node-webkit allows us to take
     advantage of many existing UI widgit and charting libraries that many team
     members were familiar with, we decided to take this route.
 
   \subsubsection{IndexedDB}
 
-  The application takes the JSON file and loads it into IndexedDB, a
+  The application loads the JSON file into IndexedDB, a
   browser-based database. IndexedDB is built into most browsers, including
-  node-webkit, which actually runs Chromium. More information on the details of IndexedDB can be found here:
+  node-webkit, which runs Chromium. More information on the details of IndexedDB can be found here:
 \begin{center}
   https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB\_API
 \end{center}
-  We use IndexedDB to store data between pages. It also
+  We use IndexedDB to store data so that it does not have to be reloaded every time the user navigates to a different page. It also
   maintains storage between application sessions. Therefore, we are able to have
   the choice to load the same file again, without reselecting it. If the user
   chooses to load a new file, we just write over this.
@@ -684,15 +683,16 @@ Users can plot graphs by either typing in a task name at the top of the page, or
     \item \texttt{Events} (a listing of all the events)
   \end{itemize}
   These correspond to the JSON types laid
-  out in the Parser section (FIXME presumably we have numbers/pages later).
+  out in the Parser section (Section 2.2.3).
 
-  Using the node-webkit profiling tool, we can see that IndexedDB is the slowest
-  part of our application, as transactions with the database must be opened and
-  closed. Ideally, we would use something less complex, but other options such
-  as Local Storage did not have enough space for our large files.
+%% This is repeated in future work
+%  Using the node-webkit profiling tool, we can see that IndexedDB is the slowest
+%  part of our application, as transactions with the database must be opened and
+%  closed. Ideally, we would use something less complex, but other options such
+%  as Local Storage did not have enough space for our large files.
 
   IndexedDB also has  a size limit, but this is typically not reached except for
-  unusually long files or files with 4 or more CPUs. Our liaisons have indicated
+  unusually long files or data from a computer with 4 or more CPUs. Our liaisons have indicated
   that the trace files they deal with do not exceed 4 CPUs.
 
   \subsubsection{Local Storage}
@@ -706,7 +706,7 @@ Users can plot graphs by either typing in a task name at the top of the page, or
   load the same data we still have their state changes saved. If they load a new
   file Local Storage is cleared.
 
-Here is a list of the Local Storage variables that we are using, and what they are for:
+Here is a list of the Local Storage variables that we use, and what they are for:
 \begin{itemize}
   \item \texttt{cellData}: A string containing the name and PID of the task currently being
   shown on the Task State page. 
@@ -728,7 +728,7 @@ Here is a list of the Local Storage variables that we are using, and what they a
 \item \texttt{mainCurrScale}: The last recorded scale for the Overview graph.	
 \item \texttt{mainCurrTranslateX}: The last recorded x translate for the Overview graph.
 \item \texttt{mainCurrTranslateY}: The last recorded y translate for the Overview graph
-  (not used).
+  (not used). %% TODO should we explain why they are not used?
 \item \texttt{maxDuration}: The longest time in seconds that a CPU ran for. Serves as
   the end time for all graphs.
 \item \texttt{processCurrScale}: The last recorded scale for the Task State graphs.
@@ -743,12 +743,12 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   \subsubsection{Overall Application Structure}
 
   The general structure of our code is similar to
-  most web applications. In the root we have HTML files, which call to
+  most web applications. In the root we have HTML files, which link to
   JavaScript and CSS files, located in \texttt{assets/js} and
   \texttt{assets/css} respectively.
-  HTML files do not have any JavaScript or CSS inside them, but exclusively call
-  to other functions for this. Each page has its own specific JavaScript file,
-  and then there are a number of shared files that multiple or all pages use. We
+  The HTML files do not have any JavaScript or CSS inside them, but exclusively call
+  to other files for this. Each page has its own specific JavaScript file,
+  and there are a number of shared files that multiple or all pages use. We
   have used a number of JavaScript libraries.
   
   \subsubsection{Selection of Graphing Tool} % Rachel
@@ -756,7 +756,7 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   with by panning and zooming. This graph is critical, as a bug manifests
   itself as a task running at an unexpected time, or failing to run at a
   particular time. We spent several weeks experimenting with different
-  javascript charts, including \texttt{timeline.js}, \texttt{vis.js} and
+  JavaScript charts, including \texttt{timeline.js}, \texttt{vis.js} and
   \texttt{gantt-chart-d3.js},
   to find one that would be suitably fast and easy for us to add new
   features to. Our main selection criteria were speed, zooming and dragging
@@ -771,7 +771,7 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   associated with syncing the zoom level of multiple charts on the same page.
   
   \subsubsection{Creating a Timeline}
-  On the Overview, Cycles, Task State, and Task Compare page, the same type of
+  On the Overview, Cycles, Task State, and Compare Tasks page, the same type of
   graph is used. The graph shows either which task is running at a given time,
   or what state a task is in at a given time. The graph is fed a list of
   events to display and a number of optional settings before being drawn. The
@@ -800,7 +800,7 @@ DataTables also makes use of Local Storage in order to save the scroll position 
       that the time range on the x-axis will be the same across all tasks.  On
       the Cycles page, our time range is simply the length of a cycle.
   
-    \item The gantt chart is passed its parameters in preparation to be drawn,
+    \item The Gantt chart is passed its parameters in preparation to be drawn,
       not including the events. These parameters include the name of the page it
       is currently on, which will allow it to modify its behavior based on
       context, as well as what attribute to group by (CPU, cycle, or nothing).
@@ -813,7 +813,7 @@ DataTables also makes use of Local Storage in order to save the scroll position 
      difference between the start times of consecutive switch events. This gives
      us the amount of time each task was running for.
   
-   \item The gantt chart is passed the events and drawn, and the colors are set.
+   \item The Gantt chart is passed the events and drawn, and the colors are set.
      The chart assigns a class to each task based on its PID, and we randomly
      select a color for this class and add a style tag to the page. Our random
      color selection is seeded so that the same colors will be assigned every
@@ -826,16 +826,17 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   \subsubsection{Primary JavaScript/CSS files}
   One of the primary JavaScript files we've worked
   with and changed is \texttt{gantt-chart-d3.js}. This file is the logic for all of the
-  graphs. This file was originally written by Dimitry Kudrayvtsev, but we have
-  significantly modified it to produce the behavior we want.
+  graphs. This file was originally written by Dimitry Kudrayvtsev, %% TODO add a reference?
+ but we have significantly modified it to produce the behavior we want.
 
-  The chart takes in data and groups it by a particular attribute. Each piece
+  The graph takes in data and groups it by a particular attribute. Each piece
   of data, here, a scheduling event, is rendered as a rectangle. The
   length of the rectangle is determined by the event's duration, and its
   placement on the graph by its start time and group. Examples of groups are
   CPU or cycle.
 
-  The chart assigns classes to each rectangle so that they can easily be
+%% TODO should this be in an appendix instead?
+  The graph assigns classes to each rectangle so that they can easily be
   colored (lines 259-279), and sets up a mouseover handler to display hover text
   over an individual event (lines 296-306). On the Overview page, clicking
   on an event will scroll to it in the data table - this handler is set up on
@@ -852,7 +853,7 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   State pages - these were the working titles we used through most of the
   semester.
 
-  \texttt{Sidebar.js} is a fairly simple script that creates the sidebar for all of the
+  \texttt{sidebar.js} is a fairly simple script that creates the sidebar for all of the
   pages, excluding the first page of the application, where the user chooses a file.
   It controls navigation and sets highlighting of the current tab.
 
@@ -899,10 +900,11 @@ The README of this repository provides a link to download a
   not recognized by the script will display the usage and a description of
   available options.
 
-  We also created a 64 bit release for Mac, which includes the parser but does
-  not have a script to connect it to the application. As most developers at
-  SpaceX use Linux machines, we decided that there were better uses of our time
-  than providing releases for other operating systems.
+%% The mac one doesn't work
+%  We also created a 64 bit release for Mac, which includes the parser but does
+%  not have a script to connect it to the application. As most developers at
+%  SpaceX use Linux machines, we decided that there were better uses of our time
+%  than providing releases for other operating systems.
 
 
 \chapter{User Feedback} % Alix
