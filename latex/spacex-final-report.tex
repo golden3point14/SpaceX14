@@ -207,17 +207,18 @@ which is an inefficient use of engineer's time. \\
 \end{figure}
 
 KernelShark displays the data but provides limited ways to interact with it. It
-does not have many features geared towards finding anomalies and no tools for
+does not have many features geared towards finding anomalies and has no tools for
 dealing with cycles.  In order to utilize information about cycles, the user
-must manually recognize where cycles start and end. Then they must manually
-compare all cycles to one another to see if anything is different, by going back
-and forth on the timeline KernelShark provides.
+must recognize by sight alone where cycles start and end, which is very
+difficult. Users are only able to compare cycles by moving back and forth on
+the timeline KernelShark provides, also a time consuming process.
 
-KernelShark has a poorly designed UI that does not function as
-expected. The tabular view on the bottom of KernelShark is not searchable, nor
-can the columns be sorted. None of the lists in KernelShark can be sorted, so a user might need to look through a list
-with hundreds of tasks to find the specific task they want. Additionally, zooming out on
-KernelShark's visual timeline is uninituitive and confusing.
+KernelShark has a poorly designed UI that does not function as expected. The
+events table at the bottom of KernelShark is not searchable, nor can the columns
+be sorted. When a user wants to display a specific task, they must choose from
+an unsortable and unsearchable list of tasks that might be hundreds of tasks
+long. Additionally, zooming out on KernelShark's visual timeline is
+uninituitive and confusing.
 
 %Using only this visualization, it can be difficult to see where the cyclical
 %deadlines for the programs begin and end, making it hard to find when something
@@ -1040,7 +1041,7 @@ representation of the tasks, and the bottom is a tabular view.}
 \subsubsection{Task State Page}
 
 With KernelShark, a user could choose individual tasks to display under
-the main timeline of all events. However, that was teh extend of what
+the main timeline of all events. However, that was the extent of what
 Kernelshark did with regards to individual tasks.
 
 The team was interested in providing more details and statistics about
