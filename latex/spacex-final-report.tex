@@ -855,7 +855,7 @@ These five fields appear for every event, but the content of extra information
   graphs.
 \item \texttt{tableScroll}: Used by the Overview table.
 \end{itemize}
-\texttt{DataTables.js}, a package we use, also makes use of Local Storage in order to save the scroll position of the table.
+DataTables.js also makes use of Local Storage in order to save the scroll position of the table.
 
   \subsection{Selection of Charting Tool} % Rachel
   Many pages render a timeline of running tasks that users can interact
@@ -870,7 +870,7 @@ These five fields appear for every event, but the content of extra information
   on portions of the chart. We decided to use \texttt{gantt-chart-d3.js} because it
   renders more quickly and is more responsive than the other charts. It
   also comes with dragging capabilities, and hovertext and
-  click handling could easily be added. Zooming on d3 charts should be
+  click handling was easy to add. Zooming on d3 charts should be
   available out of the box, but did not function as expected because our y scale
   is ordinal rather than numeric and should not be rescaled. The team
   ended up writing a custom zoom function to handle this and other issues
@@ -878,11 +878,11 @@ These five fields appear for every event, but the content of extra information
   
   \subsection{Creating a Timeline}
   On the Overview, Cycles, Task State, and Compare Tasks page, the same type of
-  graph is used. The graph shows either which task is running at a given time,
-  or what state a task is in at a given time. The graph is fed a list of
+  chart is used. The chart shows either which task is running at a given time,
+  or what state a task is in at a given time. The chart is fed a list of
   events to display and a number of optional settings before being drawn. The
   array of all events needs to be passed through several helper functions
-  before it is ready to be given to the graph.
+  before it is ready to be given to the chart.
   
   \begin{enumerate}
 
@@ -898,7 +898,7 @@ These five fields appear for every event, but the content of extra information
       events by CPU, and for each grouping of events, shift the start times
       so that the first event occurs at time zero.
   
-    \item The graph requires a time domain as in input, so the endpoint of the
+    \item The chart requires a time domain as in input, so the endpoint of the
       last event is calculated.
       How this calculation is performed depends on which page the user is
       on. On the Overview page, this comparison is across all CPUs. Each CPU may not
