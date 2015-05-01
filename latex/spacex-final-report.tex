@@ -235,7 +235,7 @@ highlights problem areas. We have created an improved user experience and
 provided more visualizations of the data than the old tool. 
 \chapter{SpaceShark}
 
-\section{Packaging and Distribution}
+\section{Obtaining SpaceShark}
   Our code is publicly available on GitHub at
 \begin{center}
   github.com/golden3point14/SpaceX14
@@ -251,14 +251,14 @@ The README of this repository provides a link to download a
            [ -h | --help]\end{verbatim}
 
   The first option allows the user to pass an unparsed trace file to the
-  application. The parser will be run and output a JSON file, which will be
-  passed to the application as it opens, skipping the load page that asks the
-  user to choose a file. The second option allows the user to pass a parsed
-  JSON file to the application. Finally, using the \texttt{-h} flag or any option
+  application. The parser will be run and pass its output 
+  to the application as it opens, skipping the load page that asks the
+  user to choose a file. The second option allows the user to pass a
+  JSON file, the output format our parser uses, to the application. Finally, using the \texttt{-h} flag or any option
   not recognized by the script will display the usage and a description of
   available options.
 
-\section{Design} %Everyone gets a part
+\section{Design}
 
   The SpaceShark tool is meant to make it easier for SpaceX engineers to find
   scheduling related problems.  SpaceShark is composed of pages that each give a
@@ -949,9 +949,8 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   pages, excluding the first page of the application, where the user chooses a file.
   It controls navigation and sets highlighting of the current tab.
 
-  The other non-page specific files are mostly borrowed and unedited from
-  JavaScript libraries, so for documentation on those you can visit their
-  respective pages online.
+  Below is a list of the libraries the application uses with links to
+  their respective sites, which include documentation.
 \begin{itemize}
 \item d3.js (d3js.org)
 % d3 - http://d3js.org/
