@@ -501,60 +501,52 @@ graph by clicking the small graph thumbnails in the sidebar.
   \subsection{Task State}
 
   \begin{figure}[H]
-  \includegraphics[scale=0.25]{task-state-page.png}
+  \includegraphics[scale=0.3]{task-state-page.png}
   \caption{The top of the Task State page displays a table of tasks
-  that preempted the current task. The bottom half is a graph representing the
+  that preempted the current task. The bottom half is a graph that plots the
 state of the current task over time. The three possible states are preempted,
 waiting, and running.}
 \end{figure}
 
 \paragraph{Purpose:}
-    The Task State page displays information about a single task. The user is
-    able to see interactions between other tasks and this task with a table of
-    preemptions. Users can jump to tasks that preempted the current one by
+    The Task State page displays information about a single task. The table in the top portion of the screen shows which other tasks preempted the task the user is viewing, and how many times. Users can jump to tasks that preempted the current one by
     clicking on a row in this table. Additionally, the task's state over time
     is displayed at the bottom. Possible task states are preempted, waiting, or
-    running and labeled with the colors red, beige, and green respectively. 
+    running. They are labeled with the colors red, beige, and green respectively. 
 
 \paragraph{Interactivity:}
     The graph on the bottom half of the page functions the same as the graphs on
-    the Overview (Section 2.1.3), Cycles (Section 2.1.4), and Compare Tasks page
-    (Section 2.1.7). The user can click the ``+ Compare'' button at the bottom
-    to add this task graph to a series of side-by-side graphs for comparison,
-    which is described in Section 2.1.7.
+    the Overview, Cycles, and Compare Tasks page
+    . The user can click the ``+ Compare'' button at the bottom
+    to add this task graph to a series of side-by-side graphs for comparison.
     
 \paragraph{Comparison to KernelShark:}
-     KernelShark can display a graph of a single task over time, however it does not show which tasks a task was preempted by and how many times it was preempted.
+     KernelShark can display a graph of a single task over time, however it does not show which other tasks preempted a given task, nor how many times it was preempted.
   
   \subsection{Compare Tasks} %Wendy
   
   \begin{figure}[H]
-  \includegraphics[scale=0.25]{compare-page.png}
+  \includegraphics[scale=0.3]{compare-page.png}
   \caption{The Compare page vertically displays the Task State graphs for
-  multiple tasks. They can be added, reordered, or removed all from this page.}
+  multiple tasks. They can be added, reordered, or removed.}
   \end{figure}
 
 \paragraph{Purpose:}
-The Compare Tasks page allows users to view the same graph as the Task State
-page, but for multiple tasks. Tasks can be reordered so that specific tasks can
-be compared side by side for the same time period. This provides similar
-functionality as the Task State page but with the additional benefit of
-comparisons between tasks. It allows a user to examine interactions between
-two or more tasks. 
+The Compare Tasks page allows users to view the state graphs for multiple tasks. Tasks can be reordered so that specific tasks can
+be compared side by side for the same time period. 
 
 \paragraph{Interactivity:}
-Users can plot graphs by either typing in a task name at the top of the page, or
-first viewing that task on the Task State page and clicking the ``+ Compare''
-button. The user can start typing a task name or PID in the text box and then
-will be given a list of possible tasks that match this text. The user can
+Users can plot graphs by either (1) typing in a task name or PID in an autocomplete box at the top of the page, or
+(2) viewing a task on the Task State page and clicking the ``+ Compare''
+button. The user can
 rearrange the order of the graphs on the page by dragging them up or down. Each
 graph can be removed by clicking on the ``Remove Task'' button next to it.
     
 \paragraph{Comparison to KernelShark:}
-    In KernelShark, the user is able to view a list of tasks and select which
+    In KernelShark, the user can view a list of tasks and select which
     ones they want to graph.  This list of tasks is not searchable. In our tool,
     the autocomplete functionality we provide is much faster and easier than
-    going through a long list of tasks. The selected graphs were plotted on the
+    scrolling through a long list of tasks. The selected graphs were plotted on the
     same graph as the CPUs, as stated before in Section 2.1.3, and could not be
     easily rearranged by dragging.
 
