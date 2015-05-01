@@ -558,9 +558,9 @@ graph can be removed by clicking on the ``Remove Task'' button next to it.
     same graph as the CPUs, as stated before in Section 2.1.3, and could not be
     easily rearranged by dragging.
 
-\section{Architecture} % Wendy
+\chapter{Architecture}
 
-  \subsection{Overview}
+  \section{Overview}
 
   Our application has three main portions: the raw input, the parser,
   and the web-based desktop application. The sections are modular, and
@@ -578,7 +578,7 @@ graph can be removed by clicking on the ``Remove Task'' button next to it.
 \end{center}
 \end{figure}
 
-  \subsection{Trace-cmd}
+  \section{Trace-cmd}
 
   Data is collected using a command-line utility called \texttt{trace-cmd}.
   \texttt{trace-cmd} records various events in the Linux kernel while it runs and then
@@ -610,7 +610,7 @@ graph can be removed by clicking on the ``Remove Task'' button next to it.
   version of \texttt{trace-cmd}. The team has chosen to use \texttt{trace-cmd} version 2.2.1, 
   the same version that our liaisons currently use.
 
-  \subsection{Parser}
+  \section{Parser}
   Next the parser takes in this raw data, and ultimately outputs the data
   reformatted into JSON with additional information. The file format of
   \texttt{trace-cmd report} is simple and consistent. The first line in the file
@@ -739,10 +739,10 @@ graph can be removed by clicking on the ``Remove Task'' button next to it.
   someone with a different output to write their own parser to create the same
   type of output so that they can view their data in our tool.
 
-  \subsection{Web Application}
+  \section{Web Application}
 
   
-  \subsubsection{Node-Webkit and HTML} %Rachel
+  \subsection{Node-Webkit and HTML} %Rachel
     At the beginning of the project, the team researched possible tools and
     technologies for creating our application. One possibility was simply
     extending KernelShark, the existing tool. After looking at the code for
@@ -756,7 +756,7 @@ graph can be removed by clicking on the ``Remove Task'' button next to it.
     take advantage of many existing UI widgit and charting libraries that many
     team members were familiar with, we decided to take this route.
 
-  \subsubsection{IndexedDB}
+  \subsection{IndexedDB}
 
   The application loads the JSON file into IndexedDB, a
   browser-based database. IndexedDB is built into most browsers, including
@@ -789,7 +789,7 @@ graph can be removed by clicking on the ``Remove Task'' button next to it.
   IndexedDB also has  a size limit, but this is typically not reached except for
   unusually long files or data from a computer many CPUs. 
 
-  \subsubsection{Local Storage}
+  \subsection{Local Storage}
 
   Our application also makes use of Local Storage, another tool
   built into most browsers and node-webkit. This is a small and quick to access
@@ -834,7 +834,7 @@ Here is a list of the Local Storage variables that we use, and what they are for
 \end{itemize}
 DataTables also makes use of Local Storage in order to save the scroll position of the table.
 
-  \subsubsection{Overall Application Structure}
+  \subsection{Overall Application Structure}
 
   The general structure of our code is similar to most web applications. In the
   root we have HTML files, which reference JavaScript and CSS files. The files
@@ -843,7 +843,7 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   its own specific JavaScript file, and there are a number of shared files that
   multiple or all pages use.
   
-  \subsubsection{Selection of Graphing Tool} % Rachel
+  \subsection{Selection of Graphing Tool} % Rachel
   Many pages render a timeline of running tasks which users can interact
   with by panning and zooming. This graph is critical, as a bug manifests
   itself as a task running at an unexpected time, or failing to run at a
@@ -862,7 +862,7 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   ended up writing a custom zoom function to handle this and other issues
   associated with syncing the zoom level of multiple charts on the same page.
   
-  \subsubsection{Creating a Timeline}
+  \subsection{Creating a Timeline}
   On the Overview, Cycles, Task State, and Compare Tasks page, the same type of
   graph is used. The graph shows either which task is running at a given time,
   or what state a task is in at a given time. The graph is fed a list of
@@ -915,7 +915,7 @@ DataTables also makes use of Local Storage in order to save the scroll position 
      priority.
 
   \end{enumerate}
-  \subsubsection{Primary JavaScript/CSS files}
+  \subsection{Primary JavaScript/CSS files}
   One of the primary JavaScript files we've worked
   with and changed is \texttt{gantt-chart-d3.js}. This file is the logic for all of the
   graphs. This file was originally written by Dimitry Kudrayvtsev, %% TODO add a reference?
