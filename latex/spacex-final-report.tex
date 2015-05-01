@@ -190,7 +190,7 @@ inversion} occurs when a high-priority task is indirectly blocked by something o
 lower priority using a shared resource that the higher priority task needs in
 order to run. 
 
-The software running on SpaceX rockets has deadlines for tasks at regular intervals because timing is very important in rocket flight. When there is a break in this cyclical pattern of processes this means that there is likely a bug in the software. These cyclical patterns of processes are called ``cycles''.
+The software running on SpaceX rockets has deadlines for tasks at regular intervals because timing is very important in rocket flight. When there is a break in this cyclical pattern of processes, this means that there is likely a bug in the software. These cyclical patterns of processes are called ``cycles''.
 
 %\section{Existing Tool}
 SpaceX currently uses a tool called KernelShark %%TODO FIXME citation
@@ -203,7 +203,7 @@ which is an inefficient use of engineer's time. \\
 \begin{figure}[H]
   \centering
       \includegraphics[width=4.95in]{kshark-open.png}
-  \caption{KernelShark consists of a graphical display of the programs running on a computer over time (top half of screen), as well as a tabular view of the same information, in the form of CPU events such as processes switching, waking, or sleeping (bottom half of screen).}
+  \caption{KernelShark consists of a graphical display of the programs running on a computer over time (top half of screen), as well as a tabular view of the same information, in the form of CPU events such as tasks switching, waking, or sleeping (bottom half of screen).}
 \end{figure}
 
 KernelShark displays the data but provides limited ways to interact with it. It
@@ -211,7 +211,7 @@ does not have many features geared towards finding anomalies and has no tools fo
 dealing with cycles.  In order to utilize information about cycles, the user
 must recognize by sight alone where cycles start and end, which is very
 difficult. Users are only able to compare cycles by moving back and forth on
-the timeline KernelShark provides, also a time consuming process.
+the timeline KernelShark provides, which is a time consuming process.
 
 KernelShark has a poorly designed UI that does not function as expected. The
 events table at the bottom of KernelShark is not searchable, nor can the columns
