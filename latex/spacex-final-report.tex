@@ -272,10 +272,10 @@ The README of this repository provides a link to download a
       \midrule
       Load File       & Allow a user to choose the data to import into the
       application\\
-      Overview        & Provide user overall view of the data\\
+      Overview        & Provide a user overall view of the data\\
       Cycles          & Break data into intervals so that a user can compare
       across them\\
-      Task Statistics & Give user high-level statistics about the data,
+      Task Statistics & Give a user high-level statistics about the data,
       comparing task's total runtimes and preemptions\\
       Task State      & Display a single tasks actions and interactions\\
       Task Compare    & Allow a user to compare several tasks changes in state
@@ -374,27 +374,22 @@ range of entries currently on the screen.
   functionality of the old tool in other pages.
 
   KernelShark also has graph plots of the CPUs and includes similar features. A
-  user can zoom by clicking and dragging a rectangular box, from left to right,
+  user can zoom by clicking and dragging a rectangular box from left to right
   over the graph.  This allows the user to precisely view a specific area of the
-  graph.  Although this zoom functionality seems helpful, it doesn't follow
-  common zoom functionalities of a modern day desktop application. Zooming out of
-  the graph in KernelShark is also unintuitive: the user can click and drag a
-  rectangular box, from right to left, over the graph. This technique
-  does not give the user any kind of information about how much the graph is
-  zooming out and can therefore be confusing to users. When
-  zooming on KernelShark, a horizontal bar appears at the bottom of the graph to
-  be able to easily pan.
+  graph.  This zoom functionality doesn't follow common zoom functionalities of
+  a modern day desktop application. Zooming out of the graph in KernelShark is
+  also unintuitive: the user can click and drag a rectangular box from right to
+  left over the graph. This technique does not give the user any kind of
+  information about how much the graph is zooming out and can therefore be
+  confusing to users. When zooming on KernelShark, a horizontal bar appears at
+  the bottom of the graph to be able to easily pan.
     
-  KernelShark has the same functionality as our tool of being able to click on a
-  spot in the graph and have the table scroll to that event. 
-    
-  The feature of hovering over the graph to get more information also exists in
-  KernelShark, and the team and liaisons felt that it would be useful to have in
-  SpaceShark.
-
-  Like our tool, KernelShark has a list of events on the bottom half of their
-  tool and gives users the option to search and filter events in the
-  table view.
+  There are several features that SpaceX engineers identified as useful that the
+  team preserved in SpaceShark. Both tools allow users to click on a spot in the
+  graph and have the table scroll to that event.  Users can hover over the graph
+  to get more information about an event.  Both also have a list of events
+  at the bottom that gives users the option to search and filter events in the
+  table.
 
   In KernelShark, the user can select individual tasks to plot on the same graph
   as the CPUs. To maximize space on the Overview page, we decided to move this
@@ -517,10 +512,10 @@ rearrange the order of the graphs on the page by dragging them up or down. Each
 graph can be removed by clicking on the ``Remove Task'' button next to it.
     
 \paragraph{Comparison to KernelShark:}
-    In KernelShark, the user can view a list of tasks and select which
-    ones they want to graph.  This list of tasks is not searchable. In our tool,
-    the autocomplete functionality we provide is much faster and easier than
-    scrolling through a long list of tasks.
+    In KernelShark, the user can view a list of tasks and select which ones they
+    want to graph.  This list of tasks is not searchable and may be very long.
+    In our tool, the search bar with autocomplete makes it much easier to find a
+    specific task.
 
 \chapter{Architecture}
 
@@ -606,6 +601,8 @@ These five fields appear for every event, but the content of extra information
   \begin{center}
     \begin{tabular}{p{0.35\linewidth}p{0.55\linewidth}}
       \toprule
+      Element name        & Description\\
+      \midrule
       \texttt{Tasks}      & An array of all tasks seen in the trace\\
        \texttt{Events}     & An array of all events seen in the trace\\
        \texttt{cycleEvents} & An array of cycle events generated from user markers\\
@@ -620,7 +617,7 @@ These five fields appear for every event, but the content of extra information
   events, and cycleEvents. A task has the following data.
 
   \begin{center}
-    \begin{tabular}{p{0.3\linewidth}p{0.2\linewidth}p{0.4\linewidth}}
+    \begin{tabular}{p{0.25\linewidth}p{0.2\linewidth}p{0.45\linewidth}}
       \toprule
       Field           & Type         & Additional description \\
       \midrule
