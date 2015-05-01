@@ -234,6 +234,30 @@ to find software problems by creating a tool that visualizes rocket data and
 highlights problem areas. We have created an improved user experience and
 provided more visualizations of the data than the old tool. 
 \chapter{SpaceShark}
+
+\section{Packaging and Distribution}
+  Our code is publicly available on GitHub at
+\begin{center}
+  github.com/golden3point14/SpaceX14
+\end{center}
+The README of this repository provides a link to download a
+  64 bit Linux version of the application. This release is a zip file that
+  contains an executable, the parser, a short wrapper script, and two additional
+  files that are necessary to get the executable to run: \texttt{nw.pak} and
+  \texttt{icudlt.dat}.
+  The short wrapper script is called \texttt{spaceshark} and has the following usage:
+
+\begin{verbatim}spaceshark [-p | --parse filename] [-o | --open filename] 
+           [ -h | --help]\end{verbatim}
+
+  The first option allows the user to pass an unparsed trace file to the
+  application. The parser will be run and output a JSON file, which will be
+  passed to the application as it opens, skipping the load page that asks the
+  user to choose a file. The second option allows the user to pass a parsed
+  JSON file to the application. Finally, using the \texttt{-h} flag or any option
+  not recognized by the script will display the usage and a description of
+  available options.
+
 \section{Design} %Everyone gets a part
 
   The SpaceShark tool is meant to make it easier for SpaceX engineers to find
@@ -944,35 +968,6 @@ DataTables also makes use of Local Storage in order to save the scroll position 
 \item Underscore (underscorejs.org)
 %% FIXME - any more?
 \end{itemize}
-
-\section{Packaging and Distribution}
-  Our code is publicly available on GitHub at
-\begin{center}
-  github.com/golden3point14/SpaceX14
-\end{center}
-The README of this repository provides a link to download a
-  64 bit Linux version of the application. This release is a zip file that
-  contains an executable, the parser, a short wrapper script, and two additional
-  files that are necessary to get the executable to run: \texttt{nw.pak} and
-  \texttt{icudlt.dat}.
-  The short wrapper script is called \texttt{spaceshark} and has the following usage:
-
-\begin{verbatim}spaceshark [-p | --parse filename] [-o | --open filename] 
-           [ -h | --help]\end{verbatim}
-
-  The first option allows the user to pass an unparsed trace file to the
-  application. The parser will be run and output a JSON file, which will be
-  passed to the application as it opens, skipping the load page that asks the
-  user to choose a file. The second option allows the user to pass a parsed
-  JSON file to the application. Finally, using the \texttt{-h} flag or any option
-  not recognized by the script will display the usage and a description of
-  available options.
-
-%% The mac one doesn't work
-%  We also created a 64 bit release for Mac, which includes the parser but does
-%  not have a script to connect it to the application. As most developers at
-%  SpaceX use Linux machines, we decided that there were better uses of our time
-%  than providing releases for other operating systems.
 
 
 \chapter{Winter Break User Feedback} % Alix
