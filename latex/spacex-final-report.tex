@@ -680,7 +680,7 @@ These five fields appear for every event, but the content of extra information
   their own markers as a task runs. A user can generate a print event by making
   an addition to the code of a task. We rely on these user-generated markers to
   identify cycles. Print events occur periodically in some of the tasks we are
-  tracing. Print events can also be used for other purposes, so we check to see
+  tracing. Engineers use print events already, so we check to see
   that the user has annotated them with \texttt{CYCLE\_START} by looking at the extra
   information field of a print event. If the extra information field starts with
   \texttt{CYCLE\_START}, then we create a \texttt{cycleEvent} that contains the following data.
@@ -688,12 +688,10 @@ These five fields appear for every event, but the content of extra information
   \begin{center}
     \begin{tabular}{lll}
       \toprule
-      cycleEvent      &        &                                        \\
+      Field     & Type                \\
       \midrule
-      Field     & Type   & Additional description                 \\
-      \midrule
-       \texttt{startTime}      & double &                                        \\
-       \texttt{extraInfo}       & string    &                                        \\
+       \texttt{startTime}      & double                               \\
+       \texttt{extraInfo}       & string                              \\
       \bottomrule
     \end{tabular}
   \end{center}
@@ -701,10 +699,11 @@ These five fields appear for every event, but the content of extra information
   To see an example of the JSON file, view Appendix A at the end of the report.
   \newline
   \newline
-  If the format of the JSON file remains the same, any changes to the internals of the
-  parser will not affect the application itself. This will allow
-  someone with a different output to write their own parser to create the same
-  type of output so that they can view their data in our tool.
+  
+  Due to the modularity of our tool, the parser could be rewritten so long as
+  the output format remains the same. Additionally, a user might have data
+  in a format other than trace data. That user could write their own parser to
+  convert their data into this JSON format. It could then be used in our tool.
 
   \section{Web Application}
 
@@ -713,15 +712,20 @@ These five fields appear for every event, but the content of extra information
     At the beginning of the project, the team researched possible tools and
     technologies for creating our application. One possibility was simply
     extending KernelShark, the existing tool. After looking at the code for
-    this, a large number of C files, we decided it would be easier to
+    this, a large number of C files, we decided it would be faster to
     reimplement and extend it in something else. Understanding the KernelShark code base
-    would take a very long time, and there was very little documentation. We
+    would take a very long time, and there was very little documentation. This
+    would allow us to more effectively use our time creating new features rather
+    than working our way through an old code base. We
     looked into Java UI libraries for desktop applications, as well as
     web-technology based charting libraries.  We found node-webkit, which allows
     HTML/CSS/JavaScript applications to be packaged and run as desktop
-    applications with no reliance on the internet. As node-webkit allows us to
-    take advantage of many existing UI widgit and charting libraries that many
-    team members were familiar with, we decided to take this route.
+    applications with no reliance on the internet. 
+    Using node web-kit allowed us to take advantage of many existing UI widigits
+    and charting libraries. Instead of spending time creating our own
+    visualizations, we were able to quickly modify existing ones. This allowed
+    us to devote more time to developing new and useful ways to view the trace
+    data.
 
   \subsection{IndexedDB}
 
@@ -802,7 +806,7 @@ These five fields appear for every event, but the content of extra information
   its own JavaScript file, and there are a number of shared SpaceShark files that
   multiple or all pages use.
   
-  \subsection{Selection of Graphing Tool} % Rachel
+  \subsection{Selection of Charting Tool} % Rachel
   Many pages render a timeline of running tasks that users can interact
   with by panning and zooming. This graph is critical, as a bug on the rocket manifests
   itself as a task running at an unexpected time, or failing to run at a
