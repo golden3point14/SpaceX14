@@ -712,6 +712,32 @@ These five fields appear for every event, but the content of extra information
     us to devote more time to developing new and useful ways to view the trace
     data.
 
+  \subsection{Overall Application Structure}
+
+  The general structure of our code is similar to most web applications. 
+  The root directory contains HTML files, which reference JavaScript and CSS files. The files
+  we have written are located in \texttt{assets/js} and \texttt{assets/css}, and
+  library files reside in \texttt{lib/js} and \texttt{lib/css}.  Each page has
+  its own JavaScript file, and there are a number of shared SpaceShark files that
+  multiple or all pages use.
+  
+
+  \begin{center}
+    \begin{tabular}{p{0.2\linewidth}p{0.7\linewidth}}
+     \toprule
+      Page Name       & Code artifacts     \\
+      \midrule
+      Load File       & \texttt{assets/js/loadFile.js}\\
+      Overview        & \texttt{assets/js/main.js, assets/js/gantt-chart-d3.js, dataTables.js}\\
+      Cycles          & \texttt{assets/js/cycles.js, assets/js/gantt-chart-d3.js}\\
+      Task Statistics & \texttt{assets/js/runtimeChart.js, assets/js/preemptionChart.js}\\
+      Task State      & \texttt{assets/js/process.js}\\
+      Task Compare    & \texttt{assets/js/compare.js}\\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+
+
   \subsection{Primary JavaScript/CSS files}
   One of the primary JavaScript files we've worked
   with and changed is \texttt{gantt-chart-d3.js}. This file contains the logic for all of the
@@ -830,31 +856,6 @@ These five fields appear for every event, but the content of extra information
 \item \texttt{tableScroll}: Used by the Overview table.
 \end{itemize}
 \texttt{DataTables.js}, a package we use, also makes use of Local Storage in order to save the scroll position of the table.
-
-  \subsection{Overall Application Structure}
-
-  The general structure of our code is similar to most web applications. 
-  The root directory contains HTML files, which reference JavaScript and CSS files. The files
-  we have written are located in \texttt{assets/js} and \texttt{assets/css}, and
-  library files reside in \texttt{lib/js} and \texttt{lib/css}.  Each page has
-  its own JavaScript file, and there are a number of shared SpaceShark files that
-  multiple or all pages use.
-  
-
-  \begin{center}
-    \begin{tabular}{p{0.2\linewidth}p{0.7\linewidth}}
-     \toprule
-      Page Name       & Code artifacts     \\
-      \midrule
-      Load File       & \texttt{assets/js/loadFile.js}\\
-      Overview        & \texttt{assets/js/main.js, assets/js/gantt-chart-d3.js, dataTables.js}\\
-      Cycles          & \texttt{assets/js/cycles.js, assets/js/gantt-chart-d3.js}\\
-      Task Statistics & \texttt{assets/js/runtimeChart.js, assets/js/preemptionChart.js}\\
-      Task State      & \texttt{assets/js/process.js}\\
-      Task Compare    & \texttt{assets/js/compare.js}\\
-    \bottomrule
-    \end{tabular}
-  \end{center}
 
   \subsection{Selection of Charting Tool} % Rachel
   Many pages render a timeline of running tasks that users can interact
