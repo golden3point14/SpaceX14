@@ -360,7 +360,7 @@ events list to scroll to that event.
 The columns of the table consist of the CPU, start time, name, PID, event type,
 and extra information dependent on the event type. By default, the table is
 displayed in ascending order of time.  Hovering over any of the table cells
-highlights that entire row. Users can also double click on a event to be
+highlights that entire row. Users can also double click on an event to be
 redirected to that task on the Task State page.  The search feature filters out
 entries that do not match the search text in any column.  Clicking on any of the
 column headers orders the information in the table by the contents of that
@@ -525,11 +525,11 @@ graph can be removed by clicking on the ``Remove Task'' button next to it.
 \chapter{Architecture}
 
 \section{Introduction}
-In this chapter, we describe the different components that form our application. This information is useful for someone who wants to modify SpaceShark in some way, for example by adding a new feature or make a change to the type of data that SpaceShark can display.
+In this chapter, we describe the different components that form our application.
+This information is useful for someone who wants to modify SpaceShark in some
+way, for example by adding a new feature or making a change to the type of data that SpaceShark can display.
 
-  \subsection{Overview}
-
-  \section{Overview}
+\section{Overview}
 
   Our application has three main components: the raw input, the parser,
   and the web-based desktop application. The raw input consists of information recorded on a computer that details what each task was doing for a short amount of time. The parser is a program that we wrote to translate this data into something that could be easily read by our application. The components are modular, and
@@ -593,7 +593,7 @@ These five fields appear for every event, but the content of extra information
   the task being switched in for the currently running task. Importantly, it
   also contains a flag that indicates if the task being switched out transitions
   to a runnable or sleeping state. If the task is switched out and into a
-  sleeping state, it has been blocked, which means the event is a preemption.
+  runnable state, it has been blocked, which means the event is a preemption.
 
   The parser also calculates the total runtime of each task by looking for
 \texttt{sched\_stat\_runtime} events. These events give the time elapsed between
@@ -711,6 +711,55 @@ These five fields appear for every event, but the content of extra information
     visualizations, we were able to quickly modify existing ones. This allowed
     us to devote more time to developing new and useful ways to view the trace
     data.
+
+  \subsection{Primary JavaScript/CSS files}
+  One of the primary JavaScript files we've worked
+  with and changed is \texttt{gantt-chart-d3.js}. This file contains the logic for all of the
+  graphs. This file was originally written by Dimitry Kudrayvtsev, %% TODO add a reference?
+ but we have significantly modified it to produce the behavior we want.
+
+  The graph takes in data and groups it by a particular attribute. Each piece
+  of data, here, a scheduling event, is rendered as a rectangle. The
+  length of the rectangle is determined by the event's duration, and its
+  placement on the graph by its start time and group. Examples of groups are
+  CPU or cycle.
+
+  The graph assigns CSS classes to each rectangle so that they can easily be
+  colored and sets up a mouseover handler to display hover text
+  over an individual event. On the Overview page, clicking
+  on an event will scroll to it in the data table.
+  Lastly, we added zooming behavior to the chart that is
+  preserved on navigation. By using Local Storage, the application is
+  able to check that charts added to the compare page will render at the
+  same zoom level as others, and will zoom in sync with one another.
+
+  To function properly, the chart needs a list of events
+  as well as a property to group on. Behavior on each pages varies
+  slightly, so a parameter is also passed to indicate to the chart the page on
+  which it is rendered
+
+  The file \texttt{sidebar.js} is a script that creates the sidebar for all of the
+  pages, excluding the first page of the application where the user chooses a file.
+  This script controls navigation and sets highlighting of the current tab.
+
+  Below is a list of the libraries the application uses with links to
+  their respective sites, which include documentation.
+\begin{itemize}
+\item d3.js (d3js.org)
+% d3 - http://d3js.org/
+\item dc.js (dc-js.github.io/dc.js)
+% dc - http://dc-js.github.io/dc.js/
+\item Draggabilly (draggabilly.desandro.com)
+% draggabilly - http://draggabilly.desandro.com/
+\item Packery (packery.metafizzy.co)
+% packery - http://packery.metafizzy.co/
+\item DataTables (datatables.net)
+% datatables - https://www.datatables.net/
+\item Twitter Typeahead (twitter.github.io/typeahead.js)
+% typeahead - https://twitter.github.io/typeahead.js/
+\item Underscore (underscorejs.org)
+%% FIXME - any more?
+\end{itemize}
 
   \subsection{IndexedDB}
 
@@ -883,54 +932,6 @@ These five fields appear for every event, but the content of extra information
      priority.
 
   \end{enumerate}
-  \subsection{Primary JavaScript/CSS files}
-  One of the primary JavaScript files we've worked
-  with and changed is \texttt{gantt-chart-d3.js}. This file contains the logic for all of the
-  graphs. This file was originally written by Dimitry Kudrayvtsev, %% TODO add a reference?
- but we have significantly modified it to produce the behavior we want.
-
-  The graph takes in data and groups it by a particular attribute. Each piece
-  of data, here, a scheduling event, is rendered as a rectangle. The
-  length of the rectangle is determined by the event's duration, and its
-  placement on the graph by its start time and group. Examples of groups are
-  CPU or cycle.
-
-  The graph assigns CSS classes to each rectangle so that they can easily be
-  colored and sets up a mouseover handler to display hover text
-  over an individual event. On the Overview page, clicking
-  on an event will scroll to it in the data table.
-  Lastly, we added zooming behavior to the chart that is
-  preserved on navigation. By using Local Storage, the application is
-  able to check that charts added to the compare page will render at the
-  same zoom level as others, and will zoom in sync with one another.
-
-  To function properly, the chart needs a list of events
-  as well as a property to group on. Behavior on each pages varies
-  slightly, so a parameter is also passed to indicate to the chart the page on
-  which it is rendered
-
-  The file \texttt{sidebar.js} is a script that creates the sidebar for all of the
-  pages, excluding the first page of the application where the user chooses a file.
-  This script controls navigation and sets highlighting of the current tab.
-
-  Below is a list of the libraries the application uses with links to
-  their respective sites, which include documentation.
-\begin{itemize}
-\item d3.js (d3js.org)
-% d3 - http://d3js.org/
-\item dc.js (dc-js.github.io/dc.js)
-% dc - http://dc-js.github.io/dc.js/
-\item Draggabilly (draggabilly.desandro.com)
-% draggabilly - http://draggabilly.desandro.com/
-\item Packery (packery.metafizzy.co)
-% packery - http://packery.metafizzy.co/
-\item DataTables (datatables.net)
-% datatables - https://www.datatables.net/
-\item Twitter Typeahead (twitter.github.io/typeahead.js)
-% typeahead - https://twitter.github.io/typeahead.js/
-\item Underscore (underscorejs.org)
-%% FIXME - any more?
-\end{itemize}
 
 
 \chapter{Winter Break User Feedback} % Alix
