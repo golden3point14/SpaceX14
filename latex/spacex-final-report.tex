@@ -417,33 +417,32 @@ range of entries currently on the screen.
   \begin{figure}[H]
   \centering
       \includegraphics[width=5in]{cycles-page.png}
-  \caption{The Cycles page displays graphs of each CPU. The user is allowed to
-  input their own cycle intervals using the box in the top left. The checkboxes
-at the top allow the user to toggle which CPUs display.}
+  \caption{The Cycles page displays graphs of each CPU. The user can define
+  custom cycle intervals using the box in the top left. The checkboxes at the
+top allow the user to select which CPUs to display.}
   \end{figure}
   
-  \paragraph{Purpose:}Tasks run in cyclical patterns on SpaceX rockets, so being able to compare
-   cycles is very important to find strange behavior. The Cycles page
-  breaks the data into cycles and stacks them, allowing a user to easily scan
-  down this graph for unusual behavior.
+  \paragraph{Purpose:}Tasks run in cyclical patterns on SpaceX rockets, so being
+  able to compare cycles helps find strange behavior. The Cycles page breaks the
+  data into cycles and stacks them, allowing a user to easily scan down this
+  graph for unusual behavior.
 
 \paragraph{Interactivity:}    
-    Like the graph on the Overview page, the graphs on the cycles page can be
-    zoomed in and out with the mouse scroll wheel and clicked and dragged to pan
-    left and right. Zoom and pan are synchronized across all graphs currently
-    displayed.
-
-    The page also has checkboxes to toggle on and off each CPUs, which removes
-    or adds the graphs for these CPUs, rescaling other graphs to use the full window
-    space. Cycle lengths are precomputed if print events exist within the trace. If
-    not, the graphs will not appear when the page first loads. The user can enter a
-    number in the top box to set the period of desired cycles, which will then
-    display a graph of cycles of that length. This feature also works  if
-    print events are present in the data. Entering a number at the top applies
-    the change to all currently displayed charts.
+    Like the graph on the Overview page, the user can zoom and pan the graphs on
+    the cycles page.  The page also has checkboxes to toggle on and off each
+    CPU, which removes or adds the graphs for these CPUs, rescaling other graphs
+    to use the full window space. Cycle lengths are precomputed if the user
+    included markers in their code to indicate where cycles start when data is
+    collected.  If not, the graphs will not appear when the page first loads.
+    The user can enter a number in the top box to set the period of desired
+    cycles, which will then display a graph of cycles of that length. This
+    feature also works  if print events are present in the data.  Entering a
+    number at the top applies the change to all currently displayed charts.
         
 \paragraph{Comparison to KernelShark:}
-    The Cycles page does not exist in KernelShark. It does not give any indication of when cycles begin or end.
+    KernelShark is a general-purpose tool. The average user does not run tasks
+    in a cyclical pattern, so KernelShark does not have any features to handle
+    cycles. Identifying cycles is critical to debugging at SpaceX.
     
   \subsection{Task Statistics Page} %May Lynn
 
@@ -455,21 +454,22 @@ at the top allow the user to toggle which CPUs display.}
   \end{figure}
 
 \paragraph{Purpose:}
-The Task Statistics page shows the preemption count and runtime of each task.
-The page displays bar charts of the preemption count and runtime for each task,
-sorted from highest to lowest, as well as the averages and standard deviations
-of each. It is easy to see if there are any outliers with a large number of
-preemptions or a long runtime, or to check if a task is behaving as expected.
+The Task Statistics page shows the number of times each task was preempted and
+its total running time. This information is displayed in a bar chart sorted from
+highest to lowest, with averages and standard deviations across all tasks at the
+top. It is easy to see if there are any outliers with a large number of
+preemptions or a long runtime.
 
 \paragraph{Interactivity:}
 All bars in the graph have distinct colors to represent different tasks. These
 colors are consistent with the color scheme throughout the rest of the
-application. The user can click on any task within the bar graph and will be
-redirected to the Task State page displaying more information about that task.
+application. The user can click on any task in the bar graph and will be
+redirected to the Task State page for more information about that task.
 The user can toggle between viewing the preemption count graph and the runtime
 graph by clicking the small graph thumbnails in the sidebar.
 
-\paragraph{Comparison to KernelShark:} KernelShark did not provide any task statistics. 
+\paragraph{Comparison to KernelShark:} KernelShark does not compute any
+statistics about the data.
 
 
   \subsection{Task State}
@@ -523,21 +523,6 @@ graph can be removed by clicking on the ``Remove Task'' button next to it.
     scrolling through a long list of tasks.
 
 \chapter{Architecture}
-
-  \begin{center}
-    \begin{tabular}{p{0.2\linewidth}p{0.7\linewidth}}
-     \toprule
-      Page Name       & Code artifacts     \\
-      \midrule
-      Load File       & \texttt{assets/js/loadFile.js}\\
-      Overview        & \texttt{assets/js/main.js, assets/js/gantt-chart-d3.js, dataTables.js}\\
-      Cycles          & \texttt{assets/js/cycles.js, assets/js/gantt-chart-d3.js}\\
-      Task Statistics & \texttt{assets/js/runtimeChart.js, assets/js/preemptionChart.js}\\
-      Task State      & \texttt{assets/js/process.js}\\
-      Task Compare    & \texttt{assets/js/compare.js}\\
-    \bottomrule
-    \end{tabular}
-  \end{center}
 
 \section{Introduction}
 In this chapter, we describe the different components that form our application. This information is useful for someone who wants to modify SpaceShark in some way, for example by adding a new feature or make a change to the type of data that SpaceShark can display.
@@ -806,6 +791,22 @@ These five fields appear for every event, but the content of extra information
   its own JavaScript file, and there are a number of shared SpaceShark files that
   multiple or all pages use.
   
+
+  \begin{center}
+    \begin{tabular}{p{0.2\linewidth}p{0.7\linewidth}}
+     \toprule
+      Page Name       & Code artifacts     \\
+      \midrule
+      Load File       & \texttt{assets/js/loadFile.js}\\
+      Overview        & \texttt{assets/js/main.js, assets/js/gantt-chart-d3.js, dataTables.js}\\
+      Cycles          & \texttt{assets/js/cycles.js, assets/js/gantt-chart-d3.js}\\
+      Task Statistics & \texttt{assets/js/runtimeChart.js, assets/js/preemptionChart.js}\\
+      Task State      & \texttt{assets/js/process.js}\\
+      Task Compare    & \texttt{assets/js/compare.js}\\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+
   \subsection{Selection of Charting Tool} % Rachel
   Many pages render a timeline of running tasks that users can interact
   with by panning and zooming. This graph is critical, as a bug on the rocket manifests
