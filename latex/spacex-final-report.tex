@@ -917,7 +917,7 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   \end{enumerate}
   \subsubsection{Primary JavaScript/CSS files}
   One of the primary JavaScript files we've worked
-  with and changed is \texttt{gantt-chart-d3.js}. This file is the logic for all of the
+  with and changed is \texttt{gantt-chart-d3.js}. This file contains the logic for all of the
   graphs. This file was originally written by Dimitry Kudrayvtsev, %% TODO add a reference?
  but we have significantly modified it to produce the behavior we want.
 
@@ -927,27 +927,23 @@ DataTables also makes use of Local Storage in order to save the scroll position 
   placement on the graph by its start time and group. Examples of groups are
   CPU or cycle.
 
-%% TODO should this be in an appendix instead?
-  The graph assigns classes to each rectangle so that they can easily be
-  colored (lines 259-279), and sets up a mouseover handler to display hover text
-  over an individual event (lines 296-306). On the Overview page, clicking
-  on an event will scroll to it in the data table - this handler is set up on
-  lines 291-295. Lastly, we added zooming behavior to the chart that is
-  preserved on navigation. By using local storage as described on page 17, we
-  are able to check that graphs added to the compare page will render at the
-  same zoom level as others, and will zoom in sync with each other.
+  The graph assigns CSS classes to each rectangle so that they can easily be
+  colored and sets up a mouseover handler to display hover text
+  over an individual event. On the Overview page, clicking
+  on an event will scroll to it in the data table.
+  Lastly, we added zooming behavior to the chart that is
+  preserved on navigation. By using Local Storage, the application is
+  able to check that charts added to the compare page will render at the
+  same zoom level as others, and will zoom in sync with one another.
 
-  To function properly, the chart needs a list of events passed to it to
-  display, as well as a property to group on. Behavior on our pages varies
-  slightly, so a parameter is also passed to indicate to the graph which
-  page it is rendering on. This is either ``MAIN'', ``CYCLES'', ``PROCESS'',
-  or ``COMPARE.'' ``MAIN'' and ``PROCESS'' refer to the Overview and Task
-  State pages - these were the working titles we used through most of the
-  semester.
+  To function properly, the chart needs a list of events
+  as well as a property to group on. Behavior on each pages varies
+  slightly, so a parameter is also passed to indicate to the chart the page on
+  which it is rendered
 
-  \texttt{sidebar.js} is a fairly simple script that creates the sidebar for all of the
-  pages, excluding the first page of the application, where the user chooses a file.
-  It controls navigation and sets highlighting of the current tab.
+  The file \texttt{sidebar.js} is a script that creates the sidebar for all of the
+  pages, excluding the first page of the application where the user chooses a file.
+  This script controls navigation and sets highlighting of the current tab.
 
   Below is a list of the libraries the application uses with links to
   their respective sites, which include documentation.
