@@ -954,17 +954,16 @@ experience using KernelShark. Testing was conducted with one subject
 at a time over a half hour period.
 
 During testing, two members of our team watched the user work their way through
-our tool using our sample data, or in some cases the user's data if they had
-some prepared. We tried to provide as little input as possible, except for
-encouraging the team member to think out loud, describing what they were
-expecting or doing, and why. While the user did this, we took notes on what they
-were saying and doing.
+our tool using our sample data or the user's data if they had some prepared. We
+tried to provide as little input as possible, except for encouraging the user
+tester to think out loud, describing what they were expecting or doing, and why.
+While the user did this, we took notes on what they were saying and doing.
 
-Once the user felt like they had explored the tool, we talked more in-depth
-about their experience, also elaborating on our intent with the tool,
-encouraging explicit feedback on how we could make the tool better. A large
-portion of this process went to brainstorming with the user and finding out why
-a page was helpful or unhelpful for their specific workflow.
+Once the user felt like they had explored the tool, we talked discussed their
+experience and our intent with pages of the tool, encouraging explicit feedback
+on how we could make the tool better. A large portion of this process went to
+brainstorming with the user and finding out why a page was helpful or unhelpful
+for their specific workflow.
 
 \section{Feedback on Specific Pages} % Alix
 
@@ -1015,14 +1014,13 @@ in the debugging process.
 
 Since there was no existing Task State page, we designed a mockup of it at the
 beginning of the project. It features many different kinds of visualizations,
-such as histograms of how long the task was in each state for, a scatterplot of 
-what preempted it, a table of what preempted it, pie charts representing the 
-data in cycles, and a graphical display of the time series data highlighting 
-the process in the graph. Through user feedback with the liaisons, we found 
-that our mockup included way too much information that SpaceX engineers would 
-not have found useful. Since preemptions are generally
-indicative of problems, we really wanted to focus on this on the Task State
-page.
+such as histograms of how long the task was in each state for, a scatterplot of
+what preempted it, a table of what preempted it, a pie chart task state, and a
+graphical display of the time series data highlighting the process in the graph.
+Through user feedback with the liaisons, we found that our mockup included way
+too much information that SpaceX engineers would not have found useful. Since
+preemptions are generally indicative of problems, we really wanted to focus on
+this on the Task State page.
 
 \begin{figure}[H]
 \begin{center}
@@ -1044,11 +1042,6 @@ is something that KernelShark was unable to do. It helps engineers dig in to the
 details, especially when used in conjunction with the broader context provided
 on the Overview page and other pages.
 
-When user testing, we received feedback that this page needed more context,
-prompting us to create the Compare Tasks page. The Compare Tasks page has not
-yet been user tested, but we hope it will meet this need by allowing users to
-display multiple state graphs side by side to look at anomalies in context.
-
 \subsubsection{Cycles Page}
 
 One of the most notable things that separates our tool from KernelShark is that
@@ -1068,7 +1061,11 @@ displayed, as shown here.}
 We received nearly all positive feedback on the Cycles page, and this seems to
 be the most useful aspect of our tool.
 
-The first change  we made was very minor; rather than ordering the cycles from first cycle to last cycle, we changed it to be ordered from last cycle to first. We made this change because anomalies are normally found within the last cycle, which SpaceX engineers would want to see displayed prominently at the top of the page.
+The first change  we made was very minor; rather than ordering the cycles from
+first cycle to last cycle, we changed it to be ordered from last cycle to first.
+We made this change because anomalies are normally found within the last cycle,
+which SpaceX engineers would want to see displayed prominently at the top of the
+page.
 
 Additionally, this page initially relied on the user's code generating ``cycle
 markers'', which meant that this functionality would not have worked with old
@@ -1150,7 +1147,7 @@ One noticeable missing feature was a list of all tasks for the user to view and 
 This would be best to add as an option on pages that require the user to select tasks, such 
 as on the Task State page and the Compare Task page. It could appear as a dropdown menu or a 
 pop-up dialog with checkboxes next to the names. It should be possible to sort these lists 
-alphabetically or by pid as the user desires. The full list is especially suitable for the 
+alphabetically or by PID as the user desires. The full list is especially suitable for the 
 Compare Task page because it would allow the user to load multiple graphs at once. It should 
 not be difficult to implement, as the tool already creates this list in 
 \texttt{assets/js/compare.js} and \texttt{assets/js/process.js}.
@@ -1169,7 +1166,7 @@ We received a lot of feedback regarding the graph, including bug fixes and addin
   considered.
 
   \item User testers were very interested in having the ability to place markers, which 
-  is something that KernelShark implemented. The user should be able to place one or two
+  is something that KernelShark provided. The user should be able to place one or two
    vertical line markers onto a graph by clicking. If two markers are placed they should
     be able to get the duration between the two markers, and shift the two markers as one
      unit over the graph, maintaining the same duration between them. The markers could
@@ -1186,16 +1183,17 @@ We received a lot of feedback regarding the graph, including bug fixes and addin
 
   \end{itemize}
 
-One user was very interested in the idea of exporting the state of the tool. One 
-potential way we could do this is to write the state (via the local storage variables)
- to the end of the JSON file, and have a check when we load files to see if there 
- is a state to load. This would potentially be very difficult, as we are not sure 
- that JavaScript would allow you to write to a file. The benefit of being able to 
- export the state hinges around the idea that it would be easier for a user to 
- share their findings with other people. A user receiving this data would have the 
- information in the same state as the original user, eliminating time spent walking 
- through the data to find the desired information. It would also allow the user to 
- work from multiple computers.
+One user was very interested in the idea of exporting the state of the tool. One
+potential way we could do this is to write the state (via the local storage
+variables) to the end of the JSON file, and have a check when we load files to
+see if there is a state to load. This might be difficult, as JavaScript is not
+well-suited for writing to files, but we imagine it would somehow be possible to
+create a Blob object of the state and then allow the user to download and save
+this file.  Exporting state would make it easier for a user to share their
+findings with other people. A user receiving this data would have the
+information in the same state as the original user, eliminating time spent
+walking through the data to find the desired information. It would also allow
+the user to work from multiple computers.
 
 \section{Overview Page}
 One user suggested that the graph respond when an event in the events list is clicked.
@@ -1229,25 +1227,21 @@ One user suggested that the graph respond when an event in the events list is cl
   Section 4.3. We think it would be best to allow the interleaving of cycles as 
   an option, but not as a replacement of the current view. Both views would be 
   useful. Combining the two graphs to display in the desired order will be 
-  difficult. One method that we considered was to have one graph for ``Cycle 0'' 
-  that divides based on CPU, then one for ``Cycle 1'', etc. This has the downside 
-  of producing many unnecessary graphs, but potentially the user could choose to 
-  only display the top few cycles, or batch loading could be implemented so that 
+  difficult. One method that we considered was to have one graph for ``Cycle 0''
+  that divides based on CPU, then one for ``Cycle 1'', etc. This has the
+  downside of producing many graphs, but the user could potentially choose to
+  only display the top few cycles, or batch loading could be implemented so that
   graphs are only loaded as the user scrolls down.
 
-  One user was potentially interested in filtering which tasks displayed on the 
-  Cycles page, but we would suggest looking into the usefulness of this before 
-  implementing it. Filtering tasks out of the graph would be very non-trivial. 
-  It could potentially be done by changing the filtered out processes to have 
-  no color, but the graph would need to be reloaded, which may cause undesired 
-  slowdown.
+  One user was interested in filtering which tasks displayed on the Cycles page.
+  The tasks list could be filtered and the graph re-rendered with this new tasks
+  list.
 
   \section{Task Statistics Page}
 
-  User testers thought this page was potentially useful, but wanted some 
-  additional statistics. They wanted to see a bar chart for duration of 
-  preemptions. In addition, they wanted the option to break down statistics 
-  by CPU.
+  User testers thought this page was potentially useful, but wanted additional
+  statistics. They wanted to see a bar chart for duration of preemptions. In
+  addition, they wanted the option to break down statistics by CPU.
 
   \section{Task State Page}
 
@@ -1264,7 +1258,7 @@ One user suggested that the graph respond when an event in the events list is cl
   process split over multiple graphs.
 
   \section{Compare Task Page}
-  The feedback for this page centered around aesthetic and usability, with no 
+  The feedback for this page centered around its aesthetic and usability, with no 
   large functionality changes. Currently, the user cannot tell what CPU a task 
   is running on. We propose adding a label to the side of each graph as a simple 
   fix. Additionally, the graphs should use less vertical space. Having less 
@@ -1295,13 +1289,13 @@ One user suggested that the graph respond when an event in the events list is cl
 
   \item The information displayed by the Task Statistics page, specifically on
     the Runtime section, is incorrect. This could be a problem due to
-    \texttt{trace-cmd} not outputting \texttt{sched\_stat\_runtime} events as often
-    as we expect them to. We expect these events to occur after each
-    \texttt{sched\_switch} events. If \texttt{sched\_stat\_runtime} events do
-    not occur consistently, the Task Statistics page will display incorrect
-    information. If this is not the issue, either the parser
-    or the visualization may be handling the data incorrectly.If the parser is
-    okay, the problem is likely in \texttt{runtimeChart.js}.
+    \texttt{trace-cmd} not outputting \texttt{sched\_stat\_runtime} events as
+    often as we expect,  after each \texttt{sched\_switch} event. If
+    \texttt{sched\_stat\_runtime} events do not occur consistently, the Task
+    Statistics page will display incorrect information. If this is not the
+    issue, either the parser or the visualization, controlled by
+    $\texttt{runtimeChart.js}$,  may be handling the data
+    incorrectly.
 
 \end{itemize}
 
@@ -1310,8 +1304,8 @@ One user suggested that the graph respond when an event in the events list is cl
 
   We have considered refactoring the parser to be cleaner. Currently, when a
   field is extracted from an event, it is immediately formatted into a JSON
-  object.  This adds some additional complexity in later calculations and
-  analysis, as the JSON object is a key-value pair instead of just a value.
+  object.  This adds some additional complexity in later calculations and is
+  less space efficient, as the JSON object is a key-value pair instead of just a value.
   Instead of this, it would be better to create an intermediate format for the
   data. We imagine this would look like a separate Java class for tasks and
   events. Events would be subclassed by their type. All events have the same
@@ -1329,11 +1323,10 @@ One user suggested that the graph respond when an event in the events list is cl
 
 \section{Extensions}
   SpaceX developers indicated an interest in interleaving the graphs of multiple
-  CPUs on the Cycles page.  This would make it easier to compare cycle
-  anomalies across CPUs, as this would cause the timestamps to align. Making
-  this possible would require tweaking the graph infrastructure, and creating an
-  interface for users to choose if they want the graphs interleaved or not, and
-  which cycle numbers to display.
+  CPUs on the Cycles page.  This interleaving would make it easier to compare
+  cycle anomalies across CPUs. Making this possible would require tweaking the
+  graph infrastructure, and creating an interface for users to choose if they
+  want the graphs interleaved or not, and which cycle numbers to display.
 
   \begin{figure}[H]
 \begin{center}
@@ -1346,7 +1339,8 @@ interleaved graphs.}
 It is also possible that the loaded files will contain more than two CPU's.
 For clear visual purposes, we only want to be displaying two CPU's graphs
 on the Cycles page. In the case that we have more than two CPU's, 
-we would hope to be able to paginate the graphs. 
+we would hope to be able to paginate the graphs. Currently, the graphs
+would simply be placed next to each other on the same page.
 
 \section{Speed} %Wendy
 The data SpaceX will be using with our tool is very large, and becomes even
@@ -1361,12 +1355,14 @@ to fix this.
 
 \section{Scalability}
 Typically for trace files using more than 4
-cores, the parsed version will be too large for IndexedDB to load, and
+cores, the parsed version will be too large for IndexedDB to store, and
 sometimes too large for the parser to handle as well.
 
 There are two possibilities for fixing this. One is to prune the JSON or
-find a more compressed method of storing the data. The other is to find a
-substitute for IndexedDB that can store more data.
+find a more compressed method of storing the data. There are existing libraries
+for compressing JSON, such as cjson, but this might cause slowdown when data is
+being loaded into the database, as it would need to be decompressed first.
+Another option is to find a substitute for IndexedDB that can store more data.
 
 \chapter{Appendices}
 \newpage
