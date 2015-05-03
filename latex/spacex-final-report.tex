@@ -184,9 +184,9 @@ To find potential bugs in their software, SpaceX developers look for
 problems like unexpected preemptions, priority inversions, and breaks in the
 pattern of tasks being run.
  A {\bf preemption} occurs when one program is running, and
-is then blocked by another program starting to run on the same CPU. 
+is then interrupted by another program starting to run on the same CPU. 
 A {\bf priority
-inversion} occurs when a high-priority task is indirectly blocked by something of
+inversion} occurs when a high-priority task is prevented from running by something of
 lower priority using a shared resource that the higher priority task needs in
 order to run. 
 
@@ -587,7 +587,7 @@ These five fields appear for every event, but the content of extra information
   the task being switched in for the currently running task. Importantly, it
   also contains a flag that indicates if the task being switched out transitions
   to a runnable or sleeping state. If the task is switched out and into a
-  runnable state, it has been blocked, which means the event is a preemption.
+  runnable state, it has been interrupted,  which means the event is a preemption.
 
   The parser also calculates the total runtime of each task by looking for
 \texttt{sched\_stat\_runtime} events. These events give the time elapsed between
@@ -934,14 +934,12 @@ DataTables.js also makes use of Local Storage in order to save the scroll positi
 \chapter{Winter Break User Feedback} % Alix
 \section{General Feedback} % Alix
 We sought user feedback about our designs and tool throughout the course of the
-semester. Most of our feedback was from our liaisons, who we communicated with
-on a weekly basis. The team was also able to user test with four SpaceX
-engineers during a week long site visit at SpaceX. It was especially useful to
+project. Most of our feedback was from our liaisons, who we communicated with on
+a weekly basis. The team was also able to test the application with four SpaceX
+engineers during a week-long site visit at SpaceX. It was especially useful to
 have people unfamiliar with our tool use it.  User testing helped the team
-identify what features were useful, what features should be modified, and what
-features needed to be added to make the tool as effective as possible.  We will
-focus mostly on the negative feedback, both from our liaisons and user testing,
-as critical feedback was the most useful in moving our tool forward.
+identify which features were useful, which features should be modified, and
+which features needed to be added to make the tool as effective as possible.
 
 Below we will cover our methodology of user testing, feedback for specific
 pages, and how that feedback shaped the changes we made, leading to the current
@@ -955,14 +953,13 @@ at a time over a half hour period.
 During testing, two members of our team watched the user work their way through
 our tool using our sample data or the user's data if they had some prepared. We
 tried to provide as little input as possible, except for encouraging the user
-tester to think out loud, describing what they were expecting or doing, and why.
+to think out loud, describing what they were expecting or doing, and why.
 While the user did this, we took notes on what they were saying and doing.
 
-Once the user felt like they had explored the tool, we talked discussed their
-experience and our intent with pages of the tool, encouraging explicit feedback
-on how we could make the tool better. A large portion of this process went to
-brainstorming with the user and finding out why a page was helpful or unhelpful
-for their specific workflow.
+Once the user felt like they had explored the tool, we encouraging explicit
+feedback on how we could make the tool better. We explained the intended use of
+pages and features and asked the user to describe why a page was helpful or
+unhelpful for them.
 
 \section{Feedback on Specific Pages} % Alix
 
@@ -975,11 +972,19 @@ Before winter break, our tool also featured a graphical representation of tasks
 running over time. The tool also displayed the top ten preempted, longest
 running, and longest waiting tasks in tables at the top of the page. 
 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=4in]{oldMain.png}
+\caption{A screenshot of our Overview page before winter break. At the top are
+several tables of statistics, followed by the graph of running tasks.}
+\end{center}
+\end{figure}
+
 During user testing, three out of four users said that they did not find the
 tables at the top of the page helpful. Two of the users described the typical
 workflow they used in KernelShark as visually finding the problem in the graph,
 jumping to that event in the events list, and then scanning the events list.
-They felt that being able to quickly scan the events list was a very valuable
+They felt that being able to quickly scan the events list was a valuable
 feature.
 
 Based on this feedback, we removed the tables at the top of our page and added
@@ -1000,7 +1005,7 @@ the main timeline of all events. However, that was the extent of what
 Kernelshark did with regards to individual tasks.
 
 The team was interested in providing more details and statistics about
-individual tasks. This would give users a different way to view
+individual tasks. This information would give users a different way to view
 their data, which our liaisons thought would be helpful
 in the debugging process.
 
@@ -1016,20 +1021,21 @@ beginning of the project. It features many different kinds of visualizations,
 such as histograms of how long the task was in each state for, a scatterplot of
 what preempted it, a table of what preempted it, a pie chart task state, and a
 graphical display of the time series data highlighting the process in the graph.
-Through user feedback with the liaisons, we found that our mockup included way
+Through feedback from the liaisons, we found that our mockup included
 too much information that SpaceX engineers would not have found useful. Since
-preemptions are generally indicative of problems, we really wanted to focus on
-this on the Task State page.
+preemptions are generally indicative of problems, we decided to focus on
+them for the Task State page.
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{task-state-page.png}
 \caption{A screenshot of the current version of the Task State page. The three
-colors indicate the three states a task can be in: running, waiting, or blocked.}
+colors indicate the three states a task can be in: running, waiting, or
+preempted.}
 \end{center}
 \end{figure}
 
-On the Task State page, the user is able to type in a particular task, see
+On the Task State page, the user can type in a particular task, see
 how many times it was preempted and which processes preempted it, as well as
 view a graph showing how long it was in one of three states: running, waiting,
 or preempted. This design has a minimalistic page view compared to the mockup,
@@ -1057,21 +1063,25 @@ displayed, as shown here.}
 \end{center}
 \end{figure}
 
-We received nearly all positive feedback on the Cycles page, and this seems to
-be the most useful aspect of our tool.
+We received nearly all positive feedback on the Cycles page, and this page seems to
+be the most useful aspect of our tool. Users requested minor changes to improve
+the page.
 
-The first change  we made was very minor; rather than ordering the cycles from
-first cycle to last cycle, we changed it to be ordered from last cycle to first.
+The first change we made was to display the cycles in a different order; rather than order the cycles from
+first cycle to last cycle, we changed them to be ordered from last cycle to first.
 We made this change because anomalies are normally found within the last cycle,
 which SpaceX engineers would want to see displayed prominently at the top of the
 page.
 
-Additionally, this page initially relied on the user's code generating ``cycle
+The Cycles page initially relied on the user's code generating ``cycle
 markers'', which meant that this functionality would not have worked with old
 traces, or traces that didn't conform to our specific markers. One engineer
 suggested that we add the ability to enter in cycle length and have it display
-cycles based on that. We chose to implement this, taking this page from having
-very specific requirements to being usable with any data.
+cycles based on that input made this change, making the page usable with more
+varieties of data.
+
+We also added the ability to choose which CPUs are displayed, as a user may
+want to focus on only a CPU, or remove CPUs if the page becomes cluttered.
 
 \begin{figure}[H]
 \begin{center}
@@ -1260,8 +1270,7 @@ One user suggested that the graph should respond when an event in the events lis
 \chapter{Future Work}
 \section{Known bugs}
 
-  We have documented bugs and like-to-haves on our Computer Science hosted trac
-  site using the ticketing system. Outstanding issues at this time are as
+  We have documented bugs and feature requests on our project's GitHub page, under ``issues''. Outstanding issues at this time are as
   follows:
 
   \begin{itemize}
@@ -1270,15 +1279,15 @@ One user suggested that the graph should respond when an event in the events lis
     they can be dragged back using the white space, this is not good for a user
     experience.
 
-  \item Graphs and other images do not resize when the window resizes unless the
+  \item Graphs and other images do not resize when the window resizes, unless the
     page is reloaded.
 
   \item The information displayed by the Task Statistics page, specifically on
-    the Runtime section, is incorrect. This could be a problem due to
-    \texttt{trace-cmd} not outputting \texttt{sched\_stat\_runtime} events as
+    the Runtime section, is incorrect. The bug might be because
+    \texttt{trace-cmd} does not output \texttt{sched\_stat\_runtime} events as
     often as we expect,  after each \texttt{sched\_switch} event. If
     \texttt{sched\_stat\_runtime} events do not occur consistently, the Task
-    Statistics page will display incorrect information. If this is not the
+    Statistics page will display incorrect information, as we calculate the runtimes diplayed there based on those events. If this is not the
     issue, either the parser or the visualization, controlled by
     $\texttt{runtimeChart.js}$,  may be handling the data
     incorrectly.
@@ -1292,16 +1301,14 @@ One user suggested that the graph should respond when an event in the events lis
   field is extracted from an event, it is immediately formatted into a JSON
   object.  This adds some additional complexity in later calculations and is
   less space efficient, as the JSON object is a key-value pair instead of just a value.
-  Instead of this, it would be better to create an intermediate format for the
-  data. We imagine this would look like a separate Java class for tasks and
+It would be better to create an intermediate format for the
+  data. We imagine this format would be a separate Java class for tasks and
   events. Events would be subclassed by their type. All events have the same
-  basic information, like the start time, PID of the task involved, and CPU, but
+  basic information, like the start time, PID of the task involved, and CPU; but
   their extra information field varies based on type. We imagine that creating
   event and task classes would make the parser code much more readable, as after
   grabbing each field from a line, this information would be passed off and
-  dealt with elsewhere. Given enough time, we would refactor the parser in this
-  way, but as it is currently functional, these changes have not been high
-  priority.
+  dealt with elsewhere. 
 
   Additionally, for most of the semester, we referred to the Overview page as
   the ``main'' page and the Task State page as the ``process'' page before
@@ -1310,59 +1317,58 @@ One user suggested that the graph should respond when an event in the events lis
 \section{Extensions}
   SpaceX developers indicated an interest in interleaving the graphs of multiple
   CPUs on the Cycles page.  This interleaving would make it easier to compare
-  cycle anomalies across CPUs. Making this possible would require tweaking the
-  graph infrastructure, and creating an interface for users to choose if they
+  cycle anomalies across CPUs. Adding this feature would require a tweak to the
+  graph infrastructure and would require an interface for users to choose if they
   want the graphs interleaved or not, and which cycle numbers to display.
 
   \begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{futureCycles.png}
-\caption{A mockup of how we envision the new Cycles page could look with
+\caption{A mockup of how we envision the new Cycles page could look, with
 interleaved graphs.}
 \end{center}
 \end{figure}
 
 It is also possible that the loaded files will contain more than two CPU's.
-For clear visual purposes, we only want to be displaying two CPU's graphs
+So that all the graphs can be clearly visible, we only want to display two CPU's graphs
 on the Cycles page. In the case that we have more than two CPU's, 
 we would hope to be able to paginate the graphs. Currently, the graphs
 would simply be placed next to each other on the same page.
 
 \section{Speed} %Wendy
-The data SpaceX will be using with our tool is very large, and becomes even
-larger once we have parsed it. As a result, some parts of the tool load slowly. One main fix we have
-implemented is batch loading the list of events on the main page so that the
+The data that SpaceX will be using with our tool is very large and becomes even
+larger after parsing it. As a result, some parts of the tool load slowly. One main fix we have
+implemented is batch-loading the list of events on the main page so that the
 user can start interacting with the tool without waiting to load the entire
 table, especially since all of the table is typically not needed.
 
 Having done some profiling, we know that pulling data from IndexedDB is the
-slowest part of our application, but at this point in time we do not have a way
-to fix this.
+slowest part of our application, but we have not discovered a way to speed it up.
 
 \section{Scalability}
-Typically for trace files using more than 4
+Typically for trace files using more than four
 cores, the parsed version will be too large for IndexedDB to store, and
 sometimes too large for the parser to handle as well.
 
-There are two possibilities for fixing this. One is to prune the JSON or
+There are two possibilities for scaling the application. One is to prune the JSON or
 find a more compressed method of storing the data. There are existing libraries
-for compressing JSON, such as cjson, but this might cause slowdown when data is
-being loaded into the database, as it would need to be decompressed first.
+for compressing JSON, but this might cause slowdown as data is
+ loaded into the database.
 Another option is to find a substitute for IndexedDB that can store more data.
 
 \section{Extensibility}
-  The downside of this is that the format of the file generated by \texttt{trace-cmd
+  The format of the file generated by \texttt{trace-cmd
   report} is dependent on the version of \texttt{trace-cmd} used. To be able to reliably
   parse data and add additional information about preemptions, we need our input
   data to have a consistent format. This creates a dependency on a particular
   version of \texttt{trace-cmd}. The team has chosen to use \texttt{trace-cmd} version 2.2.1, 
   the same version that our liaisons currently use.
 
-\chapter{Appendices}
 \newpage
+\let\cleardoublepage\clearpage
 \appendix
-\renewcommand{\thesection}{\Alph{section}}
-\section{Example JSON} \label{App:AppendixA}
+\renewcommand{\thechapter}{\Alph{chapter}}
+\chapter{Example JSON} \label{App:AppendixA}
 
 \begin{verbatim}
 Tasks
@@ -1392,38 +1398,36 @@ Events
    ...
 }
 \end{verbatim}
-\newpage
 
-\newpage
-\section{Glossary}
+\chapter{Glossary}
 \begin{itemize}[ ]
-\item {\bf Blocked:} When a task is runnable but another task is running on the same CPU, thereby blocking it from being able to run.
-\item {\bf Cycle:} The interval between the regular deadlines that tasks running on a SpaceX rocket need to meet.
+\item {\bf Cycle:} The interval between the regular deadlines that need to be
+  met by tasks running on a SpaceX rocket.
 \item {\bf CPU:} The Central Processing Unit; the part of the computer that carries out instructions.
 \item{\bf Event:} A specific activity of a task taking place at a single point in time that can denote a change in its state or some other action.
 \item {\bf PID:} A process identifier; a number attatched to a process that is unique to that process.
-\item {\bf Preemption:} When a running task is blocked by another program starting to run on the same CPU. 
-\item {\bf Priority Inversion:} When a high-priority task is indirectly blocked by something of
+\item {\bf Preemption:} When a running task is interrupted by another program starting to run on the same CPU. 
+\item {\bf Priority Inversion:} When a high-priority task is indirectly
+  prevented from running by something of
 lower priority using a shared resource that the higher priority task needs in
 order to run. 
-\item{\bf Process:} A program that can have many threads.
+\item{\bf Process:} A program. It can have many threads running at once.
 \item {\bf Running:} The state of a task when it is being executed on the CPU.
 \item {\bf Task:} A single thread of a process; a series of events.
-\item {\bf Waiting:} The state of a task when it cannot run, due to being blocked or waiting on some piece of information.
+\item {\bf Waiting:} The state of a task when it cannot run, because it is waiting 
+  on some piece of information, such as I/O.
 \end{itemize}
 
-\newpage
-\section{How to Package the Application}
-If changes have been made to any files within a cloned copy of the repository,
-the application can be repackaged with these steps.
-
+\chapter{How to Package the Application}
+Perform the following steps to repackage SpaceShark:
 \begin{enumerate}
-  \item Navigate into the top level of the directory, which contains
+  \item Navigate to the top level of the directory, which contains
     \texttt{package.json}
   \item Move the spaceshark script, README, and parser jar files to the parent directory
     and delete the rest of the parser files
   \item run
-    \begin{center}\texttt{zip -r ../\${PWD\#\#*/}.nw *}\end{center} here, which will create a file
+    \begin{center}\texttt{zip -r ../\${PWD\#\#*/}.nw *}\end{center} in the same
+    directory as step 2, which creates a file
     called \texttt{SpaceX14.nw} in the parent directory
   \item Download a copy of node-webkit from
     \texttt{https://github.com/nwjs/nw.js} and
@@ -1432,15 +1436,15 @@ the application can be repackaged with these steps.
     \begin{center}\texttt{cat nw SpaceX14.nw >
       app \&\& chmod +x app}\end{center}
   \item Zip together the app file, \texttt{nw.pak}, \texttt{icudtl.dat}, the spaceshark script,
-    README, and parser jar files
+    README, and parser jar files.
 \end{enumerate}
 
-\newpage
-\section{Debugging}
+\chapter{Debugging}
 To display a web console for debugging, within \texttt{package.json} change the line
 \texttt{toolbar: false} to \texttt{toolbar: true}. A gear icon should now appear in the
-top right corner of the application when it is launched. When clicked, this
+top right corner of the application when it is launched. When clicked, it
 displays a web console that allows the user to view current css properties,
-set breakpoints in code, and view the resources within IndexedDb and local
+set breakpoints in code, and view the resources within IndexedDB and local
 storage.
+
 \end{document}
