@@ -184,9 +184,9 @@ To find potential bugs in their software, SpaceX developers look for
 problems like unexpected preemptions, priority inversions, and breaks in the
 pattern of tasks being run.
  A {\bf preemption} occurs when one program is running, and
-is then blocked by another program starting to run on the same CPU. 
+is then interrupted by another program starting to run on the same CPU. 
 A {\bf priority
-inversion} occurs when a high-priority task is indirectly blocked by something of
+inversion} occurs when a high-priority task is prevented from running by something of
 lower priority using a shared resource that the higher priority task needs in
 order to run. 
 
@@ -587,7 +587,7 @@ These five fields appear for every event, but the content of extra information
   the task being switched in for the currently running task. Importantly, it
   also contains a flag that indicates if the task being switched out transitions
   to a runnable or sleeping state. If the task is switched out and into a
-  runnable state, it has been blocked, which means the event is a preemption.
+  runnable state, it has been interrupted,  which means the event is a preemption.
 
   The parser also calculates the total runtime of each task by looking for
 \texttt{sched\_stat\_runtime} events. These events give the time elapsed between
@@ -934,14 +934,12 @@ DataTables.js also makes use of Local Storage in order to save the scroll positi
 \chapter{Winter Break User Feedback} % Alix
 \section{General Feedback} % Alix
 We sought user feedback about our designs and tool throughout the course of the
-semester. Most of our feedback was from our liaisons, who we communicated with
-on a weekly basis. The team was also able to user test with four SpaceX
-engineers during a week long site visit at SpaceX. It was especially useful to
+project. Most of our feedback was from our liaisons, who we communicated with on
+a weekly basis. The team was also able to test the application with four SpaceX
+engineers during a week-long site visit at SpaceX. It was especially useful to
 have people unfamiliar with our tool use it.  User testing helped the team
-identify what features were useful, what features should be modified, and what
-features needed to be added to make the tool as effective as possible.  We will
-focus mostly on the negative feedback, both from our liaisons and user testing,
-as critical feedback was the most useful in moving our tool forward.
+identify which features were useful, which features should be modified, and
+which features needed to be added to make the tool as effective as possible.
 
 Below we will cover our methodology of user testing, feedback for specific
 pages, and how that feedback shaped the changes we made, leading to the current
@@ -955,14 +953,13 @@ at a time over a half hour period.
 During testing, two members of our team watched the user work their way through
 our tool using our sample data or the user's data if they had some prepared. We
 tried to provide as little input as possible, except for encouraging the user
-tester to think out loud, describing what they were expecting or doing, and why.
+to think out loud, describing what they were expecting or doing, and why.
 While the user did this, we took notes on what they were saying and doing.
 
-Once the user felt like they had explored the tool, we talked discussed their
-experience and our intent with pages of the tool, encouraging explicit feedback
-on how we could make the tool better. A large portion of this process went to
-brainstorming with the user and finding out why a page was helpful or unhelpful
-for their specific workflow.
+Once the user felt like they had explored the tool, we encouraging explicit
+feedback on how we could make the tool better. We explained the intended use of
+pages and features and asked the user to describe why a page was helpful or
+unhelpful for them.
 
 \section{Feedback on Specific Pages} % Alix
 
@@ -975,11 +972,19 @@ Before winter break, our tool also featured a graphical representation of tasks
 running over time. The tool also displayed the top ten preempted, longest
 running, and longest waiting tasks in tables at the top of the page. 
 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=4in]{oldMain.png}
+\caption{A screenshot of our Overview page before winter break. At the top are
+several tables of statistics, followed by the graph of running tasks.}
+\end{center}
+\end{figure}
+
 During user testing, three out of four users said that they did not find the
 tables at the top of the page helpful. Two of the users described the typical
 workflow they used in KernelShark as visually finding the problem in the graph,
 jumping to that event in the events list, and then scanning the events list.
-They felt that being able to quickly scan the events list was a very valuable
+They felt that being able to quickly scan the events list was a valuable
 feature.
 
 Based on this feedback, we removed the tables at the top of our page and added
@@ -1000,7 +1005,7 @@ the main timeline of all events. However, that was the extent of what
 Kernelshark did with regards to individual tasks.
 
 The team was interested in providing more details and statistics about
-individual tasks. This would give users a different way to view
+individual tasks. This information would give users a different way to view
 their data, which our liaisons thought would be helpful
 in the debugging process.
 
@@ -1016,10 +1021,10 @@ beginning of the project. It features many different kinds of visualizations,
 such as histograms of how long the task was in each state for, a scatterplot of
 what preempted it, a table of what preempted it, a pie chart task state, and a
 graphical display of the time series data highlighting the process in the graph.
-Through user feedback with the liaisons, we found that our mockup included way
+Through feedback from the liaisons, we found that our mockup included
 too much information that SpaceX engineers would not have found useful. Since
-preemptions are generally indicative of problems, we really wanted to focus on
-this on the Task State page.
+preemptions are generally indicative of problems, we decided to focus on
+them for the Task State page.
 
 \begin{figure}[H]
 \begin{center}
@@ -1030,7 +1035,7 @@ preempted.}
 \end{center}
 \end{figure}
 
-On the Task State page, the user is able to type in a particular task, see
+On the Task State page, the user can type in a particular task, see
 how many times it was preempted and which processes preempted it, as well as
 view a graph showing how long it was in one of three states: running, waiting,
 or preempted. This design has a minimalistic page view compared to the mockup,
@@ -1058,21 +1063,25 @@ displayed, as shown here.}
 \end{center}
 \end{figure}
 
-We received nearly all positive feedback on the Cycles page, and this seems to
-be the most useful aspect of our tool.
+We received nearly all positive feedback on the Cycles page, and this page seems to
+be the most useful aspect of our tool. Users requested minor changes to improve
+the page.
 
-The first change  we made was very minor; rather than ordering the cycles from
-first cycle to last cycle, we changed it to be ordered from last cycle to first.
+The first change we made was to display the cycles in a different order; rather than order the cycles from
+first cycle to last cycle, we changed them to be ordered from last cycle to first.
 We made this change because anomalies are normally found within the last cycle,
 which SpaceX engineers would want to see displayed prominently at the top of the
 page.
 
-Additionally, this page initially relied on the user's code generating ``cycle
+The Cycles page initially relied on the user's code generating ``cycle
 markers'', which meant that this functionality would not have worked with old
 traces, or traces that didn't conform to our specific markers. One engineer
 suggested that we add the ability to enter in cycle length and have it display
-cycles based on that. We chose to implement this, taking this page from having
-very specific requirements to being usable with any data.
+cycles based on that input made this change, making the page usable with more
+varieties of data.
+
+We also added the ability to choose which CPUs are displayed, as a user may
+want to focus on only a CPU, or remove CPUs if the page becomes cluttered.
 
 \begin{figure}[H]
 \begin{center}
