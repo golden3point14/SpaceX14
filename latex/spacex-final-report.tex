@@ -566,8 +566,7 @@ way, for example by adding a new feature or making a change to the type of data 
 %  the same version that our liaisons currently use.
 
   \section{Parser}
-  Next the parser takes in this raw data, and ultimately outputs the data
-  reformatted into JSON with additional information.
+  The parser converts from \texttt{trace-cmd} format to a format that is human readable and suitable for a visualization tool. It also extrapolates some additional information from the data, such as the total number of times each task is preempted, and the total runtime of each task.
 
 %% TODO this image is a little too low resolution
   \begin{figure}
