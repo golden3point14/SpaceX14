@@ -1273,8 +1273,7 @@ One user suggested that the graph respond when an event in the events list is cl
 \chapter{Future Work}
 \section{Known bugs}
 
-  We have documented bugs and like-to-haves on our Computer Science hosted trac
-  site using the ticketing system. Outstanding issues at this time are as
+  We have documented bugs and feature requests on our project's GitHub page, under ``issues''. Outstanding issues at this time are as
   follows:
 
   \begin{itemize}
@@ -1287,11 +1286,11 @@ One user suggested that the graph respond when an event in the events list is cl
     page is reloaded.
 
   \item The information displayed by the Task Statistics page, specifically on
-    the Runtime section, is incorrect. This could be a problem due to
-    \texttt{trace-cmd} not outputting \texttt{sched\_stat\_runtime} events as
+    the Runtime section, is incorrect. The bug might be because
+    \texttt{trace-cmd} does not output \texttt{sched\_stat\_runtime} events as
     often as we expect,  after each \texttt{sched\_switch} event. If
     \texttt{sched\_stat\_runtime} events do not occur consistently, the Task
-    Statistics page will display incorrect information. If this is not the
+    Statistics page will display incorrect information, as we calculate the runtimes diplayed there based on those events. If this is not the
     issue, either the parser or the visualization, controlled by
     $\texttt{runtimeChart.js}$,  may be handling the data
     incorrectly.
@@ -1305,16 +1304,14 @@ One user suggested that the graph respond when an event in the events list is cl
   field is extracted from an event, it is immediately formatted into a JSON
   object.  This adds some additional complexity in later calculations and is
   less space efficient, as the JSON object is a key-value pair instead of just a value.
-  Instead of this, it would be better to create an intermediate format for the
-  data. We imagine this would look like a separate Java class for tasks and
+It would be better to create an intermediate format for the
+  data. We imagine this format would be a separate Java class for tasks and
   events. Events would be subclassed by their type. All events have the same
-  basic information, like the start time, PID of the task involved, and CPU, but
+  basic information, like the start time, PID of the task involved, and CPU; but
   their extra information field varies based on type. We imagine that creating
   event and task classes would make the parser code much more readable, as after
   grabbing each field from a line, this information would be passed off and
-  dealt with elsewhere. Given enough time, we would refactor the parser in this
-  way, but as it is currently functional, these changes have not been high
-  priority.
+  dealt with elsewhere. 
 
   Additionally, for most of the semester, we referred to the Overview page as
   the ``main'' page and the Task State page as the ``process'' page before
@@ -1323,8 +1320,8 @@ One user suggested that the graph respond when an event in the events list is cl
 \section{Extensions}
   SpaceX developers indicated an interest in interleaving the graphs of multiple
   CPUs on the Cycles page.  This interleaving would make it easier to compare
-  cycle anomalies across CPUs. Making this possible would require tweaking the
-  graph infrastructure, and creating an interface for users to choose if they
+  cycle anomalies across CPUs. Adding this feature would require a tweak to the
+  graph infrastructure and would require an interface for users to choose if they
   want the graphs interleaved or not, and which cycle numbers to display.
 
   \begin{figure}[H]
@@ -1336,35 +1333,34 @@ interleaved graphs.}
 \end{figure}
 
 It is also possible that the loaded files will contain more than two CPU's.
-For clear visual purposes, we only want to be displaying two CPU's graphs
+So that all the graphs can be clearly visible, we only want to display two CPU's graphs
 on the Cycles page. In the case that we have more than two CPU's, 
 we would hope to be able to paginate the graphs. Currently, the graphs
 would simply be placed next to each other on the same page.
 
 \section{Speed} %Wendy
-The data SpaceX will be using with our tool is very large, and becomes even
-larger once we have parsed it. As a result, some parts of the tool load slowly. One main fix we have
-implemented is batch loading the list of events on the main page so that the
+The data that SpaceX will be using with our tool is very large and becomes even
+larger after parsing it. As a result, some parts of the tool load slowly. One main fix we have
+implemented is batch-loading the list of events on the main page so that the
 user can start interacting with the tool without waiting to load the entire
 table, especially since all of the table is typically not needed.
 
 Having done some profiling, we know that pulling data from IndexedDB is the
-slowest part of our application, but at this point in time we do not have a way
-to fix this.
+slowest part of our application, but we have not discovered a way to speed it up.
 
 \section{Scalability}
-Typically for trace files using more than 4
+Typically for trace files using more than four
 cores, the parsed version will be too large for IndexedDB to store, and
 sometimes too large for the parser to handle as well.
 
-There are two possibilities for fixing this. One is to prune the JSON or
+There are two possibilities for scaling the application. One is to prune the JSON or
 find a more compressed method of storing the data. There are existing libraries
-for compressing JSON, such as cjson, but this might cause slowdown when data is
-being loaded into the database, as it would need to be decompressed first.
+for compressing JSON, but this might cause slowdown as data is
+ loaded into the database.
 Another option is to find a substitute for IndexedDB that can store more data.
 
 \section{Extensibility}
-  The downside of this is that the format of the file generated by \texttt{trace-cmd
+  The format of the file generated by \texttt{trace-cmd
   report} is dependent on the version of \texttt{trace-cmd} used. To be able to reliably
   parse data and add additional information about preemptions, we need our input
   data to have a consistent format. This creates a dependency on a particular
