@@ -1378,9 +1378,10 @@ Another option is to find a substitute for IndexedDB that can store more data.
   the same version that our liaisons currently use.
 
 \newpage
+\let\cleardoublepage\clearpage
 \appendix
-\renewcommand{\thesection}{Appendix \Alph{section}}
-\section{Example JSON} \label{App:AppendixA}
+\renewcommand{\thechapter}{\Alph{chapter}}
+\chapter{Example JSON} \label{App:AppendixA}
 
 \begin{verbatim}
 Tasks
@@ -1410,10 +1411,8 @@ Events
    ...
 }
 \end{verbatim}
-\newpage
 
-\newpage
-\section{Glossary}
+\chapter{Glossary}
 \begin{itemize}[ ]
 \item {\bf Cycle:} The interval between the regular deadlines that need to be
   met by tasks running on a SpaceX rocket.
@@ -1432,8 +1431,7 @@ order to run.
   on some piece of information, such as I/O.
 \end{itemize}
 
-\newpage
-\section{How to Package the Application}
+\chapter{How to Package the Application}
 Perform the following steps to repackage SpaceShark:
 \begin{enumerate}
   \item Navigate to the top level of the directory, which contains
@@ -1454,8 +1452,7 @@ Perform the following steps to repackage SpaceShark:
     README, and parser jar files.
 \end{enumerate}
 
-\newpage
-\section{Debugging}
+\chapter{Debugging}
 To display a web console for debugging, within \texttt{package.json} change the line
 \texttt{toolbar: false} to \texttt{toolbar: true}. A gear icon should now appear in the
 top right corner of the application when it is launched. When clicked, it
