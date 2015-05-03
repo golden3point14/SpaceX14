@@ -1128,13 +1128,13 @@ left allows users to choose their own cycle length.}
    We were able to test with three SpaceX engineers with differing levels of
    experience with KernelShark, so we received feedback from multiple perspectives.
 
-   The users were instructed to read our README page on our GitHub page. They
+   The users were instructed to read our README page on GitHub. They
    opened the application according to the instructions they read and were
    instructed to describe what they were doing out loud, why, and if they felt
    like anything was missing. As in our first round of user testing, the team
    provided little input while the user explored the tool using our sample data.
 
-   This feedback session was after the clinic code freeze, so we were unable to
+   This feedback session happened after the project deadline where we were not allowed to code anymore, so we were unable to
    implement the changes suggested. In the next sections, we will describe the
    suggestions and feedback, and detail how we would implement these where
    possible. We will start with feedback that is applicable to the application
@@ -1143,7 +1143,7 @@ left allows users to choose their own cycle length.}
 \section{General Feedback}
 
 One noticeable missing feature was a list of all tasks for the user to view and select from. 
-This would be best to add as an option on pages that require the user to select tasks, such 
+This feature would be best to add as an option to pages that require the user to select tasks, such 
 as on the Task State page and the Compare Task page. It could appear as a dropdown menu or a 
 pop-up dialog with checkboxes next to the names. It should be possible to sort these lists 
 alphabetically or by PID as the user desires. The full list is especially suitable for the 
@@ -1151,42 +1151,41 @@ Compare Task page because it would allow the user to load multiple graphs at onc
 not be difficult to implement, as the tool already creates this list in 
 \texttt{assets/js/compare.js} and \texttt{assets/js/process.js}.
 
-We received a lot of feedback regarding the graph, including bug fixes and adding new functionality.
+We received a lot of feedback regarding the graphs of our tool that are seen on the Overview, Cycles, Task State, and Compare Tasks page, including bug fixes and adding new functionality.
   \begin{itemize}
 
   \item The labels associated with the graphs should be static, and not go off the screen when 
-  the graph is zoomed or panned. This is especially problematic on the Compare Tasks page, 
+  the graph is zoomed or panned. This feature is especially problematic on the Compare Tasks page, 
   where the user will potentially have large numbers of graphs displaying, and it will be 
   important for them to not have to remember what each graph is displaying.
 
-  \item User testers found that they often had trouble or could not see smaller events 
-  from the fully zoomed out view. This makes it harder to find trouble spots. We do not 
+  \item Users found that they often had trouble or could not see smaller events 
+  from the fully zoomed out view. This difficulty makes it harder to find trouble spots. We do not 
   have any suggestions on how to fix this, but it is an important issue that should be 
   considered.
 
-  \item User testers were very interested in having the ability to place markers, which 
+  \item User testers were interested in having the ability to place markers, which 
   is something that KernelShark provided. The user should be able to place one or two
-   vertical line markers onto a graph by clicking. If two markers are placed they should
-    be able to get the duration between the two markers, and shift the two markers as one
+   vertical-line markers onto a graph by clicking. If two markers are placed the user should
+    be able to get the duration between the two markers and shift the two markers as one
      unit over the graph, maintaining the same duration between them. The markers could
       potentially be added to the graph at the SVG level, which would likely mean they 
       would pan with the graph as desired, although zooming would require some extra 
       work to keep the markers as a thin line.
 
-  \item User testers often had trouble distinguishing where using the mouse scroll wheel
-   would zoom in on the graph, and where it would scroll down the page. One potential fix
-    for this is to make it more clear where the graph is by changing the white background
-     to be a light, desaturated color or a light grey. This would make the
+  \item Users often had trouble distinguishing where to put their mouse and use the scroll wheel to either scroll the page of our tool or to zoom in on the graph. One potential fix 
+   is to classify the location of a graph by changing its white background
+     to be a light, desaturated color or a light grey. This contrast would make the
      graph's ``white
       space'' distinguishable from the page, making it easier for the user.
 
   \end{itemize}
 
-One user was very interested in the idea of exporting the state of the tool. One
-potential way we could do this is to write the state (via the local storage
-variables) to the end of the JSON file, and have a check when we load files to
-see if there is a state to load. This might be difficult, as JavaScript is not
-well-suited for writing to files, but we imagine it would somehow be possible to
+One user was interested in the idea of exporting the state of the tool. One
+potential way to implement this is to write the state (via the local storage
+variables) to the end of the JSON file, and have a check when SpaceShark loads files to
+see if there is a state to load. JavaScript is not
+well-suited for writing to files, but we imagine it may be possible to
 create a Blob object of the state and then allow the user to download and save
 this file.  Exporting state would make it easier for a user to share their
 findings with other people. A user receiving this data would have the
@@ -1195,62 +1194,51 @@ walking through the data to find the desired information. It would also allow
 the user to work from multiple computers.
 
 \section{Overview Page}
-One user suggested that the graph respond when an event in the events list is clicked.
+One user suggested that the graph should respond when an event in the events list is clicked.
  This would mirror the existing behavior of clicking on an event in the graph and having
   it scroll in the events list. One possibility for how the graph could respond is adding
    a marker at the timestamp of the event clicked onto the graph. A second possibility is
-    translating the graph so that this event is now at the left. Lastly, the graph could 
-    be translated so that the event is in the center.
-
-  To translate the graph, the $x$-position of the switch event closest in start time to
-   the event clicked could be found. The graph already has a method for translating all
-    of the rectangles, so this could be exposed and used to shift it by the $x$-position
-     amount identified. Adding a marker would required writing a new method to append a
-      skinny rectangle to the existing graph, on top of the data, at some
-      specific $x$-position.
+    translating the graph so that this event is now at the left or the center of the graph. Both of these options allow the user to clearly see the event within the graph.
 
   Another suggestion for the Overview page was to enable more complex queries in the 
-  search bar. Currently, searching is very simple and filters events out that do not 
+  search bar. Currently, searching only filters events out that do not 
   contain the text entered. One user thought it would be useful to support
   ``or'' in 
-  some way, with delineator \texttt{OR} or ``|''. This would require a more
-  sophisticated implementation 
-  of regular expressions or string matching. DataTables, the library used for the 
+  some way, with delineator \texttt{OR} or ``|''. DataTables, the library used for the 
   events log and the search bar, can enable some of this functionality.
 
   \section{Cycles Page}
 
-  The Cycles page is a very useful view, and all participants seemed to feel that 
-  it was the most important contribution from our tool. When sharing this page, 
-  we also posed the idea of having the cycles interleaved, as mentioned in 
-  Section 4.3. We think it would be best to allow the interleaving of cycles as 
+  The Cycles page is a useful view, and all participants seemed to feel that 
+  it was the most important contribution from our tool. When sharing this page with our liaisons, 
+  we posed the idea of having the cycles interleaved, as we will later mention in the Extensions section in Section 6.3. We think it would be best to allow the interleaving of cycles as 
   an option, but not as a replacement of the current view. Both views would be 
   useful. Combining the two graphs to display in the desired order will be 
   difficult. One method that we considered was to have one graph for ``Cycle 0''
-  that divides based on CPU, then one for ``Cycle 1'', etc. This has the
-  downside of producing many graphs, but the user could potentially choose to
+  that divides based on CPU, then one for ``Cycle 1'', etc. This solution has the
+  downside of producing many graphs, which degrades performance; but the user could potentially choose to
   only display the top few cycles, or batch loading could be implemented so that
   graphs are only loaded as the user scrolls down.
 
-  One user was interested in filtering which tasks displayed on the Cycles page.
+  One user was interested in filtering the tasks displayed on the Cycles page.
   The tasks list could be filtered and the graph re-rendered with this new tasks
   list.
 
   \section{Task Statistics Page}
 
-  User testers thought this page was potentially useful, but wanted additional
+  Users thought this page was potentially useful, but wanted additional
   statistics. They wanted to see a bar chart for duration of preemptions. In
   addition, they wanted the option to break down statistics by CPU.
 
   \section{Task State Page}
 
-  User testers mentioned that it was difficult to see preemptions on the 
-  task state graph because the red did not stand out enough against the tan. 
+  Users mentioned that it was difficult to see preemptions on the 
+  task state graph because the red did not stand out enough against the tan background. 
   The color of these bars is controlled by the three classes in 
   \texttt{assets/css/process.css}, and modifying \texttt{.W}, the class for 
   waiting, will update all bars and the legend.
 
-  Currently, what task a CPU is running on is not made clear by the graph. 
+  Currently, the user cannot view which CPU a task is runnnig on in the graph. 
   A simple fix would be to add this information to the hovertext, which is 
   formatted within \texttt{assets/js/gantt-chart-d3.js}. Alternatively, we 
   could display one graph per CPU that the task is running on, with the 
@@ -1258,10 +1246,9 @@ One user suggested that the graph respond when an event in the events list is cl
 
   \section{Compare Task Page}
   The feedback for this page centered around its aesthetic and usability, with no 
-  large functionality changes. Currently, the user cannot tell what CPU a task 
+  large functionality changes. Currently, the user cannot view which CPU a task 
   is running on. We propose adding a label to the side of each graph as a simple 
-  fix. Additionally, the graphs should use less vertical space. Having less 
-  vertical space would allow more graphs to fit on the page without a loss of 
+  fix. Additionally, the graphs should use less vertical space, which would allow more graphs to fit on the page without loss of 
   information. Making this change requires editing the Compare Task specific 
   code in \texttt{/assets/js/gantt-chart-d3.js}. Lastly it is not clear to the
    user that they can drag the graphs to reorder them. We propose adding a 
