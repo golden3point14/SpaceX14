@@ -1025,7 +1025,8 @@ this on the Task State page.
 \begin{center}
 \includegraphics[width=4in]{task-state-page.png}
 \caption{A screenshot of the current version of the Task State page. The three
-colors indicate the three states a task can be in: running, waiting, or blocked.}
+colors indicate the three states a task can be in: running, waiting, or
+preempted.}
 \end{center}
 \end{figure}
 
@@ -1367,7 +1368,6 @@ Another option is to find a substitute for IndexedDB that can store more data.
   version of \texttt{trace-cmd}. The team has chosen to use \texttt{trace-cmd} version 2.2.1, 
   the same version that our liaisons currently use.
 
-\chapter{Appendices}
 \newpage
 \appendix
 \renewcommand{\thesection}{\Alph{section}}
@@ -1406,33 +1406,34 @@ Events
 \newpage
 \section{Glossary}
 \begin{itemize}[ ]
-\item {\bf Blocked:} When a task is runnable but another task is running on the same CPU, thereby blocking it from being able to run.
-\item {\bf Cycle:} The interval between the regular deadlines that tasks running on a SpaceX rocket need to meet.
+\item {\bf Cycle:} The interval between the regular deadlines that need to be
+  met by tasks running on a SpaceX rocket.
 \item {\bf CPU:} The Central Processing Unit; the part of the computer that carries out instructions.
 \item{\bf Event:} A specific activity of a task taking place at a single point in time that can denote a change in its state or some other action.
 \item {\bf PID:} A process identifier; a number attatched to a process that is unique to that process.
-\item {\bf Preemption:} When a running task is blocked by another program starting to run on the same CPU. 
-\item {\bf Priority Inversion:} When a high-priority task is indirectly blocked by something of
+\item {\bf Preemption:} When a running task is interrupted by another program starting to run on the same CPU. 
+\item {\bf Priority Inversion:} When a high-priority task is indirectly
+  prevented from running by something of
 lower priority using a shared resource that the higher priority task needs in
 order to run. 
-\item{\bf Process:} A program that can have many threads.
+\item{\bf Process:} A program. It can have many threads running at once.
 \item {\bf Running:} The state of a task when it is being executed on the CPU.
 \item {\bf Task:} A single thread of a process; a series of events.
-\item {\bf Waiting:} The state of a task when it cannot run, due to being blocked or waiting on some piece of information.
+\item {\bf Waiting:} The state of a task when it cannot run, because it is waiting 
+  on some piece of information, such as I/O.
 \end{itemize}
 
 \newpage
 \section{How to Package the Application}
-If changes have been made to any files within a cloned copy of the repository,
-the application can be repackaged with these steps.
-
+Perform the following steps to repackage SpaceShark:
 \begin{enumerate}
-  \item Navigate into the top level of the directory, which contains
+  \item Navigate to the top level of the directory, which contains
     \texttt{package.json}
   \item Move the spaceshark script, README, and parser jar files to the parent directory
     and delete the rest of the parser files
   \item run
-    \begin{center}\texttt{zip -r ../\${PWD\#\#*/}.nw *}\end{center} here, which will create a file
+    \begin{center}\texttt{zip -r ../\${PWD\#\#*/}.nw *}\end{center} in the same
+    directory as step 2, which creates a file
     called \texttt{SpaceX14.nw} in the parent directory
   \item Download a copy of node-webkit from
     \texttt{https://github.com/nwjs/nw.js} and
@@ -1441,15 +1442,16 @@ the application can be repackaged with these steps.
     \begin{center}\texttt{cat nw SpaceX14.nw >
       app \&\& chmod +x app}\end{center}
   \item Zip together the app file, \texttt{nw.pak}, \texttt{icudtl.dat}, the spaceshark script,
-    README, and parser jar files
+    README, and parser jar files.
 \end{enumerate}
 
 \newpage
 \section{Debugging}
 To display a web console for debugging, within \texttt{package.json} change the line
 \texttt{toolbar: false} to \texttt{toolbar: true}. A gear icon should now appear in the
-top right corner of the application when it is launched. When clicked, this
+top right corner of the application when it is launched. When clicked, it
 displays a web console that allows the user to view current css properties,
-set breakpoints in code, and view the resources within IndexedDb and local
+set breakpoints in code, and view the resources within IndexedDB and local
 storage.
+
 \end{document}
