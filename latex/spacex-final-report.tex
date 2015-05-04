@@ -29,6 +29,7 @@
 \usepackage{graphicx}
 \usepackage{enumerate}
 \usepackage{paralist}
+\usepackage{multirow}
 
 %%% The major difference between the statement of work and a midyear
 %%% or final report is that the statement of work is typeset as an
@@ -263,26 +264,35 @@ The README of this repository provides a link to download a
   SpaceShark helps SpaceX engineers find scheduling related problems.
   SpaceShark is composed of pages that each give a different view of the data,
   from a complete overview down to the details of of a single task. A brief
-  summary of each page and its intended purpose is given below.
+  summary of each page and its intended purpose is given in 
+  Table~\ref{table:pages}.
 
+\begin{table}[h]
+\renewcommand{\arraystretch}{1.5}
   \begin{center}
     \begin{tabular}{p{0.2\linewidth}p{0.7\linewidth}}
      \toprule
-      Page Name       & Purpose\\
+      \textbf{Page Name}               & \textbf{Purpose}\\
       \midrule
-      Load File       & Allow a user to choose the data to import into the
-      application\\
-      Overview        & Provide a user overall view of the data\\
-      Cycles          & Break data into intervals so that a user can compare
-      across them\\
-      Task Statistics & Give a user high-level statistics about the data,
-      comparing task's total runtimes and preemptions\\
-      Task State      & Display a single tasks actions and interactions\\
-      Task Compare    & Allow a user to compare several tasks changes in state
-      over time\\
+      \multirow{2}{*}{Load File}       & Allow a user to choose the data to 
+        import into the application\\
+      Overview                         & Provide a user overall view of the 
+        data\\
+      \multirow{2}{*}{Cycles }         & Break data into intervals so that a 
+        user can compare across them\\
+      \multirow{2}{*}{Task Statistics} & Give a user high-level statistics 
+        about the data, comparing task's total runtimes and preemptions\\
+      Task State                       & Display a single tasks actions and 
+        interactions\\
+      \multirow{2}{*}{Task Compare}    & Allow a user to compare several tasks 
+        changes in state over time\\
     \bottomrule
     \end{tabular}
   \end{center}
+  \vspace{-1em}
+  \caption{\label{table:pages} A description of SpaceShark's pages.}
+\end{table}
+
 \subsection{Example User Flow}
   The SpaceX debugging process involves several steps.  A user will navigate
   through the tool differently depending on what level of information they
