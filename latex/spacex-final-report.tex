@@ -332,7 +332,7 @@ display if no data has ever been loaded.}
 When the user opens SpaceShark, they see the Load File page (Figure 2.1).  This
 page allows the user to choose which data to load, or to choose to load the data
 that was most recently used.  The user can easily resume their work by choosing
-the second option, as both the data and the state of each page during the user's
+the second option, as both the data and the state of each page, such as the amount that the user has scrolled or zoomed in on the visualizations, from the
 previous session are reloaded.
 
 \paragraph{Interactivity:}
@@ -355,7 +355,7 @@ KernelShark does not allow the user to easily resume viewing previous data. Spac
 The goal of the Overview page is to give a broad view of the data, displaying
 all of the data at once.  The users sees a chart of the programs that were
 running on each of the CPUs for the entire duration of the trace and a table
-listing all of the events in the trace.
+listing all the events in the trace.
 
 \paragraph{Interactivity:} The user can zoom in and out on the graph by using
 the mouse scroll wheel, and pan left and right by clicking and dragging.
@@ -370,7 +370,7 @@ events list to scroll to that event.
 The columns of the table consist of the CPU, start time, name, PID, event type,
 and extra information dependent on the event type. By default, the table is
 displayed in ascending order of time.  Hovering over any of the table cells
-highlights that entire row. Users can also double click on an event to be
+highlights that entire row. Users can also double-click on an event to be
 redirected to that task on the Task State page.  The search feature filters out
 entries that do not match the search text in any column.  Clicking on any of the
 column headers orders the information in the table by the contents of that
@@ -387,8 +387,8 @@ range of entries currently on the screen.
   user can zoom by clicking and dragging a rectangular box from left to right
   over the graph.  This allows the user to precisely view a specific area of the
   graph.  This zoom functionality doesn't follow common zoom functionalities of
-  a modern day desktop application. Zooming out of the graph in KernelShark is
-  also unintuitive: the user can click and drag a rectangular box from right to
+  a modern-day desktop application. Zooming out of the graph in KernelShark is
+  also unintuitive: the user clicks and drags a rectangular box from right to
   left over the graph. This technique does not give the user any kind of
   information about how much the graph is zooming out and can therefore be
   confusing to users. When zooming on KernelShark, a horizontal bar appears at
@@ -453,7 +453,7 @@ top allow the user to select which CPUs to display.}
 
   \begin{figure}[H]
   \includegraphics[width=5in]{task-statistics-page.png}
-  \caption{The left column allows the user to navigate the bar charts, while
+  \caption{On the Task Statistics page, the left column allows the user to navigate the bar charts, while
     also serving as a quick thumbnail view of each one. The right side displays
   the bar chart in a larger, more detailed view.}
   \end{figure}
@@ -474,7 +474,7 @@ The user can toggle between viewing the preemption count graph and the runtime
 graph by clicking the small graph thumbnails in the sidebar.
 
 \paragraph{Comparison to KernelShark:} KernelShark does not compute any
-statistics about the data.
+statistics about the data, so it does not display any statistics about the data.
 
 
   \subsection{Task State}
@@ -483,7 +483,7 @@ statistics about the data.
   \includegraphics[scale=0.3]{task-state-page.png}
   \caption{The top of the Task State page displays a table of tasks
   that preempted the current task. The bottom half is a graph that plots the
-state of the current task over time. The three possible states are preempted,
+state of the current task over time. The three possible states are: preempted,
 waiting, and running.}
 \end{figure}
 
@@ -547,8 +547,8 @@ way, for example by adding a new feature or making a change to the type of data 
   \begin{figure}[H]
     \begin{center}
   \includegraphics[scale=0.15]{architecture_diagram.png}
-  \caption{A visual representation of three portions of our application. Each
-  piece flows into the others while remaining modular, coming together to make our final tool.}
+  \caption{A visual representation of the three components of our application. Each
+  component flows into the others while remaining modular, coming together to form a complete program.}
 \end{center}
 \end{figure}
 
@@ -605,7 +605,13 @@ These five fields appear for every event, but the content of extra information
   each event, we are able to add a field to a task giving total runtime.
 
   The output is formatted as a JSON (JavaScript Object Notation) file, so that we can easily transfer it to
-  the web application. The output JSON has the following elements:
+  the web application. For more information on JSON, visit this site:
+
+\begin{center}
+http://www.json.org/
+\end{center}
+
+The output JSON has the following elements:
 
   \begin{center}
     \begin{tabular}{p{0.35\linewidth}p{0.55\linewidth}}
@@ -622,8 +628,8 @@ These five fields appear for every event, but the content of extra information
     \end{tabular}
   \end{center}
 
-  As noted, several of these JSON objects contain other JSON objects: tasks,
-  events, and cycleEvents. A task has the following data.
+  As noted, several of these JSON objects contain other JSON objects: \texttt{tasks},
+ \texttt{events}, and \texttt{cycleEvents}. A \texttt{task} has the following data.
 
   \begin{center}
     \begin{tabular}{p{0.25\linewidth}p{0.2\linewidth}p{0.45\linewidth}}
@@ -642,7 +648,7 @@ These five fields appear for every event, but the content of extra information
     \end{tabular}
   \end{center}
 
-  An event contains the data in the table below. Switch events contain some additional
+  An \texttt{event} contains the data in the table below. Switch events contain some additional
   information. The switch event itself belongs to the task that is being
   switched out, but in the extra information field we also note which task
   was being switched in.
@@ -671,7 +677,7 @@ These five fields appear for every event, but the content of extra information
   their own markers as a task runs. A user can generate a print event by making
   an addition to the code of a task. We rely on these user-generated markers to
   identify cycles. Print events occur periodically in some of the tasks we are
-  tracing. Engineers use print events already, so we check to see
+  tracing. Print events occur whenever a program prints something, so we check to see
   that the user has annotated them with \texttt{CYCLE\_START} by looking at the extra
   information field of a print event. If the extra information field starts with
   \texttt{CYCLE\_START}, then we create a \texttt{cycleEvent} that contains the following data.
@@ -712,11 +718,14 @@ These five fields appear for every event, but the content of extra information
     web-technology based charting libraries.  We found node-webkit, which allows
     HTML/CSS/JavaScript applications to be packaged and run as desktop
     applications with no reliance on the internet. 
-    Using node web-kit allowed us to take advantage of many existing UI widigits
+    Using node-webkit allowed us to take advantage of many existing UI widigits
     and charting libraries. Instead of spending time creating our own
     visualizations, we were able to quickly modify existing ones. This allowed
     us to devote more time to developing new and useful ways to view the trace
     data.
+
+For more information on node-webkit, visit the GitHub page at 
+\begin{center}https://github.com/nwjs/nw.js/\end{center}
 
   \subsection{Overall Application Structure}
 
@@ -748,7 +757,8 @@ These five fields appear for every event, but the content of extra information
   One of the primary JavaScript files we've worked
   with and changed is \texttt{gantt-chart-d3.js}. This file contains the logic for all of the
   graphs. This file was originally written by Dimitry Kudrayvtsev, %% TODO add a reference?
- but we have significantly modified it to produce the behavior we want.
+ but we have significantly modified it to produce the behavior we want. The
+ original file is available at \texttt{github.com/dk8996/Gantt-Chart}.
 
   The graph takes in data and groups it by a particular attribute. Each piece
   of data, here, a scheduling event, is rendered as a rectangle. The
@@ -861,7 +871,12 @@ These five fields appear for every event, but the content of extra information
   graphs.
 \item \texttt{tableScroll}: Used by the Overview table.
 \end{itemize}
-DataTables.js also makes use of Local Storage in order to save the scroll position of the table.
+DataTables.js, the library we use for our events list table,  also makes use of Local Storage in order to save the scroll position of the table.
+
+For more information on Local Storage and how it is used, visit this site:
+\begin{center}
+http://www.w3schools.com/Html/html5\_webstorage.asp
+\end{center}
 
   \subsection{Selection of Charting Tool} % Rachel
   Many pages render a timeline of running tasks that users can interact
@@ -966,7 +981,7 @@ tried to provide as little input as possible, except for encouraging the user
 to think out loud, describing what they were expecting or doing, and why.
 While the user did this, we took notes on what they were saying and doing.
 
-Once the user felt like they had explored the tool, we encouraging explicit
+Once the user felt like they had explored the tool, we encouraged explicit
 feedback on how we could make the tool better. We explained the intended use of
 pages and features and asked the user to describe why a page was helpful or
 unhelpful for them.
@@ -975,7 +990,7 @@ unhelpful for them.
 
 \subsubsection{Overview Page}
 
-The main page of KernelShark featured a graphical display of the processes
+The main page of KernelShark featured a graphical display of the tasks
 running over time and a tabular version of the same information.
 
 Before winter break, our tool also featured a graphical representation of tasks
@@ -1026,8 +1041,8 @@ in the debugging process.
 \end{center}
 \end{figure}
 
-Since there was no existing Task State page, we designed a mockup of it at the
-beginning of the project. It features many different kinds of visualizations,
+We designed a mockup of the Task State page at the
+beginning of the project. It featured different visualizations,
 such as histograms of how long the task was in each state for, a scatterplot of
 what preempted it, a table of what preempted it, a pie chart task state, and a
 graphical display of the time series data highlighting the process in the graph.
@@ -1074,10 +1089,10 @@ displayed, as shown here.}
 \end{figure}
 
 We received nearly all positive feedback on the Cycles page, and this page seems to
-be the most useful aspect of our tool. Users requested minor changes to improve
+be the most useful feature of our tool. Users requested minor changes to improve
 the page.
 
-The first change we made was to display the cycles in a different order; rather than order the cycles from
+The first change we made was to display the cycles in a different order. Rather than order the cycles from
 first cycle to last cycle, we changed them to be ordered from last cycle to first.
 We made this change because anomalies are normally found within the last cycle,
 which SpaceX engineers would want to see displayed prominently at the top of the
@@ -1087,17 +1102,17 @@ The Cycles page initially relied on the user's code generating ``cycle
 markers'', which meant that this functionality would not have worked with old
 traces, or traces that didn't conform to our specific markers. One engineer
 suggested that we add the ability to enter in cycle length and have it display
-cycles based on that input made this change, making the page usable with more
+cycles based on that input, making the page usable with more
 varieties of data.
 
 We also added the ability to choose which CPUs are displayed, as a user may
-want to focus on only a CPU, or remove CPUs if the page becomes cluttered.
+want to focus on only a single CPU, or remove CPUs if the page becomes cluttered.
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{cycles-page.png}
 \caption{A screenshot of the current Cycles page. Multiple CPUs can be displayed
-at once using the checkboxes at the top of the screen. The input box on the top
+on the same page using the checkboxes at the top of the screen. The input box on the top
 left allows users to choose their own cycle length.}
 \end{center}
 \end{figure}
@@ -1144,7 +1159,7 @@ left allows users to choose their own cycle length.}
 
 \chapter{Exit User Feedback}
 \section{Methodology}
-   For this session, three members of our team attended the user testing sessions.
+   For this round, three members of our team attended the user testing sessions.
    We were able to test with three SpaceX engineers with differing levels of
    experience with KernelShark, so we received feedback from multiple perspectives.
 
@@ -1193,8 +1208,7 @@ We received a lot of feedback regarding the graphs of our tool that are seen on 
       would pan with the graph as desired, although zooming would require some extra 
       work to keep the markers as a thin line.
 
-  \item Users often had trouble distinguishing where to put their mouse and use the scroll wheel to either scroll the page of our tool or to zoom in on the graph. One potential fix 
-   is to classify the location of a graph by changing its white background
+  \item Users often had trouble distinguishing where to put their mouse and use the scroll wheel to either scroll the page of our tool or to zoom in on the graph. One potential fix is to clarify the location of a graph by changing its white background
      to be a light, desaturated color or a light grey. This contrast would make the
      graph's ``white
       space'' distinguishable from the page, making it easier for the user.
@@ -1230,13 +1244,15 @@ One user suggested that the graph should respond when an event in the events lis
   \section{Cycles Page}
 
   The Cycles page is a useful view, and all participants seemed to feel that 
-  it was the most important contribution from our tool. When sharing this page with our liaisons, 
-  we posed the idea of having the cycles interleaved, as we will later mention in the Extensions section in Section 6.3. We think it would be best to allow the interleaving of cycles as 
+  it was the most important contribution from our tool. When sharing this page
+  with our users, 
+  we posed the idea of having the cycles interleaved. We discuss this idea
+  further in the Extensions section in Section 6.3. We think it would be best to allow the interleaving of cycles as 
   an option, but not as a replacement of the current view. Both views would be 
   useful. Combining the two graphs to display in the desired order will be 
   difficult. One method that we considered was to have one graph for ``Cycle 0''
   that divides based on CPU, then one for ``Cycle 1'', etc. This solution has the
-  downside of producing many graphs, which degrades performance; but the user could potentially choose to
+  downside of producing many graphs, which degrades performance, but the user could potentially choose to
   only display the top few cycles, or batch loading could be implemented so that
   graphs are only loaded as the user scrolls down.
 
@@ -1253,7 +1269,8 @@ One user suggested that the graph should respond when an event in the events lis
   \section{Task State Page}
 
   Users mentioned that it was difficult to see preemptions on the 
-  task state graph because the red did not stand out enough against the tan background. 
+  task state graph because the red did not stand out enough against the tan that
+  represents when a task is waiting. 
   The color of these bars is controlled by the three classes in 
   \texttt{assets/css/process.css}, and modifying \texttt{.W}, the class for 
   waiting, will update all bars and the legend.
@@ -1339,14 +1356,14 @@ interleaved graphs.}
 \end{center}
 \end{figure}
 
-It is also possible that the loaded files will contain more than two CPU's.
-So that all the graphs can be clearly visible, we only want to display two CPU's graphs
-on the Cycles page. In the case that we have more than two CPU's, 
+It is also possible that the loaded files will contain more than two CPUs.
+So that all the graphs can be clearly visible, we only want to display two CPUs graphs
+on the Cycles page. In the case that we have more than two CPUs, 
 we would hope to be able to paginate the graphs. Currently, the graphs
 would simply be placed next to each other on the same page.
 
 \section{Speed} %Wendy
-The data that SpaceX will be using with our tool is very large and becomes even
+The data that SpaceX engineers use with our tool is very large and becomes even
 larger after parsing it. As a result, some parts of the tool load slowly. One main fix we have
 implemented is batch-loading the list of events on the main page so that the
 user can start interacting with the tool without waiting to load the entire
@@ -1362,7 +1379,7 @@ sometimes too large for the parser to handle as well.
 
 There are two possibilities for scaling the application. One is to prune the JSON or
 find a more compressed method of storing the data. There are existing libraries
-for compressing JSON, but this might cause slowdown as data is
+for compressing JSON, but compression might cause slowdown as data is
  loaded into the database.
 Another option is to find a substitute for IndexedDB that can store more data.
 
@@ -1414,7 +1431,10 @@ Events
 \item {\bf Cycle:} The interval between the regular deadlines that need to be
   met by tasks running on a SpaceX rocket.
 \item {\bf CPU:} The Central Processing Unit; the part of the computer that carries out instructions.
-\item{\bf Event:} A specific activity of a task taking place at a single point in time that can denote a change in its state or some other action.
+\item{\bf Event:} Occurs when a task changes state. This includes the time taken, what the
+  change was, and which task was involved. An example is if the task Python went
+  to sleep at 100 seconds. We are most concerned with software and scheduling
+  events. Each event is represented in the trace.dat files as a single line.
 \item {\bf PID:} A process identifier; a number attatched to a process that is unique to that process.
 \item {\bf Preemption:} When a running task is interrupted by another program starting to run on the same CPU. 
 \item {\bf Priority Inversion:} When a high-priority task is indirectly
