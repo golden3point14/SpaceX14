@@ -1243,7 +1243,8 @@ One user suggested that the graph should respond when an event in the events lis
   \section{Task State Page}
 
   Users mentioned that it was difficult to see preemptions on the 
-  task state graph because the red did not stand out enough against the tan background. 
+  task state graph because the red did not stand out enough against the tan that
+  represents when a task is waiting. 
   The color of these bars is controlled by the three classes in 
   \texttt{assets/css/process.css}, and modifying \texttt{.W}, the class for 
   waiting, will update all bars and the legend.
@@ -1329,14 +1330,14 @@ interleaved graphs.}
 \end{center}
 \end{figure}
 
-It is also possible that the loaded files will contain more than two CPU's.
-So that all the graphs can be clearly visible, we only want to display two CPU's graphs
-on the Cycles page. In the case that we have more than two CPU's, 
+It is also possible that the loaded files will contain more than two CPUs.
+So that all the graphs can be clearly visible, we only want to display two CPUs graphs
+on the Cycles page. In the case that we have more than two CPUs, 
 we would hope to be able to paginate the graphs. Currently, the graphs
 would simply be placed next to each other on the same page.
 
 \section{Speed} %Wendy
-The data that SpaceX will be using with our tool is very large and becomes even
+The data that SpaceX engineers use with our tool is very large and becomes even
 larger after parsing it. As a result, some parts of the tool load slowly. One main fix we have
 implemented is batch-loading the list of events on the main page so that the
 user can start interacting with the tool without waiting to load the entire
@@ -1352,7 +1353,7 @@ sometimes too large for the parser to handle as well.
 
 There are two possibilities for scaling the application. One is to prune the JSON or
 find a more compressed method of storing the data. There are existing libraries
-for compressing JSON, but this might cause slowdown as data is
+for compressing JSON, but compression might cause slowdown as data is
  loaded into the database.
 Another option is to find a substitute for IndexedDB that can store more data.
 
@@ -1404,7 +1405,10 @@ Events
 \item {\bf Cycle:} The interval between the regular deadlines that need to be
   met by tasks running on a SpaceX rocket.
 \item {\bf CPU:} The Central Processing Unit; the part of the computer that carries out instructions.
-\item{\bf Event:} A specific activity of a task taking place at a single point in time that can denote a change in its state or some other action.
+\item{\bf Event:} Occurs when a task changes state. This includes the time taken, what the
+  change was, and which task was involved. An example is if the task Python went
+  to sleep at 100 seconds. We are most concerned with software and scheduling
+  events. Each event is represented in the trace.dat files as a single line.
 \item {\bf PID:} A process identifier; a number attatched to a process that is unique to that process.
 \item {\bf Preemption:} When a running task is interrupted by another program starting to run on the same CPU. 
 \item {\bf Priority Inversion:} When a high-priority task is indirectly
