@@ -747,7 +747,8 @@ For more information on node-webkit, visit the GitHub page at
   One of the primary JavaScript files we've worked
   with and changed is \texttt{gantt-chart-d3.js}. This file contains the logic for all of the
   graphs. This file was originally written by Dimitry Kudrayvtsev, %% TODO add a reference?
- but we have significantly modified it to produce the behavior we want.
+ but we have significantly modified it to produce the behavior we want. The
+ original file is available at \texttt{github.com/dk8996/Gantt-Chart}.
 
   The graph takes in data and groups it by a particular attribute. Each piece
   of data, here, a scheduling event, is rendered as a rectangle. The
@@ -860,7 +861,7 @@ For more information on node-webkit, visit the GitHub page at
   graphs.
 \item \texttt{tableScroll}: Used by the Overview table.
 \end{itemize}
-DataTables.js also makes use of Local Storage in order to save the scroll position of the table.
+DataTables.js, the library we use for our events list table,  also makes use of Local Storage in order to save the scroll position of the table.
 
 For more information on Local Storage and how it is used, visit this site:
 \begin{center}
