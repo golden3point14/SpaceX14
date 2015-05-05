@@ -377,8 +377,8 @@ range of entries currently on the screen.
   user can zoom by clicking and dragging a rectangular box from left to right
   over the graph.  This allows the user to precisely view a specific area of the
   graph.  This zoom functionality doesn't follow common zoom functionalities of
-  a modern day desktop application. Zooming out of the graph in KernelShark is
-  also unintuitive: the user can click and drag a rectangular box from right to
+  a modern-day desktop application. Zooming out of the graph in KernelShark is
+  also unintuitive: the user clicks and drags a rectangular box from right to
   left over the graph. This technique does not give the user any kind of
   information about how much the graph is zooming out and can therefore be
   confusing to users. When zooming on KernelShark, a horizontal bar appears at
@@ -443,7 +443,7 @@ top allow the user to select which CPUs to display.}
 
   \begin{figure}[H]
   \includegraphics[width=5in]{task-statistics-page.png}
-  \caption{The left column allows the user to navigate the bar charts, while
+  \caption{On the Task Statistics page, the left column allows the user to navigate the bar charts, while
     also serving as a quick thumbnail view of each one. The right side displays
   the bar chart in a larger, more detailed view.}
   \end{figure}
@@ -464,7 +464,7 @@ The user can toggle between viewing the preemption count graph and the runtime
 graph by clicking the small graph thumbnails in the sidebar.
 
 \paragraph{Comparison to KernelShark:} KernelShark does not compute any
-statistics about the data.
+statistics about the data, so it does not display any statistics about the data.
 
 
   \subsection{Task State}
@@ -473,7 +473,7 @@ statistics about the data.
   \includegraphics[scale=0.3]{task-state-page.png}
   \caption{The top of the Task State page displays a table of tasks
   that preempted the current task. The bottom half is a graph that plots the
-state of the current task over time. The three possible states are preempted,
+state of the current task over time. The three possible states are: preempted,
 waiting, and running.}
 \end{figure}
 
@@ -537,8 +537,8 @@ way, for example by adding a new feature or making a change to the type of data 
   \begin{figure}[H]
     \begin{center}
   \includegraphics[scale=0.15]{architecture_diagram.png}
-  \caption{A visual representation of three portions of our application. Each
-  piece flows into the others while remaining modular, coming together to make our final tool.}
+  \caption{A visual representation of the three components of our application. Each
+  component flows into the others while remaining modular, coming together to form a complete program.}
 \end{center}
 \end{figure}
 
@@ -595,7 +595,13 @@ These five fields appear for every event, but the content of extra information
   each event, we are able to add a field to a task giving total runtime.
 
   The output is formatted as a JSON (JavaScript Object Notation) file, so that we can easily transfer it to
-  the web application. The output JSON has the following elements:
+  the web application. For more information on JSON, visit this site:
+
+\begin{center}
+http://www.json.org/
+\end{center}
+
+The output JSON has the following elements:
 
   \begin{center}
     \begin{tabular}{p{0.35\linewidth}p{0.55\linewidth}}
@@ -612,8 +618,8 @@ These five fields appear for every event, but the content of extra information
     \end{tabular}
   \end{center}
 
-  As noted, several of these JSON objects contain other JSON objects: tasks,
-  events, and cycleEvents. A task has the following data.
+  As noted, several of these JSON objects contain other JSON objects: \texttt{tasks},
+ \texttt{events}, and \texttt{cycleEvents}. A \texttt{task} has the following data.
 
   \begin{center}
     \begin{tabular}{p{0.25\linewidth}p{0.2\linewidth}p{0.45\linewidth}}
@@ -632,7 +638,7 @@ These five fields appear for every event, but the content of extra information
     \end{tabular}
   \end{center}
 
-  An event contains the data in the table below. Switch events contain some additional
+  An \texttt{event} contains the data in the table below. Switch events contain some additional
   information. The switch event itself belongs to the task that is being
   switched out, but in the extra information field we also note which task
   was being switched in.
@@ -661,7 +667,7 @@ These five fields appear for every event, but the content of extra information
   their own markers as a task runs. A user can generate a print event by making
   an addition to the code of a task. We rely on these user-generated markers to
   identify cycles. Print events occur periodically in some of the tasks we are
-  tracing. Engineers use print events already, so we check to see
+  tracing. Print events occur whenever a program prints something, so we check to see
   that the user has annotated them with \texttt{CYCLE\_START} by looking at the extra
   information field of a print event. If the extra information field starts with
   \texttt{CYCLE\_START}, then we create a \texttt{cycleEvent} that contains the following data.
@@ -702,11 +708,14 @@ These five fields appear for every event, but the content of extra information
     web-technology based charting libraries.  We found node-webkit, which allows
     HTML/CSS/JavaScript applications to be packaged and run as desktop
     applications with no reliance on the internet. 
-    Using node web-kit allowed us to take advantage of many existing UI widigits
+    Using node-webkit allowed us to take advantage of many existing UI widigits
     and charting libraries. Instead of spending time creating our own
     visualizations, we were able to quickly modify existing ones. This allowed
     us to devote more time to developing new and useful ways to view the trace
     data.
+
+For more information on node-webkit, visit the GitHub page at 
+\begin{center}https://github.com/nwjs/nw.js/\end{center}
 
   \subsection{Overall Application Structure}
 
@@ -852,6 +861,11 @@ These five fields appear for every event, but the content of extra information
 \item \texttt{tableScroll}: Used by the Overview table.
 \end{itemize}
 DataTables.js also makes use of Local Storage in order to save the scroll position of the table.
+
+For more information on Local Storage and how it is used, visit this site:
+\begin{center}
+http://www.w3schools.com/Html/html5\_webstorage.asp
+\end{center}
 
   \subsection{Selection of Charting Tool} % Rachel
   Many pages render a timeline of running tasks that users can interact
