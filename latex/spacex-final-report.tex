@@ -322,7 +322,7 @@ display if no data has ever been loaded.}
 When the user opens SpaceShark, they see the Load File page (Figure 2.1).  This
 page allows the user to choose which data to load, or to choose to load the data
 that was most recently used.  The user can easily resume their work by choosing
-the second option, as both the data and the state of each page during the user's
+the second option, as both the data and the state of each page, such as the amount that the user has scrolled or zoomed in on the visualizations, from the
 previous session are reloaded.
 
 \paragraph{Interactivity:}
@@ -345,7 +345,7 @@ KernelShark does not allow the user to easily resume viewing previous data. Spac
 The goal of the Overview page is to give a broad view of the data, displaying
 all of the data at once.  The users sees a chart of the programs that were
 running on each of the CPUs for the entire duration of the trace and a table
-listing all of the events in the trace.
+listing all the events in the trace.
 
 \paragraph{Interactivity:} The user can zoom in and out on the graph by using
 the mouse scroll wheel, and pan left and right by clicking and dragging.
@@ -360,7 +360,7 @@ events list to scroll to that event.
 The columns of the table consist of the CPU, start time, name, PID, event type,
 and extra information dependent on the event type. By default, the table is
 displayed in ascending order of time.  Hovering over any of the table cells
-highlights that entire row. Users can also double click on an event to be
+highlights that entire row. Users can also double-click on an event to be
 redirected to that task on the Task State page.  The search feature filters out
 entries that do not match the search text in any column.  Clicking on any of the
 column headers orders the information in the table by the contents of that
