@@ -1310,8 +1310,7 @@ One user suggested that the graph should respond when an event in the events lis
     page is reloaded.
 
   \item The information displayed by the Task Statistics page, specifically on
-    the Runtime section, is incorrect. The bug might be because
-    \texttt{trace-cmd} does not output \texttt{sched\_stat\_runtime} events as
+    the Runtime section, is incorrect. The bug might be because \texttt{trace-cmd} does not output \texttt{sched\_stat\_runtime} events as
     often as we expect,  after each \texttt{sched\_switch} event. If
     \texttt{sched\_stat\_runtime} events do not occur consistently, the Task
     Statistics page will display incorrect information, as we calculate the runtimes diplayed there based on those events. If this is not the
@@ -1357,16 +1356,14 @@ interleaved graphs.}
 \end{figure}
 
 It is also possible that the loaded files will contain more than two CPUs.
-So that all the graphs can be clearly visible, we only want to display two CPUs graphs
-on the Cycles page. In the case that we have more than two CPUs, 
+We only want to display two CPU graphs at a time on the Cycles page so that both graphs can be clearly visible. In the case that we have more than two CPUs, 
 we would hope to be able to paginate the graphs. Currently, the graphs
 would simply be placed next to each other on the same page.
 
 \section{Speed} %Wendy
 The data that SpaceX engineers use with our tool is very large and becomes even
 larger after parsing it. As a result, some parts of the tool load slowly. One main fix we have
-implemented is batch-loading the list of events on the main page so that the
-user can start interacting with the tool without waiting to load the entire
+implemented is batch-loading the list of events on the main page. This allows the user to start interacting with the tool without waiting to load the entire
 table, especially since all of the table is typically not needed.
 
 Having done some profiling, we know that pulling data from IndexedDB is the
@@ -1444,7 +1441,7 @@ order to run.
 \item{\bf Process:} A program. It can have many threads running at once.
 \item {\bf Running:} The state of a task when it is being executed on the CPU.
 \item {\bf Task:} A single thread of a process; a series of events.
-\item {\bf Waiting:} The state of a task when it cannot run, because it is waiting 
+\item {\bf Waiting:} The state of a task when it cannot run because it is waiting 
   on some piece of information, such as I/O.
 \end{itemize}
 
