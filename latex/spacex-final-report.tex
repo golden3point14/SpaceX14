@@ -558,9 +558,8 @@ way, for example by adding a new feature or making a change to the type of data 
   events.
 
   The \texttt{trace-cmd} utility can generate a human readable
-  report of this record. An example line from a report is shown below.
+  report of this record. An example line appears in Figure 3.2.
   
-\footnotesize\begin{verbatim}<idle>-0   [002]  2296.990243: sched_wakeup: comm=nautilus pid=2390 prio=120\end{verbatim}
 
 \normalsize
   
@@ -577,9 +576,9 @@ way, for example by adding a new feature or making a change to the type of data 
   \end{figure}
 
   The fields that are recorded for each event are task name, PID, start time, 
-  event type, and extra information.
+  event type, and extra information (Figure 3.2).
 These five fields appear for every event, but the content of extra information
-varies based on the type of event (Figure~\ref{fig:example_lines}).
+varies based on the type of event.
 
   To parse these event lines, the parser reads the file line by line and breaks on
   whitespace. Then it extracts fields one by one. The
@@ -597,7 +596,8 @@ varies based on the type of event (Figure~\ref{fig:example_lines}).
   each event, we are able to add a field to a task giving total runtime.
 
   The output is formatted as a JSON (JavaScript Object Notation) file, so that we can easily transfer it to
-  the web application. For more information on JSON, visit this site:
+  the web application. Appendix A contains an example JSON file. For more
+  information on JSON, visit this site:
 
 \begin{center}
 http://www.json.org/
@@ -608,12 +608,12 @@ The output JSON has the following elements:
   \begin{center}
     \begin{tabular}{p{0.35\linewidth}p{0.55\linewidth}}
       \toprule
-      Element name        & Description\\
+      \textbf{Element name}        & \textbf{Description}\\
       \midrule
       \texttt{Tasks}      & An array of all tasks seen in the trace\\
        \texttt{Events}     & An array of all events seen in the trace\\
        \texttt{cycleEvents} & An array of cycle events generated from user markers\\
-       \texttt{numCPUs}     & Integer, how many CPUs were in the trace\\
+       \texttt{numCPUs}     & The number of CPUs in the trace\\
        \texttt{AutocompleteNames} & An array of strings, listing all tasks names\\
        \texttt{AutocompleteEventTypes} & An array of strings, listing all event types in the trace\\
       \bottomrule
@@ -626,7 +626,8 @@ The output JSON has the following elements:
   \begin{center}
     \begin{tabular}{p{0.25\linewidth}p{0.2\linewidth}p{0.45\linewidth}}
       \toprule
-      Field           & Type         & Additional description \\
+      \textbf{Field}           & \textbf{Type}         & \textbf{Additional
+      description} \\
       \midrule
        \texttt{name}            & string       & \\
        \texttt{pid}             & int          & \\
@@ -648,7 +649,7 @@ The output JSON has the following elements:
   \begin{center}
     \begin{tabular}{p{0.2\linewidth}p{0.1\linewidth}p{0.6\linewidth}}
       \toprule
-      Field     & Type   & Additional description                 \\
+      \textbf{Field}     & \textbf{Type}   & \textbf{Additional description}                 \\
       \midrule
        \texttt{name}      & string &                                        \\
        \texttt{pid}       & int    &                                        \\
@@ -677,7 +678,7 @@ The output JSON has the following elements:
   \begin{center}
     \begin{tabular}{lll}
       \toprule
-      Field     & Type                \\
+      \textbf{Field}     & \textbf{Type}                \\
       \midrule
        \texttt{startTime}      & double                               \\
        \texttt{extraInfo}       & string                              \\
@@ -685,16 +686,12 @@ The output JSON has the following elements:
     \end{tabular}
   \end{center}
 
-  To see an example of the JSON file, view Appendix A at the end of the report.
-  \newline
-  \newline
-  
   Due to the modularity of our tool, the parser could be rewritten so long as
   the output format remains the same. Additionally, a user might have data
   in a format other than trace data. That user could write their own parser to
   convert their data into this JSON format. It could then be used in our tool.
 
-  \section{Web Application}
+  \section{Web Visualizer}
 
   
   \subsection{Node-Webkit and HTML} %Rachel
