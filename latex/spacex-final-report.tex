@@ -190,12 +190,12 @@ order to run.
 The software running on SpaceX rockets has deadlines for tasks at regular
 intervals because timing is very important in rocket flight. When there is a
 break in this cyclical pattern of processes, there is likely a bug in the
-software. These cyclical patterns of processes are called ``cycles''.
+software. These cyclical patterns of processes are called {\bf cycles}.
 
-%\section{Existing Tool}
-SpaceX currently uses a tool called KernelShark %%TODO FIXME citation to
+SpaceX currently uses a tool called KernelShark
 visualize trace data and help find any bugs or anomalies
-(Figure~\ref{fig:kernelshark}).  SpaceX engineers look for anomalies in process
+(Figure~\ref{fig:kernelshark},
+\url{http://people.redhat.com/srostedt/kernelshark/HTML/}).  SpaceX engineers look for anomalies in process
 timing, which often indicates software problems on the rocket. We were informed
 by our liaisons that this debugging process can take up to several days, which
 is an inefficient use of engineers' time. \\
@@ -220,15 +220,6 @@ an unsortable and unsearchable list of tasks that might be hundreds of tasks
 long. Additionally, zooming out on KernelShark's visual timeline is
 uninituitive and confusing.
 
-%Using only this visualization, it can be difficult to see where the cyclical
-%deadlines for the programs begin and end, making it hard to find when something
-%misses a deadline. In addition, the tabular display of the CPU events in the
-%bottom part of the screen has minimal search functionality and the different
-%columns of the table are not sortable. Individual timelines for tasks can be
-%displayed below this main chart, but the menu to select a task does not have
-%any searching capability and does not order the tasks in any discernible way.
-
-%\section{Project Goals} % May Lynn
 The goal of this project was to make it easier and faster for SpaceX engineers
 to find software problems by creating a tool that visualizes rocket data and
 highlights problem areas. We have created an improved user experience and
@@ -236,7 +227,7 @@ provided more visualizations of the data than the existing tool.
 \chapter{SpaceShark}
 
 This chapter will cover information that is particularly relevant for users of
-SpaceShark. This includes how to obtain and run SpaceShark, as well as in depth
+SpaceShark. This includes how to obtain and run SpaceShark, as well as in-depth
 descriptions of each page with sample workflows.
 
 \section{Obtaining and Running SpaceShark}
@@ -284,7 +275,7 @@ The README of this repository provides a link to download a
       \multirow{2}{*}{Cycles }         & Break data into intervals so that a 
         user can compare across them\\
       \multirow{2}{*}{Task Statistics} & Give a user high-level statistics 
-        about the data, comparing tasks total runtimes and preemptions\\
+        about the data, comparing tasks' total runtimes and preemptions\\
       Task State                       & Display a single task's actions and 
         interactions\\
       \multirow{2}{*}{Task Compare}    & Allow a user to compare several tasks' 
@@ -304,7 +295,7 @@ The README of this repository provides a link to download a
   If a user suspects that a particular task is involved in the problem, they
   could immediately navigate to the Task State page. From this, they are able to
   see if the task was unexpectedly preempted. These tasks are displayed in the
-  table of preemptions, or when hovering over a preemption event in the graph
+  table of preemptions, or when hovering over a preemption event in the chart
   below it.
 
   If a user does not have any suspicions about what happened, they could instead
@@ -361,14 +352,14 @@ all of the data at once.  The user sees a chart of the programs that were
 running on each of the CPUs for the entire duration of the trace and a table
 listing all the events in the trace.
 
-\paragraph{Interactivity:} The user can zoom in and out on the graph by using
+\paragraph{Interactivity:} The user can zoom in and out on the chart by using
 the mouse scroll wheel, and pan left and right by clicking and dragging.
-Double-clicking on the graph also zooms in on it. The user can hover over any
-event on the graph to see a text box with more information about that particular
+Double-clicking on the chart also zooms in on it. The user can hover over any
+event on the chart to see a text box with more information about that particular
 event.  This information consists of the task name, the CPU it's running on, its
 process ID (PID), duration, and information about the task it displaced from the
 CPU, including this task's name, priority, and resulting state (runnable or
-sleeping). Clicking on an event displayed in the graph will cause the
+sleeping). Clicking on an event displayed in the chart will cause the
 events list to scroll to that event.
 
 The columns of the table consist of the CPU, start time, name, PID, event type,
@@ -386,25 +377,25 @@ range of entries currently on the screen.
   page, we retained important functionality from the old tool. We expand on the
   functionality of the old tool in other pages.
 
-  KernelShark also has graph plots of the CPUs and includes similar features. A
+  KernelShark also has chart plots of the CPUs and includes similar features. A
   user can zoom by clicking and dragging a rectangular box from left to right
-  over the graph, which allows the user to precisely view a specific area of the
-  graph.  KernelShark's zoom functionality doesn't follow common zoom functionalities of
-  a modern-day desktop application. Zooming out of the graph in KernelShark is
+  over the chart, which allows the user to precisely view a specific area of the
+  chart.  KernelShark's zoom functionality doesn't follow common zoom functionalities of
+  a modern-day desktop application. Zooming out of the chart in KernelShark is
   also unintuitive: the user clicks and drags a rectangular box from right to
-  left over the graph. This technique does not give the user any kind of
-  information about how much the graph is zooming out and can therefore be
+  left over the chart. This technique does not give the user any kind of
+  information about how much the chart is zooming out and can therefore be
   confusing to users. When zooming on KernelShark, a horizontal bar appears at
-  the bottom of the graph to be able to easily pan.
+  the bottom of the chart to be able to easily pan.
     
   There are several features that SpaceX engineers identified as useful that the
   team preserved in SpaceShark. Both tools allow users to click on a spot in the
-  graph and have the table scroll to that event.  Users can hover over the graph
+  chart and have the table scroll to that event.  Users can hover over the chart
   to get more information about an event.  Both also have a list of events
   at the bottom that gives users the option to search and filter events in the
   table.
 
-  In KernelShark, the user can select individual tasks to plot on the same graph
+  In KernelShark, the user can select individual tasks to plot on the same chart
   as the CPUs. To maximize space on the Overview page, we decided to move this
   feature to its own page.
 
@@ -425,7 +416,7 @@ range of entries currently on the screen.
   \begin{figure}[H]
   \centering
       \includegraphics[width=5in]{cycles-page.png}
-  \caption{The Cycles page displays graphs of each CPU. The user can define
+  \caption{The Cycles page displays charts of each CPU. The user can define
   custom cycle intervals using the box in the top left. The checkboxes at the
 top allow the user to select which CPUs to display.}
   \end{figure}
@@ -433,17 +424,17 @@ top allow the user to select which CPUs to display.}
   \paragraph{Purpose:}Tasks run in cyclical patterns on SpaceX rockets, so being
   able to compare cycles helps find strange behavior. The Cycles page breaks the
   data into cycles and stacks them, allowing a user to easily scan down this
-  graph for unusual behavior.
+  chart for unusual behavior.
 
 \paragraph{Interactivity:}    
-    Like the graph on the Overview page, the user can zoom and pan the graphs on
+    Like the chart on the Overview page, the user can zoom and pan the charts on
     the cycles page.  The page also has checkboxes to toggle on and off each
-    CPU, which removes or adds the graphs for these CPUs, rescaling other graphs
+    CPU, which removes or adds the charts for these CPUs, rescaling other charts
     to use the full window space. Cycle lengths are precomputed if the user
     included markers in their code to indicate where cycles start when data is
-    collected.  If not, the graphs will not appear when the page first loads.
+    collected.  If not, the charts will not appear when the page first loads.
     In either case, the user can enter a number in the top box to set the period
-    of desired cycles, which will then display a graph of cycles of that length.
+    of desired cycles, which will then display a chart of cycles of that length.
     Entering a number at the top applies the change to all currently displayed
     charts.
         
@@ -469,12 +460,12 @@ top. It is easy to see if there are any outliers with a large number of
 preemptions or a long runtime.
 
 \paragraph{Interactivity:}
-All bars in the graph have distinct colors to represent different tasks. These
+All bars in the chart have distinct colors to represent different tasks. These
 colors are consistent with the color scheme throughout the rest of the
-application. The user can click on any task in the bar graph and will be
+application. The user can click on any task in the bar chart and will be
 redirected to the Task State page for more information about that task.
-The user can toggle between viewing the preemption count graph and the runtime
-graph by clicking the small thumbnails in the sidebar.
+The user can toggle between viewing the preemption count chart and the runtime
+chart by clicking the small thumbnails in the sidebar.
 
 \paragraph{Comparison to KernelShark:} KernelShark does not compute any
 statistics about the data, so it does not display any statistics about the data.
@@ -485,7 +476,7 @@ statistics about the data, so it does not display any statistics about the data.
   \begin{figure}[H]
   \includegraphics[scale=0.3]{task-state-page.png}
   \caption{The top of the Task State page displays a table of tasks
-  that preempted the current task. The bottom half is a graph that plots the
+  that preempted the current task. The bottom half is a chart that plots the
 state of the current task over time. The three possible states are: preempted,
 waiting, and running.}
 \end{figure}
@@ -497,36 +488,36 @@ waiting, and running.}
     running. They are labeled with the colors red, beige, and green respectively. 
 
 \paragraph{Interactivity:}
-    The graph on the bottom half of the page functions the same as the graphs on
+    The chart on the bottom half of the page functions the same as the charts on
     the Overview, Cycles, and Compare Tasks page
     . The user can click the ``+ Compare'' button at the bottom
-    to add this task graph to a series of side-by-side graphs for comparison.
+    to add this task chart to a series of side-by-side charts for comparison.
     
 \paragraph{Comparison to KernelShark:}
-     KernelShark can display a graph of a single task over time, however it does not show which other tasks preempted a given task, nor how many times it was preempted.
+     KernelShark can display a chart of a single task over time, however it does not show which other tasks preempted a given task, nor how many times it was preempted.
   
   \subsection{Compare Tasks Page}
   
   \begin{figure}[H]
   \includegraphics[scale=0.3]{compare-page.png}
-  \caption{The Compare Tasks page vertically displays the Task State graphs for
+  \caption{The Compare Tasks page vertically displays the Task State charts for
   multiple tasks. They can be added, reordered, or removed.}
   \end{figure}
 
 \paragraph{Purpose:}
-The Compare Tasks page allows users to view the state graphs for multiple tasks. Tasks can be reordered so that specific tasks can
+The Compare Tasks page allows users to view the state charts for multiple tasks. Tasks can be reordered so that specific tasks can
 be compared side by side for the same time period. 
 
 \paragraph{Interactivity:}
-Users can plot graphs by either (1) typing in a task name or PID in an autocomplete box at the top of the page, or
+Users can plot charts by either (1) typing in a task name or PID in an autocomplete box at the top of the page, or
 (2) viewing a task on the Task State page and clicking the ``+ Compare''
 button. The user can
-rearrange the order of the graphs on the page by dragging them up or down. Each
-graph can be removed by clicking on the ``Remove Task'' button next to it.
+rearrange the order of the charts on the page by dragging them up or down. Each
+chart can be removed by clicking on the ``Remove Task'' button next to it.
     
 \paragraph{Comparison to KernelShark:}
     In KernelShark, the user can view a list of tasks and select which ones they
-    want to graph.  This list of tasks is not searchable and may be very long.
+    want to chart.  This list of tasks is not searchable and may be very long.
     In our tool, the search bar with autocomplete makes it much easier to find a
     specific task.
 
@@ -574,7 +565,6 @@ way, for example by adding a new feature or making a change to the type of data 
   additional information from the data, such as the total number of times each
   task is preempted, and the total runtime of each task.
 
-%% TODO this image is a little too low resolution
   \begin{figure}
   \includegraphics[scale=0.4]{parserExample.png}
   \caption{ \label{fig:example_lines} An example line of raw input, with the specific pieces labeled.}
@@ -586,7 +576,7 @@ These five fields appear for every event, but the content of extra information
 varies based on the type of event.
 
   To parse these event lines, the parser reads the file line by line and breaks on
-  whitespace. Then it extracts fields one by one. The
+  whitespace. Then it extracts fields one by one. For the
   extra information field at the end, the parser cases on event type. Switch events
   are the only types of events that contain extra information that we need.  The
   extra information field of switch events gives the name, PID, and priority of
@@ -605,7 +595,7 @@ varies based on the type of event.
   information on JSON, visit this site:
 
 \begin{center}
-http://www.json.org/
+  \url{http://www.json.org/}
 \end{center}
 
 The output JSON has the following elements:
@@ -776,17 +766,17 @@ For more information on node-webkit, visit the GitHub page at
   \subsection{Primary JavaScript/CSS files}
   One of the primary JavaScript files we've worked
   with and changed is \texttt{gantt-chart-d3.js}. This file contains the logic for all of the
-  graphs. This file was originally written by Dimitry Kudrayvtsev, %% TODO add a reference?
+  charts. This file was originally written by Dimitry Kudrayvtsev,
  but we have significantly modified it to produce the behavior we want. The
  original file is available at \texttt{github.com/dk8996/Gantt-Chart}.
 
-  The graph takes in data and groups it by a particular attribute. Each piece
+  The chart takes in data and groups it by a particular attribute. Each piece
   of data, here, a scheduling event, is rendered as a rectangle. The
   length of the rectangle is determined by the event's duration, and its
-  placement on the graph by its start time and group. Examples of groups are
+  placement on the chart by its start time and group. Examples of groups are
   CPU or cycle.
 
-  The graph assigns CSS classes to each rectangle so that they can easily be
+  The chart assigns CSS classes to each rectangle so that they can easily be
   colored and sets up a mouseover handler to display hover text
   over an individual event. On the Overview page, clicking
   on an event will scroll to it in the data table.
@@ -843,13 +833,7 @@ For more information on node-webkit, visit the GitHub page at
     \item \texttt{Events} (a list of all the events)
   \end{itemize}
   These correspond to the JSON types described
-  in the Parser section (Section 2.2.3).
-
-
-%  Using the node-webkit profiling tool, we can see that IndexedDB is the slowest
-%  part of our application, as transactions with the database must be opened and
-%  closed. Ideally, we would use something less complex, but other options such
-%  as Local Storage did not have enough space for our large files.
+  in the Parser section.
 
   IndexedDB also has  a size limit, but this is typically not reached except for
   unusually long files or data from a computer with many CPUs. 
@@ -859,7 +843,7 @@ For more information on node-webkit, visit the GitHub page at
   SpaceShark also makes use of Local Storage, another tool
   built into most browsers and node-webkit. This is a small and quick-to-access
   storage method. We primarily use it to save state between pages, notably
-  display states. One example is the zoom level of the graph, which does not
+  display states. One example is the zoom level of the chart, which does not
   change between loads of the same page. Local Storage is also retained between
   application sessions.
 
@@ -868,13 +852,15 @@ For more information on node-webkit, visit the GitHub page at
 \begin{itemize}
   \item \texttt{cellData}: A string containing the name and PID of the task currently being
   shown on the Task State page. 
-\item \texttt{compareCurrScale}: The last recorded scale for the Compare Tasks graphs.
+\item \texttt{compareCurrScale}: The last recorded scale for the Compare Tasks
+  charts.
 \item \texttt{compareCurrTranslateX}: The last recorded x translate for the Compare Tasks
-  graphs.
-\item \texttt{compareData}: A list containing strings with the names and PIDs of the
+  charts.
+  \item \texttt{compareData}: A list containing strings with the names and PIDs of the
   tasks currently being shown on the Compare Tasks page.
-\item \texttt{cyclesCurrScale}: The last recorded scale for the Cycles graphs.	
-\item \texttt{cyclesCurrTranslateX}: The last recorded x translate for the Cycles graphs.
+\item \texttt{cyclesCurrScale}: The last recorded scale for the Cycles charts.	
+\item \texttt{cyclesCurrTranslateX}: The last recorded x translate for the
+  Cycles charts.
 \item \texttt{displayedCPUs}: A list of the CPU numbers that are being displayed on the
   Cycles page.
 \item \texttt{firstEventTime}: The time that the first event occurs, before we
@@ -882,13 +868,15 @@ For more information on node-webkit, visit the GitHub page at
 \item \texttt{hasEverExisted}: SpaceShark checks this variable to see if there
   is content in Local Storage. If it exists the user is given the option to use
   their previous data on the Load File page.	
-\item \texttt{mainCurrScale}: The last recorded scale for the Overview graph.	
-\item \texttt{mainCurrTranslateX}: The last recorded x translate for the Overview graph.
+\item \texttt{mainCurrScale}: The last recorded scale for the Overview chart.	
+\item \texttt{mainCurrTranslateX}: The last recorded x translate for the
+  Overview chart.
 \item \texttt{maxDuration}: The longest time in seconds that a CPU ran for. Serves as
-  the end time for all graphs.
-\item \texttt{processCurrScale}: The last recorded scale for the Task State graphs.
+  the end time for all charts.
+\item \texttt{processCurrScale}: The last recorded scale for the Task State
+  charts.
 \item \texttt{processCurrTranslateX}: The last recorded x translate for the Task State
-  graphs.
+  charts.
 \item \texttt{tableScroll}: Used by the Overview table.
 \end{itemize}
 DataTables.js, the library we use for our events list table,  also makes use of Local Storage in order to save the scroll position of the table.
@@ -900,7 +888,7 @@ For more information on Local Storage and how it is used, visit this site:
 
   \subsection{Selection of Charting Tool} % Rachel
   Many pages render a timeline of running tasks that users can interact
-  with by panning and zooming. This graph is critical, as a bug on the rocket manifests
+  with by panning and zooming. This chart is critical, as a bug on the rocket manifests
   itself as a task running at an unexpected time, or failing to run at a
   particular time. We spent several weeks experimenting with different
   JavaScript charts, including \texttt{timeline.js}, \texttt{vis.js} and
@@ -1020,13 +1008,13 @@ running, and longest waiting tasks in tables at the top of the page.
 \begin{center}
 \includegraphics[width=4in]{oldMain.png}
 \caption{A screenshot of our Overview page before winter break. At the top are
-several tables of statistics, followed by the graph of running tasks.}
+several tables of statistics, followed by the chart of running tasks.}
 \end{center}
 \end{figure}
 
 During user testing, three out of four users said that they did not find the
 tables at the top of the page helpful. Two of the users described the typical
-workflow they used in KernelShark as visually finding the problem in the graph,
+workflow they used in KernelShark as visually finding the problem in the chart,
 jumping to that event in the events list, and then scanning the events list.
 They felt that being able to quickly scan the events list was a valuable
 feature.
@@ -1064,7 +1052,7 @@ We designed a mockup of the Task State page at the
 beginning of the project. It featured different visualizations,
 such as histograms of how long the task was in each state for, a scatterplot of
 what preempted it, a table of what preempted it, a pie chart task state, and a
-graphical display of the time series data highlighting the process in the graph.
+graphical display of the time series data highlighting the process in the chart.
 Through feedback from the liaisons, we found that our mockup included
 too much information that SpaceX engineers would not have found useful. Since
 preemptions are generally indicative of problems, we decided to focus on
@@ -1081,7 +1069,7 @@ preempted.}
 
 On the Task State page, the user can type in a particular task, see
 how many times it was preempted and which processes preempted it, as well as
-view a graph showing how long it was in one of three states: running, waiting,
+view a chart showing how long it was in one of three states: running, waiting,
 or preempted. This design has a minimalistic page view compared to the mockup,
 but makes better use of the information it provides, and includes less
 extraneous, unhelpful information.
@@ -1097,7 +1085,7 @@ One of the most notable things that separates our tool from KernelShark is that
 KernelShark did not provide information about cycles, meaning that users had to
 manually determine where cycles were.
 The Cycles page in our tool lets the user easily find anomalies by splitting up
-the Overview page graph visualization into cycles.
+the Overview page chart visualization into cycles.
 
 \begin{figure}[H]
 \begin{center}
@@ -1201,7 +1189,7 @@ This feature would be best to add as an option to pages that require the user to
 as on the Task State page and the Compare Task page. It could appear as a dropdown menu or a 
 pop-up dialog with checkboxes next to the names. It should be possible to sort these lists 
 alphabetically or by PID as the user desires. The full list is especially suitable for the 
-Compare Task page because it would allow the user to load multiple graphs at once. It should 
+Compare Task page because it would allow the user to load multiple charts at once. It should 
 not be difficult to implement, as the tool already creates this list in 
 \texttt{assets/js/compare.js} and \texttt{assets/js/process.js}.
 
@@ -1293,13 +1281,13 @@ One user suggested that the chart should respond when an event in the events lis
   \section{Task State Page}
 
   Users mentioned that it was difficult to see preemptions on the 
-  task state graph because the red did not stand out enough against the tan that
+  task state chart because the red did not stand out enough against the tan that
   represents when a task is waiting. 
   The color of these bars is controlled by the three classes in 
   \texttt{assets/css/process.css}, and modifying \texttt{.W}, the class for 
   waiting, will update all bars and the legend.
 
-  Currently, the user cannot view which CPU a task is runnnig on in the chart. 
+  Currently, the user cannot view which CPU a task is running on in the chart. 
   A simple fix would be to add this information to the hovertext, which is 
   formatted within \texttt{assets/js/gantt-chart-d3.js}. Alternatively, we 
   could display one chart per CPU that the task is running on, with the 
@@ -1461,14 +1449,13 @@ Events
 \item {\bf PID:} A process identifier; a number attatched to a process that is unique to that process.
 \item {\bf Preemption:} When a running task is interrupted by another program starting to run on the same CPU. 
 \item {\bf Priority Inversion:} When a high-priority task is indirectly
-  prevented from running by something of
-lower priority using a shared resource that the higher priority task needs in
-order to run. 
-\item{\bf Process:} A program. It can have many threads running at once.
+  prevented from running by something of using a shared resource that the higher
+  priority task needs in order to run. 
+\item{\bf Process:} A running program. It can have many threads running at once.
 \item {\bf Running:} The state of a task when it is being executed on the CPU.
-\item {\bf Task:} A single thread of a process; a series of events.
+\item {\bf Task:} A single thread of a process.
 \item {\bf Waiting:} The state of a task when it cannot run because it is waiting 
-  on some piece of information, such as I/O.
+  on some piece of information, such as I/O. Synonymous with blocked.
 \end{itemize}
 
 \chapter{How to Package the Application}
