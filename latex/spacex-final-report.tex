@@ -198,7 +198,7 @@ visualize trace data and help find any bugs or anomalies
 (Figure~\ref{fig:kernelshark}).  SpaceX engineers look for anomalies in process
 timing, which often indicates software problems on the rocket. We were informed
 by our liaisons that this debugging process can take up to several days, which
-is an inefficient use of engineer's time. \\
+is an inefficient use of engineers' time. \\
 
 \begin{figure}[H]
   \centering
@@ -239,7 +239,7 @@ This chapter will cover information that is particularly relevant for users of
 SpaceShark. This includes how to obtain and run SpaceShark, as well as in depth
 descriptions of each page with sample workflows.
 
-\section{Obtaining SpaceShark}
+\section{Obtaining and Running SpaceShark}
   Our code is available on GitHub at
 \begin{center}
   \url{http://github.com/golden3point14/SpaceX14}
@@ -284,7 +284,7 @@ The README of this repository provides a link to download a
       \multirow{2}{*}{Cycles }         & Break data into intervals so that a 
         user can compare across them\\
       \multirow{2}{*}{Task Statistics} & Give a user high-level statistics 
-        about the data, comparing task's total runtimes and preemptions\\
+        about the data, comparing tasks total runtimes and preemptions\\
       Task State                       & Display a single task's actions and 
         interactions\\
       \multirow{2}{*}{Task Compare}    & Allow a user to compare several tasks' 
@@ -310,7 +310,7 @@ The README of this repository provides a link to download a
   If a user does not have any suspicions about what happened, they could instead
   navigate to the Cycles page. By comparing the patterns of tasks during
   different cycles, it should be easy to see an abnormal sequence of tasks. The
-  user can then hover over this sequence on the chart and read which tasks were
+  user can then hover over this sequence on the chart and see which tasks were
   running. A user might also navigate to the Task Statistics page to quickly see
   if any task is preempted far more than expected. This task could then be
   viewed on the Task State page, as described above.
