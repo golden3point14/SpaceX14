@@ -30,6 +30,7 @@
 \usepackage{enumerate}
 \usepackage{paralist}
 \usepackage{multirow}
+\usepackage{hyperref}
 
 %%% The major difference between the statement of work and a midyear
 %%% or final report is that the statement of work is typeset as an
@@ -162,25 +163,17 @@ Rachel Macfarlane}
 
 %%% Content.
 \chapter{Background and Project Goals} % May Lynn
-%\section{Introduction}
 
 SpaceX is an American space transport company that designs and manufactures
 advanced rockets and spacecraft. SpaceX rockets depend on a variety of software
 to be successful, including simulations, flight software, and data analysis.
 Almost all of this software is written in-house and is complex enough that subtle
-problems are often hard to catch and very time consuming to debug.
-
-%\section{Background} % May Lynn
-%\section{Tracing and Debugging}
+problems are often hard to catch and time consuming to debug.
 
 The data that SpaceX developers use to find software bugs is called
 a {\bf kernel trace}, which documents the different tasks running on a computer over a
 certain span of time, keeping track of when each task was running on each processor. 
 
-% Several computers are on board each SpaceX rocket and rely on tasks running in
-% predictable, cyclical patterns to coordinate. An unexpected preemption, priority
-% inversion, or some break in the pattern of tasks being run can cause problems
-% for the rocket.
 To find potential bugs in their software, SpaceX developers look for
 problems like unexpected preemptions, priority inversions, and breaks in the
 pattern of tasks being run.
@@ -191,7 +184,10 @@ inversion} occurs when a high-priority task is prevented from running by somethi
 lower priority using a shared resource that the higher priority task needs in
 order to run. 
 
-The software running on SpaceX rockets has deadlines for tasks at regular intervals because timing is very important in rocket flight. When there is a break in this cyclical pattern of processes, this means that there is likely a bug in the software. These cyclical patterns of processes are called ``cycles''.
+The software running on SpaceX rockets has deadlines for tasks at regular
+intervals because timing is very important in rocket flight. When there is a
+break in this cyclical pattern of processes, there is likely a bug in the
+software. These cyclical patterns of processes are called ``cycles''.
 
 %\section{Existing Tool}
 SpaceX currently uses a tool called KernelShark %%TODO FIXME citation
@@ -210,7 +206,7 @@ which is an inefficient use of engineer's time. \\
 KernelShark displays the data but provides limited ways to interact with it. It
 does not have many features geared towards finding anomalies and has no tools for
 dealing with cycles.  In order to utilize information about cycles, the user
-must recognize by sight alone where cycles start and end, which is very
+must recognize by sight alone where cycles start and end, which is
 difficult. Users are only able to compare cycles by moving back and forth on
 the timeline KernelShark provides, which is a time consuming process.
 
@@ -233,16 +229,20 @@ uninituitive and confusing.
 The goal of this project was to make it easier and faster for SpaceX engineers
 to find software problems by creating a tool that visualizes rocket data and
 highlights problem areas. We have created an improved user experience and
-provided more visualizations of the data than the old tool. 
+provided more visualizations of the data than the existing tool. 
 \chapter{SpaceShark}
 
+This chapter will cover information that is particularly relevant for users of
+SpaceShark. This includes how to obtain and run SpaceShark, as well as in depth
+descriptions of each page with sample workflows.
+
 \section{Obtaining SpaceShark}
-  Our code is publicly available on GitHub at
+  Our code is available on GitHub at
 \begin{center}
-  github.com/golden3point14/SpaceX14
+  \url{http://github.com/golden3point14/SpaceX14}
 \end{center}
 The README of this repository provides a link to download a
-  64 bit Linux version of the application. This release is a zip file that
+  64-bit Linux version of the application. This release is a zip file that
   contains an executable, the parser, a short wrapper script, and two additional
   files that are necessary to get the executable to run: \texttt{nw.pak} and
   \texttt{icudlt.dat}.
@@ -252,18 +252,18 @@ The README of this repository provides a link to download a
            [ -h | --help]\end{verbatim}
 
   The first option allows the user to pass an unparsed trace file to the
-  application. The parser will be run and pass its output 
+  application. The parser runs and passes its output 
   to the application as it opens, skipping the load page that asks the
   user to choose a file. The second option allows the user to pass a
-  JSON file, the output format our parser uses, to the application. Finally, using the \texttt{-h} flag or any option
+  parsed trace file to the application. Finally, using the \texttt{-h} flag or any option
   not recognized by the script will display the usage and a description of
   available options.
 
-\section{Design}
+\section{Using SpaceShark}
 
   SpaceShark helps SpaceX engineers find scheduling related problems.
   SpaceShark is composed of pages that each give a different view of the data,
-  from a complete overview down to the details of of a single task. A brief
+  from a complete overview down to the details of a single task. A brief
   summary of each page and its intended purpose is given in 
   Table~\ref{table:pages}.
 
@@ -276,15 +276,15 @@ The README of this repository provides a link to download a
       \midrule
       \multirow{2}{*}{Load File}       & Allow a user to choose the data to 
         import into the application\\
-      Overview                         & Provide a user overall view of the 
+      Overview                         & Provide a user an overall view of the 
         data\\
       \multirow{2}{*}{Cycles }         & Break data into intervals so that a 
         user can compare across them\\
       \multirow{2}{*}{Task Statistics} & Give a user high-level statistics 
         about the data, comparing task's total runtimes and preemptions\\
-      Task State                       & Display a single tasks actions and 
+      Task State                       & Display a single task's actions and 
         interactions\\
-      \multirow{2}{*}{Task Compare}    & Allow a user to compare several tasks 
+      \multirow{2}{*}{Task Compare}    & Allow a user to compare several tasks' 
         changes in state over time\\
     \bottomrule
     \end{tabular}
@@ -305,9 +305,9 @@ The README of this repository provides a link to download a
   below it.
 
   If a user does not have any suspicions about what happened, they could instead
-  navigate to the Cycles page. By comparing the patterns of tasks run during
+  navigate to the Cycles page. By comparing the patterns of tasks during
   different cycles, it should be easy to see an abnormal sequence of tasks. The
-  user can then hover over this sequence on the chart and read which tasks are
+  user can then hover over this sequence on the chart and read which tasks were
   running. A user might also navigate to the Task Statistics page to quickly see
   if any task is preempted far more than expected. This task could then be
   viewed on the Task State page, as described above.
@@ -353,7 +353,7 @@ KernelShark does not allow the user to easily resume viewing previous data. Spac
 
 \paragraph{Purpose:} 
 The goal of the Overview page is to give a broad view of the data, displaying
-all of the data at once.  The users sees a chart of the programs that were
+all of the data at once.  The user sees a chart of the programs that were
 running on each of the CPUs for the entire duration of the trace and a table
 listing all the events in the trace.
 
@@ -378,15 +378,14 @@ column.  Below the table, the user can see the total number of entries and the
 range of entries currently on the screen.
 
 \paragraph{Comparison to KernelShark:} 
-  KernelShark's main interface looks very similar to the Overview page, but
-  sometimes failed to correctly filter and search for events. With this page,
-  we retained important functionality from the old tool. We expand on the
+  KernelShark's main interface looks similar to the Overview page.  With this
+  page, we retained important functionality from the old tool. We expand on the
   functionality of the old tool in other pages.
 
   KernelShark also has graph plots of the CPUs and includes similar features. A
   user can zoom by clicking and dragging a rectangular box from left to right
-  over the graph.  This allows the user to precisely view a specific area of the
-  graph.  This zoom functionality doesn't follow common zoom functionalities of
+  over the graph, which allows the user to precisely view a specific area of the
+  graph.  KernelShark's zoom functionality doesn't follow common zoom functionalities of
   a modern-day desktop application. Zooming out of the graph in KernelShark is
   also unintuitive: the user clicks and drags a rectangular box from right to
   left over the graph. This technique does not give the user any kind of
@@ -439,13 +438,13 @@ top allow the user to select which CPUs to display.}
     to use the full window space. Cycle lengths are precomputed if the user
     included markers in their code to indicate where cycles start when data is
     collected.  If not, the graphs will not appear when the page first loads.
-    The user can enter a number in the top box to set the period of desired
-    cycles, which will then display a graph of cycles of that length. This
-    feature also works  if print events are present in the data.  Entering a
-    number at the top applies the change to all currently displayed charts.
+    In either case, the user can enter a number in the top box to set the period
+    of desired cycles, which will then display a graph of cycles of that length.
+    Entering a number at the top applies the change to all currently displayed
+    charts.
         
 \paragraph{Comparison to KernelShark:}
-    KernelShark is a general-purpose tool. The average user does not run tasks
+    KernelShark is a general-purpose tool. The typical user does not run tasks
     in a cyclical pattern, so KernelShark does not have any features to handle
     cycles. Identifying cycles is critical to debugging at SpaceX.
     
@@ -461,7 +460,7 @@ top allow the user to select which CPUs to display.}
 \paragraph{Purpose:}
 The Task Statistics page shows the number of times each task was preempted and
 its total running time. This information is displayed in a bar chart sorted from
-highest to lowest, with averages and standard deviations across all tasks at the
+highest to lowest. Averages and standard deviations across all tasks appear at the
 top. It is easy to see if there are any outliers with a large number of
 preemptions or a long runtime.
 
@@ -471,13 +470,13 @@ colors are consistent with the color scheme throughout the rest of the
 application. The user can click on any task in the bar graph and will be
 redirected to the Task State page for more information about that task.
 The user can toggle between viewing the preemption count graph and the runtime
-graph by clicking the small graph thumbnails in the sidebar.
+graph by clicking the small thumbnails in the sidebar.
 
 \paragraph{Comparison to KernelShark:} KernelShark does not compute any
 statistics about the data, so it does not display any statistics about the data.
 
 
-  \subsection{Task State}
+  \subsection{Task State Page}
 
   \begin{figure}[H]
   \includegraphics[scale=0.3]{task-state-page.png}
@@ -502,11 +501,11 @@ waiting, and running.}
 \paragraph{Comparison to KernelShark:}
      KernelShark can display a graph of a single task over time, however it does not show which other tasks preempted a given task, nor how many times it was preempted.
   
-  \subsection{Compare Tasks} %Wendy
+  \subsection{Compare Tasks Page}
   
   \begin{figure}[H]
   \includegraphics[scale=0.3]{compare-page.png}
-  \caption{The Compare page vertically displays the Task State graphs for
+  \caption{The Compare Tasks page vertically displays the Task State graphs for
   multiple tasks. They can be added, reordered, or removed.}
   \end{figure}
 
@@ -529,12 +528,10 @@ graph can be removed by clicking on the ``Remove Task'' button next to it.
 
 \chapter{Architecture}
 
-\section{Introduction}
+\section{Overview}
 In this chapter, we describe the different components that form our application.
 This information is useful for someone who wants to modify SpaceShark in some
 way, for example by adding a new feature or making a change to the type of data that SpaceShark can display.
-
-\section{Overview}
 
   Our application has three main components: the raw input, the parser,
   and the web-based desktop application. The raw input consists of information recorded on a computer that details what each task was doing for a short amount of time. The parser is a program that we wrote to translate this data into something that could be easily read by our application. The components are modular, and
@@ -554,43 +551,37 @@ way, for example by adding a new feature or making a change to the type of data 
 
   \section{Trace-cmd}
 
-  Spacex engineers collect data using a command-line utility called \texttt{trace-cmd},
+  SpaceX engineers collect data using a command-line utility called \texttt{trace-cmd},
  which captures various events in the Linux kernel while it runs. The user specifies the kinds of events \texttt{trace-cmd} should record. SpaceShark users are interested in scheduling events: what tasks were
   scheduled to run, wait, and migrate between CPUs over the time of the trace.
   We therefore assume that the user has taken a trace that captures scheduling
   events.
 
   The \texttt{trace-cmd} utility can generate a human readable
-  report of this record. An example line from a report is shown below.
+  report of this record. An example line appears in Figure 3.2.
   
-\footnotesize\begin{verbatim}<idle>-0   [002]  2296.990243: sched_wakeup: comm=nautilus pid=2390 prio=120\end{verbatim}
 
 \normalsize
   
-% FIXME put in future work
-%  The downside of this is that the format of the file generated by \texttt{trace-cmd
-%  report} is dependent on the version of \texttt{trace-cmd} used. To be able to reliably
-%  parse data and add additional information about preemptions, we need our input
-%  data to have a consistent format. This creates a dependency on a particular
-%  version of \texttt{trace-cmd}. The team has chosen to use \texttt{trace-cmd} version 2.2.1, 
-%  the same version that our liaisons currently use.
-
   \section{Parser}
-  The parser converts from \texttt{trace-cmd} format to a format that is human readable and suitable for a visualization tool. It also extrapolates some additional information from the data, such as the total number of times each task is preempted, and the total runtime of each task.
+  The parser converts from \texttt{trace-cmd} format to a format that is human
+  readable and suitable for a visualization tool. It also extrapolates some
+  additional information from the data, such as the total number of times each
+  task is preempted, and the total runtime of each task.
 
 %% TODO this image is a little too low resolution
   \begin{figure}
   \includegraphics[scale=0.4]{parserExample.png}
-  \caption{An example line of raw input, with the specific pieces labeled.}
+  \caption{ \label{fig:example_lines} An example line of raw input, with the specific pieces labeled.}
   \end{figure}
 
   The fields that are recorded for each event are task name, PID, start time, 
-  event type, and extra information. The fields are labeled in Figure 3.2. 
+  event type, and extra information (Figure 3.2).
 These five fields appear for every event, but the content of extra information
-  varies based on the type of event.
+varies based on the type of event.
 
   To parse these event lines, the parser reads the file line by line and breaks on
-  whitespace. Then it is easy to extract fields one by one. To deal with the
+  whitespace. Then it extracts fields one by one. The
   extra information field at the end, the parser cases on event type. Switch events
   are the only types of events that contain extra information that we need.  The
   extra information field of switch events gives the name, PID, and priority of
@@ -605,7 +596,8 @@ These five fields appear for every event, but the content of extra information
   each event, we are able to add a field to a task giving total runtime.
 
   The output is formatted as a JSON (JavaScript Object Notation) file, so that we can easily transfer it to
-  the web application. For more information on JSON, visit this site:
+  the web application. Appendix A contains an example JSON file. For more
+  information on JSON, visit this site:
 
 \begin{center}
 http://www.json.org/
@@ -616,12 +608,12 @@ The output JSON has the following elements:
   \begin{center}
     \begin{tabular}{p{0.35\linewidth}p{0.55\linewidth}}
       \toprule
-      Element name        & Description\\
+      \textbf{Element name}        & \textbf{Description}\\
       \midrule
       \texttt{Tasks}      & An array of all tasks seen in the trace\\
        \texttt{Events}     & An array of all events seen in the trace\\
        \texttt{cycleEvents} & An array of cycle events generated from user markers\\
-       \texttt{numCPUs}     & Integer, how many CPUs were in the trace\\
+       \texttt{numCPUs}     & The number of CPUs in the trace\\
        \texttt{AutocompleteNames} & An array of strings, listing all tasks names\\
        \texttt{AutocompleteEventTypes} & An array of strings, listing all event types in the trace\\
       \bottomrule
@@ -634,7 +626,8 @@ The output JSON has the following elements:
   \begin{center}
     \begin{tabular}{p{0.25\linewidth}p{0.2\linewidth}p{0.45\linewidth}}
       \toprule
-      Field           & Type         & Additional description \\
+      \textbf{Field}           & \textbf{Type}         & \textbf{Additional
+      description} \\
       \midrule
        \texttt{name}            & string       & \\
        \texttt{pid}             & int          & \\
@@ -656,7 +649,7 @@ The output JSON has the following elements:
   \begin{center}
     \begin{tabular}{p{0.2\linewidth}p{0.1\linewidth}p{0.6\linewidth}}
       \toprule
-      Field     & Type   & Additional description                 \\
+      \textbf{Field}     & \textbf{Type}   & \textbf{Additional description}                 \\
       \midrule
        \texttt{name}      & string &                                        \\
        \texttt{pid}       & int    &                                        \\
@@ -685,7 +678,7 @@ The output JSON has the following elements:
   \begin{center}
     \begin{tabular}{lll}
       \toprule
-      Field     & Type                \\
+      \textbf{Field}     & \textbf{Type}                \\
       \midrule
        \texttt{startTime}      & double                               \\
        \texttt{extraInfo}       & string                              \\
@@ -693,16 +686,12 @@ The output JSON has the following elements:
     \end{tabular}
   \end{center}
 
-  To see an example of the JSON file, view Appendix A at the end of the report.
-  \newline
-  \newline
-  
   Due to the modularity of our tool, the parser could be rewritten so long as
   the output format remains the same. Additionally, a user might have data
   in a format other than trace data. That user could write their own parser to
   convert their data into this JSON format. It could then be used in our tool.
 
-  \section{Web Application}
+  \section{Web Visualizer}
 
   
   \subsection{Node-Webkit and HTML} %Rachel
