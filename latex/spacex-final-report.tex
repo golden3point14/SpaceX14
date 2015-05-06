@@ -1175,31 +1175,34 @@ Compare Task page because it would allow the user to load multiple graphs at onc
 not be difficult to implement, as the tool already creates this list in 
 \texttt{assets/js/compare.js} and \texttt{assets/js/process.js}.
 
-We received a lot of feedback regarding the graphs of our tool that are seen on the Overview, Cycles, Task State, and Compare Tasks page, including bug fixes and adding new functionality.
+We received a lot of feedback regarding the charts that are seen on the Overview, Cycles, Task State, and Compare Tasks page, including bug fixes and adding new functionality.
   \begin{itemize}
 
-  \item The labels associated with the graphs should be static, and not go off the screen when 
-  the graph is zoomed or panned. This feature is especially problematic on the Compare Tasks page, 
-  where the user will potentially have large numbers of graphs displaying, and it will be 
-  important for them to not have to remember what each graph is displaying.
+  \item The labels associated with the charts should be static, and not go off the screen when 
+  the chart is zoomed or panned. This feature is especially problematic on the Compare Tasks page, 
+  where the user will potentially have large numbers of charts displaying, and it will be 
+  important for them to not have to remember what each chart is displaying.
 
   \item Users found that they often had trouble or could not see smaller events 
-  from the fully zoomed out view. This difficulty makes it harder to find trouble spots. We do not 
+  from the fully zoomed out view. This makes it harder to find trouble spots. We do not 
   have any suggestions on how to fix this, but it is an important issue that should be 
   considered.
 
-  \item User testers were interested in having the ability to place markers, which 
+  \item Users were interested in having the ability to place markers, which 
   is something that KernelShark provided. The user should be able to place one or two
-   vertical-line markers onto a graph by clicking. If two markers are placed the user should
+   vertical-line markers onto a chart by clicking. If two markers are placed the user should
     be able to get the duration between the two markers and shift the two markers as one
-     unit over the graph, maintaining the same duration between them. The markers could
-      potentially be added to the graph at the SVG level, which would likely mean they 
-      would pan with the graph as desired, although zooming would require some extra 
+     unit over the chart, maintaining the same duration between them. The markers could
+      potentially be added to the chart at the SVG level, which would likely mean they 
+      would pan with the chart as desired, although zooming would require some extra 
       work to keep the markers as a thin line.
 
-  \item Users often had trouble distinguishing where to put their mouse and use the scroll wheel to either scroll the page of our tool or to zoom in on the graph. One potential fix is to clarify the location of a graph by changing its white background
+  \item Users often had trouble distinguishing where to put their mouse and use the
+    scroll wheel to either scroll the page of our tool or to zoom in on the
+    chart. One potential fix is to clarify the location of a chart by changing
+    its white background
      to be a light, desaturated color or a light grey. This contrast would make the
-     graph's ``white
+     chart's ``white
       space'' distinguishable from the page, making it easier for the user.
 
   \end{itemize}
@@ -1217,11 +1220,13 @@ walking through the data to find the desired information. It would also allow
 the user to work from multiple computers.
 
 \section{Overview Page}
-One user suggested that the graph should respond when an event in the events list is clicked.
- This would mirror the existing behavior of clicking on an event in the graph and having
-  it scroll in the events list. One possibility for how the graph could respond is adding
-   a marker at the timestamp of the event clicked onto the graph. A second possibility is
-    translating the graph so that this event is now at the left or the center of the graph. Both of these options allow the user to clearly see the event within the graph.
+One user suggested that the chart should respond when an event in the events list is clicked.
+ This would mirror the existing behavior of clicking on an event in the chart and having
+  it scroll in the events list. One possibility for how the chart could respond is adding
+   a marker at the timestamp of the event clicked onto the chart. A second possibility is
+    translating the chart so that this event is now at the left or the center of
+    the chart. Both of these options allow the user to clearly see the event
+    within the chart.
 
   Another suggestion for the Overview page was to enable more complex queries in the 
   search bar. Currently, searching only filters events out that do not 
@@ -1238,15 +1243,15 @@ One user suggested that the graph should respond when an event in the events lis
   we posed the idea of having the cycles interleaved. We discuss this idea
   further in the Extensions section in Section 6.3. We think it would be best to allow the interleaving of cycles as 
   an option, but not as a replacement of the current view. Both views would be 
-  useful. Combining the two graphs to display in the desired order will be 
-  difficult. One method that we considered was to have one graph for ``Cycle 0''
+  useful. Combining the two charts to display in the desired order will be 
+  difficult. One method that we considered was to have one chart for ``Cycle 0''
   that divides based on CPU, then one for ``Cycle 1'', etc. This solution has the
-  downside of producing many graphs, which degrades performance, but the user could potentially choose to
+  downside of producing many charts, which degrades performance, but the user could potentially choose to
   only display the top few cycles, or batch loading could be implemented so that
-  graphs are only loaded as the user scrolls down.
+  charts are only loaded as the user scrolls down.
 
   One user was interested in filtering the tasks displayed on the Cycles page.
-  The tasks list could be filtered and the graph re-rendered with this new tasks
+  The tasks list could be filtered and the chart re-rendered with this new tasks
   list.
 
   \section{Task Statistics Page}
@@ -1264,22 +1269,23 @@ One user suggested that the graph should respond when an event in the events lis
   \texttt{assets/css/process.css}, and modifying \texttt{.W}, the class for 
   waiting, will update all bars and the legend.
 
-  Currently, the user cannot view which CPU a task is runnnig on in the graph. 
+  Currently, the user cannot view which CPU a task is runnnig on in the chart. 
   A simple fix would be to add this information to the hovertext, which is 
   formatted within \texttt{assets/js/gantt-chart-d3.js}. Alternatively, we 
-  could display one graph per CPU that the task is running on, with the 
-  process split over multiple graphs.
+  could display one chart per CPU that the task is running on, with the 
+  process split over multiple charts.
 
   \section{Compare Task Page}
   The feedback for this page centered around its aesthetic and usability, with no 
   large functionality changes. Currently, the user cannot view which CPU a task 
-  is running on. We propose adding a label to the side of each graph as a simple 
-  fix. Additionally, the graphs should use less vertical space, which would allow more graphs to fit on the page without loss of 
+  is running on. We propose adding a label to the side of each chart as a simple 
+  fix. Additionally, the charts should use less vertical space, which would
+  allow more charts to fit on the page without loss of 
   information. Making this change requires editing the Compare Task specific 
   code in \texttt{/assets/js/gantt-chart-d3.js}. Lastly it is not clear to the
-   user that they can drag the graphs to reorder them. We propose adding a 
-   handle icon to the space next to the graph and under the ``Remove Task'' 
-   button. This would cue the user to notice that they could reorder the graphs 
+   user that they can drag the charts to reorder them. We propose adding a 
+   handle icon to the space next to the chart and under the ``Remove Task'' 
+   button. This would cue the user to notice that they could reorder the charts 
    by dragging. 
 
 
@@ -1291,11 +1297,11 @@ One user suggested that the graph should respond when an event in the events lis
 
   \begin{itemize}
   
-  \item All graphs can be scrolled on the $x$-axis through clicking and dragging until they become no longer visible. While
+  \item All charts can be scrolled on the $x$-axis through clicking and dragging until they become no longer visible. While
     they can be dragged back using the white space, this is not good for a user
     experience.
 
-  \item Graphs and other images do not resize when the window resizes, unless the
+  \item Charts and other images do not resize when the window resizes, unless the
     page is reloaded.
 
   \item The information displayed by the Task Statistics page, specifically on
@@ -1330,23 +1336,24 @@ It would be better to create an intermediate format for the
   adopting new labels. These old page titles are still used in our code.
 
 \section{Extensions}
-  SpaceX developers indicated an interest in interleaving the graphs of multiple
+  SpaceX developers indicated an interest in interleaving the charts of multiple
   CPUs on the Cycles page.  This interleaving would make it easier to compare
   cycle anomalies across CPUs. Adding this feature would require a tweak to the
-  graph infrastructure and would require an interface for users to choose if they
-  want the graphs interleaved or not, and which cycle numbers to display.
+  chart infrastructure and would require an interface for users to choose if they
+  want the charts interleaved or not, and which cycle numbers to display.
 
   \begin{figure}[H]
 \begin{center}
 \includegraphics[width=4in]{futureCycles.png}
 \caption{A mockup of how we envision the new Cycles page could look, with
-interleaved graphs.}
+interleaved charts.}
 \end{center}
 \end{figure}
 
 It is also possible that the loaded files will contain more than two CPUs.
-We only want to display two CPU graphs at a time on the Cycles page so that both graphs can be clearly visible. In the case that we have more than two CPUs, 
-we would hope to be able to paginate the graphs. Currently, the graphs
+We only want to display two CPU charts at a time on the Cycles page so that both
+charts can be clearly visible. In the case that we have more than two CPUs, 
+we would hope to be able to paginate the charts. Currently, the charts
 would simply be placed next to each other on the same page.
 
 \section{Speed} %Wendy
