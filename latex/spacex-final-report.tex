@@ -150,6 +150,9 @@ Rachel Macfarlane}
 \maketitle
  
 \tableofcontents
+
+\listoffigures
+\listoftables
 %%% In a longer document or an article being submitted to a journal
 %%% or conference, you would probably have an abstract that
 %%% summarized the purpose of the document.  We don't need that for
@@ -190,17 +193,17 @@ break in this cyclical pattern of processes, there is likely a bug in the
 software. These cyclical patterns of processes are called ``cycles''.
 
 %\section{Existing Tool}
-SpaceX currently uses a tool called KernelShark %%TODO FIXME citation
-to visualize trace data and help find any bugs or anomalies (Figure 1.1). 
-SpaceX engineers look for anomalies in process timing, which often indicates 
-software problems on the rocket. We were informed by our liaisons that this
- debugging process can take up to several days, 
-which is an inefficient use of engineer's time. \\
+SpaceX currently uses a tool called KernelShark %%TODO FIXME citation to
+visualize trace data and help find any bugs or anomalies
+(Figure~\ref{fig:kernelshark}).  SpaceX engineers look for anomalies in process
+timing, which often indicates software problems on the rocket. We were informed
+by our liaisons that this debugging process can take up to several days, which
+is an inefficient use of engineer's time. \\
 
 \begin{figure}[H]
   \centering
       \includegraphics[width=4.95in]{kshark-open.png}
-  \caption{KernelShark consists of a graphical display of the programs running on a computer over time (top half of screen), as well as a tabular view of the same information, in the form of CPU events such as tasks switching, waking, or sleeping (bottom half of screen).}
+      \caption{\label{fig:kernelshark}KernelShark consists of a graphical display of the programs running on a computer over time (top half of screen), as well as a tabular view of the same information, in the form of CPU events such as tasks switching, waking, or sleeping (bottom half of screen).}
 \end{figure}
 
 KernelShark displays the data but provides limited ways to interact with it. It
@@ -323,17 +326,18 @@ The README of this repository provides a link to download a
 \begin{figure}[H]
   \centering
       \includegraphics[scale=0.75]{loadFile-buttons.png}
-  \caption{Choose File selects a new file and Use Last Data selects the file
+      \caption{\label{fig:load_file}Choose File selects a new file and Use Last Data selects the file
   that was most recently loaded into the tool. The Use Last Data option will not
 display if no data has ever been loaded.}
   \end{figure}
 
 \paragraph{Purpose:}
-When the user opens SpaceShark, they see the Load File page (Figure 2.1).  This
-page allows the user to choose which data to load, or to choose to load the data
-that was most recently used.  The user can easily resume their work by choosing
-the second option, as both the data and the state of each page, such as the amount that the user has scrolled or zoomed in on the visualizations, from the
-previous session are reloaded.
+When the user opens SpaceShark, they see the Load File page
+(Figure~\ref{fig:load_file}).  This page allows the user to choose which data to
+load, or to choose to load the data that was most recently used.  The user can
+easily resume their work by choosing the second option, as both the data and the
+state of each page, such as the amount that the user has scrolled or zoomed in
+on the visualizations, from the previous session are reloaded.
 
 \paragraph{Interactivity:}
 The user can click either the ``Choose File'' button to choose a new file to view, or if they have viewed a file using our tool before, they can click the ``Use Last Data'' button to see the data that they were previously viewing.
@@ -538,16 +542,16 @@ way, for example by adding a new feature or making a change to the type of data 
   as long as output and inputs remain the same, internal changes to one section will
   not affect the others at all. In this chapter, we  discuss in more detail how each
   component works and how they come together to form a complete program.
-  Figure 2.7 provides a visual representation of the flow of our application
+  Figure~\ref{fig:architecture} provides a visual representation of the flow of our application
   while also displaying its modular parts.
   
   \begin{figure}[H]
     \begin{center}
-  \includegraphics[scale=0.15]{architecture_diagram.png}
-  \caption{A visual representation of the three components of our application. Each
-  component flows into the others while remaining modular, coming together to form a complete program.}
-\end{center}
-\end{figure}
+    \includegraphics[scale=0.15]{architecture_diagram.png}
+    \caption{ \label{fig:architecture} A visual representation of the three components of our application. Each
+    component flows into the others while remaining modular, coming together to form a complete program.}
+    \end{center}
+  \end{figure}
 
   \section{Trace-cmd}
 
@@ -558,7 +562,8 @@ way, for example by adding a new feature or making a change to the type of data 
   events.
 
   The \texttt{trace-cmd} utility can generate a human readable
-  report of this record. An example line appears in Figure 3.2.
+  report of this record. An example line appears in
+  Figure~\ref{fig:example_lines}.
   
 
 \normalsize
