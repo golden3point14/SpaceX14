@@ -610,64 +610,79 @@ http://www.json.org/
 
 The output JSON has the following elements:
 
+\begin{table}[H]
+  \renewcommand{\arraystretch}{1.5}
   \begin{center}
     \begin{tabular}{p{0.35\linewidth}p{0.55\linewidth}}
       \toprule
       \textbf{Element name}        & \textbf{Description}\\
       \midrule
-      \texttt{Tasks}      & An array of all tasks seen in the trace\\
-       \texttt{Events}     & An array of all events seen in the trace\\
-       \texttt{cycleEvents} & An array of cycle events generated from user markers\\
-       \texttt{numCPUs}     & The number of CPUs in the trace\\
-       \texttt{AutocompleteNames} & An array of strings, listing all tasks names\\
-       \texttt{AutocompleteEventTypes} & An array of strings, listing all event types in the trace\\
+      \multirow{2}{*}\texttt{Tasks}      & An array of all tasks seen in the trace\\
+      \multirow{2}{*}\texttt{Events}     & An array of all events seen in the trace\\
+      \multirow{2}{*}\texttt{cycleEvents} & An array of cycle events generated from user markers\\
+      \multirow{2}{*}\texttt{numCPUs}     & The number of CPUs in the trace\\
+      \multirow{2}{*}\texttt{AutocompleteNames} & An array of strings, listing all tasks names\\
+      \multirow{2}{*}\texttt{AutocompleteEventTypes} & An array of strings, listing all event types in the trace\\
       \bottomrule
     \end{tabular}
+    \vspace{-1em}
+    \caption{\label{table:json_elements} A list of output JSON elements}
   \end{center}
+\end{table}
 
   As noted, several of these JSON objects contain other JSON objects: \texttt{tasks},
  \texttt{events}, and \texttt{cycleEvents}. A \texttt{task} has the following data.
 
+\begin{table}[H]
+  \renewcommand{\arraystretch}{1.5}
   \begin{center}
     \begin{tabular}{p{0.25\linewidth}p{0.2\linewidth}p{0.45\linewidth}}
       \toprule
       \textbf{Field}           & \textbf{Type}         & \textbf{Additional
       description} \\
       \midrule
-       \texttt{name}            & string       & \\
-       \texttt{pid}             & int          & \\
-       \texttt{events}          & int array    & Indices into the Events array to find associated events\\
-       \texttt{preemptedBy}     & string array & Names of tasks that preempted this task \\
-      \texttt{preemptionCount} & int          & A running total of times this task was preempted                    \\
-       \texttt{totalRuntime}    & long         & Time this task ran in milliseconds during the trace        \\
-       \texttt{totalWaittime}   & long         & Time this task waited in milliseconds during the trace     \\
-       \texttt{totalSleeptime}  & long         & Time this task slept in milliseconds during the trace\\
+      \multirow{3}{*} \texttt{name}            & string       & \\
+      \multirow{3}{*} \texttt{pid}             & int          & \\
+      \multirow{3}{*} \texttt{events}          & int array    & Indices into the Events array to find associated events\\
+      \multirow{3}{*} \texttt{preemptedBy}     & string array & Names of tasks that preempted this task \\
+      \multirow{3}{*} \texttt{preemptionCount} & int          & A running total of times this task was preempted                    \\
+      \multirow{3}{*} \texttt{totalRuntime}    & long         & Time this task ran in milliseconds during the trace        \\
+      \multirow{3}{*} \texttt{totalWaittime}   & long         & Time this task waited in milliseconds during the trace     \\
+      \multirow{3}{*} \texttt{totalSleeptime}  & long         & Time this task slept in milliseconds during the trace\\
       \bottomrule
     \end{tabular}
   \end{center}
+  \vspace{-1em}
+  \caption{Task data format}
+\end{table}
 
   An \texttt{event} contains the data in the table below. Switch events contain some additional
   information. The switch event itself belongs to the task that is being
   switched out, but in the extra information field we also note which task
   was being switched in.
 
+\begin{table}[H]
+  \renewcommand{\arraystretch}{1.5}
   \begin{center}
     \begin{tabular}{p{0.2\linewidth}p{0.1\linewidth}p{0.6\linewidth}}
       \toprule
       \textbf{Field}     & \textbf{Type}   & \textbf{Additional description}                 \\
       \midrule
-       \texttt{name}      & string &                                        \\
-       \texttt{pid}       & int    &                                        \\
-       \texttt{cpu}       & int    &                                        \\
-       \texttt{startTime} & double & Time in milliseconds since kernel boot \\
-       \texttt{eventType} & string &                                        \\
-      \texttt{extraInfo} & string &                                        \\
-       \texttt{activeName}* & string & The name of the task switching in      \\
-       \texttt{activePID}*  & string &                                        \\
+      \multirow{3}{*} \texttt{name}      & string &                                        \\
+      \multirow{3}{*} \texttt{pid}       & int    &                                        \\
+      \multirow{3}{*} \texttt{cpu}       & int    &                                        \\
+      \multirow{3}{*} \texttt{startTime} & double & Time in milliseconds since kernel boot \\
+      \multirow{3}{*} \texttt{eventType} & string &                                        \\
+      \multirow{3}{*} \texttt{extraInfo} & string &                                        \\
+      \multirow{3}{*} \texttt{activeName}* & string & The name of the task switching in      \\
+      \multirow{3}{*} \texttt{activePID}*  & string &                                        \\
       \bottomrule\\
 \multicolumn{3}{l}{ *This information is only present on switch events.}
     \end{tabular}
   \end{center}
+  \vspace{-1em}
+  \caption{Event data format}
+\end{table}
 
  
 
@@ -680,16 +695,21 @@ The output JSON has the following elements:
   information field of a print event. If the extra information field starts with
   \texttt{CYCLE\_START}, then we create a \texttt{cycleEvent} that contains the following data.
 
+\begin{table}[H]
+  \renewcommand{\arraystretch}{1.5}
   \begin{center}
     \begin{tabular}{lll}
       \toprule
       \textbf{Field}     & \textbf{Type}                \\
       \midrule
-       \texttt{startTime}      & double                               \\
-       \texttt{extraInfo}       & string                              \\
+      \multirow{2}{*}\texttt{startTime}      & double                               \\
+      \multirow{2}{*}\texttt{extraInfo}       & string                              \\
       \bottomrule
     \end{tabular}
   \end{center}
+  \vspace{-1em}
+  \caption{Print event data format}
+\end{table}
 
   Due to the modularity of our tool, the parser could be rewritten so long as
   the output format remains the same. Additionally, a user might have data
@@ -720,7 +740,7 @@ The output JSON has the following elements:
     data.
 
 For more information on node-webkit, visit the GitHub page at 
-\begin{center}https://github.com/nwjs/nw.js/\end{center}
+\begin{center}\url{https://github.com/nwjs/nw.js/}\end{center}
 
   \subsection{Overall Application Structure}
 
@@ -732,20 +752,25 @@ For more information on node-webkit, visit the GitHub page at
   used by multiple pages. 
   
 
+\begin{table}[H]
+  \renewcommand{\arraystretch}{1.5}
   \begin{center}
     \begin{tabular}{p{0.2\linewidth}p{0.7\linewidth}}
      \toprule
       Page Name       & Code artifacts     \\
       \midrule
-      Load File       & \texttt{assets/js/loadFile.js}\\
-      Overview        & \texttt{assets/js/main.js, assets/js/gantt-chart-d3.js, dataTables.js}\\
-      Cycles          & \texttt{assets/js/cycles.js, assets/js/gantt-chart-d3.js}\\
-      Task Statistics & \texttt{assets/js/runtimeChart.js, assets/js/preemptionChart.js}\\
-      Task State      & \texttt{assets/js/process.js}\\
-      Task Compare    & \texttt{assets/js/compare.js}\\
+      \multirow{2}{*}Load File       & \texttt{assets/js/loadFile.js}\\
+      \multirow{2}{*}Overview        & \texttt{assets/js/main.js, assets/js/gantt-chart-d3.js, dataTables.js}\\
+      \multirow{2}{*}Cycles          & \texttt{assets/js/cycles.js, assets/js/gantt-chart-d3.js}\\
+      \multirow{2}{*}Task Statistics & \texttt{assets/js/runtimeChart.js, assets/js/preemptionChart.js}\\
+      \multirow{2}{*}Task State      & \texttt{assets/js/process.js}\\
+      \multirow{2}{*}Task Compare    & \texttt{assets/js/compare.js}\\
     \bottomrule
     \end{tabular}
   \end{center}
+  \vspace{-1em}
+  \caption{Code artifacts for each page}
+\end{table}
 
 
   \subsection{Primary JavaScript/CSS files}
