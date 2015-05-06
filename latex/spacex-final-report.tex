@@ -608,9 +608,11 @@ varies based on the type of event.
 http://www.json.org/
 \end{center}
 
-The output JSON has the following elements:
+The output JSON has the elements described in Table~\ref{table:json_elements}.
+As noted, several of these JSON objects contain other JSON objects: \texttt{tasks},
+\texttt{events}, and \texttt{cycleEvents}. 
 
-\begin{table}[H]
+\begin{table}
   \renewcommand{\arraystretch}{1.5}
   \begin{center}
     \begin{tabular}{p{0.35\linewidth}p{0.55\linewidth}}
@@ -630,10 +632,9 @@ The output JSON has the following elements:
   \end{center}
 \end{table}
 
-  As noted, several of these JSON objects contain other JSON objects: \texttt{tasks},
- \texttt{events}, and \texttt{cycleEvents}. A \texttt{task} has the following data.
+A \texttt{task} has the data described in Table~\ref{table:tasks}.
 
-\begin{table}[H]
+\begin{table}
   \renewcommand{\arraystretch}{1.5}
   \begin{center}
     \begin{tabular}{p{0.25\linewidth}p{0.2\linewidth}p{0.45\linewidth}}
@@ -653,15 +654,15 @@ The output JSON has the following elements:
     \end{tabular}
   \end{center}
   \vspace{-1em}
-  \caption{Task data format}
+  \caption{\label{table:tasks} Task data format}
 \end{table}
 
-  An \texttt{event} contains the data in the table below. Switch events contain some additional
+  An \texttt{event} contains the data in Table~\ref{table:events}. Switch events contain some additional
   information. The switch event itself belongs to the task that is being
   switched out, but in the extra information field we also note which task
   was being switched in.
 
-\begin{table}[H]
+\begin{table}
   \renewcommand{\arraystretch}{1.5}
   \begin{center}
     \begin{tabular}{p{0.2\linewidth}p{0.1\linewidth}p{0.6\linewidth}}
@@ -681,7 +682,7 @@ The output JSON has the following elements:
     \end{tabular}
   \end{center}
   \vspace{-1em}
-  \caption{Event data format}
+  \caption{\label{table:events}Event data format}
 \end{table}
 
  
@@ -693,9 +694,10 @@ The output JSON has the following elements:
   tracing. Print events occur whenever a program prints something, so we check to see
   that the user has annotated them with \texttt{CYCLE\_START} by looking at the extra
   information field of a print event. If the extra information field starts with
-  \texttt{CYCLE\_START}, then we create a \texttt{cycleEvent} that contains the following data.
+  \texttt{CYCLE\_START}, then we create a \texttt{cycleEvent} that contains the data described
+  in Table~\ref{table:print_events}.
 
-\begin{table}[H]
+\begin{table}
   \renewcommand{\arraystretch}{1.5}
   \begin{center}
     \begin{tabular}{lll}
@@ -708,7 +710,7 @@ The output JSON has the following elements:
     \end{tabular}
   \end{center}
   \vspace{-1em}
-  \caption{Print event data format}
+  \caption{\label{table:print_events}Print event data format}
 \end{table}
 
   Due to the modularity of our tool, the parser could be rewritten so long as
@@ -752,20 +754,20 @@ For more information on node-webkit, visit the GitHub page at
   used by multiple pages. 
   
 
-\begin{table}[H]
+\begin{table}
   \renewcommand{\arraystretch}{1.5}
   \begin{center}
     \begin{tabular}{p{0.2\linewidth}p{0.7\linewidth}}
-     \toprule
-      Page Name       & Code artifacts     \\
+      \toprule
+      \textbf{Page Name}                & \textbf{Code artifacts}     \\
       \midrule
-      \multirow{2}{*}Load File       & \texttt{assets/js/loadFile.js}\\
-      \multirow{2}{*}Overview        & \texttt{assets/js/main.js, assets/js/gantt-chart-d3.js, dataTables.js}\\
-      \multirow{2}{*}Cycles          & \texttt{assets/js/cycles.js, assets/js/gantt-chart-d3.js}\\
-      \multirow{2}{*}Task Statistics & \texttt{assets/js/runtimeChart.js, assets/js/preemptionChart.js}\\
-      \multirow{2}{*}Task State      & \texttt{assets/js/process.js}\\
-      \multirow{2}{*}Task Compare    & \texttt{assets/js/compare.js}\\
-    \bottomrule
+      Load File                         & \texttt{assets/js/loadFile.js}\\
+      \multirow{2}{*} {Overview}        & \texttt{assets/js/main.js, assets/js/gantt-chart-d3.js, dataTables.js}\\
+      \multirow{2}{*} {Cycles}          & \texttt{assets/js/cycles.js, assets/js/gantt-chart-d3.js}\\
+      \multirow{2}{*} {Task Statistics} & \texttt{assets/js/runtimeChart.js, assets/js/preemptionChart.js}\\
+      Task State                        & \texttt{assets/js/process.js}\\
+      Task Compare                      & \texttt{assets/js/compare.js}\\
+      \bottomrule
     \end{tabular}
   \end{center}
   \vspace{-1em}
@@ -845,12 +847,6 @@ For more information on node-webkit, visit the GitHub page at
   These correspond to the JSON types described
   in the Parser section (Section 2.2.3).
 
-
-%  Using the node-webkit profiling tool, we can see that IndexedDB is the slowest
-%  part of our application, as transactions with the database must be opened and
-%  closed. Ideally, we would use something less complex, but other options such
-%  as Local Storage did not have enough space for our large files.
-
   IndexedDB also has  a size limit, but this is typically not reached except for
   unusually long files or data from a computer with many CPUs. 
 
@@ -901,7 +897,7 @@ For more information on Local Storage and how it is used, visit this site:
 \begin{center}
   \url{http://www.w3schools.com/Html/html5\_webstorage.asp}
 \end{center}
-
+\vspace{-2em}
   \subsection{Selection of Charting Tool} % Rachel
   Many pages render a timeline of running tasks that users can interact
   with by panning and zooming. This chart is critical, as a bug on the rocket manifests
@@ -934,7 +930,7 @@ For more information on Local Storage and how it is used, visit this site:
     \item The events list is filtered to only contain switch events. Switch
       events indicate that one process switched out, either by preemption or
       because it finished.
-      Switch events are all that are needed to determine which task was running, or
+      Only switch events are needed to determine which task was running, or
       what state a task was in.
   
     \item All start times are normalized so that first event is at time zero.
@@ -943,9 +939,9 @@ For more information on Local Storage and how it is used, visit this site:
       events by CPU, and for each grouping of events, shift the start times
       so that the first event occurs at time zero.
   
-    \item The chart requires a time domain as in input, so the endpoint of the
+    \item The chart requires a time domain as input, so the endpoint of the
       last event is calculated.
-      How this calculation is performed depends on which page the user is
+      This calculation depends on which page the user is
       on. On the Overview page, this comparison is across all CPUs. Each CPU may not
       be processing tasks for the entire duration of the trace. For example, all
       events on CPU 0 might take only three seconds, while all events on CPU 4 take
@@ -968,14 +964,13 @@ For more information on Local Storage and how it is used, visit this site:
      difference between the start times of consecutive switch events. This
      calculates the amount of time each task was running for.
   
-   \item The Gantt chart is passed the events and drawn, and the colors are set.
-     The chart assigns a CSS class to each task based on its PID, and randomly
-     selects a color for this class and adds a style tag to the page. The random
+   \item The Gantt chart is passed the events and drawn.
+     The chart assigns a CSS class to each task based on its PID, randomly
+     selects a color for this class, and adds a style tag to the page. The random
      color selection is seeded so that the same colors will be assigned every
      time. We considered producing a stylesheet after parsing so the CSS did not have
      to be generated each time, but in profiling the application we saw that
-     this process was actually quick, and decided this change was low
-     priority.
+     this process was actually quick.
 
   \end{enumerate}
 
@@ -1022,7 +1017,7 @@ running, and longest waiting tasks in tables at the top of the page.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=4in]{oldMain.png}
+\includegraphics[width=.6\textwidth]{oldMain.png}
 \caption{A screenshot of our Overview page before winter break. At the top are
 several tables of statistics, followed by the chart of running tasks.}
 \end{center}
@@ -1040,7 +1035,7 @@ an events list for users to interact with.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=4in]{overview-page.png}
+\includegraphics[width=.6\textwidth]{overview-page.png}
 \caption{A current screenshot of our Overview page. At the top is a graphical
 representation of the tasks, and the bottom is a tabular view.}
 \end{center}
@@ -1059,7 +1054,7 @@ in the debugging process.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=4in]{perProcess-49.png}
+\includegraphics[width=.6\textwidth]{perProcess-49.png}
 \caption{The first mock-up we created for the Task State page.}
 \end{center}
 \end{figure}
@@ -1076,7 +1071,7 @@ them for the Task State page.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=4in]{task-state-page.png}
+\includegraphics[width=.6\textwidth]{task-state-page.png}
 \caption{A screenshot of the current version of the Task State page. The three
 colors indicate the three states a task can be in: running, waiting, or
 preempted.}
@@ -1105,12 +1100,11 @@ the Overview page chart visualization into cycles.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=4in]{oldcycles.png}
-\caption{A mock-up of the Cycles page. Initially only one CPU at a time could be
-displayed, as shown here.}
+\includegraphics[width=.6\textwidth]{oldcycles.png}
+\caption{A mock-up of the Cycles page.}
 \end{center}
 \end{figure}
-
+\vspace{-1.5em}
 We received nearly all positive feedback on the Cycles page, and this page seems to
 be the most useful feature of our tool. Users requested minor changes to improve
 the page.
@@ -1122,63 +1116,21 @@ which SpaceX engineers would want to see displayed prominently at the top of the
 page.
 
 The Cycles page initially relied on the user's code generating ``cycle
-markers'', which meant that this functionality would not have worked with old
-traces, or traces that didn't conform to our specific markers. One engineer
+markers'', which meant that this functionality would not have worked with 
+traces that didn't conform to our specific markers. One engineer
 suggested that we add the ability to enter in cycle length and have it display
 cycles based on that input, making the page usable with more
 varieties of data.
-
-We also added the ability to choose which CPUs are displayed, as a user may
-want to focus on only a single CPU, or remove CPUs if the page becomes cluttered.
+We also added the ability to choose which CPUs are displayed or to remove CPUs if the page becomes cluttered.
+\vspace{-.5em}
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=4in]{cycles-page.png}
-\caption{A screenshot of the current Cycles page. Multiple CPUs can be displayed
-on the same page using the checkboxes at the top of the screen. The input box on the top
-left allows users to choose their own cycle length.}
+\includegraphics[width=.6\textwidth]{cycles-page.png}
+\caption{A screenshot of the current Cycles page. Checkboxes toggle the display of CPUs.
+The input box allows users to choose cycle length.}
 \end{center}
 \end{figure}
-
-%\chapter{Challenges}
-%\section{trace-cmd versioning} % Rachel
-%  As already described, we collect data using a command-line utility called
-%  trace-cmd. trace-cmd records various events in the Linux kernel while it runs
-%  and then outputs this information into a data file with a particular binary
-%  format. trace-cmd also has a ``report'' option, which takes an existing trace
-%  file and generates a human readable report of this record. Using this format
-%  as a starting point instead of the raw binary format simplifies parsing.
-%  We decided to leverage trace-cmd report instead of wrestling with the binary
-%  data ourselves. This allowed us to make progress faster and to avoid working
-%  on an already solved problem.
-%
-%  Unfortunately, the format of the file generated by trace-cmd report is
-%  dependent on the version of trace-cmd used. For example, the formatting of the
-%  ``extra info'' field of a switch event is liable to change. We use this
-%  field to identify preemptions. To be able to reliably parse data and add
-%  additional information about preemptions, we need our input data to have
-%  a consistent format. This creates a dependency on a particular version
-%  of trace-cmd. Our liaisons have been using trace-cmd version 2.2.1, so
-%  our parser expects input data to be in the format of 2.2.1.
-%\section{Selection of charting tool} % Rachel
-%  We chose to use web technologies because we felt there was a wealth of
-%  charting and UI/UX tools that we could use. We spent several weeks
-%  experimenting with different charts for the main page. The main page renders a
-%  timeline of running tasks, which is essentially a large number of colored
-%  bars. This chart needed to be responsive to zooming and dragging, and to
-%  dealing with click events to move to a particular time in the table of events
-%  displayed below it.
-%\section{Speed} %Wendy
-%The data SpaceX will be using with our tool is very large, and becomes even
-%larger once we have parsed it. As a result, some parts of the tool load slowly,
-%and this is something we are still working on fixing. One main fix we have
-%implemented is batch loading the list of events on the main page so that the
-%user can start interacting with the tool without waiting to load the entire
-%table, especially since all of the table is typically not needed.
-%
-%Having done some profiling, we know that pulling data from IndexedDB is the
-%slowest part of our application, but at this point in time we do not have a way
-%to fix this.
 
 \chapter{Exit User Feedback}
 \section{Methodology}
