@@ -190,12 +190,12 @@ order to run.
 The software running on SpaceX rockets has deadlines for tasks at regular
 intervals because timing is very important in rocket flight. When there is a
 break in this cyclical pattern of processes, there is likely a bug in the
-software. These cyclical patterns of processes are called ``cycles''.
+software. These cyclical patterns of processes are called {\bf cycles}.
 
-%\section{Existing Tool}
-SpaceX currently uses a tool called KernelShark %%TODO FIXME citation to
+SpaceX currently uses a tool called KernelShark
 visualize trace data and help find any bugs or anomalies
-(Figure~\ref{fig:kernelshark}).  SpaceX engineers look for anomalies in process
+(Figure~\ref{fig:kernelshark},
+\url{http://people.redhat.com/srostedt/kernelshark/HTML/}).  SpaceX engineers look for anomalies in process
 timing, which often indicates software problems on the rocket. We were informed
 by our liaisons that this debugging process can take up to several days, which
 is an inefficient use of engineer's time. \\
@@ -220,15 +220,6 @@ an unsortable and unsearchable list of tasks that might be hundreds of tasks
 long. Additionally, zooming out on KernelShark's visual timeline is
 uninituitive and confusing.
 
-%Using only this visualization, it can be difficult to see where the cyclical
-%deadlines for the programs begin and end, making it hard to find when something
-%misses a deadline. In addition, the tabular display of the CPU events in the
-%bottom part of the screen has minimal search functionality and the different
-%columns of the table are not sortable. Individual timelines for tasks can be
-%displayed below this main chart, but the menu to select a task does not have
-%any searching capability and does not order the tasks in any discernible way.
-
-%\section{Project Goals} % May Lynn
 The goal of this project was to make it easier and faster for SpaceX engineers
 to find software problems by creating a tool that visualizes rocket data and
 highlights problem areas. We have created an improved user experience and
@@ -574,7 +565,6 @@ way, for example by adding a new feature or making a change to the type of data 
   additional information from the data, such as the total number of times each
   task is preempted, and the total runtime of each task.
 
-%% TODO this image is a little too low resolution
   \begin{figure}
   \includegraphics[scale=0.4]{parserExample.png}
   \caption{ \label{fig:example_lines} An example line of raw input, with the specific pieces labeled.}
@@ -586,7 +576,7 @@ These five fields appear for every event, but the content of extra information
 varies based on the type of event.
 
   To parse these event lines, the parser reads the file line by line and breaks on
-  whitespace. Then it extracts fields one by one. The
+  whitespace. Then it extracts fields one by one. For the
   extra information field at the end, the parser cases on event type. Switch events
   are the only types of events that contain extra information that we need.  The
   extra information field of switch events gives the name, PID, and priority of
@@ -605,7 +595,7 @@ varies based on the type of event.
   information on JSON, visit this site:
 
 \begin{center}
-http://www.json.org/
+  \url{http://www.json.org/}
 \end{center}
 
 The output JSON has the following elements:
@@ -776,7 +766,7 @@ For more information on node-webkit, visit the GitHub page at
   \subsection{Primary JavaScript/CSS files}
   One of the primary JavaScript files we've worked
   with and changed is \texttt{gantt-chart-d3.js}. This file contains the logic for all of the
-  charts. This file was originally written by Dimitry Kudrayvtsev, %% TODO add a reference?
+  charts. This file was originally written by Dimitry Kudrayvtsev,
  but we have significantly modified it to produce the behavior we want. The
  original file is available at \texttt{github.com/dk8996/Gantt-Chart}.
 
@@ -843,13 +833,7 @@ For more information on node-webkit, visit the GitHub page at
     \item \texttt{Events} (a list of all the events)
   \end{itemize}
   These correspond to the JSON types described
-  in the Parser section (Section 2.2.3).
-
-
-%  Using the node-webkit profiling tool, we can see that IndexedDB is the slowest
-%  part of our application, as transactions with the database must be opened and
-%  closed. Ideally, we would use something less complex, but other options such
-%  as Local Storage did not have enough space for our large files.
+  in the Parser section.
 
   IndexedDB also has  a size limit, but this is typically not reached except for
   unusually long files or data from a computer with many CPUs. 
@@ -1465,14 +1449,13 @@ Events
 \item {\bf PID:} A process identifier; a number attatched to a process that is unique to that process.
 \item {\bf Preemption:} When a running task is interrupted by another program starting to run on the same CPU. 
 \item {\bf Priority Inversion:} When a high-priority task is indirectly
-  prevented from running by something of
-lower priority using a shared resource that the higher priority task needs in
-order to run. 
-\item{\bf Process:} A program. It can have many threads running at once.
+  prevented from running by something of using a shared resource that the higher
+  priority task needs in order to run. 
+\item{\bf Process:} A running program. It can have many threads running at once.
 \item {\bf Running:} The state of a task when it is being executed on the CPU.
-\item {\bf Task:} A single thread of a process; a series of events.
+\item {\bf Task:} A single thread of a process.
 \item {\bf Waiting:} The state of a task when it cannot run because it is waiting 
-  on some piece of information, such as I/O.
+  on some piece of information, such as I/O. Synonymous with blocked.
 \end{itemize}
 
 \chapter{How to Package the Application}
