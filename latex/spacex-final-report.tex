@@ -691,20 +691,21 @@ The output JSON has the following elements:
   in a format other than trace data. That user could write their own parser to
   convert their data into this JSON format. It could then be used in our tool.
 
-  \section{Web Visualizer}
+  \section{Visualizer}
 
   
   \subsection{Node-Webkit and HTML} %Rachel
     At the beginning of the project, the team researched possible tools and
     technologies for creating our application. One possibility was simply
-    extending KernelShark, the existing tool. After looking at the code for
-    this, a large number of C files, we decided it would be faster to
+    extending KernelShark, the existing tool. After looking at KernelShark's
+    code,
+    a large number of C files, we decided it would be faster to
     reimplement and extend it in something else. Understanding the KernelShark code base
     would take a very long time, and there was very little documentation. This
     would allow us to more effectively use our time creating new features rather
     than working our way through an old code base. We
     looked into Java UI libraries for desktop applications, as well as
-    web-technology based charting libraries.  We found node-webkit, which allows
+    web-technology-based charting libraries.  We found node-webkit, which allows
     HTML/CSS/JavaScript applications to be packaged and run as desktop
     applications with no reliance on the internet. 
     Using node-webkit allowed us to take advantage of many existing UI widigits
@@ -722,8 +723,8 @@ For more information on node-webkit, visit the GitHub page at
   The root directory contains HTML files, which reference JavaScript and CSS files. The files
   we have written are located in \texttt{assets/js} and \texttt{assets/css}, and
   library files reside in \texttt{lib/js} and \texttt{lib/css}.  Each page has
-  its own JavaScript file, and there are a number of shared SpaceShark files that
-  multiple or all pages use.
+  its own JavaScript file, and there are a number of shared SpaceShark files
+  used by multiple pages. 
   
 
   \begin{center}
@@ -765,7 +766,7 @@ For more information on node-webkit, visit the GitHub page at
   same zoom level as others, and will zoom in sync with one another.
 
   To function properly, the chart needs a list of events
-  as well as a property to group on. Behavior on each pages varies
+  as well as a property to group on. Behavior on each page varies
   slightly, so a parameter is also passed to indicate to the chart the page on
   which it is rendered
 
@@ -776,19 +777,19 @@ For more information on node-webkit, visit the GitHub page at
   Below is a list of the libraries the application uses with links to
   their respective sites, which include documentation.
 \begin{itemize}
-\item d3.js (d3js.org)
+  \item d3.js (\url{d3js.org})
 % d3 - http://d3js.org/
-\item dc.js (dc-js.github.io/dc.js)
+  \item dc.js (\url{dc-js.github.io/dc.js})
 % dc - http://dc-js.github.io/dc.js/
-\item Draggabilly (draggabilly.desandro.com)
+  \item Draggabilly (\url{draggabilly.desandro.com})
 % draggabilly - http://draggabilly.desandro.com/
-\item Packery (packery.metafizzy.co)
+  \item Packery (\url{packery.metafizzy.co})
 % packery - http://packery.metafizzy.co/
-\item DataTables (datatables.net)
+  \item DataTables (\url{datatables.net})
 % datatables - https://www.datatables.net/
-\item Twitter Typeahead (twitter.github.io/typeahead.js)
+  \item Twitter Typeahead (\url{twitter.github.io/typeahead.js})
 % typeahead - https://twitter.github.io/typeahead.js/
-\item Underscore (underscorejs.org)
+  \item Underscore (\url{underscorejs.org})
 %% FIXME - any more?
 \end{itemize}
 
@@ -798,7 +799,7 @@ For more information on node-webkit, visit the GitHub page at
   browser-based database. IndexedDB is built into most browsers, including
   node-webkit, which runs Chromium. More information on the details of IndexedDB can be found here:
 \begin{center}
-  https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB\_API
+  \url{https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB\_API}
 \end{center}
   We use IndexedDB to store data so that it does not have to be reloaded every time the user navigates to a different page. It also
   maintains storage between application sessions.
@@ -811,8 +812,8 @@ For more information on node-webkit, visit the GitHub page at
     \item \texttt{AutocompleteEventTypes} (also used for autocompleting)
     \item \texttt{Events} (a list of all the events)
   \end{itemize}
-  These correspond to the JSON types laid
-  out in the Parser section (Section 2.2.3).
+  These correspond to the JSON types described
+  in the Parser section (Section 2.2.3).
 
 
 %  Using the node-webkit profiling tool, we can see that IndexedDB is the slowest
@@ -864,7 +865,7 @@ DataTables.js, the library we use for our events list table,  also makes use of 
 
 For more information on Local Storage and how it is used, visit this site:
 \begin{center}
-http://www.w3schools.com/Html/html5\_webstorage.asp
+  \url{http://www.w3schools.com/Html/html5\_webstorage.asp}
 \end{center}
 
   \subsection{Selection of Charting Tool} % Rachel
@@ -946,7 +947,6 @@ http://www.w3schools.com/Html/html5\_webstorage.asp
 
 
 \chapter{Midyear User Feedback} % Alix
-\section{General Feedback} % Alix
 We sought user feedback about our designs and tool throughout the course of the
 project. Most of our feedback was from our liaisons, who we communicated with on
 a weekly basis. The team was also able to test the application with four SpaceX
